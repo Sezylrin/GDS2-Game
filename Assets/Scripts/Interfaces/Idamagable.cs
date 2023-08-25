@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface Idamageable
+public interface IDamageable
 {
-    public float hitpoints { get; set; }
+    public float Hitpoints { get; set; }
 
-    public void setHitPoints();
+    public void SetHitPoints();
     public void TakeDamage(float amount);
     public void OnDeath();
 

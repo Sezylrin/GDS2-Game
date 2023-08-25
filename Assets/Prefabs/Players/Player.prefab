@@ -376,6 +376,7 @@ GameObject:
   - component: {fileID: 3543791458973239724}
   - component: {fileID: 3543791458973239727}
   - component: {fileID: 3543791458973239726}
+  - component: {fileID: 5754933048486312608}
   - component: {fileID: 3543791458973239697}
   - component: {fileID: 3543791458973239696}
   m_Layer: 0
@@ -477,6 +478,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerController: {fileID: 3543791458973239697}
+--- !u!114 &5754933048486312608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3543791458973239701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9d7b4bf848b1de4291fae97960aea05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingHitPoint: 100
+  <Hitpoints>k__BackingField: 0
 --- !u!114 &3543791458973239697
 MonoBehaviour:
   m_ObjectHideFlags: 0
