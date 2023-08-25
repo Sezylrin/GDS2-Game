@@ -59,7 +59,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         Hitpoints = MaxHealth;
     }
 
-    public void setHitPoints()
+    public void SetHitPoints()
     {
 
     }
