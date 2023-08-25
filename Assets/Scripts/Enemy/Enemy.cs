@@ -24,12 +24,12 @@ public enum Element
     Nature
 }
 
-public abstract class Enemy : MonoBehaviour
+public abstract class Enemy : MonoBehaviour, IDamageable
 {
     [field: Header("Enemy Info")]
     [field: SerializeField] public EnemyType Type { get; set; }
     [field: SerializeField] public Element Element { get; set; }
-    [field: SerializeField] public float CurrentHealth { get; set; }
+    [field: SerializeField] public float Hitpoints { get; set; }
     [field: SerializeField] public float MaxHealth { get; set; } 
     [field: SerializeField] public float Damage { get; set; }
     [field: SerializeField] public float Speed { get; set; }
@@ -56,20 +56,25 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void SetStats()
     {
-        CurrentHealth = MaxHealth;
+        Hitpoints = MaxHealth;
     }
 
-    protected virtual void TakeDamage(float damage, Element damageType)
+    public void setHitPoints()
+    {
+
+    }
+
+    public virtual void TakeDamage(float damage)
     {
         /* if (CheckCombo() || CheckResistance())
         {
             CurrentHealth -= damage * damageMultiplier;
         }
-        else */ CurrentHealth -= damage;
-        if (CurrentHealth <= 0) OnDeath();
+        else */ Hitpoints -= damage;
+        if (Hitpoints <= 0) OnDeath();
     }
 
-    protected virtual void OnDeath()
+    public virtual void OnDeath()
     {
         if (DeathSound) DeathSound.Play();
         Destroy(gameObject); //Temp -> Replace with pooling
