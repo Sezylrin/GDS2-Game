@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using KevinCastejon.MoreAttributes;
 
 public class ProjectileAbility : AbilityBase
 {
     // Start is called before the first frame update
+    [SerializeField][ReadOnly]
+    private ProjectileVariantSO selected;
+
     [SerializeField]
-    private CircleCollider2D col2D;
-    [SerializeField]
-    private ProjectileElementSO selected;
+    private Rigidbody2D rb;
     void Start()
     {
         
@@ -22,16 +24,14 @@ public class ProjectileAbility : AbilityBase
 
     protected override void CastAbility()
     {
-        selected = selectedAbility as ProjectileElementSO;
+        selected = selectedAbility as ProjectileVariantSO;
         LaunchTowardsTarget();
-
     }
 
     protected override void InvokePoolSelf(object sender, Timer.OnTimeIsZeroEventArgs e)
     {
         if (e.timerSlot == 0)
         {
-            Debug.Log("pooled self");
             poolSelf();
             base.InvokePoolSelf(sender, e);
         }

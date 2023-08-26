@@ -8,8 +8,6 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
 {
     // Start is called before the first frame update
     protected ElementalSO selectedAbility;
-    [SerializeField]
-    protected Rigidbody2D rb;
 
     protected Timer timer;
 
@@ -44,7 +42,6 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
 
     protected virtual void InvokePoolSelf(object sender, Timer.OnTimeIsZeroEventArgs e)
     {
-        Debug.Log("lifetime reached");
         timer.OnTimeIsZero -= InvokePoolSelf;
     }
 
@@ -82,6 +79,7 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
             {
                 return;
             }
+            Debug.Log("hitting enemy with ability");
             hitEnemy.Add(foundEnemy as Enemy);
             //do damage and stuff
             if (CurrentPierce > 0)

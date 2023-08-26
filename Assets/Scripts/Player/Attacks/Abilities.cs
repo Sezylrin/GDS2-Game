@@ -40,6 +40,8 @@ public class Abilities : MonoBehaviour
             PoolingManager.Instance.FindPool(entry.Value, out temp,entry.Key.ToString() + " type");
             pools.Add(entry.Key, temp);
         }
+        //remember to uncheck them when done with debugging
+        SetAbilities();
     }
     public void CastSlotOne()
     {

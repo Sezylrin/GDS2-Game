@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: FireBall
-  m_EditorClassIdentifier: Assembly-CSharp::ProjectileElementSO
+  m_Script: {fileID: 11500000, guid: 46349f5f1777d0742ae2d3e10071b0c4, type: 3}
+  m_Name: Fire Ball
+  m_EditorClassIdentifier: 
   elementType: 1
   type: 2
   castCost: 1
   pierceAmount: 1
   damage: 10
-  lifeTime: 15
+  lifeTime: 10
   speed: 20
