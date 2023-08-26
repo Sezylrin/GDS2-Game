@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ElementType : byte
+public enum ElementType : int
 {
+    noElement = 0,
     fire = 1,
     water = 2,
     electric = 4,
     wind = 8,
     poison = 16,
-    nature = 32,
-    noElement = 64
+    nature = 32
 }
 
-public enum ElementCombos : byte
+public enum ElementCombos : int
 {
     fireSurge = 6,
     aquaVolt = 5,

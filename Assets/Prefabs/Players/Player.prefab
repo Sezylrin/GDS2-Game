@@ -635,8 +635,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c1715f659e406e4c8579fc4a762599c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lightAttackDuration: 1
-  lightAttackEndLag: 1
+  lightAttackDuration: 0.2
+  lightAttackEndLag: 0.4
   lightAttackPullDist: 5
   maxCombo: 0
   currentCombo: 0
@@ -675,12 +675,12 @@ MonoBehaviour:
     abilityShapePF:
       _serializedList:
       - Key: 0
-        Value: {fileID: 1081047491358455854, guid: a11b5b43fd902074fb6401f38dc4e41a, type: 3}
+        Value: {fileID: 2244625044603906729, guid: 982f60ea9368e2c4a84fea68fdd12328, type: 3}
       - Key: 1
-        Value: {fileID: 1081047491358455854, guid: a11b5b43fd902074fb6401f38dc4e41a, type: 3}
+        Value: {fileID: 870314205402033686, guid: 6499491490cfd8744aebab9913aabc34, type: 3}
       - Key: 2
         Value: {fileID: 1081047491358455854, guid: a11b5b43fd902074fb6401f38dc4e41a, type: 3}
-  test: {fileID: 11400000, guid: d9d4c538f0368174ab5cffc25a87901a, type: 2}
+  test: {fileID: 11400000, guid: 6f91427faf1f0314891c5a7b288e2640, type: 2}
 --- !u!1 &3543791459337211977
 GameObject:
   m_ObjectHideFlags: 0
