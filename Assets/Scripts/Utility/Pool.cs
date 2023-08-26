@@ -24,10 +24,14 @@ public class Pool<T> : IPools where T : MonoBehaviour, IPoolable<T>
     private List<T> pooledObj = new List<T>();
     private GameObject objToSpawn;
     private Transform poolParent;
-    public Pool(GameObject objToSpawn, Transform parent)
+    public Pool(GameObject objToSpawn, Transform parent, string poolName)
     {
         this.objToSpawn = objToSpawn;
         poolParent = new GameObject(typeof(T).ToString() + " Pool").transform;
+        if (poolName != null)
+        {
+            poolParent.name = poolName + " Pool";
+        }
         poolParent.transform.SetParent(parent);
     }
     /// <summary>

@@ -6,11 +6,21 @@ using KevinCastejon.MoreAttributes;
 
 public enum actionState
 {
+    nothing,
+    dashing,
+    attack,
+    abilityOne,
+    abilityTwo,
+    abilityThree
+}
+public enum playerState
+{
     idle,
     moving,
     dashing,
     attack,
-    attackEnd
+    attackEnd,
+    ability
 }
 public class PlayerController : MonoBehaviour
 {
@@ -54,6 +64,8 @@ public class PlayerController : MonoBehaviour
     private CircleCollider2D col2D;
     [SerializeField]
     private Attacks attack;
+    [SerializeField]
+    private Abilities ability;
 
     [Header("Others")]
 
@@ -68,7 +80,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] [ReadOnly]
     private Vector2 LastDirection;
     [field: SerializeField] [field: ReadOnly]
-    public actionState CurrentState { get; private set; }
+    public playerState CurrentState { get; private set; }
     [SerializeField] [ReadOnly]
     private actionState bufferedState;
     public Vector2 mousePos { get; private set; }
@@ -79,14 +91,16 @@ public class PlayerController : MonoBehaviour
 
     private Coroutine dashCoroutine;
     private Timer timers;
-    [SerializeField] [ReadOnly]
+    [SerializeField][ReadOnly]
     private bool isDashing;
-    [SerializeField] [ReadOnly]
+    [SerializeField][ReadOnly]
     private bool isMoving;
-    [SerializeField] [ReadOnly]
+    [SerializeField][ReadOnly]
     private bool isAttacking;
-    [SerializeField] [ReadOnly]
+    [SerializeField][ReadOnly]
     private bool isAttackEnd;
+    [SerializeField][ReadOnly]
+    private bool isUsingAbility;
 
     void Awake()
     {
@@ -95,9 +109,7 @@ public class PlayerController : MonoBehaviour
     }
     public void Start()
     {
-        CurrentState = actionState.idle;
-        timers = TimerManager.instance.GenerateTimers(typeof(coolDownTimers), gameObject);
-        CurrentState = actionState.idle;
+        timers = TimerManager.Instance.GenerateTimers(typeof(coolDownTimers), gameObject);
         currentMaxSpeed = maxSpeed;
         cam = Camera.main;
         currentDashCharges = dashCharges;
@@ -132,6 +144,19 @@ public class PlayerController : MonoBehaviour
     {
         BufferInput(actionState.dashing);
     }
+
+    public void BufferAbilityOne(InputAction.CallbackContext context)
+    {
+        BufferInput(actionState.abilityOne);
+    }
+    public void BufferAbilityTwo(InputAction.CallbackContext context)
+    {
+        BufferInput(actionState.abilityTwo);
+    }
+    public void BufferAbilityThree(InputAction.CallbackContext context)
+    {
+        BufferInput(actionState.abilityThree);
+    }
     #endregion
 
     #region Updates
@@ -162,6 +187,15 @@ public class PlayerController : MonoBehaviour
             case (int)actionState.attack:
                 attack.LightAttack();
                 break;
+            case (int)actionState.abilityOne:
+                ability.CastSlotOne();
+                break;
+            case (int)actionState.abilityTwo:
+                ability.CastSlotTwo();
+                break;
+            case (int)actionState.abilityThree:
+                ability.CastSlotThree();
+                break;
 
         }
         if (currentBufferDuration > 0)
@@ -172,7 +206,7 @@ public class PlayerController : MonoBehaviour
 
     public void RemoveBufferInput()
     {
-        bufferedState = actionState.idle;
+        bufferedState = actionState.nothing;
     }
 
     private void BufferInput(actionState input)
@@ -187,7 +221,7 @@ public class PlayerController : MonoBehaviour
     {
         isMoving = false;
         rb.drag = drag;
-        actionState[] allowed = { actionState.idle, actionState.moving };
+        playerState[] allowed = { playerState.idle, playerState.moving };
 
         if (!CheckStates(allowed))
             return;
@@ -207,7 +241,7 @@ public class PlayerController : MonoBehaviour
     #region Dash
     private void Dash()
     {
-        actionState[] unAllowed = { actionState.attack };
+        playerState[] unAllowed = { playerState.attack, playerState.ability };
         if (CheckStates(unAllowed))
             return;
         if (!timers.IsTimeZero((int)coolDownTimers.dashCD) || currentDashCharges < 1)
@@ -217,7 +251,6 @@ public class PlayerController : MonoBehaviour
         isDashing = true;
         currentDashCharges--;
         timers.SetTime((int)coolDownTimers.dashCD, dashCDTimer + dashDuration);
-        CurrentState = actionState.dashing;
         col2D.excludeLayers += enemyLayer;
         dashCoroutine = StartCoroutine(StartDashing());
     }
@@ -245,7 +278,7 @@ public class PlayerController : MonoBehaviour
 
     private void DashCounter()
     {
-        if (currentDashCharges < dashCharges && CurrentState != actionState.dashing)
+        if (currentDashCharges < dashCharges && CurrentState != playerState.dashing)
         {
             currentDashCharges += (1 / dashRechargeRate) * Time.deltaTime;
         }
@@ -289,23 +322,27 @@ public class PlayerController : MonoBehaviour
     {
         if (isDashing)
         {
-            CurrentState = actionState.dashing;
+            CurrentState = playerState.dashing;
+        }
+        else if (isUsingAbility)
+        {
+            CurrentState = playerState.ability;
         }
         else if (isAttacking)
         {
-            CurrentState = actionState.attack;
+            CurrentState = playerState.attack;
         }
         else if (isAttackEnd)
         {
-            CurrentState = actionState.attackEnd;
+            CurrentState = playerState.attackEnd;
         }
         else if (isMoving)
         {
-            CurrentState = actionState.moving;
+            CurrentState = playerState.moving;
         }
         else
         {
-            CurrentState = actionState.idle;
+            CurrentState = playerState.idle;
         }
     }
 
@@ -317,10 +354,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public bool CheckStates(actionState[] allowedStates)
+    public bool CheckStates(playerState[] allowedStates)
     {
         bool allowed = false;
-        foreach (actionState action in allowedStates)
+        foreach (playerState action in allowedStates)
         {
             if (action == CurrentState)
                 allowed = true;

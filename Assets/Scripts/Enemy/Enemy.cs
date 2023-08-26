@@ -13,22 +13,12 @@ public enum EnemyType
     etc
 }
 
-public enum Element
-{
-    NoElement,
-    Fire,
-    Water,
-    Shock,
-    Poison,
-    Wind,
-    Nature
-}
 
 public abstract class Enemy : MonoBehaviour, IDamageable
 {
     [field: Header("Enemy Info")]
     [field: SerializeField] public EnemyType Type { get; set; }
-    [field: SerializeField] public Element Element { get; set; }
+    [field: SerializeField] public ElementType Element { get; set; }
     [field: SerializeField] public float Hitpoints { get; set; }
     [field: SerializeField] public float MaxHealth { get; set; } 
     [field: SerializeField] public float Damage { get; set; }
