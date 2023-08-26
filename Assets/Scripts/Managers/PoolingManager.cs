@@ -9,6 +9,18 @@ public class PoolingManager : MonoBehaviour
     public static PoolingManager Instance { get; private set; }
 
     public Dictionary<GameObject, IPools> Pools = new Dictionary<GameObject, IPools>();
+
+    private void Awake()
+    {
+        if (!Instance)
+        {
+            Instance = this;
+        }
+        else
+        {
+            DestroyImmediate(this);
+        }
+    }
     void Start()
     {
         enabled = false;
@@ -25,7 +37,7 @@ public class PoolingManager : MonoBehaviour
     /// <typeparam name="T"></typeparam>
     /// <param name="objToSpawn"></param>
     /// <param name="pool"></param>
-    public void FindPool<T>(GameObject objToSpawn, out Pool<T> pool) where T : MonoBehaviour, IPoolable<T>
+    public void FindPool<T>(GameObject objToSpawn, out Pool<T> pool,string poolName = null) where T : MonoBehaviour, IPoolable<T>
     {
         IPools foundPool;
         if (Pools.TryGetValue(objToSpawn,out foundPool) && foundPool is Pool<T>)
@@ -34,7 +46,7 @@ public class PoolingManager : MonoBehaviour
         }
         else
         {
-            Pool<T> newPool = new Pool<T>(objToSpawn, transform);
+            Pool<T> newPool = new Pool<T>(objToSpawn, transform, poolName);
             Pools.Add(objToSpawn, newPool);
             pool = newPool;
         }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CustomMath
+public static class CustomMath
 {
     // Start is called before the first frame update
     public static float ClampedDirection(Vector2 originVector, Vector2 dirVecotr)

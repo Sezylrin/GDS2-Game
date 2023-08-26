@@ -6,16 +6,20 @@ using System;
 public class TimerManager : MonoBehaviour
 {
     // Start is called before the first frame update
-    public static TimerManager instance { get; private set; }
+    public static TimerManager Instance { get; private set; }
 
     [SerializeField]
     private List<Timer> timers = new List<Timer>();
     // Update is called once per frame
     private void Awake()
     {
-        if (instance == null)
+        if (!Instance)
         {
-            instance = this;
+            Instance = this;
+        }
+        else
+        {
+            DestroyImmediate(this);
         }
     }
     private void LateUpdate()

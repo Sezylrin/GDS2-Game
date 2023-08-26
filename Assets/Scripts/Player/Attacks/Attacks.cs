@@ -42,7 +42,7 @@ public class Attacks : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        timers = TimerManager.instance.GenerateTimers(typeof(coolDownTimers), gameObject);
+        timers = TimerManager.Instance.GenerateTimers(typeof(coolDownTimers), gameObject);
         playerControl = GetComponent<PlayerController>();
         maxCombo = lightHitboxes.Length;
     }
@@ -77,7 +77,7 @@ public class Attacks : MonoBehaviour
 
     public void LightAttack()
     {
-        actionState[] unAllowed = { actionState.dashing};
+        playerState[] unAllowed = { playerState.dashing};
         if (playerControl.CheckStates(unAllowed))
             return;
         if (currentCombo >= maxCombo || currentAttackStage == attackStage.attackStart)
