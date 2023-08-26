@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Type>k__BackingField: 0
-  <Element>k__BackingField: 0
+  <Element>k__BackingField: 1
   <Hitpoints>k__BackingField: 0
   <MaxHealth>k__BackingField: 0
   <Damage>k__BackingField: 0
@@ -256,6 +256,8 @@ MonoBehaviour:
   <WalkingSound>k__BackingField: {fileID: 0}
   <DeathSound>k__BackingField: {fileID: 0}
   <EffectDuration>k__BackingField: 5
+  <debugElement>k__BackingField: 0
+  <debugApplyElement>k__BackingField: 0
 --- !u!212 &1543592469
 SpriteRenderer:
   m_ObjectHideFlags: 0
