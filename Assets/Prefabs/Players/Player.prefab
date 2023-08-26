@@ -379,6 +379,7 @@ GameObject:
   - component: {fileID: 5754933048486312608}
   - component: {fileID: 3543791458973239697}
   - component: {fileID: 3543791458973239696}
+  - component: {fileID: 864687015}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -490,6 +491,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9d7b4bf848b1de4291fae97960aea05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timer:
+    <times>k__BackingField: []
+    owner: {fileID: 0}
+  MaxCastPoints: 3
+  CurrentCastPoints: 0
+  pointRegenRate: 3
+  regenTimer: 0
+  regenDelay: 2
+  debugCost: 1
   startingHitPoint: 100
   <Hitpoints>k__BackingField: 0
 --- !u!114 &3543791458973239697
@@ -517,6 +527,7 @@ MonoBehaviour:
   <rb>k__BackingField: {fileID: 3543791458973239727}
   col2D: {fileID: 3543791458973239724}
   attack: {fileID: 3543791458973239696}
+  ability: {fileID: 864687015}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -528,6 +539,7 @@ MonoBehaviour:
   isMoving: 0
   isAttacking: 0
   isAttackEnd: 0
+  isUsingAbility: 0
 --- !u!114 &3543791458973239696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -555,6 +567,37 @@ MonoBehaviour:
   - {fileID: 3543791458473558711}
   - {fileID: 3543791458936431154}
   - {fileID: 3543791457572395628}
+--- !u!114 &864687015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3543791458973239701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a73727983ababf4e86d193f39e13713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerController: {fileID: 3543791458973239697}
+  playerSystem: {fileID: 5754933048486312608}
+  abilities:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  abilityShape:
+    abilityShapePF:
+      _serializedList:
+      - Key: 0
+        Value: {fileID: 0}
+      - Key: 1
+        Value: {fileID: 0}
+      - Key: 2
+        Value: {fileID: 0}
+  test: {fileID: 11400000, guid: 9298357c5076a7a4bbed9620351108aa, type: 2}
 --- !u!1 &3543791459337211977
 GameObject:
   m_ObjectHideFlags: 0
