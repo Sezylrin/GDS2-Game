@@ -5,6 +5,10 @@ using UnityEngine;
 public class TestEnemy : Enemy
 {
     // Start is called before the first frame update
+
+    [field: SerializeField] ElementType debugElement { get; set; }
+    [field: SerializeField] bool debugApplyElement { get; set; }
+
     void Start()
     {
         
@@ -13,6 +17,10 @@ public class TestEnemy : Enemy
     // Update is called once per frame
     void Update()
     {
-        
+        if (debugApplyElement)
+        {
+            debugApplyElement = false;
+            ApplyElementEffect(debugElement);
+        }
     }
 }

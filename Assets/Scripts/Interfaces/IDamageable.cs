@@ -7,7 +7,7 @@ public interface IDamageable
     public float Hitpoints { get; set; }
 
     public void SetHitPoints();
-    public void TakeDamage(float amount);
+    public void TakeDamage(float amount, ElementType type = ElementType.noElement);
     public void OnDeath();
 
 }
