@@ -24,12 +24,18 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     [field: SerializeField] public float Damage { get; set; }
     [field: SerializeField] public float Speed { get; set; }
     [field: SerializeField, ReadOnly] public float Souls { get; set; }
+    [field: SerializeField] public ElementType ActiveElementEffect { get; set; }
 
     [field: Header("Other")]
-    
     [field: SerializeField] public AudioSource WalkingSound { get; set; }
     [field: SerializeField] public AudioSource DeathSound { get; set; }
 
+    [field: Header("Testing Variables")]
+    [field: SerializeField] public int EffectDuration { get; set; }
+
+    protected IEnumerator effectTimerCoroutine;
+
+   
     //public EnemyManager Manager { get; set; }
     //punlic Player Player { get; set; }
 
@@ -37,6 +43,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     {
         //Manager = GameManager.EnemyManager;
         SetStats();
+        ActiveElementEffect = Element;
+        effectTimerCoroutine = EffectTimer();
     }
 
     protected virtual void Awake()
@@ -54,7 +62,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     }
 
-    public virtual void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage, ElementType type)
     {
         /* if (CheckCombo() || CheckResistance())
         {
@@ -62,6 +70,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         }
         else */ Hitpoints -= damage;
         if (Hitpoints <= 0) OnDeath();
+        ApplyElementEffect(type);
     }
 
     public virtual void OnDeath()
@@ -78,5 +87,24 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     protected virtual void Attack()
     {
        //Attacking logic
+    }
+
+    protected virtual void ApplyElementEffect(ElementType type)
+    {
+        StopCoroutine("EffectTimer");
+        ActiveElementEffect = type;
+        StartCoroutine("EffectTimer", 0f);
+    }
+
+    protected virtual void RemoveElementEffect()
+    {
+        ActiveElementEffect = Element;
+    }
+
+    protected virtual IEnumerator EffectTimer()
+    {
+        yield return new WaitForSeconds(EffectDuration);
+        RemoveElementEffect();
+  
     }
 }
