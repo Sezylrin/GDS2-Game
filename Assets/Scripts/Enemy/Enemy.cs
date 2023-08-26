@@ -31,7 +31,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     [field: SerializeField] public AudioSource DeathSound { get; set; }
 
     [field: Header("Testing Variables")]
-    [field: SerializeField] public int EffectDuration { get; set; }
+    [field: SerializeField] public int EffectDuration { get; set; } = 5;
 
     protected IEnumerator effectTimerCoroutine;
 
