@@ -5,6 +5,8 @@ using UnityEngine;
 public interface IPoolable<T> where T : MonoBehaviour, IPoolable<T>
 {
     public Pool<T> Pool { get; set; }
+
+    public bool IsPooled { get; set; }
     /// <summary>
     /// Implement a function to add itself back into the pool.
     /// Use to replace destroy function in execution
@@ -45,6 +47,7 @@ public class Pool<T> : IPools where T : MonoBehaviour, IPoolable<T>
             pooledObj[0].gameObject.SetActive(true);
             T ScriptToReturn = pooledObj[0];
             pooledObj.RemoveAt(0);
+            ScriptToReturn.IsPooled = false;
             return ScriptToReturn;
         }
         else
@@ -66,6 +69,9 @@ public class Pool<T> : IPools where T : MonoBehaviour, IPoolable<T>
 
     public void PoolObj(T objToPool)
     {
+        if (objToPool.IsPooled)
+            return;
+        objToPool.IsPooled = true;
         pooledObj.Add(objToPool);
         objToPool.gameObject.SetActive(false);
     }

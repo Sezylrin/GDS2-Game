@@ -5,6 +5,10 @@ using UnityEngine;
 public class ProjectileAbility : AbilityBase
 {
     // Start is called before the first frame update
+    [SerializeField]
+    private CircleCollider2D col2D;
+    [SerializeField]
+    private ProjectileElementSO selected;
     void Start()
     {
         
@@ -18,6 +22,33 @@ public class ProjectileAbility : AbilityBase
 
     protected override void CastAbility()
     {
-        Debug.Log("test");
+        selected = selectedAbility as ProjectileElementSO;
+        LaunchTowardsTarget();
+
+    }
+
+    protected override void InvokePoolSelf(object sender, Timer.OnTimeIsZeroEventArgs e)
+    {
+        if (e.timerSlot == 0)
+        {
+            Debug.Log("pooled self");
+            poolSelf();
+            base.InvokePoolSelf(sender, e);
+        }
+    }
+
+    private void LaunchTowardsTarget()
+    {
+        transform.position = initialPos;
+        rb.velocity = direction.normalized * selected.speed;
+    }
+
+    protected override void OnTriggerEnter2D(Collider2D collision)
+    {
+        base.OnTriggerEnter2D(collision);
+        if (CurrentPierce <= 0 || collision.CompareTag(Tags.T_Terrain))
+        {
+            poolSelf();
+        }
     }
 }

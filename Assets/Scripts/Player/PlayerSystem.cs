@@ -12,6 +12,8 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     [Header("General")]
     [SerializeField]
     private Timer timer;
+    [SerializeField]
+    private PlayerComponentManager PCM;
 
     private void Start()
     {
@@ -49,7 +51,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     }
     public bool AttemptCast(int cost)
     {
-        if (cost < CurrentCastPoints)
+        if (cost <= CurrentCastPoints)
         {
             timer.SetTime((int)SystemCD.pointRegenDelay, regenDelay);
             regenTimer -= cost * pointRegenRate;

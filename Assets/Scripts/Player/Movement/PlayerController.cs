@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 using KevinCastejon.MoreAttributes;
 
 public enum actionState
@@ -28,6 +29,15 @@ public class PlayerController : MonoBehaviour
     {
         dashCD
     }
+
+    [field: Header("Core variables")]
+    [field: SerializeField]
+    public Rigidbody2D rb { get; private set; }
+    [SerializeField]
+    private CircleCollider2D col2D;
+    [SerializeField]
+    private PlayerComponentManager PCM;
+    
     [Header("Speed Stats")]
 
     [SerializeField]
@@ -38,6 +48,7 @@ public class PlayerController : MonoBehaviour
     private float currentMaxSpeed;
 
     [Header("Dash Stats")]
+
     [SerializeField]
     private float dashCDTimer;
     [SerializeField]
@@ -51,21 +62,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] [ReadOnly]
     private float currentDashCharges;
 
+    [field:Header("Transforms")]
+    [field:SerializeField]
+    public Transform AbilityCentre { get; private set; } 
+
     [Header("Input Buffer")]
 
     [SerializeField]
     private int bufferDuration;
     private int currentBufferDuration;
-
-    [field: Header("Core variables")]
-    [field: SerializeField]
-    public Rigidbody2D rb { get; private set; }
-    [SerializeField]
-    private CircleCollider2D col2D;
-    [SerializeField]
-    private Attacks attack;
-    [SerializeField]
-    private Abilities ability;
 
     [Header("Others")]
 
@@ -147,15 +152,18 @@ public class PlayerController : MonoBehaviour
 
     public void BufferAbilityOne(InputAction.CallbackContext context)
     {
-        BufferInput(actionState.abilityOne);
+        if (context.interaction is PressInteraction)
+            BufferInput(actionState.abilityOne);
     }
     public void BufferAbilityTwo(InputAction.CallbackContext context)
     {
-        BufferInput(actionState.abilityTwo);
+        if (context.interaction is PressInteraction)
+            BufferInput(actionState.abilityTwo);
     }
     public void BufferAbilityThree(InputAction.CallbackContext context)
     {
-        BufferInput(actionState.abilityThree);
+        if (context.interaction is PressInteraction)
+            BufferInput(actionState.abilityThree);
     }
     #endregion
 
@@ -167,11 +175,23 @@ public class PlayerController : MonoBehaviour
         SetMousePos();
         ExecuteInput();
         DashCounter();
+        AimAbility();
     }
 
     private void FixedUpdate()
     {
         Move();
+    }
+
+    #endregion
+
+    #region AbilityAim
+
+    private void AimAbility()
+    {
+        Vector3 vectorToTarget = (Vector3)mousePos - AbilityCentre.position;
+        float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
+        AbilityCentre.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
     #endregion
@@ -185,16 +205,16 @@ public class PlayerController : MonoBehaviour
                 Dash();
                 break;
             case (int)actionState.attack:
-                attack.LightAttack();
+                PCM.attack.LightAttack();
                 break;
             case (int)actionState.abilityOne:
-                ability.CastSlotOne();
+                PCM.abilities.CastSlotOne();
                 break;
             case (int)actionState.abilityTwo:
-                ability.CastSlotTwo();
+                PCM.abilities.CastSlotTwo();
                 break;
             case (int)actionState.abilityThree:
-                ability.CastSlotThree();
+                PCM.abilities.CastSlotThree();
                 break;
 
         }
@@ -246,7 +266,7 @@ public class PlayerController : MonoBehaviour
             return;
         if (!timers.IsTimeZero((int)coolDownTimers.dashCD) || currentDashCharges < 1)
             return;
-        attack.ResetTimer();
+        PCM.attack.ResetTimer();
         RemoveBufferInput();
         isDashing = true;
         currentDashCharges--;
@@ -348,7 +368,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Terrain"))
+        if (collision.gameObject.CompareTag(Tags.T_Terrain))
         {
             StopDash(dashCoroutine);
         }

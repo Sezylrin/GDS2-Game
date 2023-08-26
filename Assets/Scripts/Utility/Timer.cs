@@ -10,6 +10,12 @@ public class Timer
     [field:SerializeField][field:ReadOnly]
     public float[] times { get; private set; }
 
+    public event EventHandler<OnTimeIsZeroEventArgs> OnTimeIsZero;
+    public class OnTimeIsZeroEventArgs : EventArgs
+    {
+        public int timerSlot;
+    }
+
     public GameObject owner;
     /// <summary>
     /// Generate a timer using ints
@@ -30,6 +36,11 @@ public class Timer
     {
         this.owner = owner;
         times = new float[Enum.GetValues(enumName).Length];
+    }
+
+    public void InvokeOnTimeIsZero(int timeSlot)
+    {
+        OnTimeIsZero?.Invoke(this, new OnTimeIsZeroEventArgs { timerSlot = timeSlot });
     }
     /// <summary>
     /// Sets the time in seconds at the int position of the float array
@@ -96,6 +107,11 @@ public class Timer
         {
             times[i] = 0;
         }
+    }
+
+    public void DeleteTimer()
+    {
+        owner = null;
     }
 
     private bool ErrorPosition(int position)

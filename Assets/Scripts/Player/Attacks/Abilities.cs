@@ -17,9 +17,9 @@ public class Abilities : MonoBehaviour
 {
     [Header("Core")]
     [SerializeField]
-    private PlayerController playerController;
+    private PlayerComponentManager PCM;
     [SerializeField]
-    private PlayerSystem playerSystem;
+    private Transform abilitySpawnPoint;
 
     [Header("abilities")]
     [SerializeField]
@@ -43,17 +43,17 @@ public class Abilities : MonoBehaviour
     }
     public void CastSlotOne()
     {
-        playerController.RemoveBufferInput();
+        PCM.control.RemoveBufferInput();
         CastAbility(AbilitySetOne ? abilities[3] : abilities[0]);
     }
     public void CastSlotTwo()
     {
-        playerController.RemoveBufferInput();
+        PCM.control.RemoveBufferInput();
         CastAbility(AbilitySetOne ? abilities[4] : abilities[1]);
     }
     public void CastSlotThree()
     {
-        playerController.RemoveBufferInput();
+        PCM.control.RemoveBufferInput();
         CastAbility(AbilitySetOne ? abilities[5] : abilities[2]);
     }
     public void SetSlot(ElementalSO abilityToUse, int slot)
@@ -70,13 +70,25 @@ public class Abilities : MonoBehaviour
 
     private void CastAbility(ElementalSO selected)
     {
-        if (!selected) return;
-
+        if (!selected)
+            return;
+        if (!PCM.system.AttemptCast(selected.castCost))
+            return;
+        //play animation
         Pool<AbilityBase> temp;
         if (pools.TryGetValue(selected.type, out temp))
         {
             AbilityBase ability = temp.GetPooledObj();
-            ability.SetSelectedAbility(selected);
+            if (selected.type.Equals(AbilityType.AOE))
+            {
+                ability.SetSelectedAbility(selected, transform.position);
+            }
+            else
+            {
+                Vector3 dir = abilitySpawnPoint.position - transform.position;
+                ability.SetSelectedAbility(selected, abilitySpawnPoint.position, dir);
+            }
+            
         }
     }
 
@@ -90,6 +102,14 @@ public class Abilities : MonoBehaviour
         CastAbility(test);
     }
 
+    [ContextMenu("SetAbilitiesToDebug")]
+    private void SetAbilities()
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            SetSlot(test, i);
+        }
+    }
     #endregion
 }
 
