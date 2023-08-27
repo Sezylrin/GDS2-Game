@@ -14,26 +14,44 @@ public enum EnemyType
 }
 
 
-public abstract class Enemy : MonoBehaviour, IDamageable
+public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<Enemy>
 {
+    protected enum EnemyTimers
+    {
+        effectedTimer
+    }
+
     [field: Header("Enemy Info")]
-    [field: SerializeField] public EnemyType Type { get; set; }
-    [field: SerializeField] public ElementType Element { get; set; } = ElementType.noElement;
+    [field: SerializeField] protected EnemyType Type { get; set; }
+    [field: SerializeField] protected ElementType Element { get; set; } = ElementType.noElement;
     [field: SerializeField] public float Hitpoints { get; set; }
-    [field: SerializeField] public float MaxHealth { get; set; } 
-    [field: SerializeField] public float Damage { get; set; }
-    [field: SerializeField] public float Speed { get; set; }
-    [field: SerializeField, ReadOnly] public float Souls { get; set; }
-    [field: SerializeField] public ElementType ActiveElementEffect { get; set; }
+    [field: SerializeField] protected float MaxHealth { get; set; } 
+    [field: SerializeField] protected float Damage { get; set; }
+    [field: SerializeField] protected float Speed { get; set; }
+    [field: SerializeField, ReadOnly] protected float Souls { get; set; }
+    [field: SerializeField] protected ElementType ActiveElementEffect { get; set; }
 
     [field: Header("Other")]
-    [field: SerializeField] public AudioSource WalkingSound { get; set; }
-    [field: SerializeField] public AudioSource DeathSound { get; set; }
+    [field: SerializeField] protected AudioSource WalkingSound { get; set; }
+    [field: SerializeField] protected AudioSource DeathSound { get; set; }
+    [field: SerializeField] protected Timer timer { get; private set; }
 
     [field: Header("Testing Variables")]
-    [field: SerializeField] public int EffectDuration { get; set; } = 5;
+    [field: SerializeField] protected int EffectDuration { get; set; } = 5;
 
-    protected IEnumerator effectTimerCoroutine;
+    #region Combo Interface Properties
+    [field: Header("Combo Interface")]
+    [field: SerializeField] public Transform SpawnPosition { get; set; }
+    [field: SerializeField] public List<ElementCombos> ActiveCombos { get; set; }
+    [field: SerializeField] public Timer ComboEffectTimer { get; set; }
+    [field: SerializeField] public LayerMask TargetLayer { get; set; }
+    #endregion
+
+    #region Pooling
+    public Pool<Enemy> Pool { get; set; }
+    public bool IsPooled { get; set; }
+    #endregion
+
 
    
     //public EnemyManager Manager { get; set; }
@@ -44,22 +62,30 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         //Manager = GameManager.EnemyManager;
         SetStats();
         ActiveElementEffect = Element;
-        effectTimerCoroutine = EffectTimer();
+
     }
 
     protected virtual void Awake()
     {
         Init();
+
+    }
+
+    protected virtual void Start()
+    {
+        timer = TimerManager.Instance.GenerateTimers(typeof(EnemyTimers), gameObject);
+        timer.OnTimeIsZero += RemoveElementEffect;
     }
 
     public virtual void SetStats()
     {
-        Hitpoints = MaxHealth;
+
+        SetHitPoints();
     }
 
     public void SetHitPoints()
     {
-
+        Hitpoints = MaxHealth;
     }
 
     public virtual void TakeDamage(float damage, ElementType type)
@@ -76,7 +102,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     public virtual void OnDeath()
     {
         if (DeathSound) DeathSound.Play();
-        Destroy(gameObject); //Temp -> Replace with pooling
+        poolSelf();
     }
 
     protected virtual void AttemptAttack() //Check if Enemy Manager has an attack point available
@@ -91,20 +117,59 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     protected virtual void ApplyElementEffect(ElementType type)
     {
-        StopCoroutine("EffectTimer");
+        timer.SetTime((int)EnemyTimers.effectedTimer, EffectDuration);
         ActiveElementEffect = type;
-        StartCoroutine("EffectTimer", 0f);
     }
 
-    protected virtual void RemoveElementEffect()
+    protected virtual void RemoveElementEffect(object sender, Timer.OnTimeIsZeroEventArgs e)
     {
-        ActiveElementEffect = Element;
+        if (e.timerSlot == (int)EnemyTimers.effectedTimer)
+            ActiveElementEffect = Element;
     }
 
-    protected virtual IEnumerator EffectTimer()
+
+
+    #region Combo Interface Methods
+    public void SetTimers()
     {
-        yield return new WaitForSeconds(EffectDuration);
-        RemoveElementEffect();
-  
+
     }
+
+    public void ApplyFireSurge()
+    {
+
+    }
+
+    public void ApplyAquaVolt()
+    {
+
+    }
+
+    public void ApplyFireTornado(LayerMask Target)
+    {
+
+    }
+
+    public void ApplyBrambles(LayerMask Target)
+    {
+        
+    }
+
+    public void ApplyNoxiousGas()
+    {
+        
+    }
+
+    public void ApplyWither()
+    {
+        
+    }
+    #endregion
+
+    #region Pooling
+    public void poolSelf()
+    {
+        Pool.PoolObj(this);
+    }
+    #endregion
 }
