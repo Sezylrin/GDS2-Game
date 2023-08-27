@@ -6,8 +6,12 @@ public class TestEnemy : Enemy
 {
     // Start is called before the first frame update
 
+    [field: SerializeField] int debugDamage { get; set; }
+    [field: SerializeField] int debugStaggerPoints { get; set; }
     [field: SerializeField] ElementType debugElement { get; set; }
+    [field: SerializeField] bool debugTakeDamage { get; set; }
     [field: SerializeField] bool debugApplyElement { get; set; }
+    [field: SerializeField] bool debugStartStagger { get; set; }
 
     protected override void Awake()
     {
@@ -19,12 +23,23 @@ public class TestEnemy : Enemy
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
+        base.Update();
         if (debugApplyElement)
         {
             debugApplyElement = false;
             ApplyElementEffect(debugElement);
+        }
+        if (debugStartStagger)
+        {
+            debugStartStagger = false;
+            BeginStagger();
+        }
+        if (debugTakeDamage)
+        {
+            debugTakeDamage = false;
+            TakeDamage(debugDamage, debugElement, debugStaggerPoints);
         }
     }
 }

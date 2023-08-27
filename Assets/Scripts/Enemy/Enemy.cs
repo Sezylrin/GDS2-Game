@@ -2,6 +2,7 @@ using KevinCastejon.MoreAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum EnemyType
 {
@@ -18,7 +19,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
 {
     protected enum EnemyTimers
     {
-        effectedTimer
+        effectedTimer,
+        staggerTimer,
+        staggerScale
     }
 
     [field: Header("Enemy Info")]
@@ -32,12 +35,20 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     [field: SerializeField] protected ElementType ActiveElementEffect { get; set; }
 
     [field: Header("Other")]
+    [field: SerializeField] protected bool Staggered { get; set; } = false;
     [field: SerializeField] protected AudioSource WalkingSound { get; set; }
-    [field: SerializeField] protected AudioSource DeathSound { get; set; }
-    [field: SerializeField] protected Timer timer { get; private set; }
+    [field: SerializeField] protected GameObject DeathSoundPrefab { get; set; }
+    [field: SerializeField] protected Image HealthBarImage { get; set; }
+    protected float HealthBarPercentage;
+    [field: SerializeField] protected Image ElementEffectImage { get; set; }
+    [field: SerializeField] protected GameObject StaggeredImage { get; set; }
+
+    protected Timer Timer { get; private set; }
 
     [field: Header("Testing Variables")]
     [field: SerializeField] protected int EffectDuration { get; set; } = 5;
+    [field: SerializeField] protected int StaggerDuration { get; set; } = 3;
+    [field: SerializeField] protected int PointsToStagger { get; set; } = 100;
 
     #region Combo Interface Properties
     [field: Header("Combo Interface")]
@@ -53,9 +64,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     #endregion
 
 
-   
-    //public EnemyManager Manager { get; set; }
-    //punlic Player Player { get; set; }
+
+    //protected EnemyManager Manager { get; set; }
+    //protected Player Player { get; set; }
 
     protected virtual void Init()
     {
@@ -73,13 +84,18 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
 
     protected virtual void Start()
     {
-        timer = TimerManager.Instance.GenerateTimers(typeof(EnemyTimers), gameObject);
-        timer.OnTimeIsZero += RemoveElementEffect;
+        Timer = TimerManager.Instance.GenerateTimers(typeof(EnemyTimers), gameObject);
+        Timer.OnTimeIsZero += RemoveElementEffect;
+        Timer.OnTimeIsZero += EndStagger;
+    }
+
+    protected virtual void Update()
+    {
+
     }
 
     public virtual void SetStats()
     {
-
         SetHitPoints();
     }
 
@@ -88,26 +104,35 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         Hitpoints = MaxHealth;
     }
 
-    public virtual void TakeDamage(float damage, ElementType type)
+    public virtual void TakeDamage(float damage, ElementType type, int staggerPoints)
     {
         /* if (CheckCombo() || CheckResistance())
         {
             CurrentHealth -= damage * damageMultiplier;
         }
         else */ Hitpoints -= damage;
-        if (Hitpoints <= 0) OnDeath();
+        if (Hitpoints <= 0)
+        {
+            OnDeath();
+            return;
+        }
+         
         ApplyElementEffect(type);
+        AddToStaggerScale(staggerPoints);
+
+        HealthBarPercentage = Hitpoints / MaxHealth;
+        if (HealthBarImage) HealthBarImage.fillAmount = HealthBarPercentage;
     }
 
     public virtual void OnDeath()
     {
-        if (DeathSound) DeathSound.Play();
+        if (DeathSoundPrefab) Instantiate(DeathSoundPrefab);
         poolSelf();
     }
 
     protected virtual void AttemptAttack() //Check if Enemy Manager has an attack point available
     {
-        //if (Manager.CanAttack) Attack()
+        //if (Manager.CanAttack) Attack();
     }
 
     protected virtual void Attack()
@@ -117,14 +142,91 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
 
     protected virtual void ApplyElementEffect(ElementType type)
     {
-        timer.SetTime((int)EnemyTimers.effectedTimer, EffectDuration);
+        Timer.SetTime((int)EnemyTimers.effectedTimer, EffectDuration);
         ActiveElementEffect = type;
+        switch (type)
+        {
+            case ElementType.noElement:
+                ElementEffectImage.color = Color.grey;
+                break;
+            case ElementType.fire:
+                ElementEffectImage.color = Color.red;
+                break;
+            case ElementType.water:
+                ElementEffectImage.color = Color.blue;
+                break;
+            case ElementType.electric:
+                ElementEffectImage.color = Color.yellow;
+                break;
+            case ElementType.wind:
+                ElementEffectImage.color = Color.white;
+                break;
+            case ElementType.poison:
+                ElementEffectImage.color = Color.magenta;
+                break;
+            case ElementType.nature:
+                ElementEffectImage.color = Color.green;
+                break;
+        }
     }
 
     protected virtual void RemoveElementEffect(object sender, Timer.OnTimeIsZeroEventArgs e)
     {
         if (e.timerSlot == (int)EnemyTimers.effectedTimer)
+        {
             ActiveElementEffect = Element;
+            switch (Element)
+            {
+                case ElementType.noElement:
+                    ElementEffectImage.color = Color.grey;
+                    break;
+                case ElementType.fire:
+                    ElementEffectImage.color = Color.red;
+                    break;
+                case ElementType.water:
+                    ElementEffectImage.color = Color.blue;
+                    break;
+                case ElementType.electric:
+                    ElementEffectImage.color = Color.yellow;
+                    break;
+                case ElementType.wind:
+                    ElementEffectImage.color = Color.white;
+                    break;
+                case ElementType.poison:
+                    ElementEffectImage.color = Color.magenta;
+                    break;
+                case ElementType.nature:
+                    ElementEffectImage.color = Color.green;
+                    break;
+            }
+        }
+    }
+
+    protected virtual void BeginStagger()
+    {
+        Timer.SetTime((int)EnemyTimers.staggerTimer, StaggerDuration);
+        Staggered = true;
+        StaggeredImage.SetActive(true);
+    }
+
+    protected virtual void EndStagger(object sender, Timer.OnTimeIsZeroEventArgs e)
+    {
+        if (e.timerSlot == (int)EnemyTimers.staggerTimer)
+        {
+            Staggered = false;
+            StaggeredImage.SetActive(false);
+        } 
+    }
+
+    protected virtual void AddToStaggerScale(int staggerPoints)
+    {
+        Timer.ReduceCoolDown((int)EnemyTimers.staggerScale, staggerPoints/-10);
+
+        if (Timer.GetTime((int)EnemyTimers.staggerScale) * 10 >= PointsToStagger)
+        {
+            Timer.SetTime((int)EnemyTimers.staggerScale, 0);
+            BeginStagger();
+        }
     }
 
 
