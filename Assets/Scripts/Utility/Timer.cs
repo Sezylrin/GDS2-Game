@@ -16,6 +16,7 @@ public class Timer
         public int timerSlot;
     }
 
+    [ReadOnly]
     public GameObject owner;
     /// <summary>
     /// Generate a timer using ints
@@ -53,9 +54,9 @@ public class Timer
         {
            return;
         }
-        if (amount <= 0)
+        if (amount == 0)
         {
-            Debug.LogWarning("you have set a redundant time, the timer at position " + position + " will automatically be set to 0");
+            InvokeOnTimeIsZero(position);
         }
         times[position] = amount;
     }

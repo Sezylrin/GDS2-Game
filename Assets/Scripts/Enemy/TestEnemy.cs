@@ -9,9 +9,13 @@ public class TestEnemy : Enemy
     [field: SerializeField] ElementType debugElement { get; set; }
     [field: SerializeField] bool debugApplyElement { get; set; }
 
-    void Start()
+    protected override void Awake()
     {
-        
+        base.Awake();
+    }
+    protected override void Start()
+    {
+        base.Start();
     }
 
     // Update is called once per frame

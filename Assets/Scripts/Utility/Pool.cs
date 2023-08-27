@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,7 +24,7 @@ public interface IPools
 public class Pool<T> : IPools where T : MonoBehaviour, IPoolable<T>
 {
     [SerializeField]
-    private List<T> pooledObj = new List<T>();
+    private Stack<T> pooledObj = new Stack<T>();
     private GameObject objToSpawn;
     private Transform poolParent;
     public Pool(GameObject objToSpawn, Transform parent, string poolName)
@@ -44,15 +45,14 @@ public class Pool<T> : IPools where T : MonoBehaviour, IPoolable<T>
     {
         if (pooledObj.Count > 0)
         {
-            pooledObj[0].gameObject.SetActive(true);
-            T ScriptToReturn = pooledObj[0];
-            pooledObj.RemoveAt(0);
+            T ScriptToReturn = pooledObj.Pop();
+            ScriptToReturn.gameObject.SetActive(true);
             ScriptToReturn.IsPooled = false;
             return ScriptToReturn;
         }
         else
         {
-            GameObject spawnedObj = Object.Instantiate(objToSpawn, poolParent);
+            GameObject spawnedObj = UnityEngine.Object.Instantiate(objToSpawn, poolParent);
             spawnedObj.SetActive(true);
             T script = spawnedObj.GetComponentInChildren<T>();
             if (script == null)
@@ -72,7 +72,7 @@ public class Pool<T> : IPools where T : MonoBehaviour, IPoolable<T>
         if (objToPool.IsPooled)
             return;
         objToPool.IsPooled = true;
-        pooledObj.Add(objToPool);
+        pooledObj.Push(objToPool);
         objToPool.gameObject.SetActive(false);
     }
 }
