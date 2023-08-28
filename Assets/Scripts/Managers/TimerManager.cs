@@ -35,11 +35,11 @@ public class TimerManager : MonoBehaviour
             {
                 for (int j = 0; j < timer.times.Length; j++)
                 {
-                    if (timer.times[j] > 0)
-                        timer.times[j] -= Time.deltaTime;
+                    if (timer.times[j].time > 0)
+                        timer.times[j].time -= Time.deltaTime;
                     else if (timer.times[j] < 0)
                     {
-                        timer.times[j] = 0;
+                        timer.times[j].time = 0;
                         timer.InvokeOnTimeIsZero(j);
                     }
                 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,13 +29,10 @@ public class ProjectileAbility : AbilityBase
         LaunchTowardsTarget();
     }
 
-    protected override void InvokePoolSelf(object sender, Timer.OnTimeIsZeroEventArgs e)
+    protected override void InvokePoolSelf(object sender, EventArgs e)
     {
-        if (e.timerSlot == 0)
-        {
-            poolSelf();
-            base.InvokePoolSelf(sender, e);
-        }
+        poolSelf();
+        base.InvokePoolSelf(sender, e);
     }
 
     private void LaunchTowardsTarget()

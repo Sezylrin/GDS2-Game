@@ -1,3 +1,4 @@
+using System;
 using KevinCastejon.MoreAttributes;
 using System.Collections;
 using System.Collections.Generic;
@@ -93,6 +94,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
 
     protected virtual void Start()
     {
+        timer = TimerManager.Instance.GenerateTimers(typeof(EnemyTimers), gameObject);
+        timer.times[(int)EnemyTimers.effectedTimer].OnTimeIsZero += RemoveElementEffect;
+        SetTimers();
         EnemyTimers = TimerManager.Instance.GenerateTimers(typeof(EnemyTimer), gameObject);
         EnemyTimers.OnTimeIsZero += RemoveElementEffect;
         EnemyTimers.OnTimeIsZero += EndStagger;
@@ -194,7 +198,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         }
     }
 
-    protected virtual void RemoveElementEffect(object sender, Timer.OnTimeIsZeroEventArgs e)
+    protected virtual void RemoveElementEffect(object sender, EventArgs e)
     {
         if (e.timerSlot == (int)EnemyTimer.effectedTimer)
         {
@@ -269,7 +273,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     #region Combo Interface Methods
     public void SetTimers()
     {
-
+        ComboEffectTimer = TimerManager.Instance.GenerateTimers(typeof(ElementCombos), gameObject);
     }
 
     public void ApplyFireSurge()
