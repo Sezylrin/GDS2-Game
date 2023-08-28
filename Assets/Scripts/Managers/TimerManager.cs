@@ -37,7 +37,7 @@ public class TimerManager : MonoBehaviour
                 {
                     if (timer.times[j].time > 0)
                         timer.times[j].time -= Time.deltaTime;
-                    else if (timer.times[j] < 0)
+                    else if (timer.times[j].time < 0)
                     {
                         timer.times[j].time = 0;
                         timer.InvokeOnTimeIsZero(j);

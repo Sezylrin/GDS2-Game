@@ -94,13 +94,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
 
     protected virtual void Start()
     {
-        timer = TimerManager.Instance.GenerateTimers(typeof(EnemyTimers), gameObject);
-        timer.times[(int)EnemyTimers.effectedTimer].OnTimeIsZero += RemoveElementEffect;
         SetTimers();
         EnemyTimers = TimerManager.Instance.GenerateTimers(typeof(EnemyTimer), gameObject);
-        EnemyTimers.OnTimeIsZero += RemoveElementEffect;
-        EnemyTimers.OnTimeIsZero += EndStagger;
-        EnemyTimers.OnTimeIsZero += EndAttackCooldown;
+        EnemyTimers.times[(int)EnemyTimer.effectedTimer].OnTimeIsZero += RemoveElementEffect;
+        EnemyTimers.times[(int)EnemyTimer.staggerTimer].OnTimeIsZero += EndStagger;
+        EnemyTimers.times[(int)EnemyTimer.attackCooldownTimer].OnTimeIsZero += EndAttackCooldown;
     }
 
     protected virtual void Update()
@@ -200,33 +198,30 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
 
     protected virtual void RemoveElementEffect(object sender, EventArgs e)
     {
-        if (e.timerSlot == (int)EnemyTimer.effectedTimer)
+        ActiveElementEffect = Element;
+        switch (Element)
         {
-            ActiveElementEffect = Element;
-            switch (Element)
-            {
-                case ElementType.noElement:
-                    ElementEffectImage.color = Color.grey;
-                    break;
-                case ElementType.fire:
-                    ElementEffectImage.color = Color.red;
-                    break;
-                case ElementType.water:
-                    ElementEffectImage.color = Color.blue;
-                    break;
-                case ElementType.electric:
-                    ElementEffectImage.color = Color.yellow;
-                    break;
-                case ElementType.wind:
-                    ElementEffectImage.color = Color.white;
-                    break;
-                case ElementType.poison:
-                    ElementEffectImage.color = Color.magenta;
-                    break;
-                case ElementType.nature:
-                    ElementEffectImage.color = Color.green;
-                    break;
-            }
+            case ElementType.noElement:
+                ElementEffectImage.color = Color.grey;
+                break;
+            case ElementType.fire:
+                ElementEffectImage.color = Color.red;
+                break;
+            case ElementType.water:
+                ElementEffectImage.color = Color.blue;
+                break;
+            case ElementType.electric:
+                ElementEffectImage.color = Color.yellow;
+                break;
+            case ElementType.wind:
+                ElementEffectImage.color = Color.white;
+                break;
+            case ElementType.poison:
+                ElementEffectImage.color = Color.magenta;
+                break;
+            case ElementType.nature:
+                ElementEffectImage.color = Color.green;
+                break;
         }
     }
 
@@ -237,13 +232,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         StaggeredImage.SetActive(true);
     }
 
-    protected virtual void EndStagger(object sender, Timer.OnTimeIsZeroEventArgs e)
+    protected virtual void EndStagger(object sender, EventArgs e)
     {
-        if (e.timerSlot == (int)EnemyTimer.staggerTimer)
-        {
-            Staggered = false;
-            StaggeredImage.SetActive(false);
-        } 
+        Staggered = false;
+        StaggeredImage.SetActive(false);
     }
 
     protected virtual void BeginAttackCooldown()
@@ -252,10 +244,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         AbleToAttack = false;
     }
     
-    protected virtual void EndAttackCooldown(object sender, Timer.OnTimeIsZeroEventArgs e)
+    protected virtual void EndAttackCooldown(object sender, EventArgs e)
     {
-        if (e.timerSlot == (int)EnemyTimer.attackCooldownTimer)
-            AbleToAttack = true;
+        AbleToAttack = true;
     }
 
     protected virtual void AddToStaggerScale(int staggerPoints)

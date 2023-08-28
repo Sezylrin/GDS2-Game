@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,8 +24,8 @@ public abstract class MeleeEnemy : Enemy
     {
         base.Start();
         MeleeTimers = TimerManager.Instance.GenerateTimers(typeof(MeleeTimer), gameObject);
-        MeleeTimers.OnTimeIsZero += EndWindup;
-        MeleeTimers.OnTimeIsZero += EndAttack;
+        MeleeTimers.times[(int)MeleeTimer.windupDurationTimer].OnTimeIsZero += EndWindup;
+        MeleeTimers.times[(int)MeleeTimer.attackDurationTimer].OnTimeIsZero += EndAttack;
     }
 
     protected override void Update()
@@ -49,13 +50,10 @@ public abstract class MeleeEnemy : Enemy
         WarningBox.SetActive(true);
     }
 
-    protected virtual void EndWindup(object sender, Timer.OnTimeIsZeroEventArgs e)
+    protected virtual void EndWindup(object sender, EventArgs e)
     {
-        if (e.timerSlot == (int)MeleeTimer.windupDurationTimer)
-        {
-            WarningBox.SetActive(false);
-            BeginAttack();
-        }
+        WarningBox.SetActive(false);
+        BeginAttack();
     }
 
     protected virtual void BeginAttack()
@@ -64,9 +62,8 @@ public abstract class MeleeEnemy : Enemy
         AttackHitbox.SetActive(true);
     }
 
-    protected virtual void EndAttack(object sender, Timer.OnTimeIsZeroEventArgs e)
+    protected virtual void EndAttack(object sender, EventArgs e)
     {
-        if (e.timerSlot == (int)MeleeTimer.attackDurationTimer)
-            AttackHitbox.SetActive(false);
+        AttackHitbox.SetActive(false);
     }
 }
