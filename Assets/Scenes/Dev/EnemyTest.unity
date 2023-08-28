@@ -413,6 +413,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2489379559232324769, guid: 8fff45badf772e34896f361719c74816, type: 3}
+      propertyPath: m_Name
+      value: HitboxParent
+      objectReference: {fileID: 0}
     - target: {fileID: 2489379560569873064, guid: 8fff45badf772e34896f361719c74816, type: 3}
       propertyPath: m_RootOrder
       value: 2
