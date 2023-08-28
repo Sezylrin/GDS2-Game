@@ -7,14 +7,18 @@ using KevinCastejon.MoreAttributes;
 [System.Serializable]
 public class Timer
 {
-    [field:SerializeField][field:ReadOnly]
+    [field:SerializeField]
     public Times[] times { get; private set; }
 
-    public class Times
+    [Serializable]
+    public struct Times
     {
-        public float time = 0f;
+        [SerializeField]
+        [ReadOnly]
+        public float time;
         public EventHandler OnTimeIsZero;
-        public float setTime = 0f;
+        [ReadOnly]
+        public float setTime;
     }
 
     [ReadOnly]
@@ -59,9 +63,8 @@ public class Timer
         {
             InvokeOnTimeIsZero(position);
         }
-        Times temp = times[position];
-        temp.time = amount;
-        temp.setTime = amount;
+        times[position].time = amount;
+        times[position].setTime = amount;
     }
     /// <summary>
     /// returns the current time at the int position
