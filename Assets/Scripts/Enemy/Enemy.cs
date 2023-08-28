@@ -17,7 +17,7 @@ public enum EnemyType
 
 public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<Enemy>
 {
-    protected enum EnemyTimers
+    protected enum EnemyTimer
     {
         effectedTimer,
         staggerTimer,
@@ -46,7 +46,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     protected float HealthBarPercentage { get; set; }
     [field: SerializeField] protected Image ElementEffectImage { get; set; }
     [field: SerializeField] protected GameObject StaggeredImage { get; set; }
-    [field: SerializeField] protected Timer Timers { get; private set; }
+    [field: SerializeField] protected Timer EnemyTimers { get; private set; }
 
     [field: Header("Testing Variables")]
     [field: SerializeField] protected int EffectDuration { get; set; } = 5;
@@ -59,7 +59,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     [field: SerializeField] bool debugTakeDamage { get; set; }
     [field: SerializeField] bool debugApplyElement { get; set; }
     [field: SerializeField] bool debugStartStagger { get; set; }
-    [field: SerializeField] bool debugAttemptAttack { get; set; }
 
     #region Combo Interface Properties
     [field: Header("Combo Interface")]
@@ -94,10 +93,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
 
     protected virtual void Start()
     {
-        Timers = TimerManager.Instance.GenerateTimers(typeof(EnemyTimers), gameObject);
-        Timers.OnTimeIsZero += RemoveElementEffect;
-        Timers.OnTimeIsZero += EndStagger;
-        Timers.OnTimeIsZero += EndAttackCooldown;
+        EnemyTimers = TimerManager.Instance.GenerateTimers(typeof(EnemyTimer), gameObject);
+        EnemyTimers.OnTimeIsZero += RemoveElementEffect;
+        EnemyTimers.OnTimeIsZero += EndStagger;
+        EnemyTimers.OnTimeIsZero += EndAttackCooldown;
     }
 
     protected virtual void Update()
@@ -116,11 +115,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         {
             debugTakeDamage = false;
             TakeDamage(debugDamage, debugElement, debugStaggerPoints);
-        }
-        if (debugAttemptAttack)
-        {
-            debugAttemptAttack = false;
-            AttemptAttack();
         }
     }
 
@@ -160,18 +154,19 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     protected virtual void AttemptAttack() //Check if Enemy Manager has an attack point available
     {
         //if (Manager.CanAttack && AbleToAttack)
+        if (AbleToAttack)
             Attack();
     }
 
     protected virtual void Attack()
     {
-       BeginAttackCooldown();
-       //Attacking logic
+        BeginAttackCooldown();
+        
     }
 
     protected virtual void ApplyElementEffect(ElementType type)
     {
-        Timers.SetTime((int)EnemyTimers.effectedTimer, EffectDuration);
+        EnemyTimers.SetTime((int)EnemyTimer.effectedTimer, EffectDuration);
         ActiveElementEffect = type;
         switch (type)
         {
@@ -201,7 +196,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
 
     protected virtual void RemoveElementEffect(object sender, Timer.OnTimeIsZeroEventArgs e)
     {
-        if (e.timerSlot == (int)EnemyTimers.effectedTimer)
+        if (e.timerSlot == (int)EnemyTimer.effectedTimer)
         {
             ActiveElementEffect = Element;
             switch (Element)
@@ -233,14 +228,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
 
     protected virtual void BeginStagger()
     {
-        Timers.SetTime((int)EnemyTimers.staggerTimer, StaggerDuration);
+        EnemyTimers.SetTime((int)EnemyTimer.staggerTimer, StaggerDuration);
         Staggered = true;
         StaggeredImage.SetActive(true);
     }
 
     protected virtual void EndStagger(object sender, Timer.OnTimeIsZeroEventArgs e)
     {
-        if (e.timerSlot == (int)EnemyTimers.staggerTimer)
+        if (e.timerSlot == (int)EnemyTimer.staggerTimer)
         {
             Staggered = false;
             StaggeredImage.SetActive(false);
@@ -249,23 +244,23 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
 
     protected virtual void BeginAttackCooldown()
     {
-        Timers.SetTime((int)EnemyTimers.attackCooldownTimer, AttackCooldownDuration);
+        EnemyTimers.SetTime((int)EnemyTimer.attackCooldownTimer, AttackCooldownDuration);
         AbleToAttack = false;
     }
     
     protected virtual void EndAttackCooldown(object sender, Timer.OnTimeIsZeroEventArgs e)
     {
-        if (e.timerSlot == (int)EnemyTimers.attackCooldownTimer)
+        if (e.timerSlot == (int)EnemyTimer.attackCooldownTimer)
             AbleToAttack = true;
     }
 
     protected virtual void AddToStaggerScale(int staggerPoints)
     {
-        Timers.ReduceCoolDown((int)EnemyTimers.staggerScale, staggerPoints / -10);
+        EnemyTimers.ReduceCoolDown((int)EnemyTimer.staggerScale, staggerPoints / -10);
 
-        if (Timers.GetTime((int)EnemyTimers.staggerScale) * 10 >= PointsToStagger)
+        if (EnemyTimers.GetTime((int)EnemyTimer.staggerScale) * 10 >= PointsToStagger)
         {
-            Timers.SetTime((int)EnemyTimers.staggerScale, 0);
+            EnemyTimers.SetTime((int)EnemyTimer.staggerScale, 0);
             BeginStagger();
         }
     }
