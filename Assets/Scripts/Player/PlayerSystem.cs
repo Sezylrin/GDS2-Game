@@ -128,7 +128,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         Hitpoints = startingHitPoint;
     }
 
-    public void TakeDamage(float amount, ElementType type)
+    public void TakeDamage(float amount, ElementType type, int staggerPoints)
     {
         CalculateDamage(amount);
     }

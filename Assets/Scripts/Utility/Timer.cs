@@ -7,13 +7,18 @@ using KevinCastejon.MoreAttributes;
 [System.Serializable]
 public class Timer
 {
-    [field:SerializeField][field:ReadOnly]
-    public float[] times { get; private set; }
+    [field:SerializeField]
+    public Times[] times { get; private set; }
 
-    public event EventHandler<OnTimeIsZeroEventArgs> OnTimeIsZero;
-    public class OnTimeIsZeroEventArgs : EventArgs
+    [Serializable]
+    public struct Times
     {
-        public int timerSlot;
+        [SerializeField]
+        [ReadOnly]
+        public float time;
+        public EventHandler OnTimeIsZero;
+        [ReadOnly]
+        public float setTime;
     }
 
     [ReadOnly]
@@ -26,7 +31,7 @@ public class Timer
     public Timer(int amountOfTimers, GameObject owner)
     {
         this.owner = owner;
-        times = new float[amountOfTimers];
+        times = new Times[amountOfTimers];
     }
     /// <summary>
     /// Generate Timer using an Enum
@@ -36,12 +41,12 @@ public class Timer
     public Timer(Type enumName, GameObject owner)
     {
         this.owner = owner;
-        times = new float[Enum.GetValues(enumName).Length];
+        times = new Times[Enum.GetValues(enumName).Length];
     }
 
     public void InvokeOnTimeIsZero(int timeSlot)
     {
-        OnTimeIsZero?.Invoke(this, new OnTimeIsZeroEventArgs { timerSlot = timeSlot });
+        times[timeSlot].OnTimeIsZero?.Invoke(this, EventArgs.Empty);
     }
     /// <summary>
     /// Sets the time in seconds at the int position of the float array
@@ -50,7 +55,7 @@ public class Timer
     /// <param name="amount"></param>
     public void SetTime(int position, float amount)
     {
-        if (ErrorPosition(position))
+        if (ErrorPosition(position,"SetTime"))
         {
            return;
         }
@@ -58,7 +63,8 @@ public class Timer
         {
             InvokeOnTimeIsZero(position);
         }
-        times[position] = amount;
+        times[position].time = amount;
+        times[position].setTime = amount;
     }
     /// <summary>
     /// returns the current time at the int position
@@ -67,11 +73,11 @@ public class Timer
     /// <returns></returns>
     public float GetTime(int position)
     {
-        if (ErrorPosition(position))
+        if (ErrorPosition(position,"GetTime"))
         {
             return -1;
         }
-        return times[position];
+        return times[position].time;
     }
     /// <summary>
     /// returns if the time at the int position is zero
@@ -80,11 +86,11 @@ public class Timer
     /// <returns></returns>
     public bool IsTimeZero(int position)
     {
-        if (ErrorPosition(position))
+        if (ErrorPosition(position,"IsTimeZero"))
         {
             return false;
         }
-        return times[position] == 0;
+        return times[position].time == 0;
     }
     /// <summary>
     /// use to reduce the time store in index position, useful for cooldown reduction
@@ -93,11 +99,11 @@ public class Timer
     /// <param name="amount"></param>
     public void ReduceCoolDown(int position, float amount)
     {
-        if (ErrorPosition(position))
+        if (ErrorPosition(position,"ReduceCoolDown"))
         {
             return;
         }
-        times[position] -= amount;
+        times[position].time -= amount;
     }
     /// <summary>
     /// use to reset all timers back to zero when owner should be deactived or necessary
@@ -106,7 +112,23 @@ public class Timer
     {
         for (int i = 0; i < times.Length; i++)
         {
-            times[i] = 0;
+            times[i].time = 0;
+        }
+    }
+
+    public float RatioOfTimePassed(int position)
+    {
+        if (ErrorPosition(position,"RatioOfTimePassed"))
+        {
+            return 0;
+        }
+        if (times[position].setTime == 0)
+        {
+            return 1;
+        }
+        else
+        {
+            return 1 - (times[position].time / times[position].setTime);
         }
     }
 
@@ -115,12 +137,12 @@ public class Timer
         owner = null;
     }
 
-    private bool ErrorPosition(int position)
+    private bool ErrorPosition(int position, string var)
     {
         if (position >= times.Length || position < 0)
         {
             Debug.Break();
-            Debug.LogWarning("Position out of bound, check the position value compared to amount of timers");
+            Debug.LogWarning(var +" Call's position is out of bound, check the position value compared to amount of timers");
             return true;
         }
         return false;

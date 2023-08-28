@@ -6,6 +6,10 @@ using KevinCastejon.MoreAttributes;
 
 public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
 {
+    protected enum AbilityTimer
+    {
+        lifeTime
+    }
     // Start is called before the first frame update
     protected ElementalSO selectedAbility;
 
@@ -34,15 +38,15 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
     {
         if (timer == null)
         {
-            timer = TimerManager.Instance.GenerateTimers(3, gameObject);
+            timer = TimerManager.Instance.GenerateTimers(typeof(AbilityTimer), gameObject);
         }
-        timer.SetTime(0, selectedAbility.lifeTime);
-        timer.OnTimeIsZero += InvokePoolSelf;
+        timer.SetTime((int)AbilityTimer.lifeTime, selectedAbility.lifeTime);
+        timer.times[(int)AbilityTimer.lifeTime].OnTimeIsZero += InvokePoolSelf;
     }
 
-    protected virtual void InvokePoolSelf(object sender, Timer.OnTimeIsZeroEventArgs e)
+    protected virtual void InvokePoolSelf(object sender, EventArgs e)
     {
-        timer.OnTimeIsZero -= InvokePoolSelf;
+        timer.times[0].OnTimeIsZero -= InvokePoolSelf;
     }
 
     private void SetSelectedAbility(ElementalSO selected)

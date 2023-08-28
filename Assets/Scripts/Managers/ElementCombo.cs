@@ -32,6 +32,8 @@ public class ElementCombo : MonoBehaviour
     private ElementType attemptedCombo;
     public ElementType ElementOne;
     public ElementType ElementTwo;
+    [SerializeField]
+    private LayerMask defaultMask;
     void Start()
     {
         
@@ -43,22 +45,28 @@ public class ElementCombo : MonoBehaviour
         
     }
 
-    public void AttemptCombo(ElementType elementOne, ElementType elementTwo)
+    public void AttemptCombo(ElementType elementOne, ElementType elementTwo, IComboable comboInterface, LayerMask mask)
     {
         attemptedCombo = elementOne | elementTwo;
         switch ((int)attemptedCombo)
         {
             case (int)ElementCombos.aquaVolt:
+                comboInterface.ApplyAquaVolt();
                 break;
             case (int)ElementCombos.brambles:
+                comboInterface.ApplyBrambles(mask);
                 break;
             case (int)ElementCombos.fireSurge:
+                comboInterface.ApplyFireSurge();
                 break;
             case (int)ElementCombos.fireTornado:
+                comboInterface.ApplyFireTornado(mask);
                 break;
             case (int)ElementCombos.noxiousGas:
+                comboInterface.ApplyNoxiousGas();
                 break;
             case (int)ElementCombos.wither:
+                comboInterface.ApplyWither();
                 break;
         }
     }

@@ -81,13 +81,10 @@ public class BlastAbility : AbilityBase
         }
     }
 
-    protected override void InvokePoolSelf(object sender, Timer.OnTimeIsZeroEventArgs e)
+    protected override void InvokePoolSelf(object sender, EventArgs e)
     {
-        if (e.timerSlot == 0)
-        {
-            poolSelf();
-            base.InvokePoolSelf(sender, e);
-        }
+        poolSelf();
+        base.InvokePoolSelf(sender, e);
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)
