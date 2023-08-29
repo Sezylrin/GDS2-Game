@@ -36,7 +36,6 @@ public abstract class RangedEnemy : Enemy
     protected override void Attack()
     {
         base.Attack();
-        BeginWindup();
     }
 
     protected override void BeginWindup()
@@ -48,7 +47,6 @@ public abstract class RangedEnemy : Enemy
     protected override void EndWindup(object sender, EventArgs e)
     {
         base.EndWindup(sender, e);
-        BeginAttack();
     }
 
     protected virtual void FirstWarningFlash()
