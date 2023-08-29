@@ -23,6 +23,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         effectedTimer,
         staggerTimer,
         attackCooldownTimer,
+        windupDurationTimer,
+        attackDurationTimer,
         staggerScale
     }
 
@@ -34,11 +36,27 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     [field: SerializeField] protected float Damage { get; set; } = 10;
     [field: SerializeField] protected float Speed { get; set; } = 1;
     [field: SerializeField, ReadOnly] protected float Souls { get; set; } = 1;
+    [field: SerializeField] protected Timer EnemyTimers { get; private set; }
 
     [field: Header("Status Effects")]
-    [field: SerializeField] protected ElementType ActiveElementEffect { get; set; }
-    [field: SerializeField] protected bool Staggered { get; set; } = false;
-    [field: SerializeField] protected bool AbleToAttack { get; set; } = true;
+    [field: SerializeField, ReadOnly] protected ElementType ActiveElementEffect { get; set; }
+    [field: SerializeField, ReadOnly] protected bool Staggered { get; set; } = false;
+    [field: SerializeField, ReadOnly] protected bool AbleToAttack { get; set; } = true;
+
+    [field: Header("Testing Variables")]
+    [field: SerializeField] protected float EffectDuration { get; set; } = 5;
+    [field: SerializeField] protected float StaggerDuration { get; set; } = 3;
+    [field: SerializeField] protected float AttackDuration { get; set; } = 1;
+    [field: SerializeField] protected float AttackCooldownDuration { get; set; } = 10;
+    [field: SerializeField] protected int PointsToStagger { get; set; } = 100;
+    [field: SerializeField] protected float WindupDuration { get; set; } = 1;
+    [field: SerializeField] ElementType debugElement { get; set; } = ElementType.water;
+    [field: SerializeField] int debugDamage { get; set; } = 20;
+    [field: SerializeField] int debugStaggerPoints { get; set; } = 50;
+    [field: SerializeField] bool debugTakeDamage { get; set; }
+    [field: SerializeField] bool debugApplyElement { get; set; }
+    [field: SerializeField] bool debugStartStagger { get; set; }
+    [field: SerializeField] bool debugAttemptAttack { get; set; }
 
     [field: Header("Other")]
     [field: SerializeField] protected AudioSource WalkingSound { get; set; }
@@ -47,19 +65,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     protected float HealthBarPercentage { get; set; }
     [field: SerializeField] protected Image ElementEffectImage { get; set; }
     [field: SerializeField] protected GameObject StaggeredImage { get; set; }
-    [field: SerializeField] protected Timer EnemyTimers { get; private set; }
-
-    [field: Header("Testing Variables")]
-    [field: SerializeField] protected float EffectDuration { get; set; } = 5;
-    [field: SerializeField] protected float StaggerDuration { get; set; } = 3;
-    [field: SerializeField] protected float AttackCooldownDuration { get; set; } = 10;
-    [field: SerializeField] protected int PointsToStagger { get; set; } = 100;
-    [field: SerializeField] ElementType debugElement { get; set; } = ElementType.water;
-    [field: SerializeField] int debugDamage { get; set; } = 20;
-    [field: SerializeField] int debugStaggerPoints { get; set; } = 50;
-    [field: SerializeField] bool debugTakeDamage { get; set; }
-    [field: SerializeField] bool debugApplyElement { get; set; }
-    [field: SerializeField] bool debugStartStagger { get; set; }
 
     #region Combo Interface Properties
     [field: Header("Combo Interface")]
@@ -99,6 +104,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         EnemyTimers.times[(int)EnemyTimer.effectedTimer].OnTimeIsZero += RemoveElementEffect;
         EnemyTimers.times[(int)EnemyTimer.staggerTimer].OnTimeIsZero += EndStagger;
         EnemyTimers.times[(int)EnemyTimer.attackCooldownTimer].OnTimeIsZero += EndAttackCooldown;
+        EnemyTimers.times[(int)EnemyTimer.windupDurationTimer].OnTimeIsZero += EndWindup;
+        EnemyTimers.times[(int)EnemyTimer.attackDurationTimer].OnTimeIsZero += EndAttack;
     }
 
     protected virtual void Update()
@@ -117,6 +124,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         {
             debugTakeDamage = false;
             TakeDamage(debugDamage, debugElement, debugStaggerPoints);
+        }
+        if (debugAttemptAttack)
+        {
+            debugAttemptAttack = false;
+            AttemptAttack();
         }
     }
 
@@ -163,7 +175,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     protected virtual void Attack()
     {
         BeginAttackCooldown();
-        
+        BeginWindup();
     }
 
     protected virtual void ApplyElementEffect(ElementType type)
@@ -260,6 +272,25 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         }
     }
 
+    protected virtual void BeginWindup()
+    {
+        EnemyTimers.SetTime((int)EnemyTimer.windupDurationTimer, WindupDuration);
+    }
+
+    protected virtual void EndWindup(object sender, EventArgs e)
+    {
+        BeginAttack();
+    }
+
+    protected virtual void BeginAttack()
+    {
+        EnemyTimers.SetTime((int)EnemyTimer.attackDurationTimer, AttackDuration);
+    }
+
+    protected virtual void EndAttack(object sender, EventArgs e)
+    {
+
+    }
 
     #region Combo Interface Methods
     public void SetTimers()

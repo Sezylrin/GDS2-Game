@@ -7,41 +7,30 @@ public abstract class RangedEnemy : Enemy
 {
     protected enum RangedTimer
     {
-        windupDurationTimer,
         warningFlashTimer,
-        warningFlashDelay,
-        tempAttackDeleterTimer
+        warningFlashDelay
     }
 
     [field: SerializeField] protected Timer RangedTimers { get; private set; }
-    [field: SerializeField] protected float WindupDuration { get; set; } = 1;
-    [field: SerializeField] protected float AttackDuration { get; set; } = 2;
     [field: SerializeField] protected float FlashDuration { get; set; } = 0.1f;
 
     [field: SerializeField] protected GameObject WarningFlash { get; set; }
-    [field: SerializeField] protected GameObject AttackHitbox { get; set; }
-    protected bool FlashedOnce { get; set; } = false;
+    [field: SerializeField] protected GameObject ProjectilePrefab { get; set; }
+    [field: SerializeField] protected Transform ProjectileSpawnPoint { get; set; }
 
-    [field: SerializeField] bool debugAttemptAttack { get; set; }
+    protected bool FlashedOnce { get; set; } = false;
 
     protected override void Start()
     {
         base.Start();
         RangedTimers = TimerManager.Instance.GenerateTimers(typeof(RangedTimer), gameObject);
-        RangedTimers.times[(int)RangedTimer.windupDurationTimer].OnTimeIsZero += EndWindup;
         RangedTimers.times[(int)RangedTimer.warningFlashTimer].OnTimeIsZero += DisableWarningSign;
         RangedTimers.times[(int)RangedTimer.warningFlashDelay].OnTimeIsZero += SecondWarningFlash;
-        RangedTimers.times[(int)RangedTimer.tempAttackDeleterTimer].OnTimeIsZero += EndAttack;
     }
 
     protected override void Update()
     {
         base.Update();
-        if (debugAttemptAttack)
-        {
-            debugAttemptAttack = false;
-            AttemptAttack();
-        }
     }
 
     protected override void Attack()
@@ -50,14 +39,15 @@ public abstract class RangedEnemy : Enemy
         BeginWindup();
     }
 
-    protected virtual void BeginWindup()
+    protected override void BeginWindup()
     {
-        RangedTimers.SetTime((int)RangedTimer.windupDurationTimer, WindupDuration);
+        base.BeginWindup();
         FirstWarningFlash();
     }
 
-    protected virtual void EndWindup(object sender, EventArgs e)
+    protected override void EndWindup(object sender, EventArgs e)
     {
+        base.EndWindup(sender, e);
         BeginAttack();
     }
 
@@ -90,14 +80,14 @@ public abstract class RangedEnemy : Enemy
         FlashedOnce = false;
     }
 
-    protected virtual void BeginAttack()
+    protected override void BeginAttack()
     {
-        RangedTimers.SetTime((int)RangedTimer.tempAttackDeleterTimer, AttackDuration);
-        AttackHitbox.SetActive(true);
+        base.BeginAttack();
+        Instantiate(ProjectilePrefab, ProjectileSpawnPoint.position, Quaternion.identity);
     }
 
-    protected virtual void EndAttack(object sender, EventArgs e)
+    protected override void EndAttack(object sender, EventArgs e)
     {
-        AttackHitbox.SetActive(false);
+        base.EndAttack(sender, e);
     }
 }

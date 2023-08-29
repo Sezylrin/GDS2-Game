@@ -691,7 +691,7 @@ Transform:
   - {fileID: 2489379558924919621}
   - {fileID: 2489379559232324766}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2489379560569873067
 SpriteRenderer:
@@ -735,7 +735,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 1, b: 0.93678236, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -764,27 +764,30 @@ MonoBehaviour:
   <Damage>k__BackingField: 0
   <Speed>k__BackingField: 0
   <Souls>k__BackingField: 0
-  <ActiveElementEffect>k__BackingField: 0
-  <Staggered>k__BackingField: 0
-  <AbleToAttack>k__BackingField: 1
-  <WalkingSound>k__BackingField: {fileID: 0}
-  <DeathSoundPrefab>k__BackingField: {fileID: 0}
-  <HealthBarImage>k__BackingField: {fileID: 2489379561012669698}
-  <ElementEffectImage>k__BackingField: {fileID: 2489379560108725518}
-  <StaggeredImage>k__BackingField: {fileID: 2489379559056602806}
   <EnemyTimers>k__BackingField:
     <times>k__BackingField: []
     owner: {fileID: 0}
+  <ActiveElementEffect>k__BackingField: 0
+  <Staggered>k__BackingField: 0
+  <AbleToAttack>k__BackingField: 1
   <EffectDuration>k__BackingField: 5
   <StaggerDuration>k__BackingField: 3
+  <AttackDuration>k__BackingField: 0.5
   <AttackCooldownDuration>k__BackingField: 10
   <PointsToStagger>k__BackingField: 100
+  <WindupDuration>k__BackingField: 1
   <debugElement>k__BackingField: 2
   <debugDamage>k__BackingField: 20
   <debugStaggerPoints>k__BackingField: 50
   <debugTakeDamage>k__BackingField: 0
   <debugApplyElement>k__BackingField: 0
   <debugStartStagger>k__BackingField: 0
+  <debugAttemptAttack>k__BackingField: 0
+  <WalkingSound>k__BackingField: {fileID: 0}
+  <DeathSoundPrefab>k__BackingField: {fileID: 0}
+  <HealthBarImage>k__BackingField: {fileID: 2489379561012669698}
+  <ElementEffectImage>k__BackingField: {fileID: 2489379560108725518}
+  <StaggeredImage>k__BackingField: {fileID: 2489379559056602806}
   <SpawnPosition>k__BackingField: {fileID: 0}
   <ActiveCombos>k__BackingField: 
   <ComboEffectTimer>k__BackingField:
@@ -793,14 +796,8 @@ MonoBehaviour:
   <TargetLayer>k__BackingField:
     serializedVersion: 2
     m_Bits: 0
-  <MeleeTimers>k__BackingField:
-    <times>k__BackingField: []
-    owner: {fileID: 0}
-  <WindupDuration>k__BackingField: 1
-  <AttackDuration>k__BackingField: 0.5
   <WarningBox>k__BackingField: {fileID: 2489379560098110650}
   <AttackHitbox>k__BackingField: {fileID: 2489379560232288714}
-  <debugAttemptAttack>k__BackingField: 0
 --- !u!61 &2489379560569873065
 BoxCollider2D:
   m_ObjectHideFlags: 0
