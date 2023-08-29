@@ -29,11 +29,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     [field: Header("Enemy Info")]
     [field: SerializeField] protected EnemyType Type { get; set; }
     [field: SerializeField] protected ElementType Element { get; set; } = ElementType.noElement;
-    [field: SerializeField] public float Hitpoints { get; set; }
-    [field: SerializeField] protected float MaxHealth { get; set; } 
-    [field: SerializeField] protected float Damage { get; set; }
-    [field: SerializeField] protected float Speed { get; set; }
-    [field: SerializeField, ReadOnly] protected float Souls { get; set; }
+    [field: SerializeField] public float Hitpoints { get; set; } = 100;
+    [field: SerializeField] protected float MaxHealth { get; set; } = 100;
+    [field: SerializeField] protected float Damage { get; set; } = 10;
+    [field: SerializeField] protected float Speed { get; set; } = 1;
+    [field: SerializeField, ReadOnly] protected float Souls { get; set; } = 1;
 
     [field: Header("Status Effects")]
     [field: SerializeField] protected ElementType ActiveElementEffect { get; set; }
@@ -50,13 +50,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     [field: SerializeField] protected Timer EnemyTimers { get; private set; }
 
     [field: Header("Testing Variables")]
-    [field: SerializeField] protected int EffectDuration { get; set; } = 5;
-    [field: SerializeField] protected int StaggerDuration { get; set; } = 3;
-    [field: SerializeField] protected int AttackCooldownDuration { get; set; } = 10;
+    [field: SerializeField] protected float EffectDuration { get; set; } = 5;
+    [field: SerializeField] protected float StaggerDuration { get; set; } = 3;
+    [field: SerializeField] protected float AttackCooldownDuration { get; set; } = 10;
     [field: SerializeField] protected int PointsToStagger { get; set; } = 100;
-    [field: SerializeField] ElementType debugElement { get; set; }
-    [field: SerializeField] int debugDamage { get; set; }
-    [field: SerializeField] int debugStaggerPoints { get; set; }
+    [field: SerializeField] ElementType debugElement { get; set; } = ElementType.water;
+    [field: SerializeField] int debugDamage { get; set; } = 20;
+    [field: SerializeField] int debugStaggerPoints { get; set; } = 50;
     [field: SerializeField] bool debugTakeDamage { get; set; }
     [field: SerializeField] bool debugApplyElement { get; set; }
     [field: SerializeField] bool debugStartStagger { get; set; }

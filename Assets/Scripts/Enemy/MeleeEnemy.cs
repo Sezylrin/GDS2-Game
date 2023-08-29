@@ -12,7 +12,7 @@ public abstract class MeleeEnemy : Enemy
     }
 
     [field: SerializeField] protected Timer MeleeTimers { get; private set; }
-    [field: SerializeField] protected int WindupDuration { get; set; } = 1;
+    [field: SerializeField] protected float WindupDuration { get; set; } = 1;
     [field: SerializeField] protected float AttackDuration { get; set; } = 2;
 
     [field: SerializeField] protected GameObject WarningBox { get; set; }
