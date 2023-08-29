@@ -13,12 +13,17 @@ public class Timer
     [Serializable]
     public struct Times
     {
-        [SerializeField]
+        [SerializeField][HideInInspector]
+        private string name;
         [ReadOnly]
         public float time;
         public EventHandler OnTimeIsZero;
         [ReadOnly]
         public float setTime;
+        public void SetName(string name)
+        {
+            this.name = name;
+        }
     }
 
     [ReadOnly]
@@ -32,6 +37,10 @@ public class Timer
     {
         this.owner = owner;
         times = new Times[amountOfTimers];
+        for (int i = 0; i < times.Length; i++)
+        {
+            times[i].SetName("timer " + i.ToString());
+        }
     }
     /// <summary>
     /// Generate Timer using an Enum
@@ -41,7 +50,21 @@ public class Timer
     public Timer(Type enumName, GameObject owner)
     {
         this.owner = owner;
-        times = new Times[Enum.GetValues(enumName).Length];
+        int length = Enum.GetValues(enumName).Length;
+        times = new Times[length];
+        for (int i = 0; i < length; i++)
+        {
+            times[i].SetName(Enum.GetName(enumName, i));
+        }
+    }
+
+    public void SetName(int position, string name)
+    {
+        if (ErrorPosition(position, "SetName"))
+        {
+            return;
+        }
+        times[position].SetName(name);
     }
 
     public void InvokeOnTimeIsZero(int timeSlot)
@@ -114,6 +137,15 @@ public class Timer
         {
             times[i].time = 0;
         }
+    }
+
+    public void ResetSpecificToZero(int position)
+    {
+        if (ErrorPosition(position, "ResetSpecificToZero"))
+        {
+            return;
+        }
+        times[position].time = 0;
     }
 
     public float RatioOfTimePassed(int position)
