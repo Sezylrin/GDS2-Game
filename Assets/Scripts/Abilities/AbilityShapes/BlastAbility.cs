@@ -83,7 +83,7 @@ public class BlastAbility : AbilityBase
 
     protected override void InvokePoolSelf(object sender, EventArgs e)
     {
-        poolSelf();
+        PoolSelf();
         base.InvokePoolSelf(sender, e);
     }
 

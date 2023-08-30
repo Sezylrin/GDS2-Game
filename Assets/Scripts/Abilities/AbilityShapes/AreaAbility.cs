@@ -75,7 +75,7 @@ public class AreaAbility : AbilityBase
 
     protected override void InvokePoolSelf(object sender, EventArgs e)
     {
-        poolSelf();
+        PoolSelf();
         base.InvokePoolSelf(sender, e);
     }
 
