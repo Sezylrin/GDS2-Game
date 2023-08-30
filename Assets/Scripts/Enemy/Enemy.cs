@@ -21,11 +21,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     protected enum EnemyTimer
     {
         effectedTimer,
+        staggerDecayTimer,
         staggerTimer,
         attackCooldownTimer,
         windupDurationTimer,
-        attackDurationTimer,
-        staggerScale
+        attackDurationTimer
     }
 
     [field: Header("Enemy Info")]
@@ -39,13 +39,16 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     [field: SerializeField] protected Timer EnemyTimers { get; private set; }
 
     [field: Header("Status Effects")]
-    [field: SerializeField] protected ElementType ActiveElementEffect { get; set; }
-    [field: SerializeField] protected int ElementTier { get; set; }
-    [field: SerializeField] protected bool Staggered { get; set; } = false;
-    [field: SerializeField] protected bool AbleToAttack { get; set; } = true;
+    [field: SerializeField, ReadOnly] protected ElementType ActiveElementEffect { get; set; }
+    [field: SerializeField, ReadOnly] protected int ElementTier { get; set; }
+    [field: SerializeField, ReadOnly] protected float StaggerBar { get; set; }   
+    [field: SerializeField, ReadOnly] protected bool Staggered { get; set; } = false;
+    [field: SerializeField, ReadOnly] protected bool AbleToAttack { get; set; } = true;
 
     [field: Header("Testing Variables")]
     [field: SerializeField] protected float EffectDuration { get; set; } = 5;
+    [field: SerializeField] protected float StaggerDecayAmount { get; set; } = 4;
+    [field: SerializeField] protected float StaggerDecayRate { get; set; } = 0.25f;
     [field: SerializeField] protected float StaggerDuration { get; set; } = 3;
     [field: SerializeField] protected float AttackDuration { get; set; } = 1;
     [field: SerializeField] protected float AttackCooldownDuration { get; set; } = 10;
@@ -122,10 +125,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         SetTimers();
         EnemyTimers = TimerManager.Instance.GenerateTimers(typeof(EnemyTimer), gameObject);
         EnemyTimers.times[(int)EnemyTimer.effectedTimer].OnTimeIsZero += RemoveElementEffect;
+        EnemyTimers.times[(int)EnemyTimer.staggerDecayTimer].OnTimeIsZero += DecrementStaggerBar;
         EnemyTimers.times[(int)EnemyTimer.staggerTimer].OnTimeIsZero += EndStagger;
         EnemyTimers.times[(int)EnemyTimer.attackCooldownTimer].OnTimeIsZero += EndAttackCooldown;
         EnemyTimers.times[(int)EnemyTimer.windupDurationTimer].OnTimeIsZero += EndWindup;
         EnemyTimers.times[(int)EnemyTimer.attackDurationTimer].OnTimeIsZero += EndAttack;
+
+        StartStaggerDecayTimer();
     }
 
     protected virtual void Update()
@@ -179,12 +185,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
             OnDeath();
             return;
         }
+         
         if (typeTwo.Equals(ElementType.noElement))
         {
             ElementTier = tier;
             ApplyElementEffect(type);
         }
-        AddToStaggerScale(staggerPoints);
+        AddToStaggerBar(staggerPoints);
 
         HealthBarPercentage = Hitpoints / MaxHealth;
         if (HealthBarImage) HealthBarImage.fillAmount = HealthBarPercentage;
@@ -249,6 +256,27 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     {
         AbleToAttack = true;
     }
+
+    protected virtual void BeginWindup()
+    {
+        EnemyTimers.SetTime((int)EnemyTimer.windupDurationTimer, WindupDuration);
+    }
+
+    protected virtual void EndWindup(object sender, EventArgs e)
+    {
+        BeginAttack();
+    }
+
+    protected virtual void BeginAttack()
+    {
+        EnemyTimers.SetTime((int)EnemyTimer.attackDurationTimer, AttackDuration);
+    }
+
+    protected virtual void EndAttack(object sender, EventArgs e)
+    {
+
+    }
+
     #endregion
 
     #region Element
@@ -312,6 +340,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     }
     #endregion
 
+    
+
     #region Stagger
     protected virtual void BeginStagger()
     {
@@ -326,39 +356,30 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         StaggeredImage.SetActive(false);
     }
 
-
-
-    protected virtual void AddToStaggerScale(int staggerPoints)
+    protected virtual void StartStaggerDecayTimer()
     {
-        EnemyTimers.ReduceCoolDown((int)EnemyTimer.staggerScale, staggerPoints / -10);
+        EnemyTimers.SetTime((int)EnemyTimer.staggerDecayTimer, StaggerDecayRate);
+    }
 
-        if (EnemyTimers.GetTime((int)EnemyTimer.staggerScale) * 10 >= PointsToStagger)
+    protected virtual void DecrementStaggerBar(object sender, EventArgs e)
+    {
+        if (StaggerBar > 0) StaggerBar -= StaggerDecayAmount;
+        StartStaggerDecayTimer();
+    }
+
+    protected virtual void AddToStaggerBar(int staggerPoints)
+    {
+        StaggerBar += staggerPoints;
+
+        if (StaggerBar >= PointsToStagger)
         {
-            EnemyTimers.SetTime((int)EnemyTimer.staggerScale, 0);
             BeginStagger();
+            StaggerBar = 0;
         }
     }
     #endregion
 
-    protected virtual void BeginWindup()
-    {
-        EnemyTimers.SetTime((int)EnemyTimer.windupDurationTimer, WindupDuration);
-    }
-
-    protected virtual void EndWindup(object sender, EventArgs e)
-    {
-        BeginAttack();
-    }
-
-    protected virtual void BeginAttack()
-    {
-        EnemyTimers.SetTime((int)EnemyTimer.attackDurationTimer, AttackDuration);
-    }
-
-    protected virtual void EndAttack(object sender, EventArgs e)
-    {
-
-    }
+    
 
     #region Combo Interface Methods
     public void SetTimers()
