@@ -23,23 +23,41 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         effectedTimer,
         staggerTimer,
         attackCooldownTimer,
+        windupDurationTimer,
+        attackDurationTimer,
         staggerScale
     }
 
     [field: Header("Enemy Info")]
     [field: SerializeField] protected EnemyType Type { get; set; }
     [field: SerializeField] protected ElementType Element { get; set; } = ElementType.noElement;
-    [field: SerializeField] public float Hitpoints { get; set; }
-    [field: SerializeField] protected float MaxHealth { get; set; } 
-    [field: SerializeField] protected float Damage { get; set; }
-    [field: SerializeField] protected float Speed { get; set; }
-    [field: SerializeField, ReadOnly] protected float Souls { get; set; }
+    [field: SerializeField] public float Hitpoints { get; set; } = 100;
+    [field: SerializeField] protected float MaxHealth { get; set; } = 100;
+    [field: SerializeField] protected float Damage { get; set; } = 10;
+    [field: SerializeField] protected float Speed { get; set; } = 1;
+    [field: SerializeField, ReadOnly] protected float Souls { get; set; } = 1;
+    [field: SerializeField] protected Timer EnemyTimers { get; private set; }
 
     [field: Header("Status Effects")]
     [field: SerializeField] protected ElementType ActiveElementEffect { get; set; }
     [field: SerializeField] protected int ElementTier { get; set; }
     [field: SerializeField] protected bool Staggered { get; set; } = false;
     [field: SerializeField] protected bool AbleToAttack { get; set; } = true;
+
+    [field: Header("Testing Variables")]
+    [field: SerializeField] protected float EffectDuration { get; set; } = 5;
+    [field: SerializeField] protected float StaggerDuration { get; set; } = 3;
+    [field: SerializeField] protected float AttackDuration { get; set; } = 1;
+    [field: SerializeField] protected float AttackCooldownDuration { get; set; } = 10;
+    [field: SerializeField] protected int PointsToStagger { get; set; } = 100;
+    [field: SerializeField] protected float WindupDuration { get; set; } = 1;
+    [field: SerializeField] ElementType debugElement { get; set; } = ElementType.water;
+    [field: SerializeField] int debugDamage { get; set; } = 20;
+    [field: SerializeField] int debugStaggerPoints { get; set; } = 50;
+    [field: SerializeField] bool debugTakeDamage { get; set; }
+    [field: SerializeField] bool debugApplyElement { get; set; }
+    [field: SerializeField] bool debugStartStagger { get; set; }
+    [field: SerializeField] bool debugAttemptAttack { get; set; }
 
     [field: Header("Other")]
     [field: SerializeField] protected AudioSource WalkingSound { get; set; }
@@ -119,6 +137,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         EnemyTimers.times[(int)EnemyTimer.effectedTimer].OnTimeIsZero += RemoveElementEffect;
         EnemyTimers.times[(int)EnemyTimer.staggerTimer].OnTimeIsZero += EndStagger;
         EnemyTimers.times[(int)EnemyTimer.attackCooldownTimer].OnTimeIsZero += EndAttackCooldown;
+        EnemyTimers.times[(int)EnemyTimer.windupDurationTimer].OnTimeIsZero += EndWindup;
+        EnemyTimers.times[(int)EnemyTimer.attackDurationTimer].OnTimeIsZero += EndAttack;
     }
 
     protected virtual void Update()
@@ -137,6 +157,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         {
             debugTakeDamage = false;
             TakeDamage(debugDamage, debugStaggerPoints, debugElement);
+        }
+        if (debugAttemptAttack)
+        {
+            debugAttemptAttack = false;
+            AttemptAttack();
         }
     }
 
@@ -224,7 +249,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     protected virtual void Attack()
     {
         BeginAttackCooldown();
-        
+        BeginWindup();
     }
 
     protected virtual void BeginAttackCooldown()
@@ -327,6 +352,26 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         }
     }
     #endregion
+
+    protected virtual void BeginWindup()
+    {
+        EnemyTimers.SetTime((int)EnemyTimer.windupDurationTimer, WindupDuration);
+    }
+
+    protected virtual void EndWindup(object sender, EventArgs e)
+    {
+        BeginAttack();
+    }
+
+    protected virtual void BeginAttack()
+    {
+        EnemyTimers.SetTime((int)EnemyTimer.attackDurationTimer, AttackDuration);
+    }
+
+    protected virtual void EndAttack(object sender, EventArgs e)
+    {
+
+    }
 
     #region Combo Interface Methods
     public void SetTimers()
