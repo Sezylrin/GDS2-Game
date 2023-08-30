@@ -31,7 +31,7 @@ public class ProjectileAbility : AbilityBase
 
     protected override void InvokePoolSelf(object sender, EventArgs e)
     {
-        poolSelf();
+        PoolSelf();
         base.InvokePoolSelf(sender, e);
     }
 
@@ -46,7 +46,7 @@ public class ProjectileAbility : AbilityBase
         base.OnTriggerEnter2D(collision);
         if (CurrentPierce <= 0 || collision.CompareTag(Tags.T_Terrain))
         {
-            poolSelf();
+            PoolSelf();
         }
     }
 }

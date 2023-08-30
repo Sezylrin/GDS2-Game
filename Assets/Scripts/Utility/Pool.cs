@@ -12,7 +12,7 @@ public interface IPoolable<T> where T : MonoBehaviour, IPoolable<T>
     /// Implement a function to add itself back into the pool.
     /// Use to replace destroy function in execution
     /// </summary>
-    public void poolSelf();
+    public void PoolSelf();
 
 }
 
@@ -41,6 +41,33 @@ public class Pool<T> : IPools where T : MonoBehaviour, IPoolable<T>
     /// Returns an instance of the store type in the pool
     /// </summary>
     /// <returns></returns>
+    public T GetPooledObj(out bool newInstantiate)
+    {
+        if (pooledObj.Count > 0)
+        {
+            T ScriptToReturn = pooledObj.Pop();
+            ScriptToReturn.gameObject.SetActive(true);
+            ScriptToReturn.IsPooled = false;
+            newInstantiate = false;
+            return ScriptToReturn;
+        }
+        else
+        {
+            GameObject spawnedObj = UnityEngine.Object.Instantiate(objToSpawn, poolParent);
+            spawnedObj.SetActive(true);
+            T script = spawnedObj.GetComponentInChildren<T>();
+            if (script == null)
+            {
+                Debug.LogError("The given objToSpawn does not contain the required Script to store");
+                Debug.Break();
+                newInstantiate = false;
+                return null;
+            }
+            script.Pool = this;
+            newInstantiate = true;
+            return script;
+        }
+    }
     public T GetPooledObj()
     {
         if (pooledObj.Count > 0)
@@ -64,7 +91,6 @@ public class Pool<T> : IPools where T : MonoBehaviour, IPoolable<T>
             script.Pool = this;
             return script;
         }
-
     }
 
     public void PoolObj(T objToPool)

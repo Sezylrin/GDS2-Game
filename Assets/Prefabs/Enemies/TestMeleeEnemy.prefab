@@ -669,6 +669,7 @@ GameObject:
   - component: {fileID: 2489379560569873067}
   - component: {fileID: 2489379560569873066}
   - component: {fileID: 2489379560569873065}
+  - component: {fileID: 8716451748292390363}
   m_Layer: 6
   m_Name: TestMeleeEnemy
   m_TagString: Untagged
@@ -764,12 +765,19 @@ MonoBehaviour:
   <Damage>k__BackingField: 0
   <Speed>k__BackingField: 0
   <Souls>k__BackingField: 0
+  <ActiveElementEffect>k__BackingField: 0
+  <ElementTier>k__BackingField: 0
+  <Staggered>k__BackingField: 0
+  <AbleToAttack>k__BackingField: 1
+  <WalkingSound>k__BackingField: {fileID: 0}
+  <DeathSoundPrefab>k__BackingField: {fileID: 0}
+  <HealthBarImage>k__BackingField: {fileID: 2489379561012669698}
+  <ElementEffectImage>k__BackingField: {fileID: 2489379560108725518}
+  <StaggeredImage>k__BackingField: {fileID: 2489379559056602806}
   <EnemyTimers>k__BackingField:
     <times>k__BackingField: []
     owner: {fileID: 0}
-  <ActiveElementEffect>k__BackingField: 0
-  <Staggered>k__BackingField: 0
-  <AbleToAttack>k__BackingField: 1
+  <rb>k__BackingField: {fileID: 8716451748292390363}
   <EffectDuration>k__BackingField: 5
   <StaggerDuration>k__BackingField: 3
   <AttackDuration>k__BackingField: 0.5
@@ -796,6 +804,14 @@ MonoBehaviour:
   <TargetLayer>k__BackingField:
     serializedVersion: 2
     m_Bits: 0
+  staggerBonusDamage: 0
+  elementResistAmount: 0
+  baseArmour: 1
+  <MeleeTimers>k__BackingField:
+    <times>k__BackingField: []
+    owner: {fileID: 0}
+  <WindupDuration>k__BackingField: 1
+  <AttackDuration>k__BackingField: 0.5
   <WarningBox>k__BackingField: {fileID: 2489379560098110650}
   <AttackHitbox>k__BackingField: {fileID: 2489379560232288714}
 --- !u!61 &2489379560569873065
@@ -843,6 +859,33 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!50 &8716451748292390363
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2489379560569873069}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 1
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &2489379561012669700
 GameObject:
   m_ObjectHideFlags: 0

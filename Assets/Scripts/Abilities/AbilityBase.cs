@@ -79,13 +79,16 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
         IDamageable foundEnemy;
         if (UtilityFunction.FindComponent(collision.transform,out foundEnemy))
         {
+            if(!(foundEnemy as Enemy))
+            {
+                return;
+            }
             if (hitEnemy.Contains(foundEnemy as Enemy))
             {
                 return;
             }
-            Debug.Log("hitting enemy with ability");
             hitEnemy.Add(foundEnemy as Enemy);
-            //do damage and stuff
+            foundEnemy.TakeDamage(selectedAbility.damage, selectedAbility.Stagger, selectedAbility.elementType, selectedAbility.castCost);
             if (CurrentPierce > 0)
             {
 
@@ -94,7 +97,7 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
         }
     }
 
-    public void poolSelf()
+    public void PoolSelf()
     {
         ResetAbility();
         Pool.PoolObj(this);

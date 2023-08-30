@@ -9,8 +9,7 @@ namespace AYellowpaper.SerializedCollections
     [System.Serializable]
     public class AbilityDictionary
     {
-        [SerializedDictionary("Element Type", "Description")]
-        public SerializedDictionary<AbilityType, GameObject> abilityShapePF;
+        
     }
 }
 public class Abilities : MonoBehaviour
@@ -30,11 +29,11 @@ public class Abilities : MonoBehaviour
 
     private Dictionary<AbilityType, Pool<AbilityBase>> pools = new Dictionary<AbilityType, Pool<AbilityBase>>();
 
-    [SerializeField]
-    private AbilityDictionary abilityShape;
+    [SerializeField][SerializedDictionary("Element Type", "Description")]
+    private SerializedDictionary<AbilityType, GameObject> abilityShapePF;
     private void Start()
     {
-        foreach (KeyValuePair<AbilityType,GameObject> entry in abilityShape.abilityShapePF)
+        foreach (KeyValuePair<AbilityType,GameObject> entry in abilityShapePF)
         {
             Pool<AbilityBase> temp;
             PoolingManager.Instance.FindPool(entry.Value, out temp,entry.Key.ToString() + " type");
