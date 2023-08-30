@@ -40,6 +40,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
 
     [field: Header("Status Effects")]
     [field: SerializeField, ReadOnly] protected ElementType ActiveElementEffect { get; set; }
+    [field: SerializeField, ReadOnly] protected int ElementTier { get; set; }
     [field: SerializeField, ReadOnly] protected float StaggerBar { get; set; }   
     [field: SerializeField, ReadOnly] protected bool Staggered { get; set; } = false;
     [field: SerializeField, ReadOnly] protected bool AbleToAttack { get; set; } = true;
@@ -255,6 +256,27 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     {
         AbleToAttack = true;
     }
+
+    protected virtual void BeginWindup()
+    {
+        EnemyTimers.SetTime((int)EnemyTimer.windupDurationTimer, WindupDuration);
+    }
+
+    protected virtual void EndWindup(object sender, EventArgs e)
+    {
+        BeginAttack();
+    }
+
+    protected virtual void BeginAttack()
+    {
+        EnemyTimers.SetTime((int)EnemyTimer.attackDurationTimer, AttackDuration);
+    }
+
+    protected virtual void EndAttack(object sender, EventArgs e)
+    {
+
+    }
+
     #endregion
 
     #region Element
@@ -357,25 +379,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     }
     #endregion
 
-    protected virtual void BeginWindup()
-    {
-        EnemyTimers.SetTime((int)EnemyTimer.windupDurationTimer, WindupDuration);
-    }
-
-    protected virtual void EndWindup(object sender, EventArgs e)
-    {
-        BeginAttack();
-    }
-
-    protected virtual void BeginAttack()
-    {
-        EnemyTimers.SetTime((int)EnemyTimer.attackDurationTimer, AttackDuration);
-    }
-
-    protected virtual void EndAttack(object sender, EventArgs e)
-    {
-
-    }
+    
 
     #region Combo Interface Methods
     public void SetTimers()
