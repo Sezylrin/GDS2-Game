@@ -179,7 +179,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2996488684572427489
 RectTransform:
   m_ObjectHideFlags: 0
@@ -453,7 +453,7 @@ Transform:
   - {fileID: 2996488685874130668}
   - {fileID: 1862890625}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2996488685272666367
 SpriteRenderer:
@@ -575,9 +575,12 @@ MonoBehaviour:
     <times>k__BackingField: []
     owner: {fileID: 0}
   <ActiveElementEffect>k__BackingField: 0
+  <StaggerBar>k__BackingField: 0
   <Staggered>k__BackingField: 0
   <AbleToAttack>k__BackingField: 1
   <EffectDuration>k__BackingField: 5
+  <StaggerDecayAmount>k__BackingField: 5
+  <StaggerDecayRate>k__BackingField: 0.25
   <StaggerDuration>k__BackingField: 3
   <AttackDuration>k__BackingField: 1
   <AttackCooldownDuration>k__BackingField: 10

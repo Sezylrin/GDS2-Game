@@ -197,7 +197,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2489379559056602805
 RectTransform:
   m_ObjectHideFlags: 0
@@ -768,9 +768,12 @@ MonoBehaviour:
     <times>k__BackingField: []
     owner: {fileID: 0}
   <ActiveElementEffect>k__BackingField: 0
+  <StaggerBar>k__BackingField: 0
   <Staggered>k__BackingField: 0
   <AbleToAttack>k__BackingField: 1
   <EffectDuration>k__BackingField: 5
+  <StaggerDecayAmount>k__BackingField: 4
+  <StaggerDecayRate>k__BackingField: 0.25
   <StaggerDuration>k__BackingField: 3
   <AttackDuration>k__BackingField: 0.5
   <AttackCooldownDuration>k__BackingField: 10
