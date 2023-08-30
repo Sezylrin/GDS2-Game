@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using KevinCastejon.MoreAttributes;
 
-[System.Serializable]
+[Serializable]
 public class Timer
 {
     [field:SerializeField]

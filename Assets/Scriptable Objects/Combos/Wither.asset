@@ -9,14 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46349f5f1777d0742ae2d3e10071b0c4, type: 3}
-  m_Name: Fire Ball
+  m_Script: {fileID: 11500000, guid: c6aba4e5dc7d7b04b94a0434ae70d49f, type: 3}
+  m_Name: Wither
   m_EditorClassIdentifier: 
-  elementType: 1
-  type: 2
-  castCost: 1
-  pierceAmount: 1
-  damage: 10
-  Stagger: 2
-  lifeTime: 10
-  speed: 20
+  BaseDamage:
+  - 0
+  - 0
+  - 0
+  StaggerDamage: 0
+  Duration: 0
+  WitherStrength:
+  - 1
+  - 0
+  - 0

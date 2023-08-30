@@ -107,10 +107,10 @@ PolygonCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 63
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -124,7 +124,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -170,7 +170,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3543791457672997726}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.05, y: 0.13, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -218,7 +218,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ab1adeeae9e0a904bb5810aeec686e92, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -307,10 +307,10 @@ PolygonCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 63
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -324,7 +324,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -389,10 +389,10 @@ PolygonCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 63
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -406,7 +406,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -467,7 +467,7 @@ Transform:
   - {fileID: 3543791459337211974}
   - {fileID: 1874316682}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &3543791458973239724
 CircleCollider2D:
@@ -530,7 +530,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &864687022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -671,16 +671,15 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  abilityShape:
-    abilityShapePF:
-      _serializedList:
-      - Key: 0
-        Value: {fileID: 2244625044603906729, guid: 982f60ea9368e2c4a84fea68fdd12328, type: 3}
-      - Key: 1
-        Value: {fileID: 870314205402033686, guid: 6499491490cfd8744aebab9913aabc34, type: 3}
-      - Key: 2
-        Value: {fileID: 1081047491358455854, guid: a11b5b43fd902074fb6401f38dc4e41a, type: 3}
-  test: {fileID: 11400000, guid: 6f91427faf1f0314891c5a7b288e2640, type: 2}
+  abilityShapePF:
+    _serializedList:
+    - Key: 0
+      Value: {fileID: 2244625044603906729, guid: 982f60ea9368e2c4a84fea68fdd12328, type: 3}
+    - Key: 1
+      Value: {fileID: 870314205402033686, guid: 6499491490cfd8744aebab9913aabc34, type: 3}
+    - Key: 2
+      Value: {fileID: 1081047491358455854, guid: a11b5b43fd902074fb6401f38dc4e41a, type: 3}
+  test: {fileID: 11400000, guid: a4e9bcf0124e59c4f9c65c1f148a8426, type: 2}
 --- !u!1 &3543791459337211977
 GameObject:
   m_ObjectHideFlags: 0

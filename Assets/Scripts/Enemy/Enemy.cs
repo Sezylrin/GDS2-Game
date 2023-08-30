@@ -37,6 +37,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
 
     [field: Header("Status Effects")]
     [field: SerializeField] protected ElementType ActiveElementEffect { get; set; }
+    [field: SerializeField] protected int ElementTier { get; set; }
     [field: SerializeField] protected bool Staggered { get; set; } = false;
     [field: SerializeField] protected bool AbleToAttack { get; set; } = true;
 
@@ -48,7 +49,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     [field: SerializeField] protected Image ElementEffectImage { get; set; }
     [field: SerializeField] protected GameObject StaggeredImage { get; set; }
     [field: SerializeField] protected Timer EnemyTimers { get; private set; }
-
+    Rigidbody2D IDamageable.rb => rb;
+    [field: SerializeField] protected Rigidbody2D rb { get; private set; }
+    
     [field: Header("Testing Variables")]
     [field: SerializeField] protected int EffectDuration { get; set; } = 5;
     [field: SerializeField] protected int StaggerDuration { get; set; } = 3;
@@ -67,14 +70,31 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     [field: SerializeField] public List<ElementCombos> ActiveCombos { get; set; }
     [field: SerializeField] public Timer ComboEffectTimer { get; set; }
     [field: SerializeField] public LayerMask TargetLayer { get; set; }
+    float IComboable.CurrentWitherBonus { get => currentWitherBonus; set => currentWitherBonus = value; }
+    public bool IsNoxious { get; set; }
+    public bool IsWither { get; set; }
+    public bool IsBrambled { get; set; }
+    public bool IsStunned { get; set; }
     #endregion
 
     #region Pooling
     public Pool<Enemy> Pool { get; set; }
     public bool IsPooled { get; set; }
+
     #endregion
 
-
+    #region DamageModifiers
+    [Header("DamageModifiers")]
+    [SerializeField, Range(1,3)]
+    private float staggerBonusDamage;
+    private float currentStaggerDamage = 1;
+    [SerializeField, Range(0.1f,1)]
+    private float elementResistAmount;
+    private float currentElementResist = 1;
+    [SerializeField, Range(0.5f, 1)]
+    private float baseArmour;
+    private float currentWitherBonus = 1;
+    #endregion
     //protected EnemyManager Manager { get; set; }
     //protected Player Player { get; set; }
 
@@ -83,7 +103,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         //Manager = GameManager.EnemyManager;
         SetStats();
         ActiveElementEffect = Element;
-
+        ElementTier = 1;
     }
 
     protected virtual void Awake()
@@ -116,7 +136,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         if (debugTakeDamage)
         {
             debugTakeDamage = false;
-            TakeDamage(debugDamage, debugElement, debugStaggerPoints);
+            TakeDamage(debugDamage, debugStaggerPoints, debugElement);
         }
     }
 
@@ -129,30 +149,71 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     {
         Hitpoints = MaxHealth;
     }
-
-    public virtual void TakeDamage(float damage, ElementType type, int staggerPoints)
+    #region DamageFunctions
+    public virtual void TakeDamage(float damage, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement)
     {
         /* if (CheckCombo() || CheckResistance()) CurrentHealth -= damage * damageMultiplier;
-        else */ Hitpoints -= damage;
+        else */
+        CalculateResist(type, typeTwo);
+        float modifier = CalculateModifer();
+        float modifiedDamage = damage * modifier;
+        Hitpoints -= modifiedDamage;
+
+        ElementCombo.Instance.AttemptCombo(type, ActiveElementEffect, this, gameObject.layer, CalculateTier(tier, ElementTier), transform.position);
+
         if (Hitpoints <= 0)
         {
+            Hitpoints = 0;
             OnDeath();
             return;
         }
-         
-        ApplyElementEffect(type);
+        if (typeTwo.Equals(ElementType.noElement))
+        {
+            ElementTier = tier;
+            ApplyElementEffect(type);
+        }
         AddToStaggerScale(staggerPoints);
 
         HealthBarPercentage = Hitpoints / MaxHealth;
         if (HealthBarImage) HealthBarImage.fillAmount = HealthBarPercentage;
     }
+    public virtual void TakeDamage(float damage, int staggerPoints, ElementType type, ElementType typeTwo = ElementType.noElement)
+    {
+        TakeDamage(damage, staggerPoints, type, 0, typeTwo);
+    }
+
+    private int CalculateTier(int a, int b)
+    {
+        int average = a + b;
+        average = Mathf.FloorToInt(average * 0.5f);
+        return average - 1;
+    }
+
+    private void CalculateResist(ElementType type, ElementType typeTwo = ElementType.noElement)
+    {
+        if (type.Equals(Type) || (typeTwo.Equals(Type) && !typeTwo.Equals(ElementType.noElement)))
+            currentElementResist = elementResistAmount;
+        else
+            currentElementResist = 1;
+    }
+    protected float CalculateModifer()
+    {
+        return currentStaggerDamage * currentElementResist * baseArmour * currentWitherBonus;
+    } 
 
     public virtual void OnDeath()
     {
         if (DeathSoundPrefab) Instantiate(DeathSoundPrefab);
-        poolSelf();
+        PoolSelf();
     }
 
+    public void AddForce(Vector2 force)
+    {
+        rb.velocity += force;
+    }
+    #endregion
+
+    #region Attacking
     protected virtual void AttemptAttack() //Check if Enemy Manager has an attack point available
     {
         //if (Manager.CanAttack && AbleToAttack)
@@ -166,6 +227,19 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         
     }
 
+    protected virtual void BeginAttackCooldown()
+    {
+        EnemyTimers.SetTime((int)EnemyTimer.attackCooldownTimer, AttackCooldownDuration);
+        AbleToAttack = false;
+    }
+
+    protected virtual void EndAttackCooldown(object sender, EventArgs e)
+    {
+        AbleToAttack = true;
+    }
+    #endregion
+
+    #region Element
     protected virtual void ApplyElementEffect(ElementType type)
     {
         EnemyTimers.SetTime((int)EnemyTimer.effectedTimer, EffectDuration);
@@ -224,7 +298,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
                 break;
         }
     }
+    #endregion
 
+    #region Stagger
     protected virtual void BeginStagger()
     {
         EnemyTimers.SetTime((int)EnemyTimer.staggerTimer, StaggerDuration);
@@ -238,16 +314,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         StaggeredImage.SetActive(false);
     }
 
-    protected virtual void BeginAttackCooldown()
-    {
-        EnemyTimers.SetTime((int)EnemyTimer.attackCooldownTimer, AttackCooldownDuration);
-        AbleToAttack = false;
-    }
-    
-    protected virtual void EndAttackCooldown(object sender, EventArgs e)
-    {
-        AbleToAttack = true;
-    }
+
 
     protected virtual void AddToStaggerScale(int staggerPoints)
     {
@@ -259,47 +326,83 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
             BeginStagger();
         }
     }
-
+    #endregion
 
     #region Combo Interface Methods
     public void SetTimers()
     {
         ComboEffectTimer = TimerManager.Instance.GenerateTimers(typeof(ElementCombos), gameObject);
+        ComboEffectTimer.times[(int)ElementCombos.aquaVolt].OnTimeIsZero += RemoveStun;
+        ComboEffectTimer.times[(int)ElementCombos.noxiousGas].OnTimeIsZero += RemoveNoxious;
+        ComboEffectTimer.times[(int)ElementCombos.wither].OnTimeIsZero += RemoveWither;
     }
 
-    public void ApplyFireSurge()
+    public void ApplyFireSurge(float damage, int Stagger)
     {
+        TakeDamage(damage, Stagger, ElementType.fire, ElementType.electric);
+    }
+
+    public void ApplyAquaVolt(float damage, int stagger, float duration)
+    {
+        IsStunned = true;
+        TakeDamage(damage, stagger, ElementType.electric, ElementType.water);
+        duration *= currentElementResist;
+        ComboEffectTimer.SetTime((int)ElementCombos.aquaVolt, duration);
+        //add way to stop attack and stop ai
+    }
+
+    private void RemoveStun(object sender, EventArgs e)
+    {
+        RemoveStun();
+    }
+
+    public void RemoveStun()
+    {
+        IsStunned = false;
+    }
+
+    public void ApplyNoxiousGas(float damage, int stagger, float duration)
+    {
+        IsNoxious = true;
+        TakeDamage(damage, stagger, ElementType.poison, ElementType.wind);
+        duration *= currentElementResist;
+        ComboEffectTimer.SetTime((int)ElementCombos.noxiousGas, duration);
+        //add way to stop attack and stop ai
 
     }
 
-    public void ApplyAquaVolt()
+    private void RemoveNoxious(object sender, EventArgs e)
     {
-
+        RemoveNoxious();
     }
 
-    public void ApplyFireTornado(LayerMask Target)
+    public void RemoveNoxious()
     {
-
+        IsNoxious = false;
     }
 
-    public void ApplyBrambles(LayerMask Target)
+    public void ApplyWither(float damage, int stagger, float duration, float witherBonus)
     {
-        
+        IsWither = true;
+        TakeDamage(damage, stagger, ElementType.poison, ElementType.nature);
+        duration *= currentElementResist;
+        currentWitherBonus = (witherBonus - 1) * currentElementResist + 1;
+        ComboEffectTimer.SetTime((int)ElementCombos.noxiousGas, duration);
     }
 
-    public void ApplyNoxiousGas()
+    private void RemoveWither(object sender, EventArgs e)
     {
-        
+        RemoveWither();
     }
-
-    public void ApplyWither()
+    public void RemoveWither()
     {
-        
+        IsWither = false;
+        currentWitherBonus = 1;
     }
     #endregion
 
     #region Pooling
-    public void poolSelf()
+    public void PoolSelf()
     {
         Pool.PoolObj(this);
     }

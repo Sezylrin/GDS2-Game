@@ -9,14 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46349f5f1777d0742ae2d3e10071b0c4, type: 3}
-  m_Name: Fire Ball
+  m_Script: {fileID: 11500000, guid: f385951f658734e48a940e518e2e990e, type: 3}
+  m_Name: FireTornado
   m_EditorClassIdentifier: 
-  elementType: 1
-  type: 2
-  castCost: 1
-  pierceAmount: 1
-  damage: 10
-  Stagger: 2
-  lifeTime: 10
-  speed: 20
+  BaseDamage:
+  - 1
+  - 1
+  - 1
+  StaggerDamage: 0
+  Duration: 5
+  radius: 4
+  typeOne: 1
+  typeTwo: 8
+  damageTickRate: 0.25

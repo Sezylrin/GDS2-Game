@@ -119,6 +119,8 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     #region Damage Interface
     [field: SerializeField][field:ReadOnly]
     public float Hitpoints { get; set; }
+    Rigidbody2D IDamageable.rb { get => PCM.control.rb; }
+
     public void OnDeath()
     {
     }
@@ -128,11 +130,19 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         Hitpoints = startingHitPoint;
     }
 
-    public void TakeDamage(float amount, ElementType type, int staggerPoints)
+    public void TakeDamage(float amount, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement)
     {
         CalculateDamage(amount);
     }
 
-    
+    public void TakeDamage(float amount, int staggerPoints, ElementType type, ElementType typeTwo = ElementType.noElement)
+    {
+        CalculateDamage(amount);
+    }
+
+    public void AddForce(Vector2 force)
+    {
+
+    }
     #endregion
 }
