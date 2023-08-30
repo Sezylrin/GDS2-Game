@@ -66,21 +66,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     protected float HealthBarPercentage { get; set; }
     [field: SerializeField] protected Image ElementEffectImage { get; set; }
     [field: SerializeField] protected GameObject StaggeredImage { get; set; }
-    [field: SerializeField] protected Timer EnemyTimers { get; private set; }
     Rigidbody2D IDamageable.rb => rb;
     [field: SerializeField] protected Rigidbody2D rb { get; private set; }
-    
-    [field: Header("Testing Variables")]
-    [field: SerializeField] protected int EffectDuration { get; set; } = 5;
-    [field: SerializeField] protected int StaggerDuration { get; set; } = 3;
-    [field: SerializeField] protected int AttackCooldownDuration { get; set; } = 10;
-    [field: SerializeField] protected int PointsToStagger { get; set; } = 100;
-    [field: SerializeField] ElementType debugElement { get; set; }
-    [field: SerializeField] int debugDamage { get; set; }
-    [field: SerializeField] int debugStaggerPoints { get; set; }
-    [field: SerializeField] bool debugTakeDamage { get; set; }
-    [field: SerializeField] bool debugApplyElement { get; set; }
-    [field: SerializeField] bool debugStartStagger { get; set; }
 
     #region Combo Interface Properties
     [field: Header("Combo Interface")]
