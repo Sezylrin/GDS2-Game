@@ -103,12 +103,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     private float baseArmour;
     private float currentWitherBonus = 1;
     #endregion
-    //protected EnemyManager Manager { get; set; }
+    protected EnemyManager Manager { get; set; }
     //protected Player Player { get; set; }
 
     protected virtual void Init()
     {
-        //Manager = GameManager.EnemyManager;
         SetStats();
         ActiveElementEffect = Element;
         ElementTier = 1;
@@ -117,11 +116,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     protected virtual void Awake()
     {
         Init();
-
     }
 
     protected virtual void Start()
     {
+        Manager = EnemyManager.Instance;
+
         SetTimers();
         EnemyTimers = TimerManager.Instance.GenerateTimers(typeof(EnemyTimer), gameObject);
         EnemyTimers.times[(int)EnemyTimer.effectedTimer].OnTimeIsZero += RemoveElementEffect;
@@ -130,8 +130,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         EnemyTimers.times[(int)EnemyTimer.attackCooldownTimer].OnTimeIsZero += EndAttackCooldown;
         EnemyTimers.times[(int)EnemyTimer.windupDurationTimer].OnTimeIsZero += EndWindup;
         EnemyTimers.times[(int)EnemyTimer.attackDurationTimer].OnTimeIsZero += EndAttack;
-
-        StartStaggerDecayTimer();
     }
 
     protected virtual void Update()
@@ -167,6 +165,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     {
         Hitpoints = MaxHealth;
     }
+
     #region DamageFunctions
     public virtual void TakeDamage(float damage, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement)
     {
@@ -223,6 +222,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     public virtual void OnDeath()
     {
         if (DeathSoundPrefab) Instantiate(DeathSoundPrefab);
+        Manager.DecrementActiveEnemyCounter();
         PoolSelf();
     }
 
@@ -235,15 +235,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     #region Attacking
     protected virtual void AttemptAttack() //Check if Enemy Manager has an attack point available
     {
-        //if (Manager.CanAttack && AbleToAttack)
-        if (AbleToAttack)
-            Attack();
+        if (Manager.CanAttack() && AbleToAttack) Attack();
     }
 
     protected virtual void Attack()
     {
         BeginAttackCooldown();
         BeginWindup();
+        Manager.ManagerAttack();
     }
 
     protected virtual void BeginAttackCooldown()
@@ -363,12 +362,16 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
 
     protected virtual void DecrementStaggerBar(object sender, EventArgs e)
     {
-        if (StaggerBar > 0) StaggerBar -= StaggerDecayAmount;
-        StartStaggerDecayTimer();
+        if (StaggerBar > 0)
+        {
+            StaggerBar -= StaggerDecayAmount;
+            StartStaggerDecayTimer();
+        }  
     }
 
     protected virtual void AddToStaggerBar(int staggerPoints)
     {
+        if (StaggerBar <= 0) StartStaggerDecayTimer();
         StaggerBar += staggerPoints;
 
         if (StaggerBar >= PointsToStagger)
