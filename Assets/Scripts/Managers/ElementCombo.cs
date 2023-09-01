@@ -48,9 +48,12 @@ public class ElementCombo : MonoBehaviour
     [SerializeField][SerializedDictionary("Element Combo", "ComboSo")]
     private SerializedDictionary<Combos, ComboSO> setCombos;
 
-    private Pool<ComboBase> pool;
+    private Pool<ComboBase> firePool;
     [SerializeField]
-    private GameObject testobj;
+    private GameObject fireTornado;
+    private Pool<ComboBase> bramblePool;
+    [SerializeField]
+    private GameObject brambles;
 
     public static ElementCombo Instance { get; private set; }
     void Start()
@@ -59,7 +62,8 @@ public class ElementCombo : MonoBehaviour
         {
             Instance = this;
         }
-        PoolingManager.Instance.FindPool(testobj, out pool);
+        PoolingManager.Instance.FindPool(fireTornado, out firePool);
+        PoolingManager.Instance.FindPool(brambles, out bramblePool);
     }
 
     // Update is called once per frame
@@ -79,11 +83,13 @@ public class ElementCombo : MonoBehaviour
                 comboInterface.ApplyAquaVolt(combo.BaseDamage[comboTier], combo.StaggerDamage, combo.Duration);
                 break;
             case (int)Combos.brambles:
+                SpawnAreaCombo(combo, bramblePool, comboTier, mask);
                 break;
             case (int)Combos.fireSurge:
                 comboInterface.ApplyFireSurge(combo.BaseDamage[comboTier], combo.StaggerDamage);
                 break;
             case (int)Combos.fireTornado:
+                SpawnAreaCombo(combo, firePool, comboTier, mask);
                 break;
             case (int)Combos.noxiousGas:
                 comboInterface.ApplyNoxiousGas(combo.BaseDamage[comboTier], combo.StaggerDamage, combo.Duration);
@@ -104,8 +110,8 @@ public class ElementCombo : MonoBehaviour
         Debug.Log("testing " + combo);
         AttemptCombo(ElementOne, ElementTwo, test, defaultMask, 0, transform.position);
     }
-
-    private void SpawnFireTornado(ComboSO combo, int tier, LayerMask target)
+    
+    private void SpawnAreaCombo(ComboSO combo, Pool<ComboBase> pool,int tier, LayerMask target)
     {
         bool newSpawn;
         ComboBase temp = pool.GetPooledObj(out newSpawn);
@@ -116,4 +122,5 @@ public class ElementCombo : MonoBehaviour
         temp.Init(combo as AreaComboSO, tier, Vector3.zero, target);
         Debug.Break();
     }
+
 }

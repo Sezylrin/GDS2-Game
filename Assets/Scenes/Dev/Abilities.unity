@@ -175,6 +175,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2489379560569873066, guid: 8fff45badf772e34896f361719c74816, type: 3}
+      propertyPath: <Element>k__BackingField
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2489379560569873069, guid: 8fff45badf772e34896f361719c74816, type: 3}
       propertyPath: m_Name
       value: TestMeleeEnemy
@@ -930,7 +934,7 @@ PrefabInstance:
     - target: {fileID: 864687015, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
       propertyPath: test
       value: 
-      objectReference: {fileID: 11400000, guid: 6f91427faf1f0314891c5a7b288e2640, type: 2}
+      objectReference: {fileID: 11400000, guid: a4e9bcf0124e59c4f9c65c1f148a8426, type: 2}
     - target: {fileID: 3543791458973239699, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
       propertyPath: m_RootOrder
       value: 1
