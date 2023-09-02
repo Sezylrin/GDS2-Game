@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading;
 
 public enum EnemyType
 {
@@ -36,7 +37,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     [field: SerializeField] protected float Damage { get; set; } = 10;
     [field: SerializeField] protected float Speed { get; set; } = 1;
     [field: SerializeField, ReadOnly] protected float Souls { get; set; } = 1;
+    [field: SerializeField, ReadOnly] protected bool WindingUp { get; set; } = false;
     [field: SerializeField] protected Timer EnemyTimers { get; private set; }
+
 
     [field: Header("Status Effects")]
     [field: SerializeField, ReadOnly] protected ElementType ActiveElementEffect { get; set; }
@@ -61,6 +64,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     [field: SerializeField] bool debugApplyElement { get; set; }
     [field: SerializeField] bool debugStartStagger { get; set; }
     [field: SerializeField] bool debugAttemptAttack { get; set; }
+    [field: SerializeField] bool debugInterruptAttack { get; set; }
 
     [field: Header("Other")]
     [field: SerializeField] protected AudioSource WalkingSound { get; set; }
@@ -154,6 +158,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
             debugAttemptAttack = false;
             AttemptAttack();
         }
+        if (debugInterruptAttack)
+        {
+            debugInterruptAttack = false;
+            InterruptAttack();
+        }
     }
 
     public virtual void SetStats()
@@ -194,6 +203,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
 
         HealthBarPercentage = Hitpoints / MaxHealth;
         if (HealthBarImage) HealthBarImage.fillAmount = HealthBarPercentage;
+
+        if (WindingUp) InterruptAttack();
     }
     public virtual void TakeDamage(float damage, int staggerPoints, ElementType type, ElementType typeTwo = ElementType.noElement)
     {
@@ -259,11 +270,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     protected virtual void BeginWindup()
     {
         EnemyTimers.SetTime((int)EnemyTimer.windupDurationTimer, WindupDuration);
+        WindingUp = true;
     }
 
     protected virtual void EndWindup(object sender, EventArgs e)
     {
         BeginAttack();
+        WindingUp = false;
     }
 
     protected virtual void BeginAttack()
@@ -274,6 +287,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     protected virtual void EndAttack(object sender, EventArgs e)
     {
 
+    }
+
+    protected virtual void InterruptAttack()
+    {
+        EnemyTimers.ResetSpecificToZero((int)EnemyTimer.windupDurationTimer);
+        WindingUp = false;
     }
 
     #endregion
