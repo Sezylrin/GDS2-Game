@@ -57,6 +57,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     [field: SerializeField] protected float AttackCooldownDuration { get; set; } = 10;
     [field: SerializeField] protected int PointsToStagger { get; set; } = 100;
     [field: SerializeField] protected float WindupDuration { get; set; } = 1;
+
+    [field: Header("Debug Testing")]
     [field: SerializeField] ElementType debugElement { get; set; } = ElementType.water;
     [field: SerializeField] int debugDamage { get; set; } = 20;
     [field: SerializeField] int debugStaggerPoints { get; set; } = 50;
@@ -232,6 +234,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     {
         if (DeathSoundPrefab) Instantiate(DeathSoundPrefab);
         Manager.DecrementActiveEnemyCounter();
+        //Player.AddSouls(Souls);
         PoolSelf();
     }
 
