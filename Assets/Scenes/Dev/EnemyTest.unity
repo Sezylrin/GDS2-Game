@@ -175,6 +175,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2489379560569873066, guid: 8fff45badf772e34896f361719c74816, type: 3}
+      propertyPath: staggerBonusDamage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2489379560569873069, guid: 8fff45badf772e34896f361719c74816, type: 3}
       propertyPath: m_Name
       value: TestMeleeEnemy
@@ -184,6 +188,59 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8fff45badf772e34896f361719c74816, type: 3}
+--- !u!1 &127852126
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 127852127}
+  - component: {fileID: 127852128}
+  m_Layer: 0
+  m_Name: ElementCombo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &127852127
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127852126}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 747702678}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &127852128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127852126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 204067d1852cc3d47b659f507c1afc5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attemptedCombo: 0
+  ElementOne: 0
+  ElementTwo: 0
+  defaultMask:
+    serializedVersion: 2
+    m_Bits: 0
+  setCombos:
+    _serializedList: []
+  testobj: {fileID: 0}
 --- !u!1 &539617234
 GameObject:
   m_ObjectHideFlags: 0
@@ -260,6 +317,7 @@ Transform:
   - {fileID: 539617235}
   - {fileID: 1778046465}
   - {fileID: 1602605066}
+  - {fileID: 127852127}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -475,6 +533,8 @@ MonoBehaviour:
   <EnemyManagerTimers>k__BackingField:
     <times>k__BackingField: []
     owner: {fileID: 0}
+  <ActiveEnemies>k__BackingField: 0
+  <TotalEnemiesThisRoom>k__BackingField: 0
 --- !u!1 &1778046464
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,6 +587,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2996488685272666354, guid: a5522729e3ef6f14f87b8540e40c70ba, type: 3}
+      propertyPath: staggerBonusDamage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2996488685272666361, guid: a5522729e3ef6f14f87b8540e40c70ba, type: 3}
       propertyPath: m_Name
       value: TestRangedEnemy

@@ -104,7 +104,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     private float elementResistAmount;
     private float currentElementResist = 1;
     [SerializeField, Range(0.5f, 1)]
-    private float baseArmour;
+    private float baseArmour = 0.5f;
     private float currentWitherBonus = 1;
     #endregion
     protected EnemyManager Manager { get; set; }
@@ -178,8 +178,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     #region DamageFunctions
     public virtual void TakeDamage(float damage, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement)
     {
-        /* if (CheckCombo() || CheckResistance()) CurrentHealth -= damage * damageMultiplier;
-        else */
         CalculateResist(type, typeTwo);
         float modifier = CalculateModifer();
         float modifiedDamage = damage * modifier;
@@ -246,7 +244,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     #region Attacking
     protected virtual void AttemptAttack() //Check if Enemy Manager has an attack point available
     {
-        if (Manager.CanAttack() && AbleToAttack) Attack();
+        if (Manager.CanAttack() && AbleToAttack && !Staggered) Attack();
     }
 
     protected virtual void Attack()
@@ -365,12 +363,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     {
         EnemyTimers.SetTime((int)EnemyTimer.staggerTimer, StaggerDuration);
         Staggered = true;
+        currentStaggerDamage = staggerBonusDamage;
         StaggeredImage.SetActive(true);
     }
 
     protected virtual void EndStagger(object sender, EventArgs e)
     {
         Staggered = false;
+        currentStaggerDamage = 1;
         StaggeredImage.SetActive(false);
     }
 
