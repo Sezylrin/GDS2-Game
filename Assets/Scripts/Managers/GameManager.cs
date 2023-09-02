@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    public SceneLoader sceneLoader;
+    public SceneLoader sceneLoader { get; private set; }
 
     public int Souls;
 
