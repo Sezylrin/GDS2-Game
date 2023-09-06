@@ -159,11 +159,11 @@ public class EnemyManager : MonoBehaviour
         print("natureChance: " + natureChance);
 
         if (randomValue < fireChance) return ElementType.fire;
-        else if (randomValue < waterChance) return ElementType.water;      
-        else if (randomValue < shockChance) return ElementType.electric;
-        else if (randomValue < windChance) return ElementType.wind;
-        else if (randomValue < poisonChance) return ElementType.poison;
-        else if (randomValue < natureChance) return ElementType.nature;
+        else if (fireChance < randomValue && randomValue < waterChance) return ElementType.water;      
+        else if (waterChance < randomValue && randomValue < shockChance) return ElementType.electric;
+        else if (shockChance < randomValue && randomValue < windChance) return ElementType.wind;
+        else if (windChance < randomValue && randomValue < poisonChance) return ElementType.poison;
+        else if (poisonChance < randomValue && randomValue < natureChance) return ElementType.nature;
         else return ElementType.noElement;
         
         */
