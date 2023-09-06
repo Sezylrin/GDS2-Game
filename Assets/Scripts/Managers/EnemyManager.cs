@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Unity.VisualScripting;
+using Random = UnityEngine.Random;
 
 public class EnemyManager : MonoBehaviour
 {
@@ -117,6 +118,55 @@ public class EnemyManager : MonoBehaviour
 
     private ElementType SelectEnemyElement()
     {
+        /*
+        ElementType[] attacksList = Player.AttacksList;
+
+        int noElementCount = 0;
+        int fireCount = 0;
+        int waterCount = 0;
+        int shockCount = 0;
+        int windCount = 0;
+        int poisonCount = 0;
+        int natureCount = 0;
+
+        foreach (ElementType element in attacksList)
+        {
+            switch (element) 
+            {
+                case ElementType.noElement: noElementCount++; break;
+                case ElementType.fire: fireCount++; break;
+                case ElementType.water: waterCount++; break;
+                case ElementType.electric: shockCount++; break;
+                case ElementType.wind: windCount++; break;
+                case ElementType.poison: poisonCount++; break;
+                case ElementType.nature: natureCount++; break;
+            }
+        }
+        int randomValue = Random.Range(0,101);
+
+        int fireChance = fireCount * 3;
+        int waterChance = fireChance + waterCount * 3;
+        int shockChance = waterChance + shockCount * 3;
+        int windChance = shockChance + windCount * 3;
+        int poisonChance = windChance + poisonCount * 3;
+        int natureChance = poisonChance + natureCount * 3;
+
+        print("fireChance: " + fireChance);
+        print("waterChance: " + waterChance);
+        print("shockChance: " + shockChance);
+        print("windChance: " + windChance);
+        print("poisonChance: " + poisonChance);
+        print("natureChance: " + natureChance);
+
+        if (randomValue < fireChance) return ElementType.fire;
+        else if (randomValue < waterChance) return ElementType.water;      
+        else if (randomValue < shockChance) return ElementType.electric;
+        else if (randomValue < windChance) return ElementType.wind;
+        else if (randomValue < poisonChance) return ElementType.poison;
+        else if (randomValue < natureChance) return ElementType.nature;
+        else return ElementType.noElement;
+        
+        */
         return ElementType.noElement;
     }
 
@@ -137,6 +187,7 @@ public class EnemyManager : MonoBehaviour
                 temp.Init(TestSpawnPoint.position, enemyElement);
                 break;
         }
+        ActiveEnemies++;
     }
 
     #endregion
