@@ -16,8 +16,7 @@ public enum EnemyType
     etc
 }
 
-
-public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<Enemy>
+public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 {
     protected enum EnemyTimer
     {
@@ -91,11 +90,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     public bool IsStunned { get; set; }
     #endregion
 
-    #region Pooling
-    public Pool<Enemy> Pool { get; set; }
-    public bool IsPooled { get; set; }
-
-    #endregion
 
     #region DamageModifiers
     [Header("DamageModifiers")]
@@ -112,11 +106,18 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     protected EnemyManager Manager { get; set; }
     //protected Player Player { get; set; }
 
-    protected virtual void Init()
+    public virtual void Init()
     {
         SetStats();
         ActiveElementEffect = Element;
         ElementTier = 1;
+    }
+
+    public virtual void Init(Vector2 spawnLocation, ElementType element)
+    {
+        transform.position = spawnLocation;
+        Element = element;
+        Init();
     }
 
     protected virtual void Awake()
@@ -177,7 +178,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         Hitpoints = MaxHealth;
     }
 
-    #region DamageFunctions
+    #region TakeDamage
     public virtual void TakeDamage(float damage, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement)
     {
         CalculateResist(type, typeTwo);
@@ -235,7 +236,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         if (DeathSoundPrefab) Instantiate(DeathSoundPrefab);
         Manager.DecrementActiveEnemyCounter();
         //Player.AddSouls(Souls);
-        PoolSelf();
     }
 
     public void AddForce(Vector2 force)
@@ -358,7 +358,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         }
     }
     #endregion
-
     
 
     #region Stagger
@@ -479,10 +478,5 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     }
     #endregion
 
-    #region Pooling
-    public void PoolSelf()
-    {
-        Pool.PoolObj(this);
-    }
-    #endregion
+
 }

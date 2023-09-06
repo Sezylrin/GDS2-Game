@@ -3,6 +3,8 @@ using KevinCastejon.MoreAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using Unity.VisualScripting;
 
 public class EnemyManager : MonoBehaviour
 {
@@ -14,16 +16,26 @@ public class EnemyManager : MonoBehaviour
 
     public static EnemyManager Instance { get; set; }
 
-    [field: Header("Something")]
+    [field: Header("Info")]
     [field: SerializeField, ReadOnly] private int AttackPoints { get; set; }
     [field: SerializeField] private int MaxAttackPoints { get; set; } = 10;
     [field: SerializeField] private float AttackPointRefreshRate { get; set; } = 2;
     [field: SerializeField] private bool CanEnemyAttack { get; set; } = true;
     [field: SerializeField] private float AttackDelay { get; set; } = 0.5f;
     [field: SerializeField] private Timer EnemyManagerTimers { get; set; }
+    [field: SerializeField] private Transform TestSpawnPoint { get; set; }
 
     [field: SerializeField, ReadOnly] private int ActiveEnemies { get; set; }
     [field: SerializeField, ReadOnly] private int TotalEnemiesThisRoom { get; set; }
+
+    [field: SerializeField] private GameObject[] enemyPrefabs;
+
+    private Pool<TestMeleeEnemy> testMeleeEnemyPool;
+    private Pool<TestRangedEnemy> testRangedEnemyPool;
+
+    [field: Header("Debug")]
+    [field: SerializeField] bool debugTestSpawn { get; set; }
+
 
     private void Awake()
     {
@@ -45,14 +57,23 @@ public class EnemyManager : MonoBehaviour
         EnemyManagerTimers.times[(int)EnemyManagerTimer.attackPointRefeshTimer].OnTimeIsZero += RefreshAttackPoint;
 
         AttackPoints = MaxAttackPoints;
+
+        PoolingManager.Instance.FindPool(enemyPrefabs[0], out testMeleeEnemyPool);
+        PoolingManager.Instance.FindPool(enemyPrefabs[1], out testRangedEnemyPool);
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (debugTestSpawn)
+        {
+            debugTestSpawn = false;
+            SpawnEnemy();
+        }
     }
 
+    #region Attacking
     public bool CanAttack()
     {
         return CanEnemyAttack;
@@ -86,4 +107,37 @@ public class EnemyManager : MonoBehaviour
     {
         ActiveEnemies--;
     }
+    #endregion
+
+    #region Spawning
+    private EnemyType SelectEnemyToSpawn()
+    {
+        return EnemyType.Type1;
+    }
+
+    private ElementType SelectEnemyElement()
+    {
+        return ElementType.noElement;
+    }
+
+    private void SpawnEnemy()
+    {
+        EnemyType enemyToSpawn = SelectEnemyToSpawn();
+        ElementType enemyElement = SelectEnemyElement();
+
+        Enemy temp;
+        switch (enemyToSpawn)
+        {
+            case EnemyType.Type1:
+                temp = testMeleeEnemyPool.GetPooledObj();
+                temp.Init(TestSpawnPoint.position, enemyElement);
+                break;
+            case EnemyType.Type2:
+                temp = testRangedEnemyPool.GetPooledObj();
+                temp.Init(TestSpawnPoint.position, enemyElement);
+                break;
+        }
+    }
+
+    #endregion
 }
