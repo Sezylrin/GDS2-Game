@@ -24,7 +24,12 @@ public class EnemyManager : MonoBehaviour
     [field: SerializeField] private bool CanEnemyAttack { get; set; } = true;
     [field: SerializeField] private float AttackDelay { get; set; } = 0.5f;
     [field: SerializeField] private Timer EnemyManagerTimers { get; set; }
-    [field: SerializeField] private Transform TestSpawnPoint { get; set; }
+    [field: SerializeField] private List<Transform> SpawnLocations { get; set; }
+
+
+    [field: SerializeField] ElementType debugElementForAttacksList { get; set; }
+    [field: SerializeField] bool debugUpdateAttacksList { get; set; }
+    [field: SerializeField] private List<ElementType> AttacksList { get; set; }
 
     [field: SerializeField, ReadOnly] private int ActiveEnemies { get; set; }
     [field: SerializeField, ReadOnly] private int TotalEnemiesThisRoom { get; set; }
@@ -36,6 +41,7 @@ public class EnemyManager : MonoBehaviour
 
     [field: Header("Debug")]
     [field: SerializeField] bool debugTestSpawn { get; set; }
+    
 
 
     private void Awake()
@@ -71,6 +77,11 @@ public class EnemyManager : MonoBehaviour
         {
             debugTestSpawn = false;
             SpawnEnemy();
+        }
+        if (debugUpdateAttacksList)
+        {
+            debugUpdateAttacksList = false;
+            UpdateAttacksList(debugElementForAttacksList);
         }
     }
 
@@ -111,6 +122,16 @@ public class EnemyManager : MonoBehaviour
     #endregion
 
     #region Spawning
+    private void UpdateAttacksList(ElementType type)
+    {
+        AttacksList.Add(type);
+        if (AttacksList.Count > 25) 
+        {
+            AttacksList.RemoveAt(0);
+        }
+    }
+    
+    
     private EnemyType SelectEnemyToSpawn()
     {
         return EnemyType.Type1;
@@ -118,9 +139,6 @@ public class EnemyManager : MonoBehaviour
 
     private ElementType SelectEnemyElement()
     {
-        /*
-        ElementType[] attacksList = Player.AttacksList;
-
         int noElementCount = 0;
         int fireCount = 0;
         int waterCount = 0;
@@ -129,7 +147,7 @@ public class EnemyManager : MonoBehaviour
         int poisonCount = 0;
         int natureCount = 0;
 
-        foreach (ElementType element in attacksList)
+        foreach (ElementType element in AttacksList)
         {
             switch (element) 
             {
@@ -142,7 +160,7 @@ public class EnemyManager : MonoBehaviour
                 case ElementType.nature: natureCount++; break;
             }
         }
-        int randomValue = Random.Range(0,101);
+        int randomValue = Random.Range(1,101);
 
         int fireChance = fireCount * 3;
         int waterChance = fireChance + waterCount * 3;
@@ -151,13 +169,6 @@ public class EnemyManager : MonoBehaviour
         int poisonChance = windChance + poisonCount * 3;
         int natureChance = poisonChance + natureCount * 3;
 
-        print("fireChance: " + fireChance);
-        print("waterChance: " + waterChance);
-        print("shockChance: " + shockChance);
-        print("windChance: " + windChance);
-        print("poisonChance: " + poisonChance);
-        print("natureChance: " + natureChance);
-
         if (randomValue < fireChance) return ElementType.fire;
         else if (fireChance < randomValue && randomValue < waterChance) return ElementType.water;      
         else if (waterChance < randomValue && randomValue < shockChance) return ElementType.electric;
@@ -165,26 +176,33 @@ public class EnemyManager : MonoBehaviour
         else if (windChance < randomValue && randomValue < poisonChance) return ElementType.poison;
         else if (poisonChance < randomValue && randomValue < natureChance) return ElementType.nature;
         else return ElementType.noElement;
-        
-        */
-        return ElementType.noElement;
+    }
+
+    private Vector2 SelectSpawnLocation()
+    {
+        int index = Random.Range(0, SpawnLocations.Count());
+        Vector2 spawnLocation = SpawnLocations[index].position;
+        SpawnLocations.RemoveAt(index);
+
+        return spawnLocation;
     }
 
     private void SpawnEnemy()
     {
         EnemyType enemyToSpawn = SelectEnemyToSpawn();
         ElementType enemyElement = SelectEnemyElement();
+        Vector2 spawnLocation = SelectSpawnLocation();
 
         Enemy temp;
         switch (enemyToSpawn)
         {
             case EnemyType.Type1:
                 temp = testMeleeEnemyPool.GetPooledObj();
-                temp.Init(TestSpawnPoint.position, enemyElement);
+                temp.Init(spawnLocation, enemyElement);
                 break;
             case EnemyType.Type2:
                 temp = testRangedEnemyPool.GetPooledObj();
-                temp.Init(TestSpawnPoint.position, enemyElement);
+                temp.Init(spawnLocation, enemyElement);
                 break;
         }
         ActiveEnemies++;

@@ -111,6 +111,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         SetStats();
         ActiveElementEffect = Element;
         ElementTier = 1;
+        SetElementImage();
+
     }
 
     public virtual void Init(Vector2 spawnLocation, ElementType element)
@@ -303,36 +305,18 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     {
         EnemyTimers.SetTime((int)EnemyTimer.effectedTimer, EffectDuration);
         ActiveElementEffect = type;
-        switch (type)
-        {
-            case ElementType.noElement:
-                ElementEffectImage.color = Color.grey;
-                break;
-            case ElementType.fire:
-                ElementEffectImage.color = Color.red;
-                break;
-            case ElementType.water:
-                ElementEffectImage.color = Color.blue;
-                break;
-            case ElementType.electric:
-                ElementEffectImage.color = Color.yellow;
-                break;
-            case ElementType.wind:
-                ElementEffectImage.color = Color.white;
-                break;
-            case ElementType.poison:
-                ElementEffectImage.color = Color.magenta;
-                break;
-            case ElementType.nature:
-                ElementEffectImage.color = Color.green;
-                break;
-        }
+        SetElementImage();
     }
 
     protected virtual void RemoveElementEffect(object sender, EventArgs e)
     {
         ActiveElementEffect = Element;
-        switch (Element)
+        SetElementImage();
+    }
+
+    protected virtual void SetElementImage()
+    {
+        switch (ActiveElementEffect)
         {
             case ElementType.noElement:
                 ElementEffectImage.color = Color.grey;
@@ -358,7 +342,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         }
     }
     #endregion
-    
+
 
     #region Stagger
     protected virtual void BeginStagger()
