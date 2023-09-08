@@ -15,8 +15,6 @@ public class EnemyManager : MonoBehaviour
         attackPointRefeshTimer
     }
 
-    public static EnemyManager Instance { get; set; }
-
     [field: Header("Info")]
     [field: SerializeField, ReadOnly] private int AttackPoints { get; set; }
     [field: SerializeField] private int MaxAttackPoints { get; set; } = 10;
@@ -29,6 +27,7 @@ public class EnemyManager : MonoBehaviour
 
     [field: SerializeField] ElementType debugElementForAttacksList { get; set; }
     [field: SerializeField] bool debugUpdateAttacksList { get; set; }
+    [field: SerializeField] bool debugEmptyAttacksList { get; set; }
     [field: SerializeField] private List<ElementType> AttacksList { get; set; }
 
     [field: SerializeField, ReadOnly] private int ActiveEnemies { get; set; }
@@ -46,14 +45,7 @@ public class EnemyManager : MonoBehaviour
 
     private void Awake()
     {
-        if (!Instance)
-        {
-            Instance = this;
-        }
-        else
-        {
-            DestroyImmediate(this);
-        }
+       
     }
 
     // Start is called before the first frame update
@@ -83,6 +75,12 @@ public class EnemyManager : MonoBehaviour
             debugUpdateAttacksList = false;
             UpdateAttacksList(debugElementForAttacksList);
         }
+        if (debugEmptyAttacksList)
+        {
+            debugEmptyAttacksList = false;
+            EmptyAttacksList();
+        }
+
     }
 
     #region Attacking
@@ -130,8 +128,12 @@ public class EnemyManager : MonoBehaviour
             AttacksList.RemoveAt(0);
         }
     }
-    
-    
+
+    private void EmptyAttacksList()
+    {
+        AttacksList.Clear();
+    }
+
     private EnemyType SelectEnemyToSpawn()
     {
         return EnemyType.Type1;

@@ -35,7 +35,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: SerializeField] protected float MaxHealth { get; set; } = 100;
     [field: SerializeField] protected float Damage { get; set; } = 10;
     [field: SerializeField] protected float Speed { get; set; } = 1;
-    [field: SerializeField, ReadOnly] protected float Souls { get; set; } = 1;
+    [field: SerializeField, ReadOnly] protected int Souls { get; set; } = 1;
     [field: SerializeField, ReadOnly] protected bool WindingUp { get; set; } = false;
     [field: SerializeField] protected Timer EnemyTimers { get; private set; }
 
@@ -76,6 +76,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: SerializeField] protected GameObject StaggeredImage { get; set; }
     Rigidbody2D IDamageable.rb => rb;
     [field: SerializeField] protected Rigidbody2D rb { get; private set; }
+    protected EnemyManager Manager { get; set; }
 
     #region Combo Interface Properties
     [field: Header("Combo Interface")]
@@ -90,7 +91,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     public bool IsStunned { get; set; }
     #endregion
 
-
     #region DamageModifiers
     [Header("DamageModifiers")]
     [SerializeField, Range(1,3)]
@@ -103,8 +103,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     private float baseArmour = 0.5f;
     private float currentWitherBonus = 1;
     #endregion
-    protected EnemyManager Manager { get; set; }
-    //protected Player Player { get; set; }
 
     public virtual void Init()
     {
@@ -112,7 +110,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         ActiveElementEffect = Element;
         ElementTier = 1;
         SetElementImage();
-
     }
 
     public virtual void Init(Vector2 spawnLocation, ElementType element)
@@ -129,7 +126,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     protected virtual void Start()
     {
-        Manager = EnemyManager.Instance;
+        Manager = GameManager.Instance.EnemyManager;
 
         SetTimers();
         EnemyTimers = TimerManager.Instance.GenerateTimers(typeof(EnemyTimer), gameObject);
@@ -237,7 +234,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     {
         if (DeathSoundPrefab) Instantiate(DeathSoundPrefab);
         Manager.DecrementActiveEnemyCounter();
-        //Player.AddSouls(Souls);
+        GameManager.Instance.AddSouls(Souls);
     }
 
     public void AddForce(Vector2 force)
@@ -343,7 +340,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     }
     #endregion
 
-
     #region Stagger
     protected virtual void BeginStagger()
     {
@@ -386,8 +382,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         }
     }
     #endregion
-
-    
 
     #region Combo Interface Methods
     public void SetTimers()
@@ -461,6 +455,4 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         currentWitherBonus = 1;
     }
     #endregion
-
-
 }
