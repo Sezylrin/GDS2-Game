@@ -44,14 +44,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e0dea4759946614da3c64b756d513e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <EnemyManagerTimers>k__BackingField:
+    <times>k__BackingField: []
+    owner: {fileID: 0}
   <AttackPoints>k__BackingField: 0
   <MaxAttackPoints>k__BackingField: 10
   <AttackPointRefreshRate>k__BackingField: 10
   <CanEnemyAttack>k__BackingField: 1
   <AttackDelay>k__BackingField: 0.5
-  <EnemyManagerTimers>k__BackingField:
-    <times>k__BackingField: []
-    owner: {fileID: 0}
+  <debugElementForAttacksList>k__BackingField: 0
+  <debugUpdateAttacksList>k__BackingField: 0
+  <debugEmptyAttacksList>k__BackingField: 0
+  <AttacksList>k__BackingField: 
+  enemyPrefabs:
+  - {fileID: 2489379560569873069, guid: 8fff45badf772e34896f361719c74816, type: 3}
+  - {fileID: 2996488685272666361, guid: a5522729e3ef6f14f87b8540e40c70ba, type: 3}
   <SpawnLocations>k__BackingField:
   - {fileID: 0}
   - {fileID: 0}
@@ -78,15 +85,15 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  <debugElementForAttacksList>k__BackingField: 0
-  <debugUpdateAttacksList>k__BackingField: 0
-  <AttacksList>k__BackingField: 
-  <ActiveEnemies>k__BackingField: 0
-  <TotalEnemiesThisRoom>k__BackingField: 0
-  enemyPrefabs:
-  - {fileID: 2489379560569873069, guid: 8fff45badf772e34896f361719c74816, type: 3}
-  - {fileID: 2996488685272666361, guid: a5522729e3ef6f14f87b8540e40c70ba, type: 3}
+  <ActiveEnemiesCount>k__BackingField: 0
   <debugTestSpawn>k__BackingField: 0
+  <EnemyPoints>k__BackingField: 0
+  <debugEnemyPoints>k__BackingField: 10
+  <debugSetEnemyPoints>k__BackingField: 0
+  <MeleeEnemySpawnChance>k__BackingField: 75
+  <RangedEnemySpawnChance>k__BackingField: 25
+  <debugMeleeSpawnChance>k__BackingField: 50
+  <debugSetMeleeSpawnChance>k__BackingField: 0
 --- !u!1 &3761662248408365442
 GameObject:
   m_ObjectHideFlags: 0
@@ -134,7 +141,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <EnemyManager>k__BackingField: {fileID: 1602605067}
-  Souls: 0
 --- !u!114 &3761662248408365453
 MonoBehaviour:
   m_ObjectHideFlags: 0

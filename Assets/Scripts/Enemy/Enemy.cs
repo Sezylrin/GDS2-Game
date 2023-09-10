@@ -8,6 +8,7 @@ using System.Threading;
 
 public enum EnemyType
 {
+    TypeError,
     Type1,
     Type2, 
     Type3, 
@@ -177,7 +178,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         Hitpoints = MaxHealth;
     }
 
-    #region TakeDamage
+    #region TakingDamage
     public virtual void TakeDamage(float damage, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement)
     {
         CalculateResist(type, typeTwo);

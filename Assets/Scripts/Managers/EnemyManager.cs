@@ -16,32 +16,33 @@ public class EnemyManager : MonoBehaviour
     }
 
     [field: Header("Info")]
+    [field: SerializeField] private Timer EnemyManagerTimers { get; set; }
+
+    [field: Header("EnemyAttacking")]
     [field: SerializeField, ReadOnly] private int AttackPoints { get; set; }
     [field: SerializeField] private int MaxAttackPoints { get; set; } = 10;
     [field: SerializeField] private float AttackPointRefreshRate { get; set; } = 2;
-    [field: SerializeField] private bool CanEnemyAttack { get; set; } = true;
+    [field: SerializeField, ReadOnly] private bool CanEnemyAttack { get; set; } = true;
     [field: SerializeField] private float AttackDelay { get; set; } = 0.5f;
-    [field: SerializeField] private Timer EnemyManagerTimers { get; set; }
-    [field: SerializeField] private List<Transform> SpawnLocations { get; set; }
-
-
     [field: SerializeField] ElementType debugElementForAttacksList { get; set; }
     [field: SerializeField] bool debugUpdateAttacksList { get; set; }
     [field: SerializeField] bool debugEmptyAttacksList { get; set; }
     [field: SerializeField] private List<ElementType> AttacksList { get; set; }
 
-    [field: SerializeField, ReadOnly] private int ActiveEnemies { get; set; }
-    [field: SerializeField, ReadOnly] private int TotalEnemiesThisRoom { get; set; }
-
+    [field: Header("Spawning")]
     [field: SerializeField] private GameObject[] enemyPrefabs;
-
+    [field: SerializeField] private List<Transform> SpawnLocations { get; set; }
+    [field: SerializeField, ReadOnly] private int ActiveEnemiesCount { get; set; }
+    [field: SerializeField] bool debugTestSpawn { get; set; }
+    [field: SerializeField, ReadOnly] private int EnemyPoints { get; set; }
+    [field: SerializeField] int debugEnemyPoints { get; set; } = 10;
+    [field: SerializeField] bool debugSetEnemyPoints { get; set; }
+    [field: SerializeField, ReadOnly] int MeleeEnemySpawnChance { get; set; } = 75;
+    [field: SerializeField, ReadOnly] int RangedEnemySpawnChance { get; set; } = 25;
+    [field: SerializeField, Range(0, 100)] int debugMeleeSpawnChance { get; set; } = 50;
+    [field: SerializeField] bool debugSetMeleeSpawnChance { get; set; }
     private Pool<TestMeleeEnemy> testMeleeEnemyPool;
     private Pool<TestRangedEnemy> testRangedEnemyPool;
-
-    [field: Header("Debug")]
-    [field: SerializeField] bool debugTestSpawn { get; set; }
-    
-
 
     private void Awake()
     {
@@ -59,7 +60,6 @@ public class EnemyManager : MonoBehaviour
 
         PoolingManager.Instance.FindPool(enemyPrefabs[0], out testMeleeEnemyPool);
         PoolingManager.Instance.FindPool(enemyPrefabs[1], out testRangedEnemyPool);
-        
     }
 
     // Update is called once per frame
@@ -79,6 +79,16 @@ public class EnemyManager : MonoBehaviour
         {
             debugEmptyAttacksList = false;
             EmptyAttacksList();
+        }
+        if (debugSetEnemyPoints)
+        {
+            debugSetEnemyPoints = false;
+            SetEnemyPoints(debugEnemyPoints);
+        }
+        if (debugSetMeleeSpawnChance)
+        {
+            debugSetMeleeSpawnChance = false;
+            SetMeleeSpawnChance(debugMeleeSpawnChance);
         }
 
     }
@@ -112,15 +122,10 @@ public class EnemyManager : MonoBehaviour
         if (AttackPoints < MaxAttackPoints) AttackPoints++;
         if (AttackPoints < MaxAttackPoints) StartAttackPointRefresh();
     }
-
-    public void DecrementActiveEnemyCounter()
-    {
-        ActiveEnemies--;
-    }
     #endregion
 
     #region Spawning
-    private void UpdateAttacksList(ElementType type)
+    public void UpdateAttacksList(ElementType type)
     {
         AttacksList.Add(type);
         if (AttacksList.Count > 25) 
@@ -129,14 +134,56 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    private void EmptyAttacksList()
+    public void EmptyAttacksList()
     {
         AttacksList.Clear();
     }
 
+    public void SetEnemyPoints(int points)
+    {
+        EnemyPoints = points;
+    }
+
+    private void SetMeleeSpawnChance(int chance)
+    {
+        MeleeEnemySpawnChance = chance;
+        RangedEnemySpawnChance = 100 - MeleeEnemySpawnChance;
+    }
+
     private EnemyType SelectEnemyToSpawn()
     {
-        return EnemyType.Type1;
+        EnemyType type = EnemyType.TypeError;
+        int cost = 0;
+        if (EnemyPoints > 2) cost = Random.Range(1, 4);
+        else if (EnemyPoints == 2) cost = Random.Range(1, 3);
+        else if (EnemyPoints == 1) cost = 1;
+        else
+        {
+            Debug.LogWarning("No More Enemy Points");
+            return type;
+        } 
+
+        int randomValue = Random.Range(1, 101);
+
+
+        cost = 1; // Temp ----------------------------------------------- Temp \\
+        switch (cost)
+        {
+            case 1:
+                if (randomValue < MeleeEnemySpawnChance) type = EnemyType.Type1;
+                else type = EnemyType.Type2;
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            default:
+                Debug.LogWarning("Failed To Select Type");
+                return type;
+        }
+        EnemyPoints -= cost;
+        
+        return type;
     }
 
     private ElementType SelectEnemyElement()
@@ -183,17 +230,30 @@ public class EnemyManager : MonoBehaviour
     private Vector2 SelectSpawnLocation()
     {
         int index = Random.Range(0, SpawnLocations.Count());
-        Vector2 spawnLocation = SpawnLocations[index].position;
-        SpawnLocations.RemoveAt(index);
+        Vector2 spawnLocation;
 
-        return spawnLocation;
+        if (SpawnLocations.Count > 0)
+        {
+            spawnLocation = SpawnLocations[index].position;
+            SpawnLocations.RemoveAt(index);
+            return spawnLocation;
+        }
+        else 
+        {
+            Debug.LogWarning("No More Spawn Locations");
+            return Vector2.zero;
+        }
     }
 
     private void SpawnEnemy()
     {
         EnemyType enemyToSpawn = SelectEnemyToSpawn();
-        ElementType enemyElement = SelectEnemyElement();
+        if (enemyToSpawn == EnemyType.TypeError) return;
+
         Vector2 spawnLocation = SelectSpawnLocation();
+        if (spawnLocation == Vector2.zero) return;
+
+        ElementType enemyElement = SelectEnemyElement();
 
         Enemy temp;
         switch (enemyToSpawn)
@@ -207,8 +267,12 @@ public class EnemyManager : MonoBehaviour
                 temp.Init(spawnLocation, enemyElement);
                 break;
         }
-        ActiveEnemies++;
+        ActiveEnemiesCount++;
     }
-
     #endregion
+
+    public void DecrementActiveEnemyCounter()
+    {
+        ActiveEnemiesCount--;
+    }
 }
