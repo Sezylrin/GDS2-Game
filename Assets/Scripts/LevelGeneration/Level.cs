@@ -74,4 +74,9 @@ public class Level : MonoBehaviour
     {
         totalEnemyPoints = baseEnemyPoints + LevelGenerator.Instance.difficulty;
     }
+
+    public void OverrideTotalEnemyPoints(int newTotalEnemyPoints)
+    {
+        totalEnemyPoints = newTotalEnemyPoints;
+    }
 }

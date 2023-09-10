@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
-//TODO: Async Loading+Transitions | Enemy spawns | Example Levels
+//TODO: Async Loading+Transitions | Enemy spawns | Example Levels | Door Animations
 public class LevelGenerator : MonoBehaviour
 {
     private static LevelGenerator _instance;
