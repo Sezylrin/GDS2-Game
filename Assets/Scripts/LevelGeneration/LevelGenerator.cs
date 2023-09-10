@@ -8,9 +8,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
-//TODO: Split Paths, Point Bucket, Async Loading, Locked Rooms
+//TODO: Async Loading+Transitions | Enemy spawns | Example Levels
 public class LevelGenerator : MonoBehaviour
 {
+    public static LevelGenerator Instance { get; private set; }
+
     [Serializable]
     public enum Randomness
     {
@@ -20,32 +22,52 @@ public class LevelGenerator : MonoBehaviour
     }
     [Header("Parameters")]
     public Randomness randomness;
+    public SceneReference fountainRoom;
     public List<SceneReference> roomsListReference;
-    public SceneReference FountainRoom;
-    public int roomPoolSize;
-    [Tooltip("Rooms between each fountain spawn, should be >= roomPoolSize")]
-    public int fountainFrequency;
+    public int roomPoolSize = 3;
+    [Tooltip("Levels between each fountain spawn, should be >= roomPoolSize")]
+    public int fountainFrequency = 5;
+    [Tooltip("The amount that the difficulty will increase when moving through the left/easier room")]
+    public int difficultyIncreaseLeft = 1;
+    [Tooltip("The amount that the difficulty will increase when moving through the right/harder room")]
+    public int difficultyIncreaseRight = 2;
+
     [Header("ReadOnly")]
-    [ReadOnly] public int activeLevelListIndex;
-    private List<SceneReference> roomPool;
-    private List<SceneReference> levelList;
+    private List<SceneReference> roomPool = new List<SceneReference>();
+    private List<SceneReference> levelList = new List<SceneReference>();
+    [field: SerializeField, ReadOnly]
+    public int activeLevelListIndex { get; private set; }
+    [field: SerializeField, ReadOnly]
+    public int difficulty { get; private set; }
+    [SerializeField]
+    private int startDifficulty = 5;
+
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        // Singleton pattern
+        if (Instance && Instance != this)
+        {
+            DestroyImmediate(this);
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
     }
 
     private void Start()
     {
+        difficulty = startDifficulty;
         Generate();
-        DebugLevelList();
+        // DebugLevelList();
         SceneManager.LoadScene(levelList[activeLevelListIndex]);
     }
 
     private void Generate()
     {
-        roomPool = CreateRoomPool();
-        levelList = CreateLevelList();
+        AddNewFloor();
         activeLevelListIndex = 0;
     }
 
@@ -62,21 +84,72 @@ public class LevelGenerator : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            LoadNextRoomInLevel();
+            LoadNextLevel();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            DebugLoadLevelX(1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            DebugLoadLevelX(2);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            DebugLoadLevelX(3);
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            Debug.Log(Level.Instance.totalEnemyPoints);
         }
     }
 
     //TODO: Change to AsyncLoading
-    private void LoadNextRoomInLevel()
+    private void LoadNextLevel()
     {
         // If the next level is not in list
         if (activeLevelListIndex + 1 >= levelList.Count)
         {
-            return;
-            //TODO: Create a new level and add/replace list
+            AddNewFloor();
         }
+        // ALWAYS update the tracker before loading the scene
         activeLevelListIndex++;
         SceneManager.LoadScene(levelList[activeLevelListIndex]);
+    }
+
+    private void DebugLoadLevelX(int x)
+    {
+        SceneManager.LoadScene(roomsListReference[x-1]);
+    }
+
+    public void EnterDoorLeft()
+    {
+        difficulty += difficultyIncreaseLeft;
+        LoadNextLevel();
+    }
+
+    public void EnterDoorRight()
+    {
+        difficulty += difficultyIncreaseRight;
+        LoadNextLevel();
+    }
+
+    public void EnterDoorCentre()
+    {
+        LoadNextLevel();
+    }
+
+    private void AddNewFloor()
+    {
+        roomPool = CreateRoomPool();
+        if (!levelList.Any())
+        {
+            levelList = CreateLevelList();
+        }
+        else
+        {
+            levelList?.AddRange(CreateLevelList());
+        }
     }
 
     // Creates a list of Scenes randomly chosen from roomsListReference of size equal to roomsInPool.
@@ -87,7 +160,7 @@ public class LevelGenerator : MonoBehaviour
         // If there are less rooms than specified in the pool, take the remaining rooms
         if (roomsListClone.Count < roomPoolSize)
         {
-            Debug.Log("roomsInPool is larger than rooms available. Pool size is now: " + roomsListClone.Count);
+            Debug.LogWarning("roomsInPool is larger than rooms available. Pool size is now: " + roomsListClone.Count);
             return roomsListClone;
         }
 
@@ -158,10 +231,10 @@ public class LevelGenerator : MonoBehaviour
             }
             return newRoomPool;
         }
-        catch (IndexOutOfRangeException OOB)
+        catch (IndexOutOfRangeException outOfBounds)
         {
             Debug.LogError("Ignored rooms must be defined in descending order");
-            throw OOB;
+            throw outOfBounds;
         }
     }
 
@@ -169,7 +242,7 @@ public class LevelGenerator : MonoBehaviour
     {
         if (!roomPool.Any())
         {
-            Debug.LogWarning("roomPool is empty");
+            Debug.LogError("roomPool is empty, cannot add floor");
             return null;
         }
         List<SceneReference> levelList = new List<SceneReference>();
@@ -182,7 +255,7 @@ public class LevelGenerator : MonoBehaviour
                     levelList.Add(roomPool[Random.Range(0,roomPool.Count)]);
                     roomsCreated++;
                 }
-                levelList.Add(FountainRoom);
+                levelList.Add(fountainRoom);
                 break;
             case Randomness.NoDoubles:
                 SceneReference lastRoomAdded = new SceneReference();
@@ -195,7 +268,7 @@ public class LevelGenerator : MonoBehaviour
                     if (lastRoomAdded.ScenePath != "" && !roomPool.Contains(lastRoomAdded)) roomPool.Add(lastRoomAdded);
                     lastRoomAdded = roomToAdd;
                 }
-                levelList.Add(FountainRoom);
+                levelList.Add(fountainRoom);
                 break;
             case Randomness.Looped:
                 int index = 0;
@@ -206,7 +279,7 @@ public class LevelGenerator : MonoBehaviour
                     roomsCreated++;
                     index++;
                 }
-                levelList.Add(FountainRoom);
+                levelList.Add(fountainRoom);
                 break;
         }
         return levelList;
