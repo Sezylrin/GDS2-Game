@@ -5,23 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="866baa2f-6ec0-4fcb-83d5-85b52a489f51" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/LevelGeneration.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/LevelGeneration/FauxPlayer.prefab" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/LevelGeneration/FauxPlayer.prefab.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/LevelGeneration/Level.prefab" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/LevelGeneration/Level.prefab.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/LevelGeneration/LevelDoor.prefab" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/LevelGeneration/LevelDoor.prefab.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/LevelGeneration/LevelGenerator.prefab" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/LevelGeneration/LevelGenerator.prefab.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/LevelGeneration/LevelDoor.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/LevelGeneration/LevelDoor.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Player/Player.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Player/Player.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Utility/Singleton.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Utility/Singleton.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.GDS2-Game/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GDS2-Game/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/LevelGenerationScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/LevelGenerationScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Rooms/FountainRoom.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Rooms/FountainRoom.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Rooms/Room1.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Rooms/Room1.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Rooms/Room2.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Rooms/Room2.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Rooms/Room3.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Rooms/Room3.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/LevelGeneration/FauxPlayer.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/LevelGeneration/FauxPlayer.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/LevelGeneration/Level.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/LevelGeneration/Level.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/LevelGeneration/LevelGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/LevelGeneration/LevelGenerator.cs" afterDir="false" />
     </list>
@@ -38,7 +27,9 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f45a99ffbb9f4d0580258c77e560b3ab16e000/f9/f5ef1838/Debug.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/LevelGeneration/Level.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/LevelGeneration/LevelDoor.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Player/Player.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Utility/SceneReference.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Utility/Singleton.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectId" id="2UuvrVNaprL0FAv1MojwwKlCiBL" />
   <component name="ProjectViewState">

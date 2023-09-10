@@ -11,7 +11,8 @@ using Random = UnityEngine.Random;
 //TODO: Async Loading+Transitions | Enemy spawns | Example Levels
 public class LevelGenerator : MonoBehaviour
 {
-    public static LevelGenerator Instance { get; private set; }
+    private static LevelGenerator _instance;
+    public static LevelGenerator Instance { get { return _instance; }}
 
     [Serializable]
     public enum Randomness
@@ -46,13 +47,13 @@ public class LevelGenerator : MonoBehaviour
     private void Awake()
     {
         // Singleton pattern
-        if (Instance && Instance != this)
+        if (_instance && _instance != this)
         {
-            DestroyImmediate(this);
+            Destroy(this.gameObject);
         }
         else
         {
-            Instance = this;
+            _instance = this;
             DontDestroyOnLoad(gameObject);
         }
     }

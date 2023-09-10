@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class Level : MonoBehaviour
 {
-    public static Level Instance { get; private set; }
+    private static Level _instance;
+    public static Level Instance { get { return _instance; } }
 
     [SerializeField]
     private int baseEnemyPoints = 5;
@@ -19,13 +20,13 @@ public class Level : MonoBehaviour
     private void Awake()
     {
         // Singleton pattern
-        if (Instance && Instance != this)
+        if (_instance != null && _instance != this)
         {
-            DestroyImmediate(this);
+            DestroyImmediate(this.gameObject);
         }
         else
         {
-            Instance = this;
+            _instance = this;
         }
     }
 
