@@ -20,7 +20,7 @@ public class Attacks : MonoBehaviour
 
     [Header("General varibles")]
     [SerializeField]
-    private PlayerController playerControl;
+    private PlayerComponentManager PCM; 
     [SerializeField]
     private Transform centre;
     [SerializeField]
@@ -43,7 +43,6 @@ public class Attacks : MonoBehaviour
     void Start()
     {
         timers = TimerManager.Instance.GenerateTimers(typeof(coolDownTimers), gameObject);
-        playerControl = GetComponent<PlayerController>();
         maxCombo = lightHitboxes.Length;
     }
 
@@ -59,8 +58,8 @@ public class Attacks : MonoBehaviour
         {
             lightHitboxes[currentCombo - 1].enabled = false;
             currentAttackStage = attackStage.attackEnd;
-            playerControl.SetIsAttackEnd(true);
-            playerControl.SetIsAttacking(false);
+            PCM.control.SetIsAttackEnd(true);
+            PCM.control.SetIsAttacking(false);
             if (currentCombo < maxCombo)
                 timers.SetTime((int)coolDownTimers.lightEndLag, lightAttackEndLag);
             else
@@ -70,23 +69,23 @@ public class Attacks : MonoBehaviour
         {
             currentAttackStage = attackStage.noAttack;
             currentCombo = 0;
-            playerControl.SetIsAttacking(false);
-            playerControl.SetIsAttackEnd(false);
+            PCM.control.SetIsAttacking(false);
+            PCM.control.SetIsAttackEnd(false);
         }
     }
 
     public void LightAttack()
     {
         playerState[] unAllowed = { playerState.dashing};
-        if (playerControl.CheckStates(unAllowed))
+        if (PCM.control.CheckStates(unAllowed))
             return;
         if (currentCombo >= maxCombo || currentAttackStage == attackStage.attackStart)
             return;
-        playerControl.RemoveBufferInput();
+        PCM.control.RemoveBufferInput();
         // initiate light attack
         // quick attack towards mouse
-        playerControl.SetIsAttacking(true);
-        playerControl.SetIsAttackEnd(false);
+        PCM.control.SetIsAttacking(true);
+        PCM.control.SetIsAttackEnd(false);
         UniqueLightAttack();
         currentCombo++;
         timers.SetTime((int)coolDownTimers.lightAttackDuration, lightAttackDuration);
@@ -96,8 +95,8 @@ public class Attacks : MonoBehaviour
     private void UniqueLightAttack()
     {
         // moves user in that direction via force
-        Vector2 dir = (playerControl.mousePos - (Vector2)transform.position).normalized;
-        playerControl.rb.velocity = dir * lightAttackPullDist;
+        Vector2 dir = (PCM.control.mousePos - (Vector2)transform.position).normalized;
+        PCM.control.rb.velocity = dir * lightAttackPullDist;
         centre.eulerAngles = new Vector3(0, 0, CustomMath.ClampedDirection(Vector2.up, dir));
         lightHitboxes[currentCombo].enabled = true;
         // play animation and state control in inherited classes

@@ -9,17 +9,16 @@ namespace AYellowpaper.SerializedCollections
     [System.Serializable]
     public class AbilityDictionary
     {
-        [SerializedDictionary("Element Type", "Description")]
-        public SerializedDictionary<AbilityType, GameObject> abilityShapePF;
+        
     }
 }
 public class Abilities : MonoBehaviour
 {
     [Header("Core")]
     [SerializeField]
-    private PlayerController playerController;
+    private PlayerComponentManager PCM;
     [SerializeField]
-    private PlayerSystem playerSystem;
+    private Transform abilitySpawnPoint;
 
     [Header("abilities")]
     [SerializeField]
@@ -30,30 +29,32 @@ public class Abilities : MonoBehaviour
 
     private Dictionary<AbilityType, Pool<AbilityBase>> pools = new Dictionary<AbilityType, Pool<AbilityBase>>();
 
-    [SerializeField]
-    private AbilityDictionary abilityShape;
+    [SerializeField][SerializedDictionary("Element Type", "Description")]
+    private SerializedDictionary<AbilityType, GameObject> abilityShapePF;
     private void Start()
     {
-        foreach (KeyValuePair<AbilityType,GameObject> entry in abilityShape.abilityShapePF)
+        foreach (KeyValuePair<AbilityType,GameObject> entry in abilityShapePF)
         {
             Pool<AbilityBase> temp;
             PoolingManager.Instance.FindPool(entry.Value, out temp,entry.Key.ToString() + " type");
             pools.Add(entry.Key, temp);
         }
+        //remember to uncheck them when done with debugging
+        SetAbilities();
     }
     public void CastSlotOne()
     {
-        playerController.RemoveBufferInput();
+        PCM.control.RemoveBufferInput();
         CastAbility(AbilitySetOne ? abilities[3] : abilities[0]);
     }
     public void CastSlotTwo()
     {
-        playerController.RemoveBufferInput();
+        PCM.control.RemoveBufferInput();
         CastAbility(AbilitySetOne ? abilities[4] : abilities[1]);
     }
     public void CastSlotThree()
     {
-        playerController.RemoveBufferInput();
+        PCM.control.RemoveBufferInput();
         CastAbility(AbilitySetOne ? abilities[5] : abilities[2]);
     }
     public void SetSlot(ElementalSO abilityToUse, int slot)
@@ -70,13 +71,26 @@ public class Abilities : MonoBehaviour
 
     private void CastAbility(ElementalSO selected)
     {
-        if (!selected) return;
-
+        if (!selected)
+            return;
+        if (!PCM.system.AttemptCast(selected.castCost))
+            return;
+        //play animation
         Pool<AbilityBase> temp;
         if (pools.TryGetValue(selected.type, out temp))
         {
+
             AbilityBase ability = temp.GetPooledObj();
-            ability.SetSelectedAbility(selected);
+            if (selected.type.Equals(AbilityType.AOE))
+            {
+                ability.SetSelectedAbility(selected, transform.position);
+            }
+            else
+            {
+                Vector3 dir = abilitySpawnPoint.position - transform.position;
+                ability.SetSelectedAbility(selected, abilitySpawnPoint.position, dir);
+            }
+            
         }
     }
 
@@ -90,6 +104,14 @@ public class Abilities : MonoBehaviour
         CastAbility(test);
     }
 
+    [ContextMenu("SetAbilitiesToDebug")]
+    private void SetAbilities()
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            SetSlot(test, i);
+        }
+    }
     #endregion
 }
 

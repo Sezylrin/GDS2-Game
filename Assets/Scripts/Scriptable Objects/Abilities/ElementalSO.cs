@@ -8,8 +8,6 @@ public enum AbilityType
     AOE,
     Projectile
 }
-
-[CreateAssetMenu(fileName = "Abilities", menuName = "ScriptableObjects/ElementalAbility")]
 public class ElementalSO : ScriptableObject
 {
     public ElementType elementType;
@@ -21,4 +19,13 @@ public class ElementalSO : ScriptableObject
     public int pierceAmount;
 
     public float damage;
+
+    public int Stagger;
+
+    public float lifeTime;
 }
+
+
+
+
+

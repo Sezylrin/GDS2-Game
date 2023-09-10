@@ -1,10 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using KevinCastejon.MoreAttributes;
 
 public class ProjectileAbility : AbilityBase
 {
     // Start is called before the first frame update
+    [SerializeField][ReadOnly]
+    private ProjectileVariantSO selected;
+
+    [SerializeField]
+    private Rigidbody2D rb;
     void Start()
     {
         
@@ -18,6 +25,28 @@ public class ProjectileAbility : AbilityBase
 
     protected override void CastAbility()
     {
-        Debug.Log("test");
+        selected = selectedAbility as ProjectileVariantSO;
+        LaunchTowardsTarget();
+    }
+
+    protected override void InvokePoolSelf(object sender, EventArgs e)
+    {
+        PoolSelf();
+        base.InvokePoolSelf(sender, e);
+    }
+
+    private void LaunchTowardsTarget()
+    {
+        transform.position = initialPos;
+        rb.velocity = direction.normalized * selected.speed;
+    }
+
+    protected override void OnTriggerEnter2D(Collider2D collision)
+    {
+        base.OnTriggerEnter2D(collision);
+        if (CurrentPierce <= 0 || collision.CompareTag(Tags.T_Terrain))
+        {
+            PoolSelf();
+        }
     }
 }

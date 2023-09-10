@@ -10,7 +10,7 @@ public class InputController : MonoBehaviour
     private PlayerInput.PlayerActions player;
 
     [SerializeField]
-    private PlayerController playerController;
+    private PlayerComponentManager PCM;
     private void Awake()
     {
         input = new PlayerInput();
@@ -20,18 +20,24 @@ public class InputController : MonoBehaviour
     private void OnEnable()
     {
         player.Enable();
-        player.Move.performed += playerController.SetDirection;
-        player.Move.canceled += playerController.SetDirection;
-        player.Attack.performed += playerController.BufferLightAttack;
-        player.Dash.performed += playerController.BufferDash;
+        player.Move.performed += PCM.control.SetDirection;
+        player.Move.canceled += PCM.control.SetDirection;
+        player.Attack.performed += PCM.control.BufferLightAttack;
+        player.Dash.performed += PCM.control.BufferDash;
+        player.AbilityOne.performed += PCM.control.BufferAbilityOne;
+        player.AbilityTwo.performed += PCM.control.BufferAbilityTwo;
+        player.AbilityThree.performed += PCM.control.BufferAbilityThree;
     }
 
     private void OnDisable()
     {
-        player.Move.performed -= playerController.SetDirection;
-        player.Move.canceled -= playerController.SetDirection;
-        player.Attack.performed -= playerController.BufferLightAttack;
-        player.Dash.performed -= playerController.BufferDash;
+        player.Move.performed -= PCM.control.SetDirection;
+        player.Move.canceled -= PCM.control.SetDirection;
+        player.Attack.performed -= PCM.control.BufferLightAttack;
+        player.Dash.performed -= PCM.control.BufferDash;
+        player.AbilityOne.performed -= PCM.control.BufferAbilityOne;
+        player.AbilityTwo.performed -= PCM.control.BufferAbilityTwo;
+        player.AbilityThree.performed -= PCM.control.BufferAbilityThree;
         player.Disable();
     }
     // Update is called once per frame
