@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Level : MonoBehaviour
 {
+    //TODO: Spawn Points, EnemyManager
     private static Level _instance;
     public static Level Instance { get { return _instance; } }
 
@@ -13,9 +14,11 @@ public class Level : MonoBehaviour
     private int baseEnemyPoints = 5;
     public int totalEnemyPoints { get; private set; }
     public int enemiesRemaining { get; private set; }
+    [Header("Debug")]
     public bool debugClearLevel;
     [field: SerializeField, ReadOnly]
     public bool isCleared { get; private set; }
+    public List<Transform> enemySpawnPoints;
     public static event Action OnLevelClear;
     private void Awake()
     {
@@ -34,20 +37,15 @@ public class Level : MonoBehaviour
     {
         enemiesRemaining = 0;
         ValidateTotalEnemyPoints();
+        GameManager.Instance.EnemyManager.StartEnemySpawning(enemySpawnPoints, totalEnemyPoints);
     }
 
-    private void Update()
+    private void GetEnemySpawnPoints()
     {
-        if (isCleared) return;
-        if (CalculateIsCleared()) ClearLevel();
+        //TODO: Get List of enemy spawn points
     }
 
-    private bool CalculateIsCleared()
-    {
-        return totalEnemyPoints <= 0 && enemiesRemaining <= 0;
-    }
-
-    private void ClearLevel()
+    public void ClearLevel()
     {
         isCleared = true;
         OnLevelClear?.Invoke();

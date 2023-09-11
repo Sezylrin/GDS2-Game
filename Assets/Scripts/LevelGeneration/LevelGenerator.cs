@@ -83,26 +83,26 @@ public class LevelGenerator : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            LoadNextLevel();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            DebugLoadLevelX(1);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            DebugLoadLevelX(2);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            DebugLoadLevelX(3);
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            Debug.Log(Level.Instance.totalEnemyPoints);
-        }
+        // if (Input.GetKeyDown(KeyCode.Space))
+        // {
+        //     LoadNextLevel();
+        // }
+        // if (Input.GetKeyDown(KeyCode.Alpha1))
+        // {
+        //     DebugLoadLevelX(1);
+        // }
+        // if (Input.GetKeyDown(KeyCode.Alpha2))
+        // {
+        //     DebugLoadLevelX(2);
+        // }
+        // if (Input.GetKeyDown(KeyCode.Alpha3))
+        // {
+        //     DebugLoadLevelX(3);
+        // }
+        // if (Input.GetKeyDown(KeyCode.D))
+        // {
+        //     Debug.Log(Level.Instance.totalEnemyPoints);
+        // }
     }
 
     //TODO: Change to AsyncLoading

@@ -15,6 +15,7 @@ public class EnemySpawnPoint : MonoBehaviour
 
     private void ValidateCanSpawn()
     {
-        canSpawn = Vector2.Distance(Player.Instance.transform.position, gameObject.transform.position) > noSpawnRadius;
+        canSpawn = true;
+        // canSpawn = Vector2.Distance(Player.Instance.transform.position, gameObject.transform.position) > noSpawnRadius;
     }
 }
