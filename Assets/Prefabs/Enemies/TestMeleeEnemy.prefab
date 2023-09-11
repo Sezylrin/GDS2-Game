@@ -667,9 +667,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2489379560569873064}
   - component: {fileID: 2489379560569873067}
-  - component: {fileID: 2489379560569873066}
   - component: {fileID: 2489379560569873065}
   - component: {fileID: 8716451748292390363}
+  - component: {fileID: 2489379560569873066}
   m_Layer: 6
   m_Name: TestMeleeEnemy
   m_TagString: Untagged
@@ -746,79 +746,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2489379560569873066
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2489379560569873069}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e881b8def4e53448821ddda6f70479e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Type>k__BackingField: 0
-  <Element>k__BackingField: 1
-  <Hitpoints>k__BackingField: 100
-  <MaxHealth>k__BackingField: 100
-  <Damage>k__BackingField: 0
-  <Speed>k__BackingField: 0
-  <Souls>k__BackingField: 0
-  <ActiveElementEffect>k__BackingField: 0
-  <ElementTier>k__BackingField: 0
-  <Staggered>k__BackingField: 0
-  <AbleToAttack>k__BackingField: 1
-  <WalkingSound>k__BackingField: {fileID: 0}
-  <DeathSoundPrefab>k__BackingField: {fileID: 0}
-  <HealthBarImage>k__BackingField: {fileID: 2489379561012669698}
-  <ElementEffectImage>k__BackingField: {fileID: 2489379560108725518}
-  <StaggeredImage>k__BackingField: {fileID: 2489379559056602806}
-  <EnemyTimers>k__BackingField:
-    <times>k__BackingField: []
-    owner: {fileID: 0}
-  <ActiveElementEffect>k__BackingField: 0
-  <StaggerBar>k__BackingField: 0
-  <Staggered>k__BackingField: 0
-  <AbleToAttack>k__BackingField: 1
-  <EffectDuration>k__BackingField: 5
-  <StaggerDecayAmount>k__BackingField: 4
-  <StaggerDecayRate>k__BackingField: 0.25
-  <StaggerDuration>k__BackingField: 3
-  <AttackDuration>k__BackingField: 0.5
-  <AttackCooldownDuration>k__BackingField: 10
-  <PointsToStagger>k__BackingField: 100
-  <WindupDuration>k__BackingField: 1
-  <debugElement>k__BackingField: 2
-  <debugDamage>k__BackingField: 20
-  <debugStaggerPoints>k__BackingField: 50
-  <debugTakeDamage>k__BackingField: 0
-  <debugApplyElement>k__BackingField: 0
-  <debugStartStagger>k__BackingField: 0
-  <debugAttemptAttack>k__BackingField: 0
-  <WalkingSound>k__BackingField: {fileID: 0}
-  <DeathSoundPrefab>k__BackingField: {fileID: 0}
-  <HealthBarImage>k__BackingField: {fileID: 2489379561012669698}
-  <ElementEffectImage>k__BackingField: {fileID: 2489379560108725518}
-  <StaggeredImage>k__BackingField: {fileID: 2489379559056602806}
-  <SpawnPosition>k__BackingField: {fileID: 0}
-  <ActiveCombos>k__BackingField: 
-  <ComboEffectTimer>k__BackingField:
-    <times>k__BackingField: []
-    owner: {fileID: 0}
-  <TargetLayer>k__BackingField:
-    serializedVersion: 2
-    m_Bits: 0
-  staggerBonusDamage: 0
-  elementResistAmount: 0
-  baseArmour: 1
-  <MeleeTimers>k__BackingField:
-    <times>k__BackingField: []
-    owner: {fileID: 0}
-  <WindupDuration>k__BackingField: 1
-  <AttackDuration>k__BackingField: 0.5
-  <WarningBox>k__BackingField: {fileID: 2489379560098110650}
-  <AttackHitbox>k__BackingField: {fileID: 2489379560232288714}
 --- !u!61 &2489379560569873065
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -891,6 +818,69 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &2489379560569873066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2489379560569873069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e881b8def4e53448821ddda6f70479e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Type>k__BackingField: 0
+  <Element>k__BackingField: 1
+  <Hitpoints>k__BackingField: 100
+  <MaxHealth>k__BackingField: 100
+  <Damage>k__BackingField: 0
+  <Speed>k__BackingField: 0
+  <Souls>k__BackingField: 0
+  <WindingUp>k__BackingField: 0
+  <EnemyTimers>k__BackingField:
+    <times>k__BackingField: []
+    owner: {fileID: 0}
+  <ActiveElementEffect>k__BackingField: 0
+  <ElementTier>k__BackingField: 0
+  <StaggerBar>k__BackingField: 0
+  <Staggered>k__BackingField: 0
+  <AbleToAttack>k__BackingField: 1
+  <EffectDuration>k__BackingField: 5
+  <StaggerDecayAmount>k__BackingField: 4
+  <StaggerDecayRate>k__BackingField: 0.25
+  <StaggerDuration>k__BackingField: 3
+  <AttackDuration>k__BackingField: 0.5
+  <AttackCooldownDuration>k__BackingField: 10
+  <PointsToStagger>k__BackingField: 100
+  <WindupDuration>k__BackingField: 1
+  <debugElement>k__BackingField: 2
+  <debugDamage>k__BackingField: 20
+  <debugStaggerPoints>k__BackingField: 50
+  <debugTakeDamage>k__BackingField: 0
+  <debugApplyElement>k__BackingField: 0
+  <debugStartStagger>k__BackingField: 0
+  <debugAttemptAttack>k__BackingField: 0
+  <debugInterruptAttack>k__BackingField: 0
+  <WalkingSound>k__BackingField: {fileID: 0}
+  <DeathSoundPrefab>k__BackingField: {fileID: 0}
+  <HealthBarImage>k__BackingField: {fileID: 2489379561012669698}
+  <ElementEffectImage>k__BackingField: {fileID: 2489379560108725518}
+  <StaggeredImage>k__BackingField: {fileID: 2489379559056602806}
+  <rb>k__BackingField: {fileID: 8716451748292390363}
+  <SpawnPosition>k__BackingField: {fileID: 0}
+  <ActiveCombos>k__BackingField: 
+  <ComboEffectTimer>k__BackingField:
+    <times>k__BackingField: []
+    owner: {fileID: 0}
+  <TargetLayer>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 0
+  staggerBonusDamage: 2
+  elementResistAmount: 0
+  baseArmour: 1
+  <WarningBox>k__BackingField: {fileID: 2489379560098110650}
+  <AttackHitbox>k__BackingField: {fileID: 2489379560232288714}
 --- !u!1 &2489379561012669700
 GameObject:
   m_ObjectHideFlags: 0

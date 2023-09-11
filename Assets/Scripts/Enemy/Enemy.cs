@@ -4,9 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading;
 
 public enum EnemyType
 {
+    TypeError,
     Type1,
     Type2, 
     Type3, 
@@ -15,8 +17,7 @@ public enum EnemyType
     etc
 }
 
-
-public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<Enemy>
+public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 {
     protected enum EnemyTimer
     {
@@ -35,8 +36,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     [field: SerializeField] protected float MaxHealth { get; set; } = 100;
     [field: SerializeField] protected float Damage { get; set; } = 10;
     [field: SerializeField] protected float Speed { get; set; } = 1;
-    [field: SerializeField, ReadOnly] protected float Souls { get; set; } = 1;
+    [field: SerializeField, ReadOnly] protected int Souls { get; set; } = 1;
+    [field: SerializeField, ReadOnly] protected bool WindingUp { get; set; } = false;
     [field: SerializeField] protected Timer EnemyTimers { get; private set; }
+
 
     [field: Header("Status Effects")]
     [field: SerializeField, ReadOnly] protected ElementType ActiveElementEffect { get; set; }
@@ -54,6 +57,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     [field: SerializeField] protected float AttackCooldownDuration { get; set; } = 10;
     [field: SerializeField] protected int PointsToStagger { get; set; } = 100;
     [field: SerializeField] protected float WindupDuration { get; set; } = 1;
+
+    [field: Header("Debug Testing")]
     [field: SerializeField] ElementType debugElement { get; set; } = ElementType.water;
     [field: SerializeField] int debugDamage { get; set; } = 20;
     [field: SerializeField] int debugStaggerPoints { get; set; } = 50;
@@ -61,6 +66,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     [field: SerializeField] bool debugApplyElement { get; set; }
     [field: SerializeField] bool debugStartStagger { get; set; }
     [field: SerializeField] bool debugAttemptAttack { get; set; }
+    [field: SerializeField] bool debugInterruptAttack { get; set; }
 
     [field: Header("Other")]
     [field: SerializeField] protected AudioSource WalkingSound { get; set; }
@@ -71,6 +77,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     [field: SerializeField] protected GameObject StaggeredImage { get; set; }
     Rigidbody2D IDamageable.rb => rb;
     [field: SerializeField] protected Rigidbody2D rb { get; private set; }
+    protected EnemyManager Manager { get; set; }
 
     #region Combo Interface Properties
     [field: Header("Combo Interface")]
@@ -85,12 +92,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     public bool IsStunned { get; set; }
     #endregion
 
-    #region Pooling
-    public Pool<Enemy> Pool { get; set; }
-    public bool IsPooled { get; set; }
-
-    #endregion
-
     #region DamageModifiers
     [Header("DamageModifiers")]
     [SerializeField, Range(1,3)]
@@ -100,28 +101,34 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     private float elementResistAmount;
     private float currentElementResist = 1;
     [SerializeField, Range(0.5f, 1)]
-    private float baseArmour;
+    private float baseArmour = 0.5f;
     private float currentWitherBonus = 1;
     #endregion
-    //protected EnemyManager Manager { get; set; }
-    //protected Player Player { get; set; }
 
-    protected virtual void Init()
+    public virtual void Init()
     {
-        //Manager = GameManager.EnemyManager;
         SetStats();
         ActiveElementEffect = Element;
         ElementTier = 1;
+        SetElementImage();
+    }
+
+    public virtual void Init(Vector2 spawnLocation, ElementType element)
+    {
+        transform.position = spawnLocation;
+        Element = element;
+        Init();
     }
 
     protected virtual void Awake()
     {
         Init();
-
     }
 
     protected virtual void Start()
     {
+        Manager = GameManager.Instance.EnemyManager;
+
         SetTimers();
         EnemyTimers = TimerManager.Instance.GenerateTimers(typeof(EnemyTimer), gameObject);
         EnemyTimers.times[(int)EnemyTimer.effectedTimer].OnTimeIsZero += RemoveElementEffect;
@@ -130,8 +137,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         EnemyTimers.times[(int)EnemyTimer.attackCooldownTimer].OnTimeIsZero += EndAttackCooldown;
         EnemyTimers.times[(int)EnemyTimer.windupDurationTimer].OnTimeIsZero += EndWindup;
         EnemyTimers.times[(int)EnemyTimer.attackDurationTimer].OnTimeIsZero += EndAttack;
-
-        StartStaggerDecayTimer();
     }
 
     protected virtual void Update()
@@ -156,6 +161,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
             debugAttemptAttack = false;
             AttemptAttack();
         }
+        if (debugInterruptAttack)
+        {
+            debugInterruptAttack = false;
+            InterruptAttack();
+        }
     }
 
     public virtual void SetStats()
@@ -167,11 +177,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     {
         Hitpoints = MaxHealth;
     }
-    #region DamageFunctions
+
+    #region TakingDamage
     public virtual void TakeDamage(float damage, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement)
     {
-        /* if (CheckCombo() || CheckResistance()) CurrentHealth -= damage * damageMultiplier;
-        else */
         CalculateResist(type, typeTwo);
         float modifier = CalculateModifer();
         float modifiedDamage = damage * modifier;
@@ -195,6 +204,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
 
         HealthBarPercentage = Hitpoints / MaxHealth;
         if (HealthBarImage) HealthBarImage.fillAmount = HealthBarPercentage;
+
+        if (WindingUp) InterruptAttack();
     }
     public virtual void TakeDamage(float damage, int staggerPoints, ElementType type, ElementType typeTwo = ElementType.noElement)
     {
@@ -223,7 +234,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     public virtual void OnDeath()
     {
         if (DeathSoundPrefab) Instantiate(DeathSoundPrefab);
-        PoolSelf();
+        Manager.DecrementActiveEnemyCounter();
+        GameManager.Instance.AddSouls(Souls);
     }
 
     public void AddForce(Vector2 force)
@@ -235,15 +247,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     #region Attacking
     protected virtual void AttemptAttack() //Check if Enemy Manager has an attack point available
     {
-        //if (Manager.CanAttack && AbleToAttack)
-        if (AbleToAttack)
-            Attack();
+        if (Manager.CanAttack() && AbleToAttack && !Staggered) Attack();
     }
 
     protected virtual void Attack()
     {
         BeginAttackCooldown();
         BeginWindup();
+        Manager.ManagerAttack();
     }
 
     protected virtual void BeginAttackCooldown()
@@ -260,11 +271,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     protected virtual void BeginWindup()
     {
         EnemyTimers.SetTime((int)EnemyTimer.windupDurationTimer, WindupDuration);
+        WindingUp = true;
     }
 
     protected virtual void EndWindup(object sender, EventArgs e)
     {
         BeginAttack();
+        WindingUp = false;
     }
 
     protected virtual void BeginAttack()
@@ -277,6 +290,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
 
     }
 
+    protected virtual void InterruptAttack()
+    {
+        EnemyTimers.ResetSpecificToZero((int)EnemyTimer.windupDurationTimer);
+        WindingUp = false;
+    }
+
     #endregion
 
     #region Element
@@ -284,36 +303,18 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     {
         EnemyTimers.SetTime((int)EnemyTimer.effectedTimer, EffectDuration);
         ActiveElementEffect = type;
-        switch (type)
-        {
-            case ElementType.noElement:
-                ElementEffectImage.color = Color.grey;
-                break;
-            case ElementType.fire:
-                ElementEffectImage.color = Color.red;
-                break;
-            case ElementType.water:
-                ElementEffectImage.color = Color.blue;
-                break;
-            case ElementType.electric:
-                ElementEffectImage.color = Color.yellow;
-                break;
-            case ElementType.wind:
-                ElementEffectImage.color = Color.white;
-                break;
-            case ElementType.poison:
-                ElementEffectImage.color = Color.magenta;
-                break;
-            case ElementType.nature:
-                ElementEffectImage.color = Color.green;
-                break;
-        }
+        SetElementImage();
     }
 
     protected virtual void RemoveElementEffect(object sender, EventArgs e)
     {
         ActiveElementEffect = Element;
-        switch (Element)
+        SetElementImage();
+    }
+
+    protected virtual void SetElementImage()
+    {
+        switch (ActiveElementEffect)
         {
             case ElementType.noElement:
                 ElementEffectImage.color = Color.grey;
@@ -340,19 +341,19 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     }
     #endregion
 
-    
-
     #region Stagger
     protected virtual void BeginStagger()
     {
         EnemyTimers.SetTime((int)EnemyTimer.staggerTimer, StaggerDuration);
         Staggered = true;
+        currentStaggerDamage = staggerBonusDamage;
         StaggeredImage.SetActive(true);
     }
 
     protected virtual void EndStagger(object sender, EventArgs e)
     {
         Staggered = false;
+        currentStaggerDamage = 1;
         StaggeredImage.SetActive(false);
     }
 
@@ -363,12 +364,16 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
 
     protected virtual void DecrementStaggerBar(object sender, EventArgs e)
     {
-        if (StaggerBar > 0) StaggerBar -= StaggerDecayAmount;
-        StartStaggerDecayTimer();
+        if (StaggerBar > 0)
+        {
+            StaggerBar -= StaggerDecayAmount;
+            StartStaggerDecayTimer();
+        }  
     }
 
     protected virtual void AddToStaggerBar(int staggerPoints)
     {
+        if (StaggerBar <= 0) StartStaggerDecayTimer();
         StaggerBar += staggerPoints;
 
         if (StaggerBar >= PointsToStagger)
@@ -378,8 +383,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         }
     }
     #endregion
-
-    
 
     #region Combo Interface Methods
     public void SetTimers()
@@ -451,13 +454,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     {
         IsWither = false;
         currentWitherBonus = 1;
-    }
-    #endregion
-
-    #region Pooling
-    public void PoolSelf()
-    {
-        Pool.PoolObj(this);
     }
     #endregion
 }
