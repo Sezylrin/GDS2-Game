@@ -5,6 +5,7 @@ using UnityEngine;
 
 public abstract class MeleeEnemy : Enemy
 {
+    [field: Header("Melee Stats")]
     [field: SerializeField] protected GameObject WarningBox { get; set; }
     [field: SerializeField] protected GameObject AttackHitbox { get; set; }
 

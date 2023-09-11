@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 namespace Pathfinding {
 	using Pathfinding.RVO;
@@ -269,7 +270,10 @@ namespace Pathfinding {
 		/// So when the agent is close to the destination this method will typically be called every <see cref="repathRate"/> seconds.
 		/// </summary>
 		public virtual void OnTargetReached () {
+			OnDestinationReached?.Invoke(this, EventArgs.Empty);
 		}
+
+		public EventHandler OnDestinationReached;
 
 		/// <summary>
 		/// Called when a requested path has been calculated.

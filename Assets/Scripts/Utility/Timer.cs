@@ -7,7 +7,7 @@ using KevinCastejon.MoreAttributes;
 [Serializable]
 public class Timer
 {
-    [field:SerializeField]
+    [field:SerializeField][field:ReadOnly]
     public Times[] times { get; private set; }
 
     [Serializable]
