@@ -26,10 +26,13 @@ public class GamepadCursor : MonoBehaviour
     private InputAction scrollAction;
 
     private Vector2 currentPos;
-    private Button currentlyHoveredButton = null;
+    private SkillTreeButton currentlyHoveredButton = null;
 
     void Start()
     {
+        //TESTING
+        GameManager.Instance.Souls = 50;
+
         var uiMap = inputActionAsset.FindActionMap("UI");
         moveCursorAction = uiMap.FindAction("MoveCursor");
         clickAction = uiMap.FindAction("Click");
@@ -47,6 +50,9 @@ public class GamepadCursor : MonoBehaviour
 
     void Update()
     {
+        //TESTING
+        if (Input.GetKeyDown(KeyCode.E)) GameManager.Instance.Souls += 100;
+
         Vector2 scrollVector = scrollAction.ReadValue<Vector2>() * joystickScrollSpeed;
         Vector2 normalizedPos = scrollRect.normalizedPosition;
         normalizedPos.y = Mathf.Clamp01(normalizedPos.y + scrollVector.y);
@@ -68,13 +74,13 @@ public class GamepadCursor : MonoBehaviour
         List<RaycastResult> results = new List<RaycastResult>();
         eventSystem.RaycastAll(pointerData, results);
 
-        Button buttonUnderCursor = null;
+        SkillTreeButton buttonUnderCursor = null;
 
         if (results.Count > 0)
         {
             foreach (var result in results)
             {
-                Button button = result.gameObject.GetComponent<Button>();
+                SkillTreeButton button = result.gameObject.GetComponent<SkillTreeButton>();
                 if (button != null)
                 {
                     buttonUnderCursor = button;
@@ -87,14 +93,14 @@ public class GamepadCursor : MonoBehaviour
         {
             if (currentlyHoveredButton)
             {
-                ExecuteEvents.Execute<IPointerExitHandler>(currentlyHoveredButton.gameObject, pointerData, ExecuteEvents.pointerExitHandler);
+                currentlyHoveredButton.DisableHover();
             }
 
             currentlyHoveredButton = buttonUnderCursor;
 
             if (currentlyHoveredButton)
             {
-                ExecuteEvents.Execute<IPointerEnterHandler>(currentlyHoveredButton.gameObject, pointerData, ExecuteEvents.pointerEnterHandler);
+                currentlyHoveredButton.ActivateHover();
             }
         }
     }
