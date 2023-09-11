@@ -7,8 +7,9 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     public SceneLoader sceneLoader { get; private set; }
+    [field: SerializeField] public EnemyManager EnemyManager { get; private set; }
 
-    public int Souls;
+    public int Souls { get; set; }
 
     private void Awake()
     {
@@ -21,5 +22,10 @@ public class GameManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
+    }
+
+    public void AddSouls(int souls)
+    {
+        Souls += souls;
     }
 }

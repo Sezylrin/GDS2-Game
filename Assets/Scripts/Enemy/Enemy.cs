@@ -8,6 +8,7 @@ using System.Threading;
 
 public enum EnemyType
 {
+    TypeError,
     Type1,
     Type2, 
     Type3, 
@@ -16,8 +17,7 @@ public enum EnemyType
     etc
 }
 
-
-public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<Enemy>
+public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 {
     protected enum EnemyTimer
     {
@@ -36,7 +36,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     [field: SerializeField] protected float MaxHealth { get; set; } = 100;
     [field: SerializeField] protected float Damage { get; set; } = 10;
     [field: SerializeField] protected float Speed { get; set; } = 1;
-    [field: SerializeField, ReadOnly] protected float Souls { get; set; } = 1;
+    [field: SerializeField, ReadOnly] protected int Souls { get; set; } = 1;
     [field: SerializeField, ReadOnly] protected bool WindingUp { get; set; } = false;
     [field: SerializeField] protected Timer EnemyTimers { get; private set; }
 
@@ -77,6 +77,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     [field: SerializeField] protected GameObject StaggeredImage { get; set; }
     Rigidbody2D IDamageable.rb => rb;
     [field: SerializeField] protected Rigidbody2D rb { get; private set; }
+    protected EnemyManager Manager { get; set; }
 
     #region Combo Interface Properties
     [field: Header("Combo Interface")]
@@ -91,12 +92,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     public bool IsStunned { get; set; }
     #endregion
 
-    #region Pooling
-    public Pool<Enemy> Pool { get; set; }
-    public bool IsPooled { get; set; }
-
-    #endregion
-
     #region DamageModifiers
     [Header("DamageModifiers")]
     [SerializeField, Range(1,3)]
@@ -109,14 +104,20 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     private float baseArmour = 0.5f;
     private float currentWitherBonus = 1;
     #endregion
-    protected EnemyManager Manager { get; set; }
-    //protected Player Player { get; set; }
 
-    protected virtual void Init()
+    public virtual void Init()
     {
         SetStats();
         ActiveElementEffect = Element;
         ElementTier = 1;
+        SetElementImage();
+    }
+
+    public virtual void Init(Vector2 spawnLocation, ElementType element)
+    {
+        transform.position = spawnLocation;
+        Element = element;
+        Init();
     }
 
     protected virtual void Awake()
@@ -126,7 +127,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
 
     protected virtual void Start()
     {
-        Manager = EnemyManager.Instance;
+        Manager = GameManager.Instance.EnemyManager;
 
         SetTimers();
         EnemyTimers = TimerManager.Instance.GenerateTimers(typeof(EnemyTimer), gameObject);
@@ -177,7 +178,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         Hitpoints = MaxHealth;
     }
 
-    #region DamageFunctions
+    #region TakingDamage
     public virtual void TakeDamage(float damage, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement)
     {
         CalculateResist(type, typeTwo);
@@ -234,8 +235,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     {
         if (DeathSoundPrefab) Instantiate(DeathSoundPrefab);
         Manager.DecrementActiveEnemyCounter();
-        //Player.AddSouls(Souls);
-        PoolSelf();
+        GameManager.Instance.AddSouls(Souls);
     }
 
     public void AddForce(Vector2 force)
@@ -303,36 +303,18 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     {
         EnemyTimers.SetTime((int)EnemyTimer.effectedTimer, EffectDuration);
         ActiveElementEffect = type;
-        switch (type)
-        {
-            case ElementType.noElement:
-                ElementEffectImage.color = Color.grey;
-                break;
-            case ElementType.fire:
-                ElementEffectImage.color = Color.red;
-                break;
-            case ElementType.water:
-                ElementEffectImage.color = Color.blue;
-                break;
-            case ElementType.electric:
-                ElementEffectImage.color = Color.yellow;
-                break;
-            case ElementType.wind:
-                ElementEffectImage.color = Color.white;
-                break;
-            case ElementType.poison:
-                ElementEffectImage.color = Color.magenta;
-                break;
-            case ElementType.nature:
-                ElementEffectImage.color = Color.green;
-                break;
-        }
+        SetElementImage();
     }
 
     protected virtual void RemoveElementEffect(object sender, EventArgs e)
     {
         ActiveElementEffect = Element;
-        switch (Element)
+        SetElementImage();
+    }
+
+    protected virtual void SetElementImage()
+    {
+        switch (ActiveElementEffect)
         {
             case ElementType.noElement:
                 ElementEffectImage.color = Color.grey;
@@ -358,8 +340,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         }
     }
     #endregion
-
-    
 
     #region Stagger
     protected virtual void BeginStagger()
@@ -403,8 +383,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
         }
     }
     #endregion
-
-    
 
     #region Combo Interface Methods
     public void SetTimers()
@@ -476,13 +454,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable, IPoolable<
     {
         IsWither = false;
         currentWitherBonus = 1;
-    }
-    #endregion
-
-    #region Pooling
-    public void PoolSelf()
-    {
-        Pool.PoolObj(this);
     }
     #endregion
 }
