@@ -1393,6 +1393,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1602605067, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: <debugTestSpawn>k__BackingField
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602605067, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
       propertyPath: <SpawnLocations>k__BackingField.Array.data[0]
       value: 
       objectReference: {fileID: 2024364399}

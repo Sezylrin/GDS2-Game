@@ -93,7 +93,7 @@ public class EnemyManager : MonoBehaviour
 
     }
 
-    #region Attacking
+    #region EnemyAttacking
     public bool CanAttack()
     {
         return CanEnemyAttack;
@@ -124,11 +124,11 @@ public class EnemyManager : MonoBehaviour
     }
     #endregion
 
-    #region Spawning
+    #region PlayerAttacksList
     public void UpdateAttacksList(ElementType type)
     {
         AttacksList.Add(type);
-        if (AttacksList.Count > 25) 
+        if (AttacksList.Count > 25)
         {
             AttacksList.RemoveAt(0);
         }
@@ -138,7 +138,17 @@ public class EnemyManager : MonoBehaviour
     {
         AttacksList.Clear();
     }
+    #endregion
 
+    #region Spawning
+    public void StartEnemySpawning(List<Transform> spawnPoints, int enemyPoints)
+    {
+        SetEnemyPoints(enemyPoints);
+        SpawnLocations = spawnPoints;
+        SpawnEnemy();
+    }
+    
+    
     public void SetEnemyPoints(int points)
     {
         EnemyPoints = points;
@@ -268,6 +278,8 @@ public class EnemyManager : MonoBehaviour
                 break;
         }
         ActiveEnemiesCount++;
+
+        if (EnemyPoints > 0) SpawnEnemy();
     }
     #endregion
 
