@@ -43,6 +43,8 @@ public class EnemyManager : MonoBehaviour
     [field: SerializeField] bool debugSetMeleeSpawnChance { get; set; }
     private Pool<TestMeleeEnemy> testMeleeEnemyPool;
     private Pool<TestRangedEnemy> testRangedEnemyPool;
+    private List<Enemy> enemyList = new List<Enemy>();
+    [field: SerializeField] bool debugKillEnemies { get; set; }
 
     private void Awake()
     {
@@ -90,7 +92,11 @@ public class EnemyManager : MonoBehaviour
             debugSetMeleeSpawnChance = false;
             SetMeleeSpawnChance(debugMeleeSpawnChance);
         }
-
+        if (debugKillEnemies)
+        {
+            debugKillEnemies = false;
+            KillEnemies();
+        }
     }
 
     #region EnemyAttacking
@@ -271,13 +277,16 @@ public class EnemyManager : MonoBehaviour
             case EnemyType.Type1:
                 temp = testMeleeEnemyPool.GetPooledObj();
                 temp.Init(spawnLocation, enemyElement);
+                enemyList.Add(temp);
                 break;
             case EnemyType.Type2:
                 temp = testRangedEnemyPool.GetPooledObj();
                 temp.Init(spawnLocation, enemyElement);
+                enemyList.Add(temp);
                 break;
         }
         ActiveEnemiesCount++;
+
 
         if (EnemyPoints > 0) SpawnEnemy();
     }
@@ -286,5 +295,17 @@ public class EnemyManager : MonoBehaviour
     public void DecrementActiveEnemyCounter()
     {
         ActiveEnemiesCount--;
+        if (ActiveEnemiesCount <= 0)
+        {
+            Level.Instance.ClearLevel();
+        }
+    }
+
+    private void KillEnemies()
+    {
+        foreach (Enemy enemy in enemyList)
+        {
+            enemy.OnDeath();
+        }
     }
 }
