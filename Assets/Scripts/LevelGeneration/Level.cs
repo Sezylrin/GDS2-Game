@@ -6,19 +6,23 @@ using UnityEngine;
 
 public class Level : MonoBehaviour
 {
-    //TODO: Spawn Points, EnemyManager
+    //TODO: Spawn Points
     private static Level _instance;
     public static Level Instance { get { return _instance; } }
 
     [SerializeField]
     private int baseEnemyPoints = 5;
     public int totalEnemyPoints { get; private set; }
-    public int enemiesRemaining { get; private set; }
+    [SerializeField]
+    private float enemyPointMultiplier = 1.0f;
+    [SerializeField]
+    private Transform playerSpawnPoint;
+    [SerializeField]
+    private List<Transform> enemySpawnPoints;
     [Header("Debug")]
     public bool debugClearLevel;
     [field: SerializeField, ReadOnly]
     public bool isCleared { get; private set; }
-    public List<Transform> enemySpawnPoints;
     public static event Action OnLevelClear;
     private void Awake()
     {
@@ -35,8 +39,10 @@ public class Level : MonoBehaviour
 
     private void Start()
     {
-        enemiesRemaining = 0;
         ValidateTotalEnemyPoints();
+        SpawnPlayer();
+        GetEnemySpawnPoints();
+        LevelGenerator.Instance.TriggerCrossFadeEnd();
         GameManager.Instance.EnemyManager.StartEnemySpawning(enemySpawnPoints, totalEnemyPoints);
     }
 
@@ -58,23 +64,22 @@ public class Level : MonoBehaviour
         ClearLevel();
     }
 
-    public void UseEnemyPoints(int pointsToUse)
-    {
-        totalEnemyPoints -= pointsToUse;
-    }
-
-    public void AddEnemy()
-    {
-        enemiesRemaining++;
-    }
-
     private void ValidateTotalEnemyPoints()
     {
-        totalEnemyPoints = baseEnemyPoints + LevelGenerator.Instance.difficulty;
+        totalEnemyPoints = Mathf.RoundToInt((baseEnemyPoints + LevelGenerator.Instance.difficulty) * enemyPointMultiplier);
     }
 
     public void OverrideTotalEnemyPoints(int newTotalEnemyPoints)
     {
         totalEnemyPoints = newTotalEnemyPoints;
+    }
+
+    private void SpawnPlayer()
+    {
+        if (Player.Instance.transform.position !=
+            playerSpawnPoint.position)
+        {
+            Player.Instance.transform.position = playerSpawnPoint.position;
+        }
     }
 }

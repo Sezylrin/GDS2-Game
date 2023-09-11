@@ -8,11 +8,17 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
-//TODO: Async Loading+Transitions | Enemy spawns | Example Levels | Door Animations
+//TODO: Async Loading+Transitions | Example Levels | Door Animations
 public class LevelGenerator : MonoBehaviour
 {
     private static LevelGenerator _instance;
     public static LevelGenerator Instance { get { return _instance; }}
+
+    [Header("Components")]
+    [SerializeField]
+    private Animator crossFadeAnimator;
+    [SerializeField]
+    private float crossFadeTime = 1f;
 
     [Serializable]
     public enum Randomness
@@ -43,6 +49,8 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField]
     private int startDifficulty = 5;
 
+    [Header("Debug")]
+    public bool debugNextLevel;
 
     private void Awake()
     {
@@ -63,22 +71,13 @@ public class LevelGenerator : MonoBehaviour
         difficulty = startDifficulty;
         Generate();
         // DebugLevelList();
-        SceneManager.LoadScene(levelList[activeLevelListIndex]);
+        // SceneManager.LoadScene(levelList[activeLevelListIndex]);
     }
 
     private void Generate()
     {
         AddNewFloor();
-        activeLevelListIndex = 0;
-    }
-
-    private void DebugStart()
-    {
-        int[] ignoredRooms = new int[2];
-        ignoredRooms[0] = 1;
-        ignoredRooms[1] = 2;
-        roomPool = CreateRoomPool(ignoredRooms);
-        DebugRoomPool();
+        activeLevelListIndex = -1;
     }
 
     private void Update()
@@ -105,6 +104,13 @@ public class LevelGenerator : MonoBehaviour
         // }
     }
 
+    private void OnValidate()
+    {
+        if (!debugNextLevel) return;
+        debugNextLevel = false;
+        LoadNextLevel();
+    }
+
     //TODO: Change to AsyncLoading
     private void LoadNextLevel()
     {
@@ -115,7 +121,21 @@ public class LevelGenerator : MonoBehaviour
         }
         // ALWAYS update the tracker before loading the scene
         activeLevelListIndex++;
-        SceneManager.LoadScene(levelList[activeLevelListIndex]);
+        StartCoroutine(LoadLevel(levelList[activeLevelListIndex]));
+    }
+
+    IEnumerator LoadLevel(string scenePath)
+    {
+        crossFadeAnimator.SetTrigger("Start");
+
+        yield return new WaitForSeconds(crossFadeTime);
+
+        SceneManager.LoadScene(scenePath);
+    }
+
+    public void TriggerCrossFadeEnd()
+    {
+        crossFadeAnimator.SetTrigger("End");
     }
 
     private void DebugLoadLevelX(int x)
@@ -302,5 +322,14 @@ public class LevelGenerator : MonoBehaviour
         {
             Debug.Log(room.ScenePath);
         }
+    }
+
+    private void DebugStart()
+    {
+        int[] ignoredRooms = new int[2];
+        ignoredRooms[0] = 1;
+        ignoredRooms[1] = 2;
+        roomPool = CreateRoomPool(ignoredRooms);
+        DebugRoomPool();
     }
 }
