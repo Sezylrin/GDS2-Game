@@ -25,8 +25,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1862890624}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: 0, z: 0}
-  m_LocalScale: {x: 2.8650985, y: 2.9302511, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2996488685272666364}
@@ -429,7 +429,10 @@ GameObject:
   - component: {fileID: 2996488685272666364}
   - component: {fileID: 2996488685272666367}
   - component: {fileID: 2996488685272666365}
+  - component: {fileID: 882732001}
   - component: {fileID: 2996488685272666354}
+  - component: {fileID: 1090918736}
+  - component: {fileID: 1090918735}
   m_Layer: 6
   m_Name: TestRangedEnemy
   m_TagString: Untagged
@@ -453,7 +456,7 @@ Transform:
   - {fileID: 2996488685874130668}
   - {fileID: 1862890625}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2996488685272666367
 SpriteRenderer:
@@ -493,8 +496,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1725982173
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
@@ -552,6 +555,33 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!50 &882732001
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2996488685272666361}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 1
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!114 &2996488685272666354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564,17 +594,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b32f68944282414c95e0f642ff033c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Type>k__BackingField: 0
+  <Type>k__BackingField: 1
   <Element>k__BackingField: 1
   <Hitpoints>k__BackingField: 100
   <MaxHealth>k__BackingField: 100
-  <Damage>k__BackingField: 0
+  <Damage>k__BackingField: 10
   <Speed>k__BackingField: 0
   <Souls>k__BackingField: 0
+  <WindingUp>k__BackingField: 0
   <EnemyTimers>k__BackingField:
     <times>k__BackingField: []
     owner: {fileID: 0}
   <ActiveElementEffect>k__BackingField: 0
+  <ElementTier>k__BackingField: 0
   <StaggerBar>k__BackingField: 0
   <Staggered>k__BackingField: 0
   <AbleToAttack>k__BackingField: 1
@@ -593,12 +625,14 @@ MonoBehaviour:
   <debugApplyElement>k__BackingField: 0
   <debugStartStagger>k__BackingField: 0
   <debugAttemptAttack>k__BackingField: 0
+  <debugInterruptAttack>k__BackingField: 0
   <WalkingSound>k__BackingField: {fileID: 0}
   <DeathSoundPrefab>k__BackingField: {fileID: 0}
   <HealthBarImage>k__BackingField: {fileID: 2996488685429595990}
   <ElementEffectImage>k__BackingField: {fileID: 2996488685867968346}
   <StaggeredImage>k__BackingField: {fileID: 2996488684572427490}
-  <SpawnPosition>k__BackingField: {fileID: 0}
+  <rb>k__BackingField: {fileID: 882732001}
+  <path>k__BackingField: {fileID: 1090918735}
   <ActiveCombos>k__BackingField: 
   <ComboEffectTimer>k__BackingField:
     <times>k__BackingField: []
@@ -606,6 +640,23 @@ MonoBehaviour:
   <TargetLayer>k__BackingField:
     serializedVersion: 2
     m_Bits: 0
+  <PlayerLayer>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 8
+  <EnemyLayer>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 64
+  staggerBonusDamage: 2
+  elementResistAmount: 0
+  baseArmour: 0.5
+  IdleRadius: 3
+  RepositionPoint: 5
+  IdleMoveRateMin: 4
+  IdleMoveRateMax: 6
+  RepositionRateMin: 2
+  RepositionRateMax: 4
+  AttackEndAiCD: 0.5
+  currentState: 0
   <RangedTimers>k__BackingField:
     <times>k__BackingField: []
     owner: {fileID: 0}
@@ -613,6 +664,76 @@ MonoBehaviour:
   <WarningFlash>k__BackingField: {fileID: 2996488685874130670}
   <ProjectilePrefab>k__BackingField: {fileID: 14868488010454435, guid: 737e4c733442e9a46a0bcee5aea33709, type: 3}
   <ProjectileSpawnPoint>k__BackingField: {fileID: 1862890625}
+--- !u!114 &1090918736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2996488685272666361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 373b52eb9bf8c40f785bb6947a1aee66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  drawGizmos: 1
+  detailedGizmos: 1
+  startEndModifier:
+    addPoints: 0
+    exactStartPoint: 1
+    exactEndPoint: 0
+    useRaycasting: 0
+    mask:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    useGraphRaycasting: 0
+  traversableTags: -1
+  tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  graphMask:
+    value: -1
+--- !u!114 &1090918735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2996488685272666361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6eb1402c17e84a9282a7f0f62eb584f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 5
+  radius: 0.5
+  height: 2
+  canMove: 1
+  maxSpeed: 3
+  gravity: {x: NaN, y: NaN, z: NaN}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  centerOffsetCompatibility: NaN
+  repathRateCompatibility: NaN
+  canSearchCompability: 0
+  orientation: 1
+  enableRotation: 0
+  autoRepath:
+    mode: 2
+    interval: 0.5
+    sensitivity: 10
+    maximumInterval: 2
+    visualizeSensitivity: 0
+  targetCompatibility: {fileID: 0}
+  maxAcceleration: 10
+  rotationSpeed: 360
+  slowdownDistance: 0.6
+  pickNextWaypointDist: 2
+  endReachedDistance: 0.2
+  alwaysDrawGizmos: 1
+  slowWhenNotFacingTarget: 1
+  whenCloseToDestination: 0
+  constrainInsideGraph: 0
 --- !u!1 &2996488685429595984
 GameObject:
   m_ObjectHideFlags: 0

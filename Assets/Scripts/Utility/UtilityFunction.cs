@@ -15,7 +15,7 @@ public static class UtilityFunction
         return false;
     }
 
-    private static Quaternion LookAt2D(Vector3 origin, Vector3 lookTarget)
+    public static Quaternion LookAt2D(Vector3 origin, Vector3 lookTarget)
     {
         Vector3 vectorToTarget = (Vector3)lookTarget - origin;
         float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;

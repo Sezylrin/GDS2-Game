@@ -55,7 +55,6 @@ public class ElementCombo : MonoBehaviour
     [SerializeField]
     private GameObject brambles;
 
-    public static ElementCombo Instance { get; private set; }
     void Start()
     {
         if (Instance == null)
