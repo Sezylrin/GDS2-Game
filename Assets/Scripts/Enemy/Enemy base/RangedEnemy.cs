@@ -18,14 +18,17 @@ public abstract class RangedEnemy : Enemy
     [field: SerializeField] protected GameObject ProjectilePrefab { get; set; }
     [field: SerializeField] protected Transform ProjectileSpawnPoint { get; set; }
 
+    protected Pool<EnemyProjectile> pool;
+
     protected bool FlashedOnce { get; set; } = false;
 
     protected override void Start()
     {
         base.Start();
-        RangedTimers = TimerManager.Instance.GenerateTimers(typeof(RangedTimer), gameObject);
+        RangedTimers = GameManager.Instance.TimerManager.GenerateTimers(typeof(RangedTimer), gameObject);
         RangedTimers.times[(int)RangedTimer.warningFlashTimer].OnTimeIsZero += DisableWarningSign;
         RangedTimers.times[(int)RangedTimer.warningFlashDelay].OnTimeIsZero += SecondWarningFlash;
+        GameManager.Instance.PoolingManager.FindPool(ProjectilePrefab, out pool);
     }
 
     protected override void Update()
@@ -81,11 +84,21 @@ public abstract class RangedEnemy : Enemy
     protected override void BeginAttack()
     {
         base.BeginAttack();
-        Instantiate(ProjectilePrefab, ProjectileSpawnPoint.position, Quaternion.identity);
+        bool initial;
+        EnemyProjectile temp = pool.GetPooledObj(out initial);
+        if (initial)
+        {
+            temp.NewInstance();
+        }
+        temp.Init(targetTr.position - transform.position, ProjectileSpawnPoint.position, TargetLayer, Damage, Element, transform);
     }
 
     protected override void EndAttack(object sender, EventArgs e)
     {
         base.EndAttack(sender, e);
+    }
+    protected override void DetermineAttackPathing()
+    {
+        SetDestination(transform.position);
     }
 }

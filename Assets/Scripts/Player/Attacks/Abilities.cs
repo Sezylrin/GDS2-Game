@@ -3,15 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using KevinCastejon.MoreAttributes;
 using AYellowpaper.SerializedCollections;
+using UnityEngine.InputSystem;
 
-namespace AYellowpaper.SerializedCollections
-{
-    [System.Serializable]
-    public class AbilityDictionary
-    {
-        
-    }
-}
+
 public class Abilities : MonoBehaviour
 {
     [Header("Core")]
@@ -22,9 +16,8 @@ public class Abilities : MonoBehaviour
 
     [Header("abilities")]
     [SerializeField]
-    [ReadOnly]
     private ElementalSO[] abilities = new ElementalSO[6];
-
+    [SerializeField][ReadOnly]
     private bool AbilitySetOne;
 
     private Dictionary<AbilityType, Pool<AbilityBase>> pools = new Dictionary<AbilityType, Pool<AbilityBase>>();
@@ -36,11 +29,15 @@ public class Abilities : MonoBehaviour
         foreach (KeyValuePair<AbilityType,GameObject> entry in abilityShapePF)
         {
             Pool<AbilityBase> temp;
-            PoolingManager.Instance.FindPool(entry.Value, out temp,entry.Key.ToString() + " type");
+            GameManager.Instance.PoolingManager.FindPool(entry.Value, out temp,entry.Key.ToString() + " type");
             pools.Add(entry.Key, temp);
         }
         //remember to uncheck them when done with debugging
-        SetAbilities();
+        //SetAbilities();
+    }
+    public void ToggleActiveAbilitySet(InputAction.CallbackContext context)
+    {
+        AbilitySetOne = !AbilitySetOne;
     }
     public void CastSlotOne()
     {

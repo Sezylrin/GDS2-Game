@@ -7,22 +7,10 @@ using KevinCastejon.MoreAttributes;
 public class TimerManager : MonoBehaviour
 {
     // Start is called before the first frame update
-    public static TimerManager Instance { get; private set; }
 
     [SerializeField]
     private List<Timer> timers = new List<Timer>();
     // Update is called once per frame
-    private void Awake()
-    {
-        if (!Instance)
-        {
-            Instance = this;
-        }
-        else
-        {
-            DestroyImmediate(this);
-        }
-    }
     private void LateUpdate()
     {
         for (int i = timers.Count - 1; i >= 0; i--)

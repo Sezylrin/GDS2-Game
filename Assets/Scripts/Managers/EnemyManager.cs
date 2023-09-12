@@ -43,6 +43,8 @@ public class EnemyManager : MonoBehaviour
     [field: SerializeField] bool debugSetMeleeSpawnChance { get; set; }
     private Pool<TestMeleeEnemy> testMeleeEnemyPool;
     private Pool<TestRangedEnemy> testRangedEnemyPool;
+    private List<Enemy> enemyList = new List<Enemy>();
+    [field: SerializeField] bool debugKillEnemies { get; set; }
 
     private void Awake()
     {
@@ -52,14 +54,14 @@ public class EnemyManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        EnemyManagerTimers = TimerManager.Instance.GenerateTimers(typeof(EnemyManagerTimer), gameObject);
+        EnemyManagerTimers = GameManager.Instance.TimerManager.GenerateTimers(typeof(EnemyManagerTimer), gameObject);
         EnemyManagerTimers.times[(int)EnemyManagerTimer.attackDelayTimer].OnTimeIsZero += EnableAttack;
         EnemyManagerTimers.times[(int)EnemyManagerTimer.attackPointRefeshTimer].OnTimeIsZero += RefreshAttackPoint;
 
         AttackPoints = MaxAttackPoints;
 
-        PoolingManager.Instance.FindPool(enemyPrefabs[0], out testMeleeEnemyPool);
-        PoolingManager.Instance.FindPool(enemyPrefabs[1], out testRangedEnemyPool);
+        GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[0], out testMeleeEnemyPool);
+        GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[1], out testRangedEnemyPool);
     }
 
     // Update is called once per frame
@@ -90,13 +92,20 @@ public class EnemyManager : MonoBehaviour
             debugSetMeleeSpawnChance = false;
             SetMeleeSpawnChance(debugMeleeSpawnChance);
         }
-
+        if (debugKillEnemies)
+        {
+            debugKillEnemies = false;
+            KillEnemies();
+        }
     }
 
-    #region Attacking
+    #region EnemyAttacking
     public bool CanAttack()
     {
-        return CanEnemyAttack;
+        bool CanAttack = CanEnemyAttack && AttackPoints > 0;
+        if (CanAttack)
+            ManagerAttack();
+        return CanAttack;
     }
 
     public void ManagerAttack()
@@ -124,11 +133,11 @@ public class EnemyManager : MonoBehaviour
     }
     #endregion
 
-    #region Spawning
+    #region PlayerAttacksList
     public void UpdateAttacksList(ElementType type)
     {
         AttacksList.Add(type);
-        if (AttacksList.Count > 25) 
+        if (AttacksList.Count > 25)
         {
             AttacksList.RemoveAt(0);
         }
@@ -138,7 +147,17 @@ public class EnemyManager : MonoBehaviour
     {
         AttacksList.Clear();
     }
+    #endregion
 
+    #region Spawning
+    public void StartEnemySpawning(List<Transform> spawnPoints, int enemyPoints)
+    {
+        SetEnemyPoints(enemyPoints);
+        SpawnLocations = spawnPoints;
+        SpawnEnemy();
+    }
+    
+    
     public void SetEnemyPoints(int points)
     {
         EnemyPoints = points;
@@ -261,18 +280,74 @@ public class EnemyManager : MonoBehaviour
             case EnemyType.Type1:
                 temp = testMeleeEnemyPool.GetPooledObj();
                 temp.Init(spawnLocation, enemyElement);
+                enemyList.Add(temp);
                 break;
             case EnemyType.Type2:
                 temp = testRangedEnemyPool.GetPooledObj();
                 temp.Init(spawnLocation, enemyElement);
+                enemyList.Add(temp);
                 break;
         }
         ActiveEnemiesCount++;
+
+
+        if (EnemyPoints > 0) SpawnEnemy();
     }
     #endregion
 
     public void DecrementActiveEnemyCounter()
     {
         ActiveEnemiesCount--;
+        if (ActiveEnemiesCount <= 0)
+        {
+            Level.Instance.ClearLevel();
+        }
+    }
+
+    private void KillEnemies()
+    {
+        foreach (Enemy enemy in enemyList)
+        {
+            enemy.OnDeath();
+        }
+    }
+
+    public void EnableAggro()
+    {
+        foreach (Enemy enemy in enemyList)
+        {
+            enemy.BeginAggro();
+        }
+    }
+
+    public void DebugAddEnemy(Enemy enemy)
+    {
+        enemyList.Add(enemy);
+    }
+
+    public Transform FindNearestEnemy(Transform origin)
+    {
+        Transform nearest;
+        float distance = float.MaxValue;
+        if (enemyList.Count == 1)
+            return null;
+        else if (enemyList[0].Equals(origin))
+        {
+            nearest = enemyList[1].transform;
+        }
+        else
+        {
+            nearest = enemyList[0].transform;
+        }
+        foreach(Enemy enemy in enemyList)
+        {
+            float temp = Vector3.Distance(origin.position, enemy.transform.position);
+            if (temp < distance)
+            {
+                distance = temp;
+                nearest = enemy.transform;
+            }
+        }
+        return nearest;
     }
 }

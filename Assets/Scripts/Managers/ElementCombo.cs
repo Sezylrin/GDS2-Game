@@ -52,14 +52,9 @@ public class ElementCombo : MonoBehaviour
     [SerializeField]
     private GameObject testobj;
 
-    public static ElementCombo Instance { get; private set; }
     void Start()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        PoolingManager.Instance.FindPool(testobj, out pool);
+        GameManager.Instance.PoolingManager.FindPool(testobj, out pool);
     }
 
     // Update is called once per frame

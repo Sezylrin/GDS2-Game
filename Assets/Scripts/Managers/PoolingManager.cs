@@ -6,21 +6,10 @@ using UnityEngine;
 public class PoolingManager : MonoBehaviour
 {
     // Start is called before the first frame update
-    public static PoolingManager Instance { get; private set; }
 
     public Dictionary<GameObject, IPools> Pools = new Dictionary<GameObject, IPools>();
 
-    private void Awake()
-    {
-        if (!Instance)
-        {
-            Instance = this;
-        }
-        else
-        {
-            DestroyImmediate(this);
-        }
-    }
+
     void Start()
     {
         enabled = false;

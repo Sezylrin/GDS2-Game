@@ -8,7 +8,10 @@ public class GameManager : MonoBehaviour
 
     public SceneLoader sceneLoader { get; private set; }
     [field: SerializeField] public EnemyManager EnemyManager { get; private set; }
-
+    [field: SerializeField] public TimerManager TimerManager { get; private set; }
+    [field: SerializeField] public PoolingManager PoolingManager { get; private set; }
+    [field: SerializeField] public ElementCombo ComboManager { get; private set; }
+    [field: SerializeField] public Transform PlayerTransform { get; private set; }
     public int Souls { get; set; }
 
     private void Awake()

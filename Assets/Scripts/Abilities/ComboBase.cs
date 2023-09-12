@@ -40,7 +40,7 @@ public class ComboBase : MonoBehaviour, IPoolable<ComboBase>
     }
     public void InitSpawn()
     {
-        timer = TimerManager.Instance.GenerateTimers(typeof(ComboTimers), gameObject);
+        timer = GameManager.Instance.TimerManager.GenerateTimers(typeof(ComboTimers), gameObject);
         timer.times[(int)ComboTimers.lifetime].OnTimeIsZero += PoolSelf;
         timer.times[(int)ComboTimers.damageTick].OnTimeIsZero += DoDamage;
     }

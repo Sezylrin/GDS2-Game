@@ -11,6 +11,12 @@ public class Attacks : MonoBehaviour
     private float lightAttackEndLag;
     [SerializeField]
     private float lightAttackPullDist;
+    [SerializeField]
+    private int[] lightAttackDamage = new int[3];
+    [SerializeField]
+    private int[] lightAttackStagger = new int[3];
+    [SerializeField]
+    private float[] lightAttackKnockBack = new float[3];
     [SerializeField][ReadOnly]
     private int maxCombo;
     [ReadOnly][SerializeField]
@@ -27,6 +33,8 @@ public class Attacks : MonoBehaviour
     private Timer timers;
     [SerializeField]
     private PolygonCollider2D[] lightHitboxes = new PolygonCollider2D[3];
+    [SerializeField]
+    private SpriteRenderer[] hitboxSprite = new SpriteRenderer[3];
     private attackStage currentAttackStage;
     private enum coolDownTimers : int
     {
@@ -42,7 +50,7 @@ public class Attacks : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        timers = TimerManager.Instance.GenerateTimers(typeof(coolDownTimers), gameObject);
+        timers = GameManager.Instance.TimerManager.GenerateTimers(typeof(coolDownTimers), gameObject);
         maxCombo = lightHitboxes.Length;
     }
 
@@ -57,6 +65,7 @@ public class Attacks : MonoBehaviour
         if (timers.IsTimeZero((int)coolDownTimers.lightAttackDuration) && currentAttackStage.Equals(attackStage.attackStart))
         {
             lightHitboxes[currentCombo - 1].enabled = false;
+            hitboxSprite[currentCombo - 1].enabled = false;
             currentAttackStage = attackStage.attackEnd;
             PCM.control.SetIsAttackEnd(true);
             PCM.control.SetIsAttacking(false);
@@ -99,12 +108,24 @@ public class Attacks : MonoBehaviour
         PCM.control.rb.velocity = dir * lightAttackPullDist;
         centre.eulerAngles = new Vector3(0, 0, CustomMath.ClampedDirection(Vector2.up, dir));
         lightHitboxes[currentCombo].enabled = true;
+        hitboxSprite[currentCombo].enabled = true;
         // play animation and state control in inherited classes
 
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if (collision.isTrigger)
+            return;
+        IDamageable foundEnemy;
+        if (UtilityFunction.FindComponent(collision.transform, out foundEnemy))
+        {
+            if (!(foundEnemy as Enemy))
+            {
+                return;
+            }
+            foundEnemy.TakeDamage(lightAttackDamage[currentCombo - 1], lightAttackStagger[currentCombo - 1],ElementType.noElement);
+            foundEnemy.AddForce((collision.transform.position - transform.position).normalized * lightAttackKnockBack[currentCombo - 1]);
+        }
     }
 
     public void ResetTimer()
