@@ -13,12 +13,18 @@ MonoBehaviour:
   m_Name: Brambles
   m_EditorClassIdentifier: 
   BaseDamage:
-  - 0
-  - 0
-  - 0
-  StaggerDamage: 0
-  Duration: 0
-  radius: 0
+  - 10
+  - 15
+  - 20
+  StaggerDamage: 04000000080000000c000000
+  Duration:
+  - 3
+  - 5
+  - 8
+  radius:
+  - 1
+  - 2
+  - 3
   typeOne: 2
   typeTwo: 32
-  damageTickRate: 0
+  damageTickRate: 0.5

@@ -89,9 +89,18 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
             }
             hitEnemy.Add(foundEnemy as Enemy);
             foundEnemy.TakeDamage(selectedAbility.damage, selectedAbility.Stagger, selectedAbility.elementType, selectedAbility.castCost);
+            Vector3 dir;
+            if (direction.Equals(Vector3.zero))
+            { 
+                dir = collision.transform.position - initialPos;
+            }
+            else
+            {
+                dir = direction;
+            }
+            foundEnemy.AddForce(dir.normalized * selectedAbility.knockback);
             if (CurrentPierce > 0)
             {
-
                 CurrentPierce--;
             }
         }

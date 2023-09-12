@@ -72,6 +72,7 @@ public class Abilities : MonoBehaviour
             return;
         if (!PCM.system.AttemptCast(selected.castCost))
             return;
+        PCM.control.SetAbilityState();
         //play animation
         Pool<AbilityBase> temp;
         if (pools.TryGetValue(selected.type, out temp))

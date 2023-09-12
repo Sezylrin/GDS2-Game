@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Area Combo Effect", menuName = "ScriptableObjects/Combo/Area Combo")]
 public class AreaComboSO : ComboSO
 {
-    public float radius;
+    public float[] radius;
 
     public ElementType typeOne;
 

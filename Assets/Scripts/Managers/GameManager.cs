@@ -27,8 +27,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void SetPlayerTransform(Transform player)
+    {
+        PlayerTransform = player;
+    }
+
     public void AddSouls(int souls)
     {
         Souls += souls;
     }
+
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,13 +22,16 @@ public enum playerState
     dashing,
     attack,
     attackEnd,
-    ability
+    abilityCast,
+    abilityLag
 }
 public class PlayerController : MonoBehaviour
 {
     private enum coolDownTimers : int
     {
-        dashCD
+        dashCD,
+        abilityCast,
+        abilityLag
     }
 
     [field: Header("Core variables")]
@@ -61,6 +65,12 @@ public class PlayerController : MonoBehaviour
     private float dashRechargeRate;
     [SerializeField] [ReadOnly]
     private float currentDashCharges;
+
+    [field: Header("Ability")]
+    [SerializeField]
+    private float abilityLag;
+    [SerializeField]
+    private float abilityCast;
 
     [field:Header("Transforms")]
     [field:SerializeField]
@@ -115,6 +125,8 @@ public class PlayerController : MonoBehaviour
     public void Start()
     {
         timers = GameManager.Instance.TimerManager.GenerateTimers(typeof(coolDownTimers), gameObject);
+        timers.times[(int)coolDownTimers.abilityLag].OnTimeIsZero += AbilityLagOver;
+        timers.times[(int)coolDownTimers.abilityCast].OnTimeIsZero += AbilityCastOver;
         currentMaxSpeed = maxSpeed;
         cam = Camera.main;
         currentDashCharges = dashCharges;
@@ -185,7 +197,7 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    #region AbilityAim
+    #region Ability 
 
     private void AimAbility()
     {
@@ -194,6 +206,34 @@ public class PlayerController : MonoBehaviour
         AbilityCentre.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
+    public void SetAbilityState()
+    {
+        isUsingAbility = true;
+        rb.drag = drag * 10;
+        timers.SetTime((int)coolDownTimers.abilityCast, abilityCast);
+    }
+
+    private void AbilityCastOver(object sender, EventArgs e)
+    {
+        GoIntoAbilityLag();
+    }
+
+    private void GoIntoAbilityLag()
+    {
+        timers.SetTime((int)coolDownTimers.abilityLag, abilityLag);
+        rb.drag = drag;
+    }
+
+    private void AbilityLagOver(object sender, EventArgs e)
+    {
+        StopAbilityLag();
+    }
+
+    private void StopAbilityLag()
+    {
+        isUsingAbility = false;
+        timers.ResetSpecificToZero((int)coolDownTimers.abilityLag);
+    }
     #endregion
 
     #region Input Buffering
@@ -261,7 +301,7 @@ public class PlayerController : MonoBehaviour
     #region Dash
     private void Dash()
     {
-        playerState[] unAllowed = { playerState.attack, playerState.ability };
+        playerState[] unAllowed = { playerState.attack, playerState.abilityCast };
         if (CheckStates(unAllowed))
             return;
         if (!timers.IsTimeZero((int)coolDownTimers.dashCD) || currentDashCharges < 1)
@@ -346,7 +386,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (isUsingAbility)
         {
-            CurrentState = playerState.ability;
+            CurrentState = playerState.abilityCast;
         }
         else if (isAttacking)
         {

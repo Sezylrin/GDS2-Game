@@ -866,6 +866,8 @@ MonoBehaviour:
   dashCharges: 3
   dashRechargeRate: 1
   currentDashCharges: 0
+  abilityLag: 0.3
+  abilityCast: 0.2
   <AbilityCentre>k__BackingField: {fileID: 1874316682}
   bufferDuration: 3
   enemyLayer:
@@ -898,9 +900,9 @@ MonoBehaviour:
   lightAttackDamage: 07000000090000000b000000
   lightAttackStagger: 0a0000000a0000000f000000
   lightAttackKnockBack:
-  - 5
-  - 5
-  - 5
+  - 3
+  - 4
+  - 6
   maxCombo: 0
   currentCombo: 0
   comboEndLag: 1
@@ -932,12 +934,13 @@ MonoBehaviour:
   PCM: {fileID: 864687022}
   abilitySpawnPoint: {fileID: 1699224757}
   abilities:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 418ea2c3934df71459d836d5d9631746, type: 2}
+  - {fileID: 11400000, guid: bfa1d90d7346b0d478313eedc9d02ef0, type: 2}
+  - {fileID: 11400000, guid: b171dd3449f27d24b853ff66dc8d7750, type: 2}
+  - {fileID: 11400000, guid: 10dea94313b3be64d800d6b8b5a96dd5, type: 2}
+  - {fileID: 11400000, guid: 10ba623a21e2d014fa77d3bbb2d7b5b8, type: 2}
+  - {fileID: 11400000, guid: c488a9b6f3504bc429009542737aff68, type: 2}
+  AbilitySetOne: 0
   abilityShapePF:
     _serializedList:
     - Key: 0
