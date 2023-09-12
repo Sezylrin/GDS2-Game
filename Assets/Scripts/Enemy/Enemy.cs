@@ -38,7 +38,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: SerializeField] protected ElementType Element { get; set; } = ElementType.noElement;
     [field: SerializeField] public float Hitpoints { get; set; } = 100;
     [field: SerializeField] protected float MaxHealth { get; set; } = 100;
-    [field: SerializeField] protected float Damage { get; set; } = 10;
+    [field: SerializeField] protected int Damage { get; set; } = 10;
     [field: SerializeField] protected float Speed { get; set; } = 1;
     [field: SerializeField, ReadOnly] protected int Souls { get; set; } = 1;
     [field: SerializeField, ReadOnly] protected bool WindingUp { get; set; } = false;
@@ -151,7 +151,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         Init();
         ComboManager = GameManager.Instance.ComboManager;
         Manager = GameManager.Instance.EnemyManager;
-
+        Manager.DebugAddEnemy(this);
         SetTimers();
         EnemyTimers = GameManager.Instance.TimerManager.GenerateTimers(typeof(EnemyTimer), gameObject);
         EnemyTimers.times[(int)EnemyTimer.effectedTimer].OnTimeIsZero += RemoveElementEffect;
@@ -213,9 +213,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     #region DamageFunctions
     public virtual void TakeDamage(float damage, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement)
     {
-        //change this to make all enemies aggro
-        if (currentState == EnemyState.idle)
-            currentState = EnemyState.stationary;
+        //Makes all enemies on screen aggroed
+        if(currentState == EnemyState.idle)
+            Manager.EnableAggro();
         CalculateResist(type, typeTwo);
         float modifier = CalculateModifer();
         float modifiedDamage = damage * modifier;
@@ -230,7 +230,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
             return;
         }
          
-        if (typeTwo.Equals(ElementType.noElement))
+        if (typeTwo.Equals(ElementType.noElement) && type != ElementType.noElement)
         {
             ElementTier = tier;
             ApplyElementEffect(type);
@@ -444,6 +444,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         duration *= currentElementResist;
         ComboEffectTimer.SetTime((int)ElementCombos.aquaVolt, duration);
         //add way to stop attack and stop ai
+        InterruptAttack();
+        StopPathing();
+        EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, float.MaxValue);
     }
 
     private void RemoveStun(object sender, EventArgs e)
@@ -454,6 +457,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     public void RemoveStun()
     {
         IsStunned = false;
+        EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, 0);
     }
 
     public void ApplyNoxiousGas(float damage, int stagger, float duration)
@@ -464,6 +468,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         ComboEffectTimer.SetTime((int)ElementCombos.noxiousGas, duration);
         //add way to stop attack and stop ai
         TargetLayer = EnemyLayer;
+        targetTr = Manager.FindNearestEnemy(transform);
+        //ignore manager bucket, instantly attack enemy
+        currentState = EnemyState.chasing;
     }
 
     private void RemoveNoxious(object sender, EventArgs e)
@@ -539,7 +546,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         }
         if (!(EnemyTimers.IsTimeZero((int)EnemyTimer.aiActionTimer) && !hasDestination))
             return;
-
+        if (targetTr == null)
+            return;
         if (currentState == EnemyState.stationary)
         {
             if (AbleToAttack && Manager.CanAttack())
@@ -603,7 +611,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     public void SetTarget(Transform targetPos)
     {
-        this.targetTr = targetPos;
+        targetTr = targetPos;
     }
 
     public void BeginAggro()

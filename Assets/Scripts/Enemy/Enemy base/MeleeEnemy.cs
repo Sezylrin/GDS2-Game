@@ -11,6 +11,8 @@ public abstract class MeleeEnemy : Enemy
     [field: SerializeField] protected GameObject AttackHitbox { get; set; }
     [field: SerializeField] protected float MinimumAttackRange { get; set; }
     [field: SerializeField] protected BoxCollider2D col2D { get; set; }
+    [field: SerializeField] protected float KnockBackForce { get; set; }
+    protected Vector2 dir { get; set; }
     protected override void Start()
     {
         base.Start();
@@ -29,7 +31,7 @@ public abstract class MeleeEnemy : Enemy
 
     protected override void BeginWindup()
     {
-        Vector2 dir = (targetTr.position - transform.position).normalized;
+        dir = (targetTr.position - transform.position).normalized;
         hitboxCentre.eulerAngles = new Vector3(0, 0, CustomMath.ClampedDirection(Vector2.right, dir));
         base.BeginWindup();
         WarningBox.SetActive(true);
@@ -77,8 +79,9 @@ public abstract class MeleeEnemy : Enemy
     {
         IDamageable foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
-        { 
+        {
             foundTarget.TakeDamage(Damage, 0, Element);
+            foundTarget.AddForce(dir.normalized * KnockBackForce);
         }
     }
 }

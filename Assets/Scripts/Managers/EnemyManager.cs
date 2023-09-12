@@ -311,4 +311,43 @@ public class EnemyManager : MonoBehaviour
             enemy.OnDeath();
         }
     }
+
+    public void EnableAggro()
+    {
+        foreach (Enemy enemy in enemyList)
+        {
+            enemy.BeginAggro();
+        }
+    }
+
+    public void DebugAddEnemy(Enemy enemy)
+    {
+        enemyList.Add(enemy);
+    }
+
+    public Transform FindNearestEnemy(Transform origin)
+    {
+        Transform nearest;
+        float distance = float.MaxValue;
+        if (enemyList.Count == 1)
+            return null;
+        else if (enemyList[0].Equals(origin))
+        {
+            nearest = enemyList[1].transform;
+        }
+        else
+        {
+            nearest = enemyList[0].transform;
+        }
+        foreach(Enemy enemy in enemyList)
+        {
+            float temp = Vector3.Distance(origin.position, enemy.transform.position);
+            if (temp < distance)
+            {
+                distance = temp;
+                nearest = enemy.transform;
+            }
+        }
+        return nearest;
+    }
 }

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 14868488010454430}
   - component: {fileID: 14868488010454431}
+  - component: {fileID: 3407305585038957822}
   m_Layer: 6
   m_Name: TestEnemyProjectile
   m_TagString: Untagged
@@ -51,6 +52,38 @@ MonoBehaviour:
     <times>k__BackingField: []
     owner: {fileID: 0}
   <SpriteObj>k__BackingField: {fileID: 5310795201552222990}
+  <col2d>k__BackingField: {fileID: 8874038050355432615}
+  <rb>k__BackingField: {fileID: 3407305585038957822}
+  <terrainMask>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 128
+--- !u!50 &3407305585038957822
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14868488010454435}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &1352735200624069415
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,8 +184,8 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 64
-  m_LayerOverridePriority: 0
+    m_Bits: 0
+  m_LayerOverridePriority: 1
   m_ForceSendLayers:
     serializedVersion: 2
     m_Bits: 4294967295

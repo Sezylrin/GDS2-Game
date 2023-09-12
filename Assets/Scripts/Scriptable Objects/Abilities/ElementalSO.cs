@@ -9,7 +9,7 @@ public enum AbilityType
     Projectile
 }
 public class ElementalSO : ScriptableObject
-{
+{     
     public ElementType elementType;
 
     public AbilityType type;
