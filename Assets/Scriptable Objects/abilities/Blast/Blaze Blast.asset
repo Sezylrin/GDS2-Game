@@ -14,19 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   elementType: 1
   type: 0
-  castCost: 0
-  pierceAmount: 0
-  damage: 0
-  Stagger: 0
-  lifeTime: 0
+  castCost: 1
+  pierceAmount: 3
+  damage: 20
+  Stagger: 40
+  lifeTime: 0.75
   initialShape:
-  - {x: 0.5, y: 0.5}
-  - {x: -0.5, y: 0.5}
-  - {x: -0.5, y: -0.5}
-  - {x: 0.5, y: -0.5}
+  - {x: -0.016571105, y: 0.1763877}
+  - {x: -0.282193, y: 0.1591092}
+  - {x: -0.28703678, y: -0.14057478}
+  - {x: -0.040545464, y: -0.1659389}
   finalShape:
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  speed: 0
+  - {x: 2.3742523, y: 0.7872921}
+  - {x: -0.282193, y: 0.1591092}
+  - {x: -0.28703678, y: -0.14057478}
+  - {x: 2.387988, y: -0.7768433}
+  speed: 0.5
