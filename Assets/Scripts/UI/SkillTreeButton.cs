@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -25,11 +26,15 @@ public class SkillTreeButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
     [SerializeField]
     private string skillName;
     [SerializeField]
+    private UnityEvent onPurchase;
+    [SerializeField]
     private string skillDescription;
+    [SerializeField]
+    private SkillTreeButton[] prerequisiteSkills;
 
     private bool canAfford = false;
     private bool hovering = false;
-    private bool purchased = false;
+    public bool purchased { get; private set; } = false;
 
     private void Start()
     {
@@ -38,7 +43,7 @@ public class SkillTreeButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
         canAfford = gameManager.Souls >= soulCost;
         Image bgImage = gameObject.GetComponent<Image>();
 
-        if (!canAfford && !purchased)
+        if ((!canAfford && !purchased) || !PrereqUnlocked())
         {
             bgImage.sprite = bgSpriteDisabled;
         }
@@ -49,7 +54,7 @@ public class SkillTreeButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
         canAfford = gameManager.Souls >= soulCost;
         Image bgImage = gameObject.GetComponent<Image>();
 
-        if (!canAfford && !hovering && !purchased)
+        if ((!canAfford && !hovering && !purchased) || !PrereqUnlocked())
         {
             bgImage.sprite = bgSpriteDisabled;
         }
@@ -63,7 +68,7 @@ public class SkillTreeButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         hovering = true;
         Image bgImage = gameObject.GetComponent<Image>();
-        if (!canAfford && !purchased)
+        if ((!canAfford && !purchased) || !PrereqUnlocked())
         {
             bgImage.sprite = bgSpriteHoveredDisabled;
         }
@@ -71,14 +76,14 @@ public class SkillTreeButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
         {
             bgImage.sprite = bgSpriteHovered;
         }
-
-        skillTreeManager.ShowSkillTree(skillName, skillDescription, soulCost, purchased);
+        
+        skillTreeManager.ShowSkillTree(skillName, skillDescription, soulCost, purchased, PrereqUnlocked());
     }
 
     public void DisableHover()
     {
         Image bgImage = gameObject.GetComponent<Image>();
-        if (!canAfford && !purchased)
+        if ((!canAfford && !purchased) || !PrereqUnlocked())
         {
             bgImage.sprite = bgSpriteDisabled;
         }
@@ -103,11 +108,28 @@ public class SkillTreeButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        foreach (SkillTreeButton skillTreeBtn in prerequisiteSkills)
+        {
+            if (!skillTreeBtn.purchased) return;
+        }
         if (canAfford)
         {
             gameManager.Souls -= soulCost;
             purchased = true;
             skillTreeManager.ShowPurchased();
+            onPurchase.Invoke();
         } 
+    }
+
+    private bool PrereqUnlocked()
+    {
+        bool preReqUnlocked = true;
+
+        foreach (SkillTreeButton skillTreeBtn in prerequisiteSkills)
+        {
+            if (!skillTreeBtn.purchased) preReqUnlocked = false;
+        }
+
+        return preReqUnlocked;
     }
 }

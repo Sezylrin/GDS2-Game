@@ -899,6 +899,7 @@ GameObject:
   - component: {fileID: 359783971}
   - component: {fileID: 359783970}
   - component: {fileID: 359783973}
+  - component: {fileID: 359783974}
   m_Layer: 5
   m_Name: SkillTreeCanvas
   m_TagString: SkillTreeCanvas
@@ -1009,6 +1010,18 @@ MonoBehaviour:
   soulCostTxt: {fileID: 1766658801}
   skillNameTxt: {fileID: 1166808557}
   skillDescriptionTxt: {fileID: 162971435}
+--- !u!114 &359783974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 359783968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5dfccb3a69a22f45bedc43a6b0ed547, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &373726287
 GameObject:
   m_ObjectHideFlags: 0
@@ -1245,7 +1258,23 @@ MonoBehaviour:
   bgSpriteHoveredDisabled: {fileID: 21300000, guid: 6091d9c598fa94841a21cfa5059d11bd, type: 3}
   soulCost: 100
   skillName: First Skill
+  onPurchase:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 359783974}
+        m_TargetAssemblyTypeName: PurchasableFunctions, Assembly-CSharp
+        m_MethodName: IncreaseHealth
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
   skillDescription: Skill Description
+  prerequisiteSkills: []
 --- !u!114 &839221282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1809,7 +1838,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -25}
-  m_SizeDelta: {x: 500, y: 200}
+  m_SizeDelta: {x: 800, y: 200}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1065996487
 MonoBehaviour:
@@ -1907,7 +1936,24 @@ MonoBehaviour:
   bgSpriteHoveredDisabled: {fileID: 21300000, guid: 6091d9c598fa94841a21cfa5059d11bd, type: 3}
   soulCost: 200
   skillName: Second Skill
+  onPurchase:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 359783974}
+        m_TargetAssemblyTypeName: PurchasableFunctions, Assembly-CSharp
+        m_MethodName: IncreaseStatus
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 0
   skillDescription: Second Skill Description
+  prerequisiteSkills:
+  - {fileID: 839221281}
 --- !u!114 &1130591864
 MonoBehaviour:
   m_ObjectHideFlags: 0

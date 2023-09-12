@@ -19,14 +19,15 @@ public class SkillTreeManager : MonoBehaviour
     [SerializeField]
     private TMP_Text skillDescriptionTxt;
 
-    public void ShowSkillTree(string skillName, string skillDescription, int skillSoulCost, bool purchased)
+    public void ShowSkillTree(string skillName, string skillDescription, int skillSoulCost, bool purchased, bool prereqUnlocked)
     {
         skillNameTxt.text = skillName;
         skillDescriptionTxt.text = skillDescription;
         soulCostTxt.text = skillSoulCost.ToString() + " Souls";
 
-        if (GameManager.Instance.Souls < skillSoulCost && !purchased)
+        if ((GameManager.Instance.Souls < skillSoulCost && !purchased) || !prereqUnlocked)
         {
+            if (!prereqUnlocked) cantAffordText.GetComponent<TMP_Text>().text = "Previous skill not unlocked";
             cantAffordText.SetActive(true);
         }
         else if (purchased)
@@ -38,6 +39,7 @@ public class SkillTreeManager : MonoBehaviour
 
     public void HideSkillTree()
     {
+        cantAffordText.GetComponent<TMP_Text>().text = "Can't Afford";
         cantAffordText.SetActive(false);
         skillTreePopup.SetActive(false);
         purchasedText.SetActive(false);
