@@ -54,14 +54,14 @@ public class EnemyManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        EnemyManagerTimers = TimerManager.Instance.GenerateTimers(typeof(EnemyManagerTimer), gameObject);
+        EnemyManagerTimers = GameManager.Instance.TimerManager.GenerateTimers(typeof(EnemyManagerTimer), gameObject);
         EnemyManagerTimers.times[(int)EnemyManagerTimer.attackDelayTimer].OnTimeIsZero += EnableAttack;
         EnemyManagerTimers.times[(int)EnemyManagerTimer.attackPointRefeshTimer].OnTimeIsZero += RefreshAttackPoint;
 
         AttackPoints = MaxAttackPoints;
 
-        PoolingManager.Instance.FindPool(enemyPrefabs[0], out testMeleeEnemyPool);
-        PoolingManager.Instance.FindPool(enemyPrefabs[1], out testRangedEnemyPool);
+        GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[0], out testMeleeEnemyPool);
+        GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[1], out testRangedEnemyPool);
     }
 
     // Update is called once per frame
@@ -102,7 +102,10 @@ public class EnemyManager : MonoBehaviour
     #region EnemyAttacking
     public bool CanAttack()
     {
-        return CanEnemyAttack;
+        bool CanAttack = CanEnemyAttack && AttackPoints > 0;
+        if (CanAttack)
+            ManagerAttack();
+        return CanAttack;
     }
 
     public void ManagerAttack()
@@ -307,5 +310,44 @@ public class EnemyManager : MonoBehaviour
         {
             enemy.OnDeath();
         }
+    }
+
+    public void EnableAggro()
+    {
+        foreach (Enemy enemy in enemyList)
+        {
+            enemy.BeginAggro();
+        }
+    }
+
+    public void DebugAddEnemy(Enemy enemy)
+    {
+        enemyList.Add(enemy);
+    }
+
+    public Transform FindNearestEnemy(Transform origin)
+    {
+        Transform nearest;
+        float distance = float.MaxValue;
+        if (enemyList.Count == 1)
+            return null;
+        else if (enemyList[0].Equals(origin))
+        {
+            nearest = enemyList[1].transform;
+        }
+        else
+        {
+            nearest = enemyList[0].transform;
+        }
+        foreach(Enemy enemy in enemyList)
+        {
+            float temp = Vector3.Distance(origin.position, enemy.transform.position);
+            if (temp < distance)
+            {
+                distance = temp;
+                nearest = enemy.transform;
+            }
+        }
+        return nearest;
     }
 }

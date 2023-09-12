@@ -138,7 +138,11 @@ public class Timer
             times[i].time = 0;
         }
     }
-
+    /// <summary>
+    /// Reset Specific Timer to zero, does not result in invoke of the action.
+    /// Use SetTime if you wish to invoke an action instantly
+    /// </summary>
+    /// <param name="position"></param>
     public void ResetSpecificToZero(int position)
     {
         if (ErrorPosition(position, "ResetSpecificToZero"))

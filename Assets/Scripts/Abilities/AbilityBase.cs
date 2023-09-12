@@ -38,7 +38,7 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
     {
         if (timer == null)
         {
-            timer = TimerManager.Instance.GenerateTimers(typeof(AbilityTimer), gameObject);
+            timer = GameManager.Instance.TimerManager.GenerateTimers(typeof(AbilityTimer), gameObject);
         }
         timer.SetTime((int)AbilityTimer.lifeTime, selectedAbility.lifeTime);
         timer.times[(int)AbilityTimer.lifeTime].OnTimeIsZero += InvokePoolSelf;

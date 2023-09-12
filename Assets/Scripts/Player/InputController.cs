@@ -27,6 +27,7 @@ public class InputController : MonoBehaviour
         player.AbilityOne.performed += PCM.control.BufferAbilityOne;
         player.AbilityTwo.performed += PCM.control.BufferAbilityTwo;
         player.AbilityThree.performed += PCM.control.BufferAbilityThree;
+        player.ToggleAbilities.performed += PCM.abilities.ToggleActiveAbilitySet;
     }
 
     private void OnDisable()
@@ -38,6 +39,7 @@ public class InputController : MonoBehaviour
         player.AbilityOne.performed -= PCM.control.BufferAbilityOne;
         player.AbilityTwo.performed -= PCM.control.BufferAbilityTwo;
         player.AbilityThree.performed -= PCM.control.BufferAbilityThree;
+        player.ToggleAbilities.performed -= PCM.abilities.ToggleActiveAbilitySet;
         player.Disable();
     }
     // Update is called once per frame

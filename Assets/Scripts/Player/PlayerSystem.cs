@@ -6,7 +6,8 @@ public class PlayerSystem : MonoBehaviour, IDamageable
 {
     private enum SystemCD
     {
-        pointRegenDelay
+        pointRegenDelay,
+        iFrames
     }
 
     [Header("General")]
@@ -14,11 +15,13 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     private Timer timer;
     [SerializeField]
     private PlayerComponentManager PCM;
+    [SerializeField]
+    private float iframes;
 
     private void Start()
     {
         SetHitPoints();
-        timer = TimerManager.Instance.GenerateTimers(typeof(SystemCD), gameObject);
+        timer = GameManager.Instance.TimerManager.GenerateTimers(typeof(SystemCD), gameObject);
         InitCastPoints();
     }
     #region Update
@@ -105,6 +108,8 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     private float startingHitPoint;
     public void CalculateDamage(float amount)
     {
+        if (!timer.IsTimeZero((int)SystemCD.iFrames))
+            return;
         if (Hitpoints - amount < 0)
         {
             OnDeath();
@@ -112,6 +117,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         else
         {
             Hitpoints -= amount;
+            timer.SetTime((int)SystemCD.iFrames, iframes);
         }
     }
     #endregion
@@ -123,6 +129,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
 
     public void OnDeath()
     {
+        Debug.Log("oh, i'm die, thank you forever");
     }
 
     public void SetHitPoints()

@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
     [field: SerializeField]
     public Rigidbody2D rb { get; private set; }
     [SerializeField]
-    private CircleCollider2D col2D;
+    private CapsuleCollider2D col2D;
     [SerializeField]
     private PlayerComponentManager PCM;
     
@@ -114,7 +114,7 @@ public class PlayerController : MonoBehaviour
     }
     public void Start()
     {
-        timers = TimerManager.Instance.GenerateTimers(typeof(coolDownTimers), gameObject);
+        timers = GameManager.Instance.TimerManager.GenerateTimers(typeof(coolDownTimers), gameObject);
         currentMaxSpeed = maxSpeed;
         cam = Camera.main;
         currentDashCharges = dashCharges;
