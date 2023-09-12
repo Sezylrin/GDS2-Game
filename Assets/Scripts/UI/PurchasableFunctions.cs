@@ -8,14 +8,24 @@ public class PurchasableFunctions : MonoBehaviour
     //Player Health
     //Increase skill point total
     //Player damage by tiny amount
-    public void IncreaseHealth()
+    public void IncreaseHealth(int AmountToIncrease)
     {
         Debug.Log("Increased Health");
     }
 
-    public void IncreaseStatus()
+    public void IncreaseMaxSkillPoints(int AmountToIncrease)
     {
-        Debug.Log("Increase Status");
+
+    }
+
+    public void IncreaseElementalDamage(int AmountToIncrease)
+    {
+
+    }
+
+    public void IncreaseDamage(int AmountToIncrease)
+    {
+
     }
 }
 

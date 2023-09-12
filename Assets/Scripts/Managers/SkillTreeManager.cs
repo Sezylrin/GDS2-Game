@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class SkillTreeManager : MonoBehaviour
 {
+    [Header("Popup")]
     [SerializeField]
     private GameObject skillTreePopup;
     [SerializeField]
@@ -19,7 +20,17 @@ public class SkillTreeManager : MonoBehaviour
     [SerializeField]
     private TMP_Text skillDescriptionTxt;
 
-    public void ShowSkillTree(string skillName, string skillDescription, int skillSoulCost, bool purchased, bool prereqUnlocked)
+    public void ShowSkillTree()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void HideSkillTree()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void ShowSkillTreePopup(string skillName, string skillDescription, int skillSoulCost, bool purchased, bool prereqUnlocked)
     {
         skillNameTxt.text = skillName;
         skillDescriptionTxt.text = skillDescription;
@@ -37,7 +48,7 @@ public class SkillTreeManager : MonoBehaviour
         skillTreePopup.SetActive(true);
     }
 
-    public void HideSkillTree()
+    public void HideSkillTreePopup()
     {
         cantAffordText.GetComponent<TMP_Text>().text = "Can't Afford";
         cantAffordText.SetActive(false);

@@ -22,11 +22,11 @@ public class SkillTreeButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     [Header("Data")]
     [SerializeField]
+    private UnityEvent onPurchase;
+    [SerializeField]
     private int soulCost;
     [SerializeField]
     private string skillName;
-    [SerializeField]
-    private UnityEvent onPurchase;
     [SerializeField]
     private string skillDescription;
     [SerializeField]
@@ -77,7 +77,7 @@ public class SkillTreeButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
             bgImage.sprite = bgSpriteHovered;
         }
         
-        skillTreeManager.ShowSkillTree(skillName, skillDescription, soulCost, purchased, PrereqUnlocked());
+        skillTreeManager.ShowSkillTreePopup(skillName, skillDescription, soulCost, purchased, PrereqUnlocked());
     }
 
     public void DisableHover()
@@ -93,7 +93,7 @@ public class SkillTreeButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
         }
         hovering = false;
 
-        skillTreeManager.HideSkillTree();
+        skillTreeManager.HideSkillTreePopup();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
