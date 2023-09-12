@@ -54,11 +54,11 @@ public class SkillTreeButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
         canAfford = gameManager.Souls >= soulCost;
         Image bgImage = gameObject.GetComponent<Image>();
 
-        if ((!canAfford && !hovering && !purchased) || !PrereqUnlocked())
+        if ((!canAfford && !hovering && !purchased))
         {
             bgImage.sprite = bgSpriteDisabled;
         }
-        else if (canAfford && !hovering)
+        else if (canAfford && !hovering && PrereqUnlocked())
         {
             bgImage.sprite = bgSprite;
         }
