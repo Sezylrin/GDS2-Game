@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class EnemyProjectile : MonoBehaviour
+public abstract class EnemyProjectile : MonoBehaviour, IPoolable<EnemyProjectile>
 {
     protected enum ProjectileTimer
     {
@@ -13,28 +13,70 @@ public abstract class EnemyProjectile : MonoBehaviour
     [field: SerializeField] protected float Speed { get; set; } = 1;
     [field: SerializeField] protected float Duration { get; set; } = 3;
     [field: SerializeField] protected Timer ProjectileTimers { get; private set; }
-
-    // Start is called before the first frame update
-    protected virtual void Start()
+    [field: SerializeField] protected Transform SpriteObj { get; set; }
+    [field: SerializeField] protected BoxCollider2D col2d { get; set; }
+    [field: SerializeField] protected LayerMask terrainMask { get; set; }
+    protected Vector2 dir;
+    protected int damage;
+    protected ElementType element;
+    public virtual void NewInstance()
     {
-        ProjectileTimers = TimerManager.Instance.GenerateTimers(typeof(ProjectileTimer), gameObject);
-        ProjectileTimers.times[(int)ProjectileTimer.lifetimeTimer].OnTimeIsZero += RemoveObject;
+        ProjectileTimers = GameManager.Instance.TimerManager.GenerateTimers(typeof(ProjectileTimer), gameObject);
+        ProjectileTimers.times[(int)ProjectileTimer.lifetimeTimer].OnTimeIsZero += PoolSelf;
+    }
+
+    public virtual void Init(Vector2 dir, Vector3 spawnPos, LayerMask Target, int damage, ElementType element)
+    {
         StartLifetime();
+        this.dir = dir;
+        transform.position = spawnPos;
+        SpriteObj.rotation = UtilityFunction.LookAt2D(Vector3.zero, dir);
+        col2d.includeLayers = terrainMask + Target;
+        this.damage = damage;
+        this.element = element;
     }
 
     // Update is called once per frame
     protected virtual void Update()
     {
-        gameObject.transform.Translate(Vector2.right * Speed * Time.deltaTime);
+        MoveProjectileByDir();
+    }
+    protected void MoveProjectile(Vector2 dir)
+    {
+        gameObject.transform.Translate(dir.normalized * Speed * Time.deltaTime);
     }
 
+    protected virtual void MoveProjectileByDir()
+    {
+        MoveProjectile(dir);
+    }
     protected virtual void StartLifetime()
     {
         ProjectileTimers.SetTime((int)ProjectileTimer.lifetimeTimer, Duration);
     }
 
-    protected virtual void RemoveObject(object sender, EventArgs e)
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        Destroy(gameObject);
+        IDamageable foundEnemy;
+        if (UtilityFunction.FindComponent(collision.transform, out foundEnemy))
+        {
+            foundEnemy.TakeDamage(damage, 0, element);
+        }
+        PoolSelf();
     }
+
+    #region Pooling
+    public Pool<EnemyProjectile> Pool { get; set; }
+    public bool IsPooled { get; set; }
+    public void PoolSelf(object sender, EventArgs e)
+    {
+        PoolSelf();
+    }
+    public void PoolSelf()
+    {
+        col2d.includeLayers = 0;
+        if(!IsPooled)
+            Pool.PoolObj(this);
+    }
+    #endregion
 }

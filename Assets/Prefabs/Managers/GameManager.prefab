@@ -45,13 +45,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attemptedCombo: 0
-  ElementOne: 0
-  ElementTwo: 0
+  ElementOne: 1
+  ElementTwo: 4
   defaultMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   setCombos:
-    _serializedList: []
+    _serializedList:
+    - Key: 5
+      Value: {fileID: 11400000, guid: 8b6dee5ed27141e42885fb2959fb6267, type: 2}
+    - Key: 6
+      Value: {fileID: 11400000, guid: e4baf384e4b936d4abd5a892aec038e2, type: 2}
+    - Key: 9
+      Value: {fileID: 11400000, guid: 009c55a77b176cd4cacfd0bacaac0f21, type: 2}
+    - Key: 24
+      Value: {fileID: 11400000, guid: 0917a02050cd8144d9107b66857d390f, type: 2}
+    - Key: 34
+      Value: {fileID: 11400000, guid: cd6fdd3dba2d68b4b9921b0338a25171, type: 2}
+    - Key: 48
+      Value: {fileID: 11400000, guid: e9ff1b6f07159e5439898444e5c554ed, type: 2}
   testobj: {fileID: 0}
 --- !u!1 &539617234
 GameObject:
@@ -192,6 +204,7 @@ MonoBehaviour:
   <RangedEnemySpawnChance>k__BackingField: 25
   <debugMeleeSpawnChance>k__BackingField: 50
   <debugSetMeleeSpawnChance>k__BackingField: 0
+  <debugKillEnemies>k__BackingField: 0
 --- !u!1 &1778046464
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,6 +299,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <EnemyManager>k__BackingField: {fileID: 1602605067}
+  <TimerManager>k__BackingField: {fileID: 539617236}
+  <PoolingManager>k__BackingField: {fileID: 1778046466}
+  <ComboManager>k__BackingField: {fileID: 127852128}
+  <PlayerTransform>k__BackingField: {fileID: 0}
 --- !u!114 &3761662248408365453
 MonoBehaviour:
   m_ObjectHideFlags: 0

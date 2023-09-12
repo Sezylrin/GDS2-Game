@@ -36,7 +36,7 @@ public class Abilities : MonoBehaviour
         foreach (KeyValuePair<AbilityType,GameObject> entry in abilityShapePF)
         {
             Pool<AbilityBase> temp;
-            PoolingManager.Instance.FindPool(entry.Value, out temp,entry.Key.ToString() + " type");
+            GameManager.Instance.PoolingManager.FindPool(entry.Value, out temp,entry.Key.ToString() + " type");
             pools.Add(entry.Key, temp);
         }
         //remember to uncheck them when done with debugging

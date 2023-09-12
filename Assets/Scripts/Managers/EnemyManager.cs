@@ -54,14 +54,14 @@ public class EnemyManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        EnemyManagerTimers = TimerManager.Instance.GenerateTimers(typeof(EnemyManagerTimer), gameObject);
+        EnemyManagerTimers = GameManager.Instance.TimerManager.GenerateTimers(typeof(EnemyManagerTimer), gameObject);
         EnemyManagerTimers.times[(int)EnemyManagerTimer.attackDelayTimer].OnTimeIsZero += EnableAttack;
         EnemyManagerTimers.times[(int)EnemyManagerTimer.attackPointRefeshTimer].OnTimeIsZero += RefreshAttackPoint;
 
         AttackPoints = MaxAttackPoints;
 
-        PoolingManager.Instance.FindPool(enemyPrefabs[0], out testMeleeEnemyPool);
-        PoolingManager.Instance.FindPool(enemyPrefabs[1], out testRangedEnemyPool);
+        GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[0], out testMeleeEnemyPool);
+        GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[1], out testRangedEnemyPool);
     }
 
     // Update is called once per frame
@@ -102,7 +102,10 @@ public class EnemyManager : MonoBehaviour
     #region EnemyAttacking
     public bool CanAttack()
     {
-        return CanEnemyAttack;
+        bool CanAttack = CanEnemyAttack && AttackPoints > 0;
+        if (CanAttack)
+            ManagerAttack();
+        return CanAttack;
     }
 
     public void ManagerAttack()

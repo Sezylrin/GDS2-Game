@@ -831,7 +831,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Type>k__BackingField: 0
-  <Element>k__BackingField: 1
+  <Element>k__BackingField: 0
   <Hitpoints>k__BackingField: 100
   <MaxHealth>k__BackingField: 100
   <Damage>k__BackingField: 0
@@ -868,19 +868,30 @@ MonoBehaviour:
   <ElementEffectImage>k__BackingField: {fileID: 2489379560108725518}
   <StaggeredImage>k__BackingField: {fileID: 2489379559056602806}
   <rb>k__BackingField: {fileID: 8716451748292390363}
-  <SpawnPosition>k__BackingField: {fileID: 0}
+  <path>k__BackingField: {fileID: 0}
   <ActiveCombos>k__BackingField: 
   <ComboEffectTimer>k__BackingField:
     <times>k__BackingField: []
     owner: {fileID: 0}
   <TargetLayer>k__BackingField:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   staggerBonusDamage: 2
   elementResistAmount: 0
   baseArmour: 1
+  IdleRadius: 0
+  RepositionPoint: 0
+  IdleMoveRateMin: 0
+  IdleMoveRateMax: 0
+  RepositionRateMin: 0
+  RepositionRateMax: 0
+  AttackEndAiCD: 0
+  currentState: 0
+  <hitboxCentre>k__BackingField: {fileID: 0}
   <WarningBox>k__BackingField: {fileID: 2489379560098110650}
   <AttackHitbox>k__BackingField: {fileID: 2489379560232288714}
+  <MinimumAttackRange>k__BackingField: 0
+  <col2D>k__BackingField: {fileID: 0}
 --- !u!1 &2489379561012669700
 GameObject:
   m_ObjectHideFlags: 0

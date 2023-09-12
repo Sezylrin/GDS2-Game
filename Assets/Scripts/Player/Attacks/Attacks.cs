@@ -42,7 +42,7 @@ public class Attacks : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        timers = TimerManager.Instance.GenerateTimers(typeof(coolDownTimers), gameObject);
+        timers = GameManager.Instance.TimerManager.GenerateTimers(typeof(coolDownTimers), gameObject);
         maxCombo = lightHitboxes.Length;
     }
 
@@ -104,7 +104,21 @@ public class Attacks : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        IDamageable foundEnemy;
+        if (UtilityFunction.FindComponent(collision.transform, out foundEnemy))
+        {
+            /*if (!(foundEnemy as Enemy))
+            {
+                return;
+            }
+            if (hitEnemy.Contains(foundEnemy as Enemy))
+            {
+                return;
+            }
+            hitEnemy.Add(foundEnemy as Enemy);
+            foundEnemy.TakeDamage(damage, selectedAbility.Stagger, selectedAbility.elementType, selectedAbility.castCost);
+            */
+        }
     }
 
     public void ResetTimer()
