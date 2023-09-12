@@ -48,21 +48,17 @@ public class ElementCombo : MonoBehaviour
     [SerializeField][SerializedDictionary("Element Combo", "ComboSo")]
     private SerializedDictionary<Combos, ComboSO> setCombos;
 
-    private Pool<ComboBase> firePool;
-    [SerializeField]
-    private GameObject fireTornado;
+    private Pool<ComboBase> tornadoPool;
     private Pool<ComboBase> bramblePool;
     [SerializeField]
-    private GameObject brambles;
+    private GameObject fireTornado;
+    [SerializeField]
+    private GameObject bramble;
 
     void Start()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        PoolingManager.Instance.FindPool(fireTornado, out firePool);
-        PoolingManager.Instance.FindPool(brambles, out bramblePool);
+        GameManager.Instance.PoolingManager.FindPool(fireTornado, out tornadoPool);
+        GameManager.Instance.PoolingManager.FindPool(bramble, out bramblePool);
     }
 
     // Update is called once per frame
@@ -79,22 +75,22 @@ public class ElementCombo : MonoBehaviour
         switch ((int)attemptedCombo)
         {
             case (int)Combos.aquaVolt:
-                comboInterface.ApplyAquaVolt(combo.BaseDamage[comboTier], combo.StaggerDamage, combo.Duration);
+                comboInterface.ApplyAquaVolt(combo.BaseDamage[comboTier], combo.StaggerDamage[comboTier], combo.Duration[comboTier]);
                 break;
             case (int)Combos.brambles:
-                SpawnAreaCombo(combo, bramblePool, comboTier, mask);
+                SpawnBramble(combo, comboTier, mask, pos);
                 break;
             case (int)Combos.fireSurge:
-                comboInterface.ApplyFireSurge(combo.BaseDamage[comboTier], combo.StaggerDamage);
+                comboInterface.ApplyFireSurge(combo.BaseDamage[comboTier], combo.StaggerDamage[comboTier]);
                 break;
             case (int)Combos.fireTornado:
-                SpawnAreaCombo(combo, firePool, comboTier, mask);
+                SpawnFireTornado(combo, comboTier, mask, pos);
                 break;
             case (int)Combos.noxiousGas:
-                comboInterface.ApplyNoxiousGas(combo.BaseDamage[comboTier], combo.StaggerDamage, combo.Duration);
+                comboInterface.ApplyNoxiousGas(combo.BaseDamage[comboTier], combo.StaggerDamage[comboTier], combo.Duration[comboTier]);
                 break;
             case (int)Combos.wither:
-                comboInterface.ApplyWither(combo.BaseDamage[comboTier], combo.StaggerDamage, combo.Duration, (combo as WitherSO).WitherStrength[comboTier]);
+                comboInterface.ApplyWither(combo.BaseDamage[comboTier], combo.StaggerDamage[comboTier], combo.Duration[comboTier], (combo as WitherSO).WitherStrength[comboTier]);
                 break;
         }
     }
@@ -109,17 +105,25 @@ public class ElementCombo : MonoBehaviour
         Debug.Log("testing " + combo);
         AttemptCombo(ElementOne, ElementTwo, test, defaultMask, 0, transform.position);
     }
-    
-    private void SpawnAreaCombo(ComboSO combo, Pool<ComboBase> pool,int tier, LayerMask target)
+
+    private void SpawnFireTornado(ComboSO combo, int tier, LayerMask target, Vector3 pos)
     {
         bool newSpawn;
-        ComboBase temp = pool.GetPooledObj(out newSpawn);
+        ComboBase temp = tornadoPool.GetPooledObj(out newSpawn);
         if (newSpawn)
         {
             temp.InitSpawn();
         }
-        temp.Init(combo as AreaComboSO, tier, Vector3.zero, target);
-        Debug.Break();
+        temp.Init(combo as AreaComboSO, tier, pos, target);
     }
-
+    private void SpawnBramble(ComboSO combo, int tier, LayerMask target, Vector3 pos)
+    {
+        bool newSpawn;
+        ComboBase temp = bramblePool.GetPooledObj(out newSpawn);
+        if (newSpawn)
+        {
+            temp.InitSpawn();
+        }
+        temp.Init(combo as AreaComboSO, tier, pos, target);
+    }
 }

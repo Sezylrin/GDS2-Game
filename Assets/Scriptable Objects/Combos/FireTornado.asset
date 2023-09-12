@@ -13,12 +13,18 @@ MonoBehaviour:
   m_Name: FireTornado
   m_EditorClassIdentifier: 
   BaseDamage:
+  - 10
+  - 20
+  - 30
+  StaggerDamage: 000000000000000000000000
+  Duration:
+  - 3
+  - 5
+  - 7
+  radius:
   - 1
-  - 1
-  - 1
-  StaggerDamage: 0
-  Duration: 5
-  radius: 4
+  - 1.5
+  - 2.5
   typeOne: 1
   typeTwo: 8
   damageTickRate: 0.25

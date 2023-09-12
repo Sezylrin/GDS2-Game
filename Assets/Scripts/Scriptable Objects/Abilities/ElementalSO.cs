@@ -20,6 +20,8 @@ public class ElementalSO : ScriptableObject
 
     public float damage;
 
+    public float knockback;
+
     public int Stagger;
 
     public float lifeTime;

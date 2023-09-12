@@ -151,5 +151,15 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     {
 
     }
+
+    public void ModifySpeed(float percentage)
+    {
+        
+    }
+
+    public void ResetSpeed()
+    {
+        
+    }
     #endregion
 }
