@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46349f5f1777d0742ae2d3e10071b0c4, type: 3}
+  m_Name: Hydro Sphere
+  m_EditorClassIdentifier: 
+  color: {fileID: 2100000, guid: ee2fc3b70dfe19045b4edfe0d5826c73, type: 2}
+  elementType: 2
+  type: 2
+  castCost: 1
+  pierceAmount: 1
+  damage: 15
+  knockback: 0
+  Stagger: 20
+  lifeTime: 5
+  speed: 15
