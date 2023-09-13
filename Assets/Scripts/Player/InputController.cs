@@ -29,12 +29,12 @@ public class InputController : MonoBehaviour
         player.AbilityThree.performed += PCM.control.BufferAbilityThree;
         player.ToggleAbilities.performed += PCM.abilities.ToggleActiveAbilitySet;
 
-        GameManager.Instance.SetPlayerTransform(transform);
+        GameManager.Instance.SetPlayerTransform(transform, PCM);
     }
 
     private void OnDisable()
     {
-        GameManager.Instance.SetPlayerTransform(null);
+        GameManager.Instance.SetPlayerTransform(null, null);
 
         player.Move.performed -= PCM.control.SetDirection;
         player.Move.canceled -= PCM.control.SetDirection;

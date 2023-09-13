@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76d5bbfd3d5dd9746bcfe99438c2b0ec, type: 3}
   m_Name: Verdant Growth
   m_EditorClassIdentifier: 
+  color: {fileID: 2100000, guid: 1019f58b21679da48a048180c1633774, type: 2}
   elementType: 32
   type: 1
   castCost: 2
@@ -19,6 +20,6 @@ MonoBehaviour:
   damage: 30
   knockback: 0
   Stagger: 10
-  lifeTime: 4
-  radius: 2
+  lifeTime: 2
+  radius: 4
   growthSpeed: 0

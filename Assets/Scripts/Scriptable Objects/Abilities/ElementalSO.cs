@@ -9,7 +9,9 @@ public enum AbilityType
     Projectile
 }
 public class ElementalSO : ScriptableObject
-{     
+{
+    public Material color;
+
     public ElementType elementType;
 
     public AbilityType type;
@@ -25,6 +27,7 @@ public class ElementalSO : ScriptableObject
     public int Stagger;
 
     public float lifeTime;
+
 }
 
 

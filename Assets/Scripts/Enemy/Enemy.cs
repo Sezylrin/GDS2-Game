@@ -245,7 +245,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         HealthBarPercentage = Hitpoints / MaxHealth;
         if (HealthBarImage) HealthBarImage.fillAmount = HealthBarPercentage;
 
-        if (WindingUp && typeTwo == ElementType.noElement && type != ElementType.noElement) InterruptAttack();
+        if (typeTwo == ElementType.noElement && type != ElementType.noElement) InterruptAttack();
     }
     public virtual void TakeDamage(float damage, int staggerPoints, ElementType type, ElementType typeTwo = ElementType.noElement)
     {

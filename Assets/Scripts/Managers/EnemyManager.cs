@@ -298,7 +298,7 @@ public class EnemyManager : MonoBehaviour
     public void DecrementActiveEnemyCounter()
     {
         ActiveEnemiesCount--;
-        if (ActiveEnemiesCount <= 0)
+        if (ActiveEnemiesCount <= 0 && Level.Instance)
         {
             Level.Instance.ClearLevel();
         }
@@ -323,6 +323,7 @@ public class EnemyManager : MonoBehaviour
     public void DebugAddEnemy(Enemy enemy)
     {
         enemyList.Add(enemy);
+        ActiveEnemiesCount++;
     }
 
     public Transform FindNearestEnemy(Transform origin)

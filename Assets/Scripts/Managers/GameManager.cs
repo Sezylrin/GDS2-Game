@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public PoolingManager PoolingManager { get; private set; }
     [field: SerializeField] public ElementCombo ComboManager { get; private set; }
     [field: SerializeField] public Transform PlayerTransform { get; private set; }
+    [field: SerializeField] public PlayerComponentManager PCM { get; private set; }
     public int Souls { get; set; }
 
     private void Awake()
@@ -27,9 +28,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SetPlayerTransform(Transform player)
+    public void SetPlayerTransform(Transform player, PlayerComponentManager PCM)
     {
         PlayerTransform = player;
+        this.PCM = PCM;
     }
 
     public void AddSouls(int souls)
