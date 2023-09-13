@@ -30,6 +30,14 @@ public class SkillTreeManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            HideSkillTree();
+        }
+    }
+
     public void ShowSkillTree()
     {
         gameObject.SetActive(true);

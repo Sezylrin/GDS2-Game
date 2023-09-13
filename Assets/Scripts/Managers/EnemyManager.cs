@@ -289,8 +289,6 @@ public class EnemyManager : MonoBehaviour
                 break;
         }
         ActiveEnemiesCount++;
-
-
         if (EnemyPoints > 0) SpawnEnemy();
     }
     #endregion
@@ -300,6 +298,7 @@ public class EnemyManager : MonoBehaviour
         ActiveEnemiesCount--;
         if (ActiveEnemiesCount <= 0 && Level.Instance)
         {
+            enemyList.Clear();
             Level.Instance.ClearLevel();
         }
     }

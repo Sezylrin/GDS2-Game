@@ -20,5 +20,6 @@ public class PlayerComponentManager : MonoBehaviour
     private void Start()
     {
         enabled = false;
+        DontDestroyOnLoad(gameObject);
     }
 }

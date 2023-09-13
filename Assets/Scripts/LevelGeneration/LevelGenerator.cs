@@ -62,7 +62,6 @@ public class LevelGenerator : MonoBehaviour
         else
         {
             _instance = this;
-            DontDestroyOnLoad(gameObject);
         }
     }
 
