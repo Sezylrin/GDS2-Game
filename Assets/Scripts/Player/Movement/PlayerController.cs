@@ -147,6 +147,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void Interact(InputAction.CallbackContext context)
+    {
+        GameManager.Instance.CallInteraction();
+    }
+
     private void SetMousePos()
     {
         mousePos = cam.ScreenToWorldPoint(Input.mousePosition);

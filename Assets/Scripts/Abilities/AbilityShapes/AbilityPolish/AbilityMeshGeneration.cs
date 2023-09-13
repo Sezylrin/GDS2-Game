@@ -13,7 +13,6 @@ public class AbilityMeshGeneration : MonoBehaviour
     private Vector2[] uv;
     void Start()
     {
-        Debug.Log("start has ran");
         dynamicMesh = new Mesh();
 
         uv = new Vector2[4];

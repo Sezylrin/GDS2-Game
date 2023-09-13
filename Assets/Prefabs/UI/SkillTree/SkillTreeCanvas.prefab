@@ -2375,7 +2375,7 @@ GameObject:
   - component: {fileID: 164168539365492341}
   - component: {fileID: 164168539365492338}
   m_Layer: 5
-  m_Name: Damage1
+  m_Name: AttackDamage1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2472,8 +2472,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 1
   soulCost: 100
-  skillName: Damage
-  skillDescription: Increase all damage by 10
+  skillName: Attack Damage
+  skillDescription: Increase all attack damage by 10
   prerequisiteSkills: []
 --- !u!1 &164168539487371998
 GameObject:
@@ -3413,7 +3413,7 @@ GameObject:
   - component: {fileID: 164168539895324801}
   - component: {fileID: 164168539895324814}
   m_Layer: 5
-  m_Name: Damage3
+  m_Name: AttackDamage3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3510,8 +3510,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 1
   soulCost: 300
-  skillName: Damage 3
-  skillDescription: Increase all damage by 10
+  skillName: Attack Damage 3
+  skillDescription: Increase all attack damage by 10
   prerequisiteSkills:
   - {fileID: 164168539365492338}
   - {fileID: 164168539905844368}
@@ -3528,7 +3528,7 @@ GameObject:
   - component: {fileID: 164168539905844371}
   - component: {fileID: 164168539905844368}
   m_Layer: 5
-  m_Name: Damage2
+  m_Name: AttackDamage2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3625,8 +3625,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 1
   soulCost: 200
-  skillName: Damage 2
-  skillDescription: Increase all damage by 10
+  skillName: Attack Damage 2
+  skillDescription: Increase all attack damage by 10
   prerequisiteSkills:
   - {fileID: 164168539365492338}
 --- !u!1 &164168539928421345
@@ -5572,7 +5572,7 @@ GameObject:
   - component: {fileID: 164168540592454686}
   - component: {fileID: 164168540592454687}
   m_Layer: 5
-  m_Name: DamageHeading
+  m_Name: AttackDamageHeading
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5626,7 +5626,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Damage
+  m_text: Attack Damage
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

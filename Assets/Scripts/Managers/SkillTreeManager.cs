@@ -20,6 +20,14 @@ public class SkillTreeManager : MonoBehaviour
     [SerializeField]
     private TMP_Text skillDescriptionTxt;
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            HideSkillTree();
+        }
+    }
+
     public void ShowSkillTree()
     {
         gameObject.SetActive(true);
