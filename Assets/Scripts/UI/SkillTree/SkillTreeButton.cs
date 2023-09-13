@@ -117,6 +117,7 @@ public class SkillTreeButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
             gameManager.Souls -= soulCost;
             purchased = true;
             skillTreeManager.ShowPurchased();
+            skillTreeManager.UpdateSoulsText();
             onPurchase.Invoke();
         } 
     }
