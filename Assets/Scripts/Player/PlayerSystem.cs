@@ -149,9 +149,20 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         SetHealthUI();
     }
 
+    public void FullHeal()
+    {
+        Hitpoints = startingHitPoint + GameManager.Instance.StatsManager.bonusHealth;
+        SetHealthUI();
+    }
+
     private void SetHealthUI()
     {
-        PCM.UI.SetGreenHealthBar(Hitpoints / startingHitPoint);
+        PCM.UI.SetGreenHealthBar(Hitpoints / (startingHitPoint + GameManager.Instance.StatsManager.bonusHealth));
+    }
+
+    public void UpgradeHealth()
+    {
+        FullHeal();
     }
     #endregion
 

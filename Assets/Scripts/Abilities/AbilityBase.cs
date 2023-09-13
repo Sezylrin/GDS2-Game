@@ -88,7 +88,7 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
                 return;
             }
             hitEnemy.Add(foundEnemy as Enemy);
-            foundEnemy.TakeDamage(selectedAbility.damage, selectedAbility.Stagger, selectedAbility.elementType, selectedAbility.castCost);
+            foundEnemy.TakeDamage(selectedAbility.damage + GameManager.Instance.StatsManager.abilityModifier, selectedAbility.Stagger, selectedAbility.elementType, selectedAbility.castCost);
             Vector3 dir;
             if (direction.Equals(Vector3.zero))
             { 

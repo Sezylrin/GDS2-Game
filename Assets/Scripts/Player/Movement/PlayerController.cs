@@ -147,6 +147,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void Interact(InputAction.CallbackContext context)
+    {
+        float interactionRadius = 1f;
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, interactionRadius);
+
+        foreach (Collider2D hit in hits)
+        {
+            InteractionTarget target = hit.gameObject.GetComponent<InteractionTarget>();
+            if (target != null)
+            {
+                target.OnInteractedWith();
+                break;
+            }
+        }
+    }
+
     private void SetMousePos()
     {
         mousePos = cam.ScreenToWorldPoint(Input.mousePosition);

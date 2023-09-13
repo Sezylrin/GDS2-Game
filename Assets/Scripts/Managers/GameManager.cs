@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public ElementCombo ComboManager { get; private set; }
     [field: SerializeField] public Transform PlayerTransform { get; private set; }
     [field: SerializeField] public PlayerComponentManager PCM { get; private set; }
+    [field: SerializeField] public SkillTreeManager SkillTreeManager { get; private set; }
+    [field: SerializeField] public StatsManager StatsManager { get; private set; }
     public int Souls { get; set; }
 
     private void Awake()

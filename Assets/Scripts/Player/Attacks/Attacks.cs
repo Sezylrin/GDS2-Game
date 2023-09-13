@@ -123,7 +123,7 @@ public class Attacks : MonoBehaviour
             {
                 return;
             }
-            foundEnemy.TakeDamage(lightAttackDamage[currentCombo - 1], lightAttackStagger[currentCombo - 1],ElementType.noElement);
+            foundEnemy.TakeDamage(lightAttackDamage[currentCombo - 1] + GameManager.Instance.StatsManager.attackDamageModifier, lightAttackStagger[currentCombo - 1],ElementType.noElement);
             foundEnemy.AddForce((collision.transform.position - transform.position).normalized * lightAttackKnockBack[currentCombo - 1]);
         }
     }

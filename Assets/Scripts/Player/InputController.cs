@@ -28,6 +28,7 @@ public class InputController : MonoBehaviour
         player.AbilityTwo.performed += PCM.control.BufferAbilityTwo;
         player.AbilityThree.performed += PCM.control.BufferAbilityThree;
         player.ToggleAbilities.performed += PCM.abilities.ToggleActiveAbilitySet;
+        player.Interact.performed += PCM.control.Interact;
 
         GameManager.Instance.SetPlayerTransform(transform, PCM);
     }
