@@ -296,14 +296,15 @@ public class EnemyManager : MonoBehaviour
     public void DecrementActiveEnemyCounter()
     {
         ActiveEnemiesCount--;
-        if (ActiveEnemiesCount <= 0 && Level.Instance)
+        if (ActiveEnemiesCount <= 0)
         {
             enemyList.Clear();
-            Level.Instance.ClearLevel();
+            if(Level.Instance)
+                Level.Instance.ClearLevel();
         }
     }
 
-    private void KillEnemies()
+    public void KillEnemies()
     {
         foreach (Enemy enemy in enemyList)
         {

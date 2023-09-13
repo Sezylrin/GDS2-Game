@@ -102,7 +102,6 @@ public class PlayerController : MonoBehaviour
 
     private float drag;
 
-    private Camera cam;
 
     private Coroutine dashCoroutine;
     private Timer timers;
@@ -128,7 +127,6 @@ public class PlayerController : MonoBehaviour
         timers.times[(int)coolDownTimers.abilityLag].OnTimeIsZero += AbilityLagOver;
         timers.times[(int)coolDownTimers.abilityCast].OnTimeIsZero += AbilityCastOver;
         currentMaxSpeed = maxSpeed;
-        cam = Camera.main;
         currentDashCharges = dashCharges;
         drag = rb.drag;
     }
@@ -154,7 +152,7 @@ public class PlayerController : MonoBehaviour
 
     private void SetMousePos()
     {
-        mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 
     public void BufferLightAttack(InputAction.CallbackContext context)
@@ -413,7 +411,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag(Tags.T_Terrain))
+        if (collision.gameObject.CompareTag(Tags.T_Terrain) && dashCoroutine != null)
         {
             StopDash(dashCoroutine);
         }

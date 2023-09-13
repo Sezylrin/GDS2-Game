@@ -49,6 +49,11 @@ public class GameManager : MonoBehaviour
         PCM.UI.UpdateSoulsText();
     }
 
+    public void SetSoulsToZero()
+    {
+        Souls = 0;
+    }
+
     public void SetInteraction(InteractionBase interaction)
     {
         this.interaction = interaction;

@@ -76,9 +76,12 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
+        if (CurrentPierce <= 0)
+            return;
         IDamageable foundEnemy;
         if (UtilityFunction.FindComponent(collision.transform,out foundEnemy))
         {
+            
             if(!(foundEnemy as Enemy))
             {
                 return;

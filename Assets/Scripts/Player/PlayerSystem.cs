@@ -173,7 +173,9 @@ public class PlayerSystem : MonoBehaviour, IDamageable
 
     public void OnDeath()
     {
-        Debug.Log("oh, i'm die, thank you forever");
+        GameManager.Instance.EnemyManager.KillEnemies();
+        GameManager.Instance.SetSoulsToZero();
+        Loader.Load(EN_Scene.Sprint2);
     }
 
     public void SetHitPoints()

@@ -17,9 +17,19 @@ public class PlayerComponentManager : MonoBehaviour
     [field: SerializeField]
     public PlayerUI UI{ get; private set; }
 
+    public static GameObject Instance { get; private set; }
+
     private void Start()
     {
         enabled = false;
-        DontDestroyOnLoad(gameObject);
+        if (Instance != null)
+        {
+            DestroyImmediate(gameObject);
+        }
+        else
+        {
+            Instance = gameObject;
+            DontDestroyOnLoad(gameObject);
+        }
     }
 }
