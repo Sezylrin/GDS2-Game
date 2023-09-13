@@ -40,7 +40,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: SerializeField] protected float MaxHealth { get; set; } = 100;
     [field: SerializeField] protected int Damage { get; set; } = 10;
     [field: SerializeField] protected float Speed { get; set; } = 1;
-    [field: SerializeField, ReadOnly] protected int Souls { get; set; } = 1;
+    [field: SerializeField] protected int Souls { get; set; } = 1;
     [field: SerializeField, ReadOnly] protected bool WindingUp { get; set; } = false;
     [field: SerializeField] protected Timer EnemyTimers { get; private set; }
     #endregion
