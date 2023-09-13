@@ -735,7 +735,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1725982173
-  m_SortingLayer: 2
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0, g: 1, b: 0.93678236, a: 1}
@@ -838,7 +838,7 @@ MonoBehaviour:
   <MaxHealth>k__BackingField: 100
   <Damage>k__BackingField: 10
   <Speed>k__BackingField: 0
-  <Souls>k__BackingField: 0
+  <Souls>k__BackingField: 25
   <WindingUp>k__BackingField: 0
   <EnemyTimers>k__BackingField:
     <times>k__BackingField: []
@@ -864,6 +864,7 @@ MonoBehaviour:
   <debugStartStagger>k__BackingField: 0
   <debugAttemptAttack>k__BackingField: 0
   <debugInterruptAttack>k__BackingField: 0
+  <debugEnemySpawn>k__BackingField: 0
   <WalkingSound>k__BackingField: {fileID: 0}
   <DeathSoundPrefab>k__BackingField: {fileID: 0}
   <HealthBarImage>k__BackingField: {fileID: 2489379561012669698}

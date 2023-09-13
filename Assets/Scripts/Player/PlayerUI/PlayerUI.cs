@@ -25,6 +25,10 @@ public class PlayerUI : MonoBehaviour
     private TMP_Text EAbilityText;
     [SerializeField]
     private TMP_Text shiftAbilityText;
+    [Header("Souls UI")]
+    [SerializeField]
+    private TMP_Text soulsTxt;
+
     void Start()
     {
     }
@@ -65,5 +69,10 @@ public class PlayerUI : MonoBehaviour
         QAbilityText.text = AbilityOne;
         EAbilityText.text = AbilityTwo;
         shiftAbilityText.text = AbilityThree;
+    }
+
+    public void UpdateSoulsText()
+    {
+        soulsTxt.text = GameManager.Instance.Souls.ToString();
     }
 }

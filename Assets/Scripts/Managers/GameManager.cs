@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public LevelGenerator LevelGenerator { get; private set; }
     [field: SerializeField] public SkillTreeManager SkillTreeManager { get; private set; }
     [field: SerializeField] public StatsManager StatsManager { get; private set; }
-    public int Souls { get; set; }
+    public int Souls { get; private set; }
     public Transform PlayerTransform { get; private set; }
     public PlayerComponentManager PCM { get; private set; }
     private InteractionBase interaction;
@@ -40,6 +40,13 @@ public class GameManager : MonoBehaviour
     public void AddSouls(int souls)
     {
         Souls += souls;
+        PCM.UI.UpdateSoulsText();
+    }
+
+    public void RemoveSouls(int souls)
+    {
+        Souls -= souls;
+        PCM.UI.UpdateSoulsText();
     }
 
     public void SetInteraction(InteractionBase interaction)
