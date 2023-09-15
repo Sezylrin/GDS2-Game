@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,16 +21,13 @@ public enum playerState
     dashing,
     attack,
     attackEnd,
-    abilityCast,
-    abilityLag
+    ability
 }
 public class PlayerController : MonoBehaviour
 {
     private enum coolDownTimers : int
     {
-        dashCD,
-        abilityCast,
-        abilityLag
+        dashCD
     }
 
     [field: Header("Core variables")]
@@ -66,12 +62,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] [ReadOnly]
     private float currentDashCharges;
 
-    [field: Header("Ability")]
-    [SerializeField]
-    private float abilityLag;
-    [SerializeField]
-    private float abilityCast;
-
     [field:Header("Transforms")]
     [field:SerializeField]
     public Transform AbilityCentre { get; private set; } 
@@ -102,6 +92,7 @@ public class PlayerController : MonoBehaviour
 
     private float drag;
 
+    private Camera cam;
 
     private Coroutine dashCoroutine;
     private Timer timers;
@@ -124,9 +115,8 @@ public class PlayerController : MonoBehaviour
     public void Start()
     {
         timers = GameManager.Instance.TimerManager.GenerateTimers(typeof(coolDownTimers), gameObject);
-        timers.times[(int)coolDownTimers.abilityLag].OnTimeIsZero += AbilityLagOver;
-        timers.times[(int)coolDownTimers.abilityCast].OnTimeIsZero += AbilityCastOver;
         currentMaxSpeed = maxSpeed;
+        cam = Camera.main;
         currentDashCharges = dashCharges;
         drag = rb.drag;
     }
@@ -145,14 +135,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void Interact(InputAction.CallbackContext context)
-    {
-        GameManager.Instance.CallInteraction();
-    }
-
     private void SetMousePos()
     {
-        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
     }
 
     public void BufferLightAttack(InputAction.CallbackContext context)
@@ -200,7 +185,7 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    #region Ability 
+    #region AbilityAim
 
     private void AimAbility()
     {
@@ -209,34 +194,6 @@ public class PlayerController : MonoBehaviour
         AbilityCentre.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
-    public void SetAbilityState()
-    {
-        isUsingAbility = true;
-        rb.drag = drag * 10;
-        timers.SetTime((int)coolDownTimers.abilityCast, abilityCast);
-    }
-
-    private void AbilityCastOver(object sender, EventArgs e)
-    {
-        GoIntoAbilityLag();
-    }
-
-    private void GoIntoAbilityLag()
-    {
-        timers.SetTime((int)coolDownTimers.abilityLag, abilityLag);
-        rb.drag = drag;
-    }
-
-    private void AbilityLagOver(object sender, EventArgs e)
-    {
-        StopAbilityLag();
-    }
-
-    private void StopAbilityLag()
-    {
-        isUsingAbility = false;
-        timers.ResetSpecificToZero((int)coolDownTimers.abilityLag);
-    }
     #endregion
 
     #region Input Buffering
@@ -304,7 +261,7 @@ public class PlayerController : MonoBehaviour
     #region Dash
     private void Dash()
     {
-        playerState[] unAllowed = { playerState.attack, playerState.abilityCast };
+        playerState[] unAllowed = { playerState.attack, playerState.ability };
         if (CheckStates(unAllowed))
             return;
         if (!timers.IsTimeZero((int)coolDownTimers.dashCD) || currentDashCharges < 1)
@@ -389,7 +346,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (isUsingAbility)
         {
-            CurrentState = playerState.abilityCast;
+            CurrentState = playerState.ability;
         }
         else if (isAttacking)
         {
@@ -411,7 +368,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag(Tags.T_Terrain) && dashCoroutine != null)
+        if (collision.gameObject.CompareTag(Tags.T_Terrain))
         {
             StopDash(dashCoroutine);
         }

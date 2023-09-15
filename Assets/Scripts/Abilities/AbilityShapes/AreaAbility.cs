@@ -12,10 +12,6 @@ public class AreaAbility : AbilityBase
 
     [SerializeField]
     private CircleCollider2D col2D;
-    [SerializeField]
-    private Transform AOETr;
-    [SerializeField]
-    private SpriteRenderer rend;
 
     private Coroutine aoeCoroutine;
     void Start()
@@ -34,8 +30,6 @@ public class AreaAbility : AbilityBase
         selected = selectedAbility as AOEVariantSO;
         transform.position = initialPos;
         SpawnAoeEffect();
-        //polish
-        rend.color = selected.color.color;
     }
 
     private void SpawnAoeEffect()
@@ -60,8 +54,6 @@ public class AreaAbility : AbilityBase
             col2D.radius = ratio * endRadius;
             if (timer + Time.deltaTime >= selected.growthSpeed)
                 col2D.radius = endRadius;
-            float radius = col2D.radius;
-            AOETr.localScale = new Vector3(radius, radius, radius);
             yield return null;
         }
         StopExpand();

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using KevinCastejon.MoreAttributes;
-using System;
 public class PlayerSystem : MonoBehaviour, IDamageable
 {
     private enum SystemCD
@@ -37,7 +36,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     [SerializeField]
     private int MaxCastPoints;
     [SerializeField][ReadOnly]
-    private int currentCastPoints;
+    private int CurrentCastPoints;
     [SerializeField]
     private float pointRegenRate;
     [SerializeField][ReadOnly]
@@ -47,18 +46,6 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     private float maxRegenTime;
     [SerializeField]
     private int debugCost;
-    private int CurrentCastPoints
-    {
-        get { return currentCastPoints; }
-        set
-        {
-            if (CurrentCastPoints != value)
-            {
-                currentCastPoints = value;
-                PCM.UI.UpdateSKillPointUI(value);
-            }
-        }
-    }
 
     [ContextMenu("attempt cast")]
     public void AttemptCastDbug()
@@ -95,26 +82,12 @@ public class PlayerSystem : MonoBehaviour, IDamageable
             regenTimer = maxRegenTime;
         }
     }
+
     private void InitCastPoints()
-    {
-        for (int i = 0; i < MaxCastPoints; i++)
-        {
-            PCM.UI.AddMoreSkillPoint();
-        }
-        UpdateCastPoints();
-    }
-    private void UpdateCastPoints()
     {
         maxRegenTime = MaxCastPoints * pointRegenRate;
         CurrentCastPoints = MaxCastPoints;
         regenTimer = maxRegenTime;
-    }
-
-    public void AddCastPoint()
-    {
-        MaxCastPoints++;
-        PCM.UI.AddMoreSkillPoint();
-        UpdateCastPoints();
     }
 
     private void CalculatePoints()
@@ -133,7 +106,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     [Header("Health")]
     [SerializeField]
     private float startingHitPoint;
-    private void CalculateDamage(float amount)
+    public void CalculateDamage(float amount)
     {
         if (!timer.IsTimeZero((int)SystemCD.iFrames))
             return;
@@ -146,23 +119,6 @@ public class PlayerSystem : MonoBehaviour, IDamageable
             Hitpoints -= amount;
             timer.SetTime((int)SystemCD.iFrames, iframes);
         }
-        SetHealthUI();
-    }
-
-    public void FullHeal()
-    {
-        Hitpoints = startingHitPoint + GameManager.Instance.StatsManager.bonusHealth;
-        SetHealthUI();
-    }
-
-    private void SetHealthUI()
-    {
-        PCM.UI.SetGreenHealthBar(Hitpoints / (startingHitPoint + GameManager.Instance.StatsManager.bonusHealth));
-    }
-
-    public void UpgradeHealth()
-    {
-        FullHeal();
     }
     #endregion
 
@@ -173,9 +129,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
 
     public void OnDeath()
     {
-        GameManager.Instance.EnemyManager.KillEnemies();
-        GameManager.Instance.SetSoulsToZero();
-        Loader.Load(EN_Scene.Sprint2);
+        Debug.Log("oh, i'm die, thank you forever");
     }
 
     public void SetHitPoints()
@@ -196,16 +150,6 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     public void AddForce(Vector2 force)
     {
 
-    }
-
-    public void ModifySpeed(float percentage)
-    {
-        
-    }
-
-    public void ResetSpeed()
-    {
-        
     }
     #endregion
 }

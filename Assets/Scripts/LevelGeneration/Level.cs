@@ -19,8 +19,6 @@ public class Level : MonoBehaviour
     private Transform playerSpawnPoint;
     [SerializeField]
     private List<Transform> enemySpawnPoints;
-    [SerializeField]
-    private bool isFountain = false;
     [Header("Debug")]
     public bool debugClearLevel;
     [field: SerializeField, ReadOnly]
@@ -45,10 +43,7 @@ public class Level : MonoBehaviour
         SpawnPlayer();
         GetEnemySpawnPoints();
         LevelGenerator.Instance.TriggerCrossFadeEnd();
-        if (!isFountain)
-            GameManager.Instance.EnemyManager.StartEnemySpawning(enemySpawnPoints, totalEnemyPoints);
-        else
-            ClearLevel();
+        GameManager.Instance.EnemyManager.StartEnemySpawning(enemySpawnPoints, totalEnemyPoints);
     }
 
     private void GetEnemySpawnPoints()

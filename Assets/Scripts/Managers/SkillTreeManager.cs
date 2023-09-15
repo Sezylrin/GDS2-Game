@@ -19,21 +19,10 @@ public class SkillTreeManager : MonoBehaviour
     private TMP_Text skillNameTxt;
     [SerializeField]
     private TMP_Text skillDescriptionTxt;
-    [SerializeField] 
-    private TMP_Text soulsTxt;
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            HideSkillTree();
-        }
-    }
 
     public void ShowSkillTree()
     {
         gameObject.SetActive(true);
-        UpdateSoulsText();
     }
 
     public void HideSkillTree()
@@ -70,10 +59,5 @@ public class SkillTreeManager : MonoBehaviour
     public void ShowPurchased()
     {
         purchasedText.SetActive(true);
-    }
-
-    public void UpdateSoulsText()
-    {
-        soulsTxt.text = GameManager.Instance.Souls.ToString();
     }
 }

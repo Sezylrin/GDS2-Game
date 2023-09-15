@@ -40,7 +40,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: SerializeField] protected float MaxHealth { get; set; } = 100;
     [field: SerializeField] protected int Damage { get; set; } = 10;
     [field: SerializeField] protected float Speed { get; set; } = 1;
-    [field: SerializeField] protected int Souls { get; set; } = 1;
+    [field: SerializeField, ReadOnly] protected int Souls { get; set; } = 1;
     [field: SerializeField, ReadOnly] protected bool WindingUp { get; set; } = false;
     [field: SerializeField] protected Timer EnemyTimers { get; private set; }
     #endregion
@@ -74,7 +74,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: SerializeField] bool debugStartStagger { get; set; }
     [field: SerializeField] bool debugAttemptAttack { get; set; }
     [field: SerializeField] bool debugInterruptAttack { get; set; }
-    [field: SerializeField] bool debugEnemySpawn { get; set; } = false;
     #endregion
 
     #region Other
@@ -154,8 +153,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         Init();
         ComboManager = GameManager.Instance.ComboManager;
         Manager = GameManager.Instance.EnemyManager;
-        if (debugEnemySpawn)
-            Manager.DebugAddEnemy(this);
+        Manager.DebugAddEnemy(this);
         SetTimers();
         EnemyTimers = GameManager.Instance.TimerManager.GenerateTimers(typeof(EnemyTimer), gameObject);
         EnemyTimers.times[(int)EnemyTimer.effectedTimer].OnTimeIsZero += RemoveElementEffect;
@@ -167,7 +165,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         StartStaggerDecayTimer();
 
         path.OnDestinationReached += SetOnDestination;
-        Speed = path.maxSpeed;
     }
 
     protected virtual void Update()
@@ -199,10 +196,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         }
         EnemyAi();
     }
-    private void FixedUpdate()
-    {
-        ReEnablingPath();
-    }
     #endregion
 
     #region Health
@@ -222,8 +215,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     #region DamageFunctions
     public virtual void TakeDamage(float damage, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement)
     {
-        if (Hitpoints <= 0)
-            return;
         //Makes all enemies on screen aggroed
         if(currentState == EnemyState.idle)
             Manager.EnableAggro();
@@ -231,16 +222,16 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         float modifier = CalculateModifer();
         float modifiedDamage = damage * modifier;
         Hitpoints -= modifiedDamage;
-        
+
+        ComboManager.AttemptCombo(type, ActiveElementEffect, this, gameObject.layer, CalculateTier(tier, ElementTier), transform.position);
+
         if (Hitpoints <= 0)
         {
             Hitpoints = 0;
             OnDeath();
             return;
         }
-        if (typeTwo == ElementType.noElement)
-            ComboManager.AttemptCombo(type, ActiveElementEffect, this, EnemyLayer, CalculateTier(tier, ElementTier), transform.position);
-
+         
         if (typeTwo.Equals(ElementType.noElement) && type != ElementType.noElement)
         {
             ElementTier = tier;
@@ -253,7 +244,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
         HealthBarController.UpdateSegments((int)Hitpoints);
 
-        if (typeTwo == ElementType.noElement && type != ElementType.noElement) InterruptAttack();
+        if (WindingUp && typeTwo == ElementType.noElement && type != ElementType.noElement) InterruptAttack();
     }
     public virtual void TakeDamage(float damage, int staggerPoints, ElementType type, ElementType typeTwo = ElementType.noElement)
     {
@@ -281,7 +272,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     public virtual void OnDeath()
     {
-        Debug.Log("Dying");
         if (DeathSoundPrefab) Instantiate(DeathSoundPrefab);
         Manager.DecrementActiveEnemyCounter();
         GameManager.Instance.AddSouls(Souls);
@@ -290,17 +280,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     public void AddForce(Vector2 force)
     {
         rb.velocity += force;
-        path.enabled = false;
-    }
-
-    public void ModifySpeed(float percentage)
-    {
-        path.maxSpeed = path.maxSpeed * percentage;
-    }
-
-    public void ResetSpeed()
-    {
-        path.maxSpeed = Speed;
     }
     #endregion
 
@@ -507,7 +486,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     {
         IsNoxious = false;
         TargetLayer = PlayerLayer;
-        targetTr = GameManager.Instance.PlayerTransform;
     }
 
     public void ApplyWither(float damage, int stagger, float duration, float witherBonus)
@@ -559,10 +537,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [SerializeField] protected float AttackEndAiCD;
     [SerializeField][ReadOnly]
     protected EnemyState currentState;
-    [SerializeField][ReadOnly]
     protected bool hasDestination;
     private Vector3 spawnPos;
-    [SerializeField][ReadOnly]
     protected Transform targetTr;
 
     protected virtual void EnemyAi()
@@ -596,11 +572,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
             case (int)EnemyState.repositioning:
                 RepositionPicker();
                 break;
-        }
-
-        if(currentState == EnemyState.attacking)
-        {
-            currentState = EnemyState.stationary;
         }
     }
     //call in child class to determine pathing choice
@@ -667,7 +638,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
             case (int)EnemyState.chasing:
                 AttemptAttack();
                 currentState = EnemyState.attacking;
-                timeToAdd = AttackDuration + WindupDuration;
                 break;
             case (int)EnemyState.repositioning:
                 timeToAdd = UnityEngine.Random.Range(RepositionRateMin, RepositionRateMax);
@@ -687,14 +657,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     {
         hasDestination = false;
         path.destination = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
-    }
-
-    private void ReEnablingPath()
-    {
-        if (!path.enabled && rb.velocity.magnitude <= 0.2f)
-        {
-            path.enabled = true;
-        }
     }
     #endregion
 

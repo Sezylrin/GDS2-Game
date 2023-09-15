@@ -11,9 +11,6 @@ public class ProjectileAbility : AbilityBase
     private ProjectileVariantSO selected;
 
     [SerializeField]
-    private SpriteRenderer rend;
-
-    [SerializeField]
     private Rigidbody2D rb;
     void Start()
     {
@@ -30,7 +27,6 @@ public class ProjectileAbility : AbilityBase
     {
         selected = selectedAbility as ProjectileVariantSO;
         LaunchTowardsTarget();
-        rend.color = selected.color.color;
     }
 
     protected override void InvokePoolSelf(object sender, EventArgs e)

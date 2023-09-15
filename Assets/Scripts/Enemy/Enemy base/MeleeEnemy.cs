@@ -77,8 +77,6 @@ public abstract class MeleeEnemy : Enemy
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.isTrigger)
-            return;
         IDamageable foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
         {

@@ -35,8 +35,6 @@ public abstract class EnemyProjectile : MonoBehaviour, IPoolable<EnemyProjectile
         SpriteObj.rotation = UtilityFunction.LookAt2D(Vector3.zero, dir);
         col2d.includeLayers = terrainMask + Target;
         rb.includeLayers = terrainMask + Target;
-        col2d.excludeLayers = ~col2d.includeLayers;
-        rb.excludeLayers = ~rb.includeLayers;
         this.damage = damage;
         this.element = element;
         this.owner = owner;
@@ -84,8 +82,6 @@ public abstract class EnemyProjectile : MonoBehaviour, IPoolable<EnemyProjectile
     {
         col2d.includeLayers = 0;
         rb.includeLayers = 0;
-        col2d.excludeLayers = 0;
-        rb.excludeLayers = 0;
         if(!IsPooled)
             Pool.PoolObj(this);
     }

@@ -34,31 +34,10 @@ public class Abilities : MonoBehaviour
         }
         //remember to uncheck them when done with debugging
         //SetAbilities();
-        PCM.UI.UpdateAbilityText(GetName(0), GetName(1), GetName(2));
     }
     public void ToggleActiveAbilitySet(InputAction.CallbackContext context)
     {
         AbilitySetOne = !AbilitySetOne;
-        if (AbilitySetOne)
-        {
-            PCM.UI.UpdateAbilityText(GetName(3), GetName(4), GetName(5));
-        }
-        else
-        {
-            PCM.UI.UpdateAbilityText(GetName(0), GetName(1), GetName(2));
-        }
-    }
-
-    private string GetName(int index)
-    {
-        if(abilities[index] == null)
-        {
-            return "";
-        }
-        else
-        {
-            return abilities[index].name;
-        }
     }
     public void CastSlotOne()
     {
@@ -93,7 +72,6 @@ public class Abilities : MonoBehaviour
             return;
         if (!PCM.system.AttemptCast(selected.castCost))
             return;
-        PCM.control.SetAbilityState();
         //play animation
         Pool<AbilityBase> temp;
         if (pools.TryGetValue(selected.type, out temp))

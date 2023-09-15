@@ -31,10 +31,11 @@ public class ComboBase : MonoBehaviour, IPoolable<ComboBase>
         this.tier = tier;
         transform.position = pos;
         areaComboSO = SO;
-        col2D.radius = SO.radius[tier];
-        col2D.includeLayers = target;
+        col2D.radius = SO.radius;
+        targetLayer = target;
+        col2D.excludeLayers += ~targetLayer;
         
-        timer.SetTime((int)ComboTimers.lifetime, areaComboSO.Duration[tier]);
+        timer.SetTime((int)ComboTimers.lifetime, areaComboSO.Duration);
         timer.SetTime((int)ComboTimers.damageTick, 0.1f);
     }
     public void InitSpawn()
@@ -49,11 +50,11 @@ public class ComboBase : MonoBehaviour, IPoolable<ComboBase>
         timer.SetTime((int)ComboTimers.damageTick, areaComboSO.damageTickRate);
         for (int i = 0; i < hitTargets.Count; i++)
         {
-            hitTargets[i].TakeDamage(areaComboSO.BaseDamage[tier], areaComboSO.StaggerDamage[tier], areaComboSO.typeOne, areaComboSO.typeTwo);
+            hitTargets[i].TakeDamage(areaComboSO.BaseDamage[tier], areaComboSO.StaggerDamage, areaComboSO.typeOne, areaComboSO.typeTwo);
         }
     }
 
-    protected virtual void OnTriggerEnter2D(Collider2D collision)
+    protected virtual void OnTriggerStay2D(Collider2D collision)
     {
         IDamageable foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
@@ -91,7 +92,7 @@ public class ComboBase : MonoBehaviour, IPoolable<ComboBase>
     public void PoolSelf()
     {
         timer.ResetToZero();
-        col2D.includeLayers = 0;
+        col2D.excludeLayers -= ~targetLayer;
         Pool.PoolObj(this);
     }
     #endregion
