@@ -81,8 +81,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: Header("Other")]
     [field: SerializeField] protected AudioSource WalkingSound { get; set; }
     [field: SerializeField] protected GameObject DeathSoundPrefab { get; set; }
-    [field: SerializeField] protected Image HealthBarImage { get; set; }
-    protected float HealthBarPercentage { get; set; }
     [field: SerializeField] protected Image ElementEffectImage { get; set; }
     [field: SerializeField] protected GameObject StaggeredImage { get; set; }
     Rigidbody2D IDamageable.rb => rb;
@@ -210,7 +208,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     public virtual void SetStats()
     {
         SetHitPoints();
-        if (HealthBarImage) HealthBarImage.fillAmount = 100;
     }
 
     public void SetHitPoints()
@@ -248,9 +245,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         }
         AddToStaggerBar(staggerPoints);
 
-        HealthBarPercentage = Hitpoints / MaxHealth;
-        if (HealthBarImage) HealthBarImage.fillAmount = HealthBarPercentage;
-
         HealthBarController.UpdateSegments((int)Hitpoints);
 
         if (typeTwo == ElementType.noElement && type != ElementType.noElement) InterruptAttack();
@@ -281,7 +275,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     public virtual void OnDeath()
     {
-        Debug.Log("Dying");
         if (DeathSoundPrefab) Instantiate(DeathSoundPrefab);
         Manager.DecrementActiveEnemyCounter();
         GameManager.Instance.AddSouls(Souls);

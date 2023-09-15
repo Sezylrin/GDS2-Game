@@ -16,18 +16,22 @@ public class HealthBarSegmentController : MonoBehaviour
     {
         MaxHealth = maxHealth;
 
-        if (segments.Count > (MaxHealth / HealthOfSegment)) // If there are more segments in the list than there should be
+        float numberOfActualSegments = (float)MaxHealth / (float)HealthOfSegment;
+        float numberOfFullSegments = Mathf.Floor(MaxHealth / HealthOfSegment);
+        float leftoverHealthPercent = numberOfActualSegments - numberOfFullSegments;
+
+        if (segments.Count > numberOfActualSegments) // If there are more segments in the list than there should be
         {
-            if (CheckForEvenHealth()) // If the max health divides evenly amongst all segments
+            if (leftoverHealthPercent == 0) // If the max health divides evenly amongst all segments
             {
-                while (segments.Count > MaxHealth / HealthOfSegment) // Remove segments until we reach the right amount
+                while (segments.Count > numberOfActualSegments) // Remove segments until we reach the right amount
                 {
                     RemoveSegment();
                 }
             }
             else
             {
-                while (segments.Count > (MaxHealth / HealthOfSegment) + 1) // Remove segments until we have the right amount of equal segments + 1 segment for the leftover health
+                while (segments.Count > (numberOfActualSegments) + 1) // Remove segments until we have the right amount of equal segments + 1 segment for the leftover health
                 {
                     RemoveSegment();
                 }
@@ -35,7 +39,7 @@ public class HealthBarSegmentController : MonoBehaviour
         }
         else //If there are less segments in the list than there should be
         {
-            while (segments.Count < MaxHealth / HealthOfSegment) // Add segments until we reach the right amount (including + 1 segment for leftover health if needed)
+            while (segments.Count < numberOfActualSegments) // Add segments until we reach the right amount (including + 1 segment for leftover health if needed)
             {
                 CreateNewSegment();
             }
@@ -46,10 +50,10 @@ public class HealthBarSegmentController : MonoBehaviour
             segment.SetToGreen();
             segment.UpdateFillPercent(100);
         }
+
         if (!CheckForEvenHealth()) // If max health does not divide evenly amongst all segments, update the last segment to the correct visual
         {
-            int lastSegmentSize = MaxHealth - (HealthOfSegment * (segments.Count - 1));
-            segments[segments.Count - 1].UpdateFillPercent(HealthOfSegment / lastSegmentSize);
+            segments[(int)numberOfFullSegments].UpdateFillPercent(leftoverHealthPercent);
         }
     }
 

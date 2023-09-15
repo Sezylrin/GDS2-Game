@@ -304,7 +304,7 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    private void KillEnemies()
+    public void KillEnemies()
     {
         foreach (Enemy enemy in enemyList)
         {
