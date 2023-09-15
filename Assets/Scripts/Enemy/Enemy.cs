@@ -89,6 +89,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field:SerializeField] protected AIPath path { get; set; }
     protected EnemyManager Manager { get; set; }
     protected ElementCombo ComboManager { get; set; }
+    [field: SerializeField] protected HealthBarSegmentController HealthBarController { get; set; }
     #endregion
 
     #region Combo Interface Properties
@@ -131,6 +132,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         SetElementImage();
         targetTr = GameManager.Instance.PlayerTransform;
         TargetLayer = PlayerLayer;
+        HealthBarController.SetInitialSegments((int)MaxHealth);
     }
 
     public virtual void Init(Vector2 spawnLocation, ElementType element)
@@ -239,6 +241,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
         HealthBarPercentage = Hitpoints / MaxHealth;
         if (HealthBarImage) HealthBarImage.fillAmount = HealthBarPercentage;
+
+        HealthBarController.UpdateSegments((int)Hitpoints);
 
         if (WindingUp && typeTwo == ElementType.noElement && type != ElementType.noElement) InterruptAttack();
     }
