@@ -62,7 +62,6 @@ public class LevelGenerator : MonoBehaviour
         else
         {
             _instance = this;
-            DontDestroyOnLoad(gameObject);
         }
     }
 
@@ -132,7 +131,18 @@ public class LevelGenerator : MonoBehaviour
 
         SceneManager.LoadScene(scenePath);
     }
+    public void TriggerFade()
+    {
+        StartCoroutine(TriggerCrossFadeStart());
+    }
+    public IEnumerator TriggerCrossFadeStart()
+    {
+        crossFadeAnimator.SetTrigger("Start");
 
+        yield return new WaitForSeconds(crossFadeTime);
+
+        TriggerCrossFadeEnd();
+    }
     public void TriggerCrossFadeEnd()
     {
         crossFadeAnimator.SetTrigger("End");

@@ -61,7 +61,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1141889249
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &2489379558924919619
@@ -393,8 +393,8 @@ Transform:
   m_GameObject: {fileID: 2489379560098110650}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1, y: 0, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.29, y: 1.29, z: 1.29}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2489379559232324766}
   m_RootOrder: -1
@@ -437,9 +437,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 1725982173
+  m_SortingLayer: 4
+  m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 0.67058825, b: 0, a: 0.41960785}
   m_FlipX: 0
@@ -554,8 +554,8 @@ Transform:
   m_GameObject: {fileID: 2489379560232288714}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1, y: 0, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.29, y: 1.29, z: 1.29}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2489379559232324766}
   m_RootOrder: -1
@@ -598,9 +598,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 1725982173
+  m_SortingLayer: 4
+  m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -627,7 +627,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -694,7 +694,7 @@ Transform:
   - {fileID: 2489379558924919621}
   - {fileID: 2489379559232324766}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2489379560569873067
 SpriteRenderer:
@@ -735,7 +735,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1725982173
-  m_SortingLayer: 2
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0, g: 1, b: 0.93678236, a: 1}
@@ -763,7 +763,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -806,7 +806,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 1
+  m_LinearDrag: 5
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -833,12 +833,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Type>k__BackingField: 1
-  <Element>k__BackingField: 0
+  <Element>k__BackingField: 32
   <Hitpoints>k__BackingField: 100
   <MaxHealth>k__BackingField: 100
   <Damage>k__BackingField: 10
   <Speed>k__BackingField: 0
-  <Souls>k__BackingField: 0
+  <Souls>k__BackingField: 25
   <WindingUp>k__BackingField: 0
   <EnemyTimers>k__BackingField:
     <times>k__BackingField: []
@@ -856,7 +856,7 @@ MonoBehaviour:
   <AttackCooldownDuration>k__BackingField: 10
   <PointsToStagger>k__BackingField: 100
   <WindupDuration>k__BackingField: 1
-  <debugElement>k__BackingField: 2
+  <debugElement>k__BackingField: 8
   <debugDamage>k__BackingField: 20
   <debugStaggerPoints>k__BackingField: 50
   <debugTakeDamage>k__BackingField: 0
@@ -864,6 +864,7 @@ MonoBehaviour:
   <debugStartStagger>k__BackingField: 0
   <debugAttemptAttack>k__BackingField: 0
   <debugInterruptAttack>k__BackingField: 0
+  <debugEnemySpawn>k__BackingField: 0
   <WalkingSound>k__BackingField: {fileID: 0}
   <DeathSoundPrefab>k__BackingField: {fileID: 0}
   <HealthBarImage>k__BackingField: {fileID: 2489379561012669698}
@@ -893,8 +894,10 @@ MonoBehaviour:
   IdleMoveRateMax: 5
   RepositionRateMin: 1
   RepositionRateMax: 3
-  AttackEndAiCD: 0.25
+  AttackEndAiCD: 0.75
   currentState: 0
+  hasDestination: 0
+  targetTr: {fileID: 0}
   <hitboxCentre>k__BackingField: {fileID: 2489379559232324766}
   <WarningBox>k__BackingField: {fileID: 2489379560098110650}
   <AttackHitbox>k__BackingField: {fileID: 2489379560232288714}

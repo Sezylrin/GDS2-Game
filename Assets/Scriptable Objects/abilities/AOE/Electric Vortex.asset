@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76d5bbfd3d5dd9746bcfe99438c2b0ec, type: 3}
   m_Name: Electric Vortex
   m_EditorClassIdentifier: 
+  color: {fileID: 2100000, guid: 7c4faa0fd6a98c343899f82f2da05ea7, type: 2}
   elementType: 4
   type: 1
   castCost: 2
   pierceAmount: 99
   damage: 0
+  knockback: 0
   Stagger: 0
   lifeTime: 0
   radius: 0

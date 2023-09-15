@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76d5bbfd3d5dd9746bcfe99438c2b0ec, type: 3}
   m_Name: Inferno Whirlwind
   m_EditorClassIdentifier: 
+  color: {fileID: 2100000, guid: b6b1f8e9ff3150e4ba23179c757e8ab6, type: 2}
   elementType: 1
   type: 1
   castCost: 3
   pierceAmount: 99
   damage: 0
+  knockback: 0
   Stagger: 0
   lifeTime: 0
   radius: 0

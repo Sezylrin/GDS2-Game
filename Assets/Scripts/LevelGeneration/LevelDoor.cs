@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelDoor : MonoBehaviour
+public class LevelDoor : InteractionBase
 {
     [Serializable]
     public enum DoorPosition
@@ -29,13 +29,34 @@ public class LevelDoor : MonoBehaviour
         RemoveUnneededDoors();
     }
 
-    private void OnTriggerEnter2D(Collider2D otherCollider)
+    public override void Interact()
     {
-        if (!otherCollider.CompareTag("Player")) return;
-        if (!Level.Instance.isCleared) return;
-        ExitLevel();
+        if(Level.Instance.isCleared)
+            ExitLevel();
+    }
+    protected override void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!Level.Instance.isCleared)
+            return;
+        if (collision.CompareTag(Tags.T_Player))
+        {
+            GameManager.Instance.SetInteraction(this);
+            if (UI)
+                UI.SetActive(true);
+        }
     }
 
+    protected override void OnTriggerExit2D(Collider2D collision)
+    {
+        if (!Level.Instance.isCleared)
+            return;
+        if (collision.CompareTag(Tags.T_Player))
+        {
+            GameManager.Instance.RemoveInteraction(this);
+            if (UI)
+                UI.SetActive(false);
+        }
+    }
     private void OpenDoor()
     {
         //TODO: Animate

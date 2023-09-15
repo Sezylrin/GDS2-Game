@@ -341,12 +341,16 @@ public class EnemyManager : MonoBehaviour
         }
         foreach(Enemy enemy in enemyList)
         {
-            float temp = Vector3.Distance(origin.position, enemy.transform.position);
-            if (temp < distance)
+            if (enemy.transform != origin)
             {
-                distance = temp;
-                nearest = enemy.transform;
+                float temp = Vector3.Distance(origin.position, enemy.transform.position);
+                if (temp < distance)
+                {
+                    distance = temp;
+                    nearest = enemy.transform;
+                }
             }
+            
         }
         return nearest;
     }
