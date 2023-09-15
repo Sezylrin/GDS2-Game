@@ -10,6 +10,8 @@ public class BlastAbility : AbilityBase
     private BlastVariantSO selected;
     [SerializeField]
     private PolygonCollider2D col2D;
+    [SerializeField]
+    private AbilityMeshGeneration blastMesh;
 
     private Coroutine blastCoroutine;
 
@@ -28,6 +30,7 @@ public class BlastAbility : AbilityBase
     protected override void CastAbility()
     {
         selected = selectedAbility as BlastVariantSO;
+        blastMesh.SetMaterial(selected.color);
         transform.position = initialPos;
         RotateSelf();
         col2D.SetPath(0, selected.initialShape);
@@ -58,11 +61,13 @@ public class BlastAbility : AbilityBase
                     corners[i] = selected.finalShape[i];
                 }
             }
+            blastMesh.SetVertex(corners);
             col2D.SetPath(0, corners);
             yield return null;
         }
         if(selected.speed == 0)
         {
+            blastMesh.SetVertex(corners);
             col2D.SetPath(0, selected.finalShape);
         }
         StopExpand();
