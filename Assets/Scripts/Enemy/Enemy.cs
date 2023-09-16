@@ -75,7 +75,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: SerializeField] protected AudioSource WalkingSound { get; set; }
     [field: SerializeField] protected GameObject DeathSoundPrefab { get; set; }
     [field: SerializeField] protected Image ElementEffectImage { get; set; }
-    [field: SerializeField] protected GameObject StaggeredImage { get; set; }
     Rigidbody2D IDamageable.rb => rb;
     [field: SerializeField] protected Rigidbody2D rb { get; private set; }
     [field:SerializeField] protected AIPath path { get; set; }
