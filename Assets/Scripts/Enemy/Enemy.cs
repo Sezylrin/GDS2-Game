@@ -126,6 +126,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         targetTr = GameManager.Instance.PlayerTransform;
         TargetLayer = PlayerLayer;
         HealthBarController.SetInitialSegments((int)MaxHealth);
+
+        if (debugDisableAI) Debug.LogWarning(this + "'s AI is Disabled");
     }
 
     public virtual void Init(Vector2 spawnLocation, ElementType element)
@@ -519,9 +521,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     private Vector3 spawnPos;
     [SerializeField][ReadOnly]
     protected Transform targetTr;
+    [SerializeField] protected bool debugDisableAI = false;
 
     protected virtual void EnemyAi()
     {
+        if (debugDisableAI) return;
+        
         if (currentState == EnemyState.chasing)
         {
             DetermineAttackPathing();
