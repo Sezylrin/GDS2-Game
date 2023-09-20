@@ -133,6 +133,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     [Header("Health")]
     [SerializeField]
     private float startingHitPoint;
+    private float actualMaxHealth;
     private void CalculateDamage(float amount)
     {
         if (!timer.IsTimeZero((int)SystemCD.iFrames))
@@ -149,21 +150,40 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         SetHealthUI();
     }
 
+
+
     public void FullHeal()
     {
-        Hitpoints = startingHitPoint + GameManager.Instance.StatsManager.bonusHealth;
+        Hitpoints = actualMaxHealth;
         SetHealthUI();
     }
+    
+    public void Heal(int health)
+    {
+        Hitpoints += health;
+        if (Hitpoints > actualMaxHealth) Hitpoints = actualMaxHealth;
+        SetHealthUI();
+    }
+    
+    public void Heal(float health)
+    {
+        if (health < 0) health = 0;
+        int healAmount = (int)Mathf.Ceil(actualMaxHealth * health);
+        Heal(healAmount);
+    }
+    
 
     private void SetHealthUI()
     {
-        PCM.UI.SetGreenHealthBar(Hitpoints / (startingHitPoint + GameManager.Instance.StatsManager.bonusHealth));
+        PCM.UI.SetGreenHealthBar(Hitpoints / actualMaxHealth);
     }
 
     public void UpgradeHealth()
     {
+        actualMaxHealth = startingHitPoint + GameManager.Instance.StatsManager.bonusHealth;
         FullHeal();
     }
+    
     #endregion
 
     #region Damage Interface
@@ -180,7 +200,8 @@ public class PlayerSystem : MonoBehaviour, IDamageable
 
     public void SetHitPoints()
     {
-        Hitpoints = startingHitPoint;
+        actualMaxHealth = startingHitPoint + GameManager.Instance.StatsManager.bonusHealth;
+        Hitpoints = actualMaxHealth;
     }
 
     public void TakeDamage(float amount, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement)

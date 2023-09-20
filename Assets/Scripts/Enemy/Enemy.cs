@@ -39,7 +39,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: SerializeField] protected int Damage { get; set; } = 10;
     [field: SerializeField] protected float Speed { get; set; } = 1;
     [field: SerializeField] protected int Souls { get; set; } = 1;
-    [field: SerializeField, ReadOnly] protected bool WindingUp { get; set; } = false;
+    [field: SerializeField, ReadOnly] protected bool WindingUp { get; set; }
     [field: SerializeField] protected Timer EnemyTimers { get; private set; }
     #endregion
 
@@ -116,8 +116,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     private float currentWitherBonus = 1;
     #endregion
 
-    //protected EnemyManager Manager { get; set; }
-    //protected Player Player { get; set; }
     #region Init Function
     public virtual void Init()
     {
@@ -132,6 +130,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         HealthBarController.SetInitialSegments((int)MaxHealth);
         HealthBarController.SetLowHealthThreshold(ConsumableHealthPercent);
 
+        EnemyTimers.ResetToZero();
+
+        StaggerBar.ResetStagger();
+
+        WindingUp = false;
         Staggered = false;
         AbleToAttack = true;
         Consumable = false;
@@ -155,7 +158,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     protected virtual void Start()
     {
-        Init();
         ComboManager = GameManager.Instance.ComboManager;
         Manager = GameManager.Instance.EnemyManager;
         if (debugEnemySpawn)
@@ -307,6 +309,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     public void ResetSpeed()
     {
         path.maxSpeed = Speed;
+    }
+
+    public bool CheckIfConsumable()
+    {
+        return Consumable;
     }
     #endregion
 

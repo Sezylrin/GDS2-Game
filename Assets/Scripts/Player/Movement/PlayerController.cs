@@ -180,6 +180,11 @@ public class PlayerController : MonoBehaviour
         if (context.interaction is PressInteraction)
             BufferInput(actionState.abilityThree);
     }
+
+    public void Consume(InputAction.CallbackContext context)
+    {
+        GameManager.Instance.CallConsume();
+    }
     #endregion
 
     #region Updates

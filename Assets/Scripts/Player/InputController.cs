@@ -29,6 +29,7 @@ public class InputController : MonoBehaviour
         player.AbilityThree.performed += PCM.control.BufferAbilityThree;
         player.ToggleAbilities.performed += PCM.abilities.ToggleActiveAbilitySet;
         player.Interact.performed += PCM.control.Interact;
+        player.Consume.performed += PCM.control.Consume;
 
         GameManager.Instance.SetPlayerTransform(transform, PCM);
     }
@@ -45,6 +46,8 @@ public class InputController : MonoBehaviour
         player.AbilityTwo.performed -= PCM.control.BufferAbilityTwo;
         player.AbilityThree.performed -= PCM.control.BufferAbilityThree;
         player.ToggleAbilities.performed -= PCM.abilities.ToggleActiveAbilitySet;
+        player.Interact.performed -= PCM.control.Interact;
+        player.Consume.performed -= PCM.control.Consume;
         player.Disable();
     }
     // Update is called once per frame

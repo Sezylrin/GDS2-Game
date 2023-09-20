@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     public Transform PlayerTransform { get; private set; }
     public PlayerComponentManager PCM { get; private set; }
     private InteractionBase interaction;
+    private Consume consume;
+
     private void Awake()
     {
         if (Instance != null)
@@ -72,6 +74,26 @@ public class GameManager : MonoBehaviour
         if (interaction)
         {
             interaction.Interact();
+        }
+    }
+    public void SetConsume(Consume consume)
+    {
+        this.consume = consume;
+    }
+
+    public void RemoveConsume(Consume consume)
+    {
+        if (this.consume == consume)
+        {
+            this.consume = null;
+        }
+    }
+
+    public void CallConsume()
+    {
+        if (consume)
+        {
+            consume.TriggerConsume();
         }
     }
 }

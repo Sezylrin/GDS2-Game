@@ -107,6 +107,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Consume"",
+                    ""type"": ""Button"",
+                    ""id"": ""19e92c11-70d9-4494-a932-4f84839c1898"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -393,6 +402,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""ToggleAbilities"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8859c9b7-470c-420f-be6f-f88b33bbb941"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Consume"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1049,6 +1069,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_Player_AbilityTwo = m_Player.FindAction("AbilityTwo", throwIfNotFound: true);
         m_Player_AbilityThree = m_Player.FindAction("AbilityThree", throwIfNotFound: true);
         m_Player_ToggleAbilities = m_Player.FindAction("ToggleAbilities", throwIfNotFound: true);
+        m_Player_Consume = m_Player.FindAction("Consume", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1134,6 +1155,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_AbilityTwo;
     private readonly InputAction m_Player_AbilityThree;
     private readonly InputAction m_Player_ToggleAbilities;
+    private readonly InputAction m_Player_Consume;
     public struct PlayerActions
     {
         private @PlayerInput m_Wrapper;
@@ -1147,6 +1169,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @AbilityTwo => m_Wrapper.m_Player_AbilityTwo;
         public InputAction @AbilityThree => m_Wrapper.m_Player_AbilityThree;
         public InputAction @ToggleAbilities => m_Wrapper.m_Player_ToggleAbilities;
+        public InputAction @Consume => m_Wrapper.m_Player_Consume;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1183,6 +1206,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @ToggleAbilities.started += instance.OnToggleAbilities;
             @ToggleAbilities.performed += instance.OnToggleAbilities;
             @ToggleAbilities.canceled += instance.OnToggleAbilities;
+            @Consume.started += instance.OnConsume;
+            @Consume.performed += instance.OnConsume;
+            @Consume.canceled += instance.OnConsume;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1214,6 +1240,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @ToggleAbilities.started -= instance.OnToggleAbilities;
             @ToggleAbilities.performed -= instance.OnToggleAbilities;
             @ToggleAbilities.canceled -= instance.OnToggleAbilities;
+            @Consume.started -= instance.OnConsume;
+            @Consume.performed -= instance.OnConsume;
+            @Consume.canceled -= instance.OnConsume;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1429,6 +1458,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnAbilityTwo(InputAction.CallbackContext context);
         void OnAbilityThree(InputAction.CallbackContext context);
         void OnToggleAbilities(InputAction.CallbackContext context);
+        void OnConsume(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

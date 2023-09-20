@@ -101,4 +101,12 @@ public class StaggerBar : MonoBehaviour
             }
         }
     }
+
+    public void ResetStagger()
+    {
+        Staggered = false;
+        Bar = 0;
+        StaggerTimers.ResetToZero();
+        SetToOrange();
+    }
 }
