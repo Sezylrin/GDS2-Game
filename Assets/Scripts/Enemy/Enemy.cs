@@ -47,8 +47,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: Header("Status Effects")]
     [field: SerializeField, ReadOnly] protected ElementType ActiveElementEffect { get; set; }
     [field: SerializeField, ReadOnly] protected int ElementTier { get; set; }
-    [field: SerializeField, ReadOnly] protected bool Staggered { get; set; } = false;
-    [field: SerializeField, ReadOnly] protected bool AbleToAttack { get; set; } = true;
+    [field: SerializeField, ReadOnly] protected bool Staggered { get; set; }
+    [field: SerializeField, ReadOnly] protected bool AbleToAttack { get; set; }
+    [field: SerializeField, ReadOnly] protected bool Consumable { get; set; }
+
     #endregion
 
     #region Testing Variables
@@ -57,6 +59,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: SerializeField] protected float AttackDuration { get; set; } = 1;
     [field: SerializeField] protected float AttackCooldownDuration { get; set; } = 10;
     [field: SerializeField] protected float WindupDuration { get; set; } = 1;
+    [field: SerializeField] protected int ConsumableHealthPercent { get; set; } = 25;
 
     [field: Header("Debug Testing")]
     [field: SerializeField] ElementType debugElement { get; set; } = ElementType.water;
@@ -82,6 +85,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     protected ElementCombo ComboManager { get; set; }
     [field: SerializeField] protected HealthBarSegmentController HealthBarController { get; set; }
     [field: SerializeField] protected StaggerBar StaggerBar { get; set; }
+    [field: SerializeField] protected GameObject ConsumableHitbox { get; set; }
 
     #endregion
 
@@ -126,6 +130,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         targetTr = GameManager.Instance.PlayerTransform;
         TargetLayer = PlayerLayer;
         HealthBarController.SetInitialSegments((int)MaxHealth);
+        HealthBarController.SetLowHealthThreshold(ConsumableHealthPercent);
+
+        Staggered = false;
+        AbleToAttack = true;
+        Consumable = false;
+        ConsumableHitbox.SetActive(false);
 
         if (debugDisableAI) Debug.LogWarning(this + "'s AI is Disabled");
     }
@@ -236,7 +246,17 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
             ElementTier = tier;
             ApplyElementEffect(type);
         }
+
         StaggerBar.AddToStaggerBar(staggerPoints);
+
+        if (!Consumable)
+        {
+            if (Hitpoints / MaxHealth * 100 <= ConsumableHealthPercent)
+            {
+                ConsumableHitbox.SetActive(true);
+                Consumable = true;
+            }
+        }
 
         HealthBarController.UpdateSegments((int)Hitpoints);
 

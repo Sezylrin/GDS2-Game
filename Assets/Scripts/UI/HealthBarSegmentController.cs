@@ -9,8 +9,7 @@ public class HealthBarSegmentController : MonoBehaviour
     private List<HealthBarSegment> segments = new List<HealthBarSegment>();
     private int MaxHealth { get; set; }
     [field: SerializeField] private int HealthOfSegment { get; set; } = 100;
-    [field: SerializeField] private int LowHealthThreshholdPercent { get; set; } = 25;
-    private IDamageable Parent { get; set; }
+    private int LowHealthThresholdPercent { get; set; }
 
     public void SetInitialSegments(int maxHealth)
     {
@@ -85,7 +84,7 @@ public class HealthBarSegmentController : MonoBehaviour
             segments[(int)numberOfFullSegments].UpdateFillPercent(leftoverHealthPercent);
         }
 
-        if (currentHealth <= MaxHealth * LowHealthThreshholdPercent / 100)
+        if (currentHealth <= MaxHealth * LowHealthThresholdPercent / 100)
         {
             foreach (HealthBarSegment segment in segments)
             {
@@ -97,5 +96,10 @@ public class HealthBarSegmentController : MonoBehaviour
     private bool CheckForEvenHealth()
     {
         return MaxHealth % HealthOfSegment == 0;
+    }
+
+    public void SetLowHealthThreshold(int percent)
+    {
+        LowHealthThresholdPercent = percent;
     }
 }
