@@ -28,6 +28,9 @@ public class PlayerUI : MonoBehaviour
     [Header("Souls UI")]
     [SerializeField]
     private TMP_Text soulsTxt;
+    [Header("Consume UI")]
+    [SerializeField]
+    private Image consumeBarImage;
 
     void Start()
     {
@@ -74,5 +77,20 @@ public class PlayerUI : MonoBehaviour
     public void UpdateSoulsText()
     {
         soulsTxt.text = GameManager.Instance.Souls.ToString();
+    }
+
+    public void UpdateConsumeBar(float fillAmount)
+    {
+        consumeBarImage.fillAmount = fillAmount;
+        if (fillAmount == 1)
+        {
+            consumeBarImage.color = Color.red;
+        }
+    }
+
+    public void EmptyConsumeBar()
+    {
+        consumeBarImage.fillAmount = 0;
+        consumeBarImage.color = new Color(255, 162, 0);
     }
 }

@@ -60,6 +60,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: SerializeField] protected float AttackCooldownDuration { get; set; } = 10;
     [field: SerializeField] protected float WindupDuration { get; set; } = 1;
     [field: SerializeField] protected int ConsumableHealthPercent { get; set; } = 25;
+    [field: SerializeField, Range(0, 1)] protected float HealthPercentReceivedOnConsume { get; set; } = 0.1f;
 
     [field: Header("Debug Testing")]
     [field: SerializeField] ElementType debugElement { get; set; } = ElementType.water;
@@ -85,6 +86,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     protected ElementCombo ComboManager { get; set; }
     [field: SerializeField] protected HealthBarSegmentController HealthBarController { get; set; }
     [field: SerializeField] protected StaggerBar StaggerBar { get; set; }
+    [field: SerializeField] protected Consume Consume { get; set; }
     [field: SerializeField] protected GameObject ConsumableHitbox { get; set; }
 
     #endregion
@@ -129,6 +131,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         TargetLayer = PlayerLayer;
         HealthBarController.SetInitialSegments((int)MaxHealth);
         HealthBarController.SetLowHealthThreshold(ConsumableHealthPercent);
+        Consume.SetHealthRecievedPercent(HealthPercentReceivedOnConsume);
 
         EnemyTimers.ResetToZero();
 

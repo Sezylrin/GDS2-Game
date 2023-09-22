@@ -1450,6 +1450,7 @@ MonoBehaviour:
   <AttackCooldownDuration>k__BackingField: 10
   <WindupDuration>k__BackingField: 1
   <ConsumableHealthPercent>k__BackingField: 25
+  <HealthPercentReceivedOnConsume>k__BackingField: 0.1
   <debugElement>k__BackingField: 2
   <debugDamage>k__BackingField: 75
   <debugStaggerPoints>k__BackingField: 50
@@ -1466,6 +1467,7 @@ MonoBehaviour:
   <path>k__BackingField: {fileID: 44327001}
   <HealthBarController>k__BackingField: {fileID: 1012920425}
   <StaggerBar>k__BackingField: {fileID: 1569979671}
+  <Consume>k__BackingField: {fileID: 506776005}
   <ConsumableHitbox>k__BackingField: {fileID: 506776003}
   <ActiveCombos>k__BackingField: 
   <ComboEffectTimer>k__BackingField:

@@ -36,11 +36,13 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     [Header("Ability Stats")]
     [SerializeField]
     private int MaxCastPoints;
-    [SerializeField][ReadOnly]
+    [SerializeField]
+    [ReadOnly]
     private int currentCastPoints;
     [SerializeField]
     private float pointRegenRate;
-    [SerializeField][ReadOnly]
+    [SerializeField]
+    [ReadOnly]
     private float regenTimer;
     [SerializeField]
     private float regenDelay;
@@ -157,21 +159,21 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         Hitpoints = actualMaxHealth;
         SetHealthUI();
     }
-    
+
     public void Heal(int health)
     {
         Hitpoints += health;
         if (Hitpoints > actualMaxHealth) Hitpoints = actualMaxHealth;
         SetHealthUI();
     }
-    
+
     public void Heal(float health)
     {
         if (health < 0) health = 0;
         int healAmount = (int)Mathf.Ceil(actualMaxHealth * health);
         Heal(healAmount);
     }
-    
+
 
     private void SetHealthUI()
     {
@@ -183,11 +185,12 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         actualMaxHealth = startingHitPoint + GameManager.Instance.StatsManager.bonusHealth;
         FullHeal();
     }
-    
+
     #endregion
 
     #region Damage Interface
-    [field: SerializeField][field:ReadOnly]
+    [field: SerializeField]
+    [field: ReadOnly]
     public float Hitpoints { get; set; }
     Rigidbody2D IDamageable.rb { get => PCM.control.rb; }
 
@@ -221,12 +224,43 @@ public class PlayerSystem : MonoBehaviour, IDamageable
 
     public void ModifySpeed(float percentage)
     {
-        
+
     }
 
     public void ResetSpeed()
     {
-        
+
     }
+    #endregion
+
+    #region Consume
+    [Header("Consume")]
+    [SerializeField] private int consumeBar;
+    [SerializeField] private int consumeBarMax;
+    [SerializeField] private bool canConsume = false;
+
+    public void AddToConsumeBar(int consumeValue)
+    {
+        consumeBar += consumeValue;
+        PCM.UI.UpdateConsumeBar(consumeBar / consumeBarMax);
+        if (consumeBar > consumeBarMax)
+        {
+            canConsume = true;
+        }
+    }
+
+    public void UseConsume(float health)
+    {
+        canConsume = false;
+        consumeBar = 0;
+        Heal(health);
+        PCM.UI.EmptyConsumeBar();
+    }
+
+    public bool CanConsume()
+    {
+        return canConsume;
+    }
+
     #endregion
 }
