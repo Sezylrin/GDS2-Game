@@ -6,13 +6,14 @@ public class Consume : MonoBehaviour
 {
     [field: SerializeField] private Enemy enemy;
     [field: SerializeField] private GameObject UI;
+    private int healthReceivedPercent;
 
     public void TriggerConsume()
     {
-        if (enemy.CheckIfConsumable())
+        if (enemy.CheckIfConsumable() && GameManager.Instance.PCM.system.CanConsume())
         {
             GameManager.Instance.RemoveConsume(this);
-            GameManager.Instance.PCM.system.FullHeal(); // Full heals -- TEMP
+            GameManager.Instance.PCM.system.UseConsume(healthReceivedPercent);
             enemy.OnDeath();
         }
     }
@@ -35,5 +36,10 @@ public class Consume : MonoBehaviour
             if (UI)
                 UI.SetActive(false);
         }
+    }
+
+    public void SetHealthRecievedPercent(int health)
+    {
+        healthReceivedPercent = health;
     }
 }

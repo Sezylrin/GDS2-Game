@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IDamageable
 {
-    public float Hitpoints { get; set; }
+    public int Hitpoints { get; set; }
     public Rigidbody2D rb { get; }
     public void SetHitPoints();
     public void TakeDamage(float amount, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement);

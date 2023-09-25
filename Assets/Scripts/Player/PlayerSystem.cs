@@ -36,11 +36,13 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     [Header("Ability Stats")]
     [SerializeField]
     private int MaxCastPoints;
-    [SerializeField][ReadOnly]
+    [SerializeField]
+    [ReadOnly]
     private int currentCastPoints;
     [SerializeField]
     private float pointRegenRate;
-    [SerializeField][ReadOnly]
+    [SerializeField]
+    [ReadOnly]
     private float regenTimer;
     [SerializeField]
     private float regenDelay;
@@ -132,19 +134,19 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     #region Health
     [Header("Health")]
     [SerializeField]
-    private float startingHitPoint;
-    private float actualMaxHealth;
-    private void CalculateDamage(float amount)
+    private int startingHitPoint;
+    private int actualMaxHealth;
+    private void CalculateDamage(float damage)
     {
         if (!timer.IsTimeZero((int)SystemCD.iFrames))
             return;
-        if (Hitpoints - amount < 0)
+        if (Hitpoints - damage < 0)
         {
             OnDeath();
         }
         else
         {
-            Hitpoints -= amount;
+            Hitpoints -= (int)Mathf.Ceil(damage);
             timer.SetTime((int)SystemCD.iFrames, iframes);
         }
         SetHealthUI();
@@ -157,25 +159,27 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         Hitpoints = actualMaxHealth;
         SetHealthUI();
     }
-    
+
     public void Heal(int health)
     {
         Hitpoints += health;
         if (Hitpoints > actualMaxHealth) Hitpoints = actualMaxHealth;
         SetHealthUI();
     }
-    
-    public void Heal(float health)
+
+    public void HealByPercentage(int percentageToHeal)
     {
-        if (health < 0) health = 0;
-        int healAmount = (int)Mathf.Ceil(actualMaxHealth * health);
+        if (percentageToHeal < 0) percentageToHeal = 0;
+
+        int healAmount = (int)Mathf.Ceil(actualMaxHealth * percentageToHeal / 100);
         Heal(healAmount);
     }
-    
+
 
     private void SetHealthUI()
     {
-        PCM.UI.SetGreenHealthBar(Hitpoints / actualMaxHealth);
+        float heathPercent = (float)Hitpoints / (float)actualMaxHealth;
+        PCM.UI.SetGreenHealthBar(heathPercent);
     }
 
     public void UpgradeHealth()
@@ -183,12 +187,13 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         actualMaxHealth = startingHitPoint + GameManager.Instance.StatsManager.bonusHealth;
         FullHeal();
     }
-    
+
     #endregion
 
     #region Damage Interface
-    [field: SerializeField][field:ReadOnly]
-    public float Hitpoints { get; set; }
+    [field: SerializeField]
+    [field: ReadOnly]
+    public int Hitpoints { get; set; }
     Rigidbody2D IDamageable.rb { get => PCM.control.rb; }
 
     public void OnDeath()
@@ -221,12 +226,43 @@ public class PlayerSystem : MonoBehaviour, IDamageable
 
     public void ModifySpeed(float percentage)
     {
-        
+
     }
 
     public void ResetSpeed()
     {
-        
+
     }
+    #endregion
+
+    #region Consume
+    [Header("Consume")]
+    [SerializeField] private int consumeBar;
+    [SerializeField] private int consumeBarMax;
+    [SerializeField] private bool canConsume = false;
+
+    public void AddToConsumeBar(int consumeValue)
+    {
+        consumeBar += consumeValue;
+        PCM.UI.UpdateConsumeBar(consumeBar / consumeBarMax);
+        if (consumeBar > consumeBarMax)
+        {
+            canConsume = true;
+        }
+    }
+
+    public void UseConsume(int percentageToHeal)
+    {
+        canConsume = false;
+        consumeBar = 0;
+        HealByPercentage(percentageToHeal);
+        PCM.UI.EmptyConsumeBar();
+    }
+
+    public bool CanConsume()
+    {
+        return canConsume;
+    }
+
     #endregion
 }

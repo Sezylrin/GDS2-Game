@@ -1129,7 +1129,7 @@ Transform:
   - {fileID: 1862890625}
   - {fileID: 294510618}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2996488685272666367
 SpriteRenderer:
@@ -1270,24 +1270,25 @@ MonoBehaviour:
   <Type>k__BackingField: 1
   <Element>k__BackingField: 1
   <Hitpoints>k__BackingField: 250
+  <ActiveElementEffect>k__BackingField: 0
+  <ElementTier>k__BackingField: 0
+  <WindingUp>k__BackingField: 0
+  <Staggered>k__BackingField: 0
+  <AbleToAttack>k__BackingField: 1
+  <Consumable>k__BackingField: 0
+  <EnemyTimers>k__BackingField:
+    <times>k__BackingField: []
+    owner: {fileID: 0}
   <MaxHealth>k__BackingField: 250
   <Damage>k__BackingField: 10
   <Speed>k__BackingField: 0
   <Souls>k__BackingField: 40
-  <WindingUp>k__BackingField: 0
-  <EnemyTimers>k__BackingField:
-    <times>k__BackingField: []
-    owner: {fileID: 0}
-  <ActiveElementEffect>k__BackingField: 0
-  <ElementTier>k__BackingField: 0
-  <Staggered>k__BackingField: 0
-  <AbleToAttack>k__BackingField: 1
-  <Consumable>k__BackingField: 0
   <EffectDuration>k__BackingField: 5
   <AttackDuration>k__BackingField: 1
   <AttackCooldownDuration>k__BackingField: 10
   <WindupDuration>k__BackingField: 1
   <ConsumableHealthPercent>k__BackingField: 25
+  <HealthPercentReceivedOnConsume>k__BackingField: 0.1
   <debugElement>k__BackingField: 2
   <debugDamage>k__BackingField: 20
   <debugStaggerPoints>k__BackingField: 50
@@ -1297,14 +1298,15 @@ MonoBehaviour:
   <debugAttemptAttack>k__BackingField: 0
   <debugInterruptAttack>k__BackingField: 0
   <debugEnemySpawn>k__BackingField: 0
-  <WalkingSound>k__BackingField: {fileID: 0}
-  <DeathSoundPrefab>k__BackingField: {fileID: 0}
-  <ElementEffectImage>k__BackingField: {fileID: 988464900}
-  <rb>k__BackingField: {fileID: 882732001}
-  <path>k__BackingField: {fileID: 1090918735}
   <HealthBarController>k__BackingField: {fileID: 972554465}
   <StaggerBar>k__BackingField: {fileID: 378752905}
+  <Consume>k__BackingField: {fileID: 294510619}
   <ConsumableHitbox>k__BackingField: {fileID: 294510617}
+  <ElementEffectImage>k__BackingField: {fileID: 988464900}
+  <WalkingSound>k__BackingField: {fileID: 0}
+  <DeathSoundPrefab>k__BackingField: {fileID: 0}
+  <rb>k__BackingField: {fileID: 882732001}
+  <path>k__BackingField: {fileID: 1090918735}
   <ActiveCombos>k__BackingField: 
   <ComboEffectTimer>k__BackingField:
     <times>k__BackingField: []
