@@ -284,6 +284,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""85395680-02d3-4bb2-b1c2-9e0d87313c66"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""57383629-008e-4236-9d5d-e7f0731be052"",
                     ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
@@ -295,9 +306,20 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""f71b8322-9e65-4b33-9240-b35bd8cb899e"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""f30228cf-4f9a-4e32-941f-c46ac376772f"",
                     ""path"": ""<Keyboard>/q"",
-                    ""interactions"": ""Press,Hold"",
+                    ""interactions"": ""Hold,Press"",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""AbilityOne"",
@@ -306,9 +328,20 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""79870e04-b77f-4013-bab9-c95598f25fed"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": ""Hold(pressPoint=0.2),Press(pressPoint=0.6)"",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""AbilityOne"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""7b2d6b34-000d-4b24-932d-408323c3342c"",
                     ""path"": ""<Keyboard>/e"",
-                    ""interactions"": ""Press,Hold"",
+                    ""interactions"": ""Hold,Press"",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""AbilityTwo"",
@@ -317,11 +350,33 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""21576a6c-2ac8-4b3a-9099-1955f5939e03"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": ""Hold,Press"",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""AbilityTwo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""05bc4d93-1b31-46dc-85ea-15bc84544e55"",
                     ""path"": ""<Keyboard>/shift"",
-                    ""interactions"": ""Press,Hold"",
+                    ""interactions"": ""Hold,Press"",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""AbilityThree"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""401788a3-cbcb-4c26-9549-b58341674121"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": ""Hold,Press"",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
                     ""action"": ""AbilityThree"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -339,11 +394,44 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""bc00afe2-fe4c-4b48-adfb-389afff1d066"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ToggleAbilities"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ceb5a226-d585-4468-b57d-00ae89cb657d"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""ToggleAbilities"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""8859c9b7-470c-420f-be6f-f88b33bbb941"",
                     ""path"": ""<Keyboard>/x"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
+                    ""action"": ""Consume"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2cfbab83-d925-46ae-9eb8-405d5ca5b357"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
                     ""action"": ""Consume"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false

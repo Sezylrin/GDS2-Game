@@ -131,7 +131,7 @@ public class PlayerController : MonoBehaviour
         currentMaxSpeed = maxSpeed;
         currentDashCharges = dashCharges;
         drag = rb.drag;
-
+        GameManager.Instance.OnControlSchemeSwitch += SchemeChange;
     }
     #region Updates
     // Update is called once per frame
@@ -195,6 +195,12 @@ public class PlayerController : MonoBehaviour
         //Debug.Log(context.ReadValue<Vector2>() + " " + Input.mousePosition);
     }
 
+    private void SchemeChange(object sender, EventArgs e)
+    {
+        if (GameManager.Instance.currentScheme == ControlScheme.keyboardAndMouse)
+            GameManager.Instance.ShowCursor();
+    }
+
     public void ControllerCursor()
     {
         if (GameManager.Instance.currentScheme != ControlScheme.controller)
@@ -206,7 +212,7 @@ public class PlayerController : MonoBehaviour
         }
         else
             GameManager.Instance.HideCursor();
-        mousePos = cursorPos.position;
+        mousePos = (Vector2)transform.position + stickPos;
     }
 
     public void BufferLightAttack(InputAction.CallbackContext context)
