@@ -134,19 +134,19 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     #region Health
     [Header("Health")]
     [SerializeField]
-    private float startingHitPoint;
-    private float actualMaxHealth;
-    private void CalculateDamage(float amount)
+    private int startingHitPoint;
+    private int actualMaxHealth;
+    private void CalculateDamage(float damage)
     {
         if (!timer.IsTimeZero((int)SystemCD.iFrames))
             return;
-        if (Hitpoints - amount < 0)
+        if (Hitpoints - damage < 0)
         {
             OnDeath();
         }
         else
         {
-            Hitpoints -= amount;
+            Hitpoints -= (int)Mathf.Ceil(damage);
             timer.SetTime((int)SystemCD.iFrames, iframes);
         }
         SetHealthUI();
@@ -167,17 +167,19 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         SetHealthUI();
     }
 
-    public void Heal(float health)
+    public void HealByPercentage(int percentageToHeal)
     {
-        if (health < 0) health = 0;
-        int healAmount = (int)Mathf.Ceil(actualMaxHealth * health);
+        if (percentageToHeal < 0) percentageToHeal = 0;
+
+        int healAmount = (int)Mathf.Ceil(actualMaxHealth * percentageToHeal / 100);
         Heal(healAmount);
     }
 
 
     private void SetHealthUI()
     {
-        PCM.UI.SetGreenHealthBar(Hitpoints / actualMaxHealth);
+        float heathPercent = (float)Hitpoints / (float)actualMaxHealth;
+        PCM.UI.SetGreenHealthBar(heathPercent);
     }
 
     public void UpgradeHealth()
@@ -191,7 +193,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     #region Damage Interface
     [field: SerializeField]
     [field: ReadOnly]
-    public float Hitpoints { get; set; }
+    public int Hitpoints { get; set; }
     Rigidbody2D IDamageable.rb { get => PCM.control.rb; }
 
     public void OnDeath()
@@ -249,11 +251,11 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         }
     }
 
-    public void UseConsume(float health)
+    public void UseConsume(int percentageToHeal)
     {
         canConsume = false;
         consumeBar = 0;
-        Heal(health);
+        HealByPercentage(percentageToHeal);
         PCM.UI.EmptyConsumeBar();
     }
 

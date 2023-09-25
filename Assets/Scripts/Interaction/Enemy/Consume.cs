@@ -6,7 +6,7 @@ public class Consume : MonoBehaviour
 {
     [field: SerializeField] private Enemy enemy;
     [field: SerializeField] private GameObject UI;
-    private float healthReceivedPercent;
+    private int healthReceivedPercent;
 
     public void TriggerConsume()
     {
@@ -38,7 +38,7 @@ public class Consume : MonoBehaviour
         }
     }
 
-    public void SetHealthRecievedPercent(float health)
+    public void SetHealthRecievedPercent(int health)
     {
         healthReceivedPercent = health;
     }
