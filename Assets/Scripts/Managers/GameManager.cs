@@ -1,7 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.InputSystem.Users;
+using UnityEngine.InputSystem;
+using KevinCastejon.MoreAttributes;
+public enum ControlScheme
+{
+    keyboardAndMouse,
+    controller
+}
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
@@ -15,10 +23,23 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public SkillTreeManager SkillTreeManager { get; private set; }
     [field: SerializeField] public StatsManager StatsManager { get; private set; }
     public int Souls { get; private set; }
+    [field: SerializeField, HideOnPlay(true)]
     public Transform PlayerTransform { get; private set; }
     public PlayerComponentManager PCM { get; private set; }
     private InteractionBase interaction;
     private Consume consume;
+    #region ControlScheme
+    public ControlScheme currentScheme { get; private set; }
+    public InputUser User { get; private set; }
+    public EventHandler OnControlSchemeSwitch;
+    #endregion
+
+    #region Cursor
+    [field: SerializeField]
+    public Transform cursosrTR { get;private set; }
+    [field: SerializeField]
+    public SpriteRenderer cursorRend { get; private set; }
+    #endregion
 
     private void Awake()
     {
@@ -31,14 +52,17 @@ public class GameManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
+        InputUser.onChange += SetScheme;
+        Cursor.visible = false;
     }
+
 
     public void SetPlayerTransform(Transform player, PlayerComponentManager PCM)
     {
         PlayerTransform = player;
         this.PCM = PCM;
     }
-
+    #region Souls
     public void AddSouls(int souls)
     {
         Souls += souls;
@@ -55,7 +79,9 @@ public class GameManager : MonoBehaviour
     {
         Souls = 0;
     }
+    #endregion
 
+    #region Interaction
     public void SetInteraction(InteractionBase interaction)
     {
         this.interaction = interaction;
@@ -76,6 +102,9 @@ public class GameManager : MonoBehaviour
             interaction.Interact();
         }
     }
+    #endregion
+
+    #region Consume (healing)
     public void SetConsume(Consume consume)
     {
         this.consume = consume;
@@ -96,4 +125,48 @@ public class GameManager : MonoBehaviour
             consume.TriggerConsume();
         }
     }
+    #endregion
+
+    #region ControlScheme
+    public void SetScheme(InputUser inputUser, InputUserChange change, InputDevice device)
+    {
+        Debug.Log("triggering");
+        if (!change.Equals(InputUserChange.ControlSchemeChanged))
+            return;
+        if (inputUser.controlScheme.Equals(null))
+            return;
+        InputControlScheme temp = (InputControlScheme)inputUser.controlScheme;
+        ControlScheme scheme;
+        switch (temp.name)
+        {
+            case "Keyboard&Mouse":
+                scheme = ControlScheme.keyboardAndMouse;
+                break;
+            case "Controller":
+                scheme = ControlScheme.controller;
+                break;
+            default:
+                scheme = ControlScheme.keyboardAndMouse;
+                break;
+        }
+        User = inputUser;
+        currentScheme = scheme;
+        OnControlSchemeSwitch?.Invoke(this, EventArgs.Empty);
+    }
+
+    #endregion
+
+    #region Cursor
+    public void HideCursor()
+    {
+        if(cursorRend.enabled)
+            cursorRend.enabled = false;
+    }
+
+    public void ShowCursor()
+    {
+        if (!cursorRend.enabled)
+            cursorRend.enabled = true;
+    }
+    #endregion
 }

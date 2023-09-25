@@ -86,7 +86,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private LayerMask enemyLayer;
-
+    [SerializeField]
+    private Transform cursorPos;
 
     [Header("Debug Values")]
 
@@ -116,6 +117,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField][ReadOnly]
     private bool isUsingAbility;
 
+    #region Unity Function
     void Awake()
     {
         QualitySettings.vSyncCount = 0;  // VSync must be disabled
@@ -129,7 +131,26 @@ public class PlayerController : MonoBehaviour
         currentMaxSpeed = maxSpeed;
         currentDashCharges = dashCharges;
         drag = rb.drag;
+
     }
+    #region Updates
+    // Update is called once per frame
+    void Update()
+    {
+        StateDecider();
+        ExecuteInput();
+        DashCounter();
+        AimAbility();
+        ControllerCursor();
+    }
+
+    private void FixedUpdate()
+    {
+        Move();
+    }
+
+    #endregion
+    #endregion
 
     #region GetInputs
     public void SetDirection(InputAction.CallbackContext context)
@@ -150,9 +171,42 @@ public class PlayerController : MonoBehaviour
         GameManager.Instance.CallInteraction();
     }
 
-    private void SetMousePos()
+    public void SetMouseCursor(Transform cursor)
     {
-        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        cursorPos = cursor;
+    }
+    private Vector2 stickPos;
+    public void MousePosition(InputAction.CallbackContext context)
+    {
+        Vector2 pos = context.ReadValue<Vector2>();
+        Debug.Log(GameManager.Instance.currentScheme);
+        if (GameManager.Instance.currentScheme == ControlScheme.keyboardAndMouse)    
+        {
+            Vector3 temp = Camera.main.ScreenToWorldPoint(pos);
+            temp.z = 0;
+            cursorPos.position = temp;
+            mousePos = cursorPos.position;
+        }
+        else
+        {
+            stickPos = pos.normalized;
+        }
+        //if (context.control  )
+        //Debug.Log(context.ReadValue<Vector2>() + " " + Input.mousePosition);
+    }
+
+    public void ControllerCursor()
+    {
+        if (GameManager.Instance.currentScheme != ControlScheme.controller)
+            return;
+        if (stickPos.magnitude > 0)
+        {
+            cursorPos.position = (Vector2)transform.position + stickPos;
+            GameManager.Instance.ShowCursor();
+        }
+        else
+            GameManager.Instance.HideCursor();
+        mousePos = cursorPos.position;
     }
 
     public void BufferLightAttack(InputAction.CallbackContext context)
@@ -187,23 +241,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    #region Updates
-    // Update is called once per frame
-    void Update()
-    {
-        StateDecider();
-        SetMousePos();
-        ExecuteInput();
-        DashCounter();
-        AimAbility();
-    }
-
-    private void FixedUpdate()
-    {
-        Move();
-    }
-
-    #endregion
+    
 
     #region Ability 
 

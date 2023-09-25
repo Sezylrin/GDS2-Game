@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.Users;
 using UnityEngine.InputSystem;
+//using UnityEngine.InputSystem.Controls;
 
 public class InputController : MonoBehaviour
 {
     // Start is called before the first frame update
     private PlayerInput input;
     private PlayerInput.PlayerActions player;
+    
 
     [SerializeField]
     private PlayerComponentManager PCM;
@@ -30,14 +33,19 @@ public class InputController : MonoBehaviour
         player.ToggleAbilities.performed += PCM.abilities.ToggleActiveAbilitySet;
         player.Interact.performed += PCM.control.Interact;
         player.Consume.performed += PCM.control.Consume;
-
+        player.Look.performed += PCM.control.MousePosition;
+        player.Look.canceled += PCM.control.MousePosition;
+        player.LookMouse.performed += PCM.control.MousePosition;
         GameManager.Instance.SetPlayerTransform(transform, PCM);
+        PCM.control.SetMouseCursor(GameManager.Instance.cursosrTR);
     }
+
+    
 
     private void OnDisable()
     {
         GameManager.Instance.SetPlayerTransform(null, null);
-
+        PCM.control.SetMouseCursor(null);
         player.Move.performed -= PCM.control.SetDirection;
         player.Move.canceled -= PCM.control.SetDirection;
         player.Attack.performed -= PCM.control.BufferLightAttack;
@@ -48,9 +56,13 @@ public class InputController : MonoBehaviour
         player.ToggleAbilities.performed -= PCM.abilities.ToggleActiveAbilitySet;
         player.Interact.performed -= PCM.control.Interact;
         player.Consume.performed -= PCM.control.Consume;
+        player.Look.performed -= PCM.control.MousePosition;
+        player.Look.canceled -= PCM.control.MousePosition;
+        player.LookMouse.performed -= PCM.control.MousePosition;
         player.Disable();
     }
     // Update is called once per frame
+
     void Update()
     {
         
