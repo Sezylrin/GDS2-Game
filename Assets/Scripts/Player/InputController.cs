@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.Users;
 using UnityEngine.InputSystem;
+//using UnityEngine.InputSystem.Controls;
 
 public class InputController : MonoBehaviour
 {
     // Start is called before the first frame update
     private PlayerInput input;
     private PlayerInput.PlayerActions player;
+    
 
     [SerializeField]
     private PlayerComponentManager PCM;
@@ -30,9 +33,12 @@ public class InputController : MonoBehaviour
         player.ToggleAbilities.performed += PCM.abilities.ToggleActiveAbilitySet;
         player.Interact.performed += PCM.control.Interact;
         player.Consume.performed += PCM.control.Consume;
-
+        player.Look.performed += PCM.control.MousePosition;
+        //player.Look.canceled += PCM.control.MousePosition;
         GameManager.Instance.SetPlayerTransform(transform, PCM);
     }
+
+    
 
     private void OnDisable()
     {
@@ -48,9 +54,12 @@ public class InputController : MonoBehaviour
         player.ToggleAbilities.performed -= PCM.abilities.ToggleActiveAbilitySet;
         player.Interact.performed -= PCM.control.Interact;
         player.Consume.performed -= PCM.control.Consume;
+        player.Look.performed -= PCM.control.MousePosition;
+        //player.Look.canceled -= PCM.control.MousePosition;
         player.Disable();
     }
     // Update is called once per frame
+
     void Update()
     {
         
