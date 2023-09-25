@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.InputSystem;
+using KevinCastejon.MoreAttributes;
 public enum ControlScheme
 {
     keyboardAndMouse,
@@ -22,14 +23,23 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public SkillTreeManager SkillTreeManager { get; private set; }
     [field: SerializeField] public StatsManager StatsManager { get; private set; }
     public int Souls { get; private set; }
-    [field: SerializeField]
-    public ControlScheme currentScheme { get; private set; }
-    public InputUser User { get; private set; }
-    public EventHandler OnControlSchemeSwitch;
+    [field: SerializeField, HideOnPlay(true)]
     public Transform PlayerTransform { get; private set; }
     public PlayerComponentManager PCM { get; private set; }
     private InteractionBase interaction;
     private Consume consume;
+    #region ControlScheme
+    public ControlScheme currentScheme { get; private set; }
+    public InputUser User { get; private set; }
+    public EventHandler OnControlSchemeSwitch;
+    #endregion
+
+    #region Cursor
+    [field: SerializeField]
+    public Transform cursosrTR { get;private set; }
+    [field: SerializeField]
+    public SpriteRenderer cursorRend { get; private set; }
+    #endregion
 
     private void Awake()
     {
@@ -43,6 +53,7 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
         InputUser.onChange += SetScheme;
+        Cursor.visible = false;
     }
 
 
@@ -119,6 +130,7 @@ public class GameManager : MonoBehaviour
     #region ControlScheme
     public void SetScheme(InputUser inputUser, InputUserChange change, InputDevice device)
     {
+        Debug.Log("triggering");
         if (!change.Equals(InputUserChange.ControlSchemeChanged))
             return;
         if (inputUser.controlScheme.Equals(null))
@@ -141,6 +153,20 @@ public class GameManager : MonoBehaviour
         currentScheme = scheme;
         OnControlSchemeSwitch?.Invoke(this, EventArgs.Empty);
     }
-    
+
+    #endregion
+
+    #region Cursor
+    public void HideCursor()
+    {
+        if(cursorRend.enabled)
+            cursorRend.enabled = false;
+    }
+
+    public void ShowCursor()
+    {
+        if (!cursorRend.enabled)
+            cursorRend.enabled = true;
+    }
     #endregion
 }

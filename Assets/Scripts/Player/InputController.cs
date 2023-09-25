@@ -34,8 +34,10 @@ public class InputController : MonoBehaviour
         player.Interact.performed += PCM.control.Interact;
         player.Consume.performed += PCM.control.Consume;
         player.Look.performed += PCM.control.MousePosition;
-        //player.Look.canceled += PCM.control.MousePosition;
+        player.Look.canceled += PCM.control.MousePosition;
+        player.LookMouse.performed += PCM.control.MousePosition;
         GameManager.Instance.SetPlayerTransform(transform, PCM);
+        PCM.control.SetMouseCursor(GameManager.Instance.cursosrTR);
     }
 
     
@@ -43,7 +45,7 @@ public class InputController : MonoBehaviour
     private void OnDisable()
     {
         GameManager.Instance.SetPlayerTransform(null, null);
-
+        PCM.control.SetMouseCursor(null);
         player.Move.performed -= PCM.control.SetDirection;
         player.Move.canceled -= PCM.control.SetDirection;
         player.Attack.performed -= PCM.control.BufferLightAttack;
@@ -55,7 +57,8 @@ public class InputController : MonoBehaviour
         player.Interact.performed -= PCM.control.Interact;
         player.Consume.performed -= PCM.control.Consume;
         player.Look.performed -= PCM.control.MousePosition;
-        //player.Look.canceled -= PCM.control.MousePosition;
+        player.Look.canceled -= PCM.control.MousePosition;
+        player.LookMouse.performed -= PCM.control.MousePosition;
         player.Disable();
     }
     // Update is called once per frame

@@ -141,6 +141,7 @@ public class PlayerController : MonoBehaviour
         ExecuteInput();
         DashCounter();
         AimAbility();
+        ControllerCursor();
     }
 
     private void FixedUpdate()
@@ -170,27 +171,42 @@ public class PlayerController : MonoBehaviour
         GameManager.Instance.CallInteraction();
     }
 
-    private void SetMousePos()
+    public void SetMouseCursor(Transform cursor)
     {
-        
+        cursorPos = cursor;
     }
-
+    private Vector2 stickPos;
     public void MousePosition(InputAction.CallbackContext context)
     {
         Vector2 pos = context.ReadValue<Vector2>();
         Debug.Log(GameManager.Instance.currentScheme);
         if (GameManager.Instance.currentScheme == ControlScheme.keyboardAndMouse)    
         {
-            Debug.Log("mouse");
-            mousePos = Camera.main.ScreenToWorldPoint(pos);
-            cursorPos.position = mousePos;
+            Vector3 temp = Camera.main.ScreenToWorldPoint(pos);
+            temp.z = 0;
+            cursorPos.position = temp;
+            mousePos = cursorPos.position;
         }
         else
         {
-            cursorPos.position = (Vector2)transform.position + pos;
+            stickPos = pos.normalized;
         }
         //if (context.control  )
         //Debug.Log(context.ReadValue<Vector2>() + " " + Input.mousePosition);
+    }
+
+    public void ControllerCursor()
+    {
+        if (GameManager.Instance.currentScheme != ControlScheme.controller)
+            return;
+        if (stickPos.magnitude > 0)
+        {
+            cursorPos.position = (Vector2)transform.position + stickPos;
+            GameManager.Instance.ShowCursor();
+        }
+        else
+            GameManager.Instance.HideCursor();
+        mousePos = cursorPos.position;
     }
 
     public void BufferLightAttack(InputAction.CallbackContext context)
