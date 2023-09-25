@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     private InteractionBase interaction;
     private Consume consume;
     #region ControlScheme
+    [field: SerializeField]
     public ControlScheme currentScheme { get; private set; }
     public InputUser User { get; private set; }
     public EventHandler OnControlSchemeSwitch;
