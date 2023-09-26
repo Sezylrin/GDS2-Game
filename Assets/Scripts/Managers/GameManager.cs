@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public ElementCombo ComboManager { get; private set; }
     [field: SerializeField] public LevelGenerator LevelGenerator { get; private set; }
     [field: SerializeField] public SkillTreeManager SkillTreeManager { get; private set; }
+    [field: SerializeField] public SkillSwitchManager SkillSwitchManager { get; private set; }
     [field: SerializeField] public StatsManager StatsManager { get; private set; }
     public int Souls { get; private set; }
     [field: SerializeField, HideOnPlay(true)]
