@@ -8,15 +8,15 @@ using UnityEngine.InputSystem;
 public class InputController : MonoBehaviour
 {
     // Start is called before the first frame update
-    private PlayerInput input;
-    private PlayerInput.PlayerActions player;
+    private PlayerInputs input;
+    private PlayerInputs.PlayerActions player;
     
 
     [SerializeField]
     private PlayerComponentManager PCM;
     private void Awake()
     {
-        input = new PlayerInput();
+        input = new PlayerInputs();
         player = input.Player;
     }
 

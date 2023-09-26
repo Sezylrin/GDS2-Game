@@ -58,6 +58,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: SerializeField] protected float EffectDuration { get; set; } = 5;
     [field: SerializeField] protected float AttackDuration { get; set; } = 1;
     [field: SerializeField] protected float AttackCooldownDuration { get; set; } = 10;
+    [field: SerializeField] protected float AttackKnockback { get; set; } = 5;
     [field: SerializeField] protected float WindupDuration { get; set; } = 1;
     [field: SerializeField, Range(0, 100)] protected int ConsumableHealthPercentThreshold { get; set; } = 25;
     [field: SerializeField, Range(0, 100)] protected int HealthPercentReceivedOnConsume { get; set; } = 10;
@@ -296,6 +297,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     public void AddForce(Vector2 force)
     {
+        rb.velocity = Vector2.zero;
         rb.velocity += force;
         path.enabled = false;
     }
@@ -319,11 +321,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         Hitpoints = MaxHealth;
     }
 
-    public virtual void OnDeath()
+    public virtual void OnDeath(bool overrideKill = false)
     {
         if (DeathSoundPrefab) Instantiate(DeathSoundPrefab);
-        Manager.DecrementActiveEnemyCounter();
-        GameManager.Instance.AddSouls(Souls);
+        if (!overrideKill)
+        {
+            Manager.DecrementActiveEnemyCounter();
+            GameManager.Instance.AddSouls(Souls);
+        }
     }
     #endregion
 

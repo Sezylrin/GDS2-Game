@@ -92,7 +92,7 @@ public class Attacks : MonoBehaviour
 
     public void LightAttack()
     {
-        playerState[] unAllowed = { playerState.dashing, playerState.abilityCast};
+        playerState[] unAllowed = { playerState.dashing, playerState.abilityCast, playerState.hit};
         if (PCM.control.CheckStates(unAllowed))
             return;
         if (currentCombo >= maxCombo || currentAttackStage == attackStage.attackStart)
@@ -130,6 +130,7 @@ public class Attacks : MonoBehaviour
             {
                 return;
             }
+            Debug.Log((foundEnemy as Enemy).gameObject);
             foundEnemy.TakeDamage(lightAttackDamage[currentCombo - 1] + GameManager.Instance.StatsManager.attackDamageModifier, lightAttackStagger[currentCombo - 1],ElementType.noElement);
             foundEnemy.AddForce((collision.transform.position - transform.position).normalized * lightAttackKnockBack[currentCombo - 1]);
 
