@@ -45,8 +45,8 @@ public class LevelGenerator : MonoBehaviour
     [field: SerializeField, ReadOnly]
     public int activeLevelListIndex { get; private set; }
     public int floorsCleared => Mathf.FloorToInt((float)(activeLevelListIndex + 1) / (fountainFrequency + 1));
-    public int lastFloorOnDeath;
-    public int lastFloorOnDeathIndex => lastFloorOnDeath * (fountainFrequency+1) - 1;
+    public int lastFloorOnExit;
+    public int lastFloorOnExitIndex => lastFloorOnExit * (fountainFrequency+1) - 1;
 
     [field: SerializeField, ReadOnly]
     public int difficulty { get; private set; }
@@ -78,7 +78,7 @@ public class LevelGenerator : MonoBehaviour
 
     public void New()
     {
-        lastFloorOnDeath = floorsCleared;
+        lastFloorOnExit = floorsCleared;
         difficulty = startDifficulty;
         levelList = new List<SceneReference>();
         AddNewFloor();
