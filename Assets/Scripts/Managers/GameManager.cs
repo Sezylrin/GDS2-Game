@@ -58,7 +58,10 @@ public class GameManager : MonoBehaviour
     }
     #region Souls
     public int Souls { get; private set; }
+    [field: SerializeField]
     public int LostSouls { get; private set; }
+    [field:SerializeField]
+    public int FountainRoomToSpawn { get; private set; }
     public void AddSouls(int souls)
     {
         Souls += souls;
@@ -70,12 +73,35 @@ public class GameManager : MonoBehaviour
         Souls -= souls;
         PCM.UI.UpdateSoulsText();
     }
+    public void RemoveLostSouls()
+    {
+        LostSouls = 0;
+        FountainRoomToSpawn = -1;
+    }
+    public void SetLostSouls()
+    {
+        LostSouls = Souls;
+        FountainRoomToSpawn = LevelGenerator.lastFloorOnExit;
+        if (FountainRoomToSpawn == 0)
+            FountainRoomToSpawn = 1;
+    }
 
     public void SetSoulsToZero()
     {
-        LostSouls = Souls;
         Souls = 0;
         PCM.UI.UpdateSoulsText();
+    }
+
+    public void RetrieveSouls()
+    {
+        AddSouls(LostSouls);
+        LostSouls = 0;
+        FountainRoomToSpawn = -1;
+    }
+
+    public bool IsSoulRetrieveRoom()
+    {
+        return FountainRoomToSpawn == LevelGenerator.floorsCleared;
     }
     #endregion
 
