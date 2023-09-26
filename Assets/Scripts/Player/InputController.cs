@@ -27,8 +27,11 @@ public class InputController : MonoBehaviour
         player.Move.canceled += PCM.control.SetDirection;
         player.Attack.performed += PCM.control.BufferLightAttack;
         player.Dash.performed += PCM.control.BufferDash;
+        player.AbilityOne.canceled += PCM.control.BufferAbilityOne;
         player.AbilityOne.performed += PCM.control.BufferAbilityOne;
+        player.AbilityTwo.canceled += PCM.control.BufferAbilityTwo;
         player.AbilityTwo.performed += PCM.control.BufferAbilityTwo;
+        player.AbilityThree.canceled += PCM.control.BufferAbilityThree;
         player.AbilityThree.performed += PCM.control.BufferAbilityThree;
         player.ToggleAbilities.performed += PCM.abilities.ToggleActiveAbilitySet;
         player.Interact.performed += PCM.control.Interact;
@@ -37,7 +40,7 @@ public class InputController : MonoBehaviour
         player.Look.canceled += PCM.control.MousePosition;
         player.LookMouse.performed += PCM.control.MousePosition;
         GameManager.Instance.SetPlayerTransform(transform, PCM);
-        PCM.control.SetMouseCursor(GameManager.Instance.cursosrTR);
+        PCM.control.SetControllerCursor(GameManager.Instance.controllerCursosrTR);
     }
 
     
@@ -45,13 +48,16 @@ public class InputController : MonoBehaviour
     private void OnDisable()
     {
         GameManager.Instance.SetPlayerTransform(null, null);
-        PCM.control.SetMouseCursor(null);
+        PCM.control.SetControllerCursor(null);
         player.Move.performed -= PCM.control.SetDirection;
         player.Move.canceled -= PCM.control.SetDirection;
         player.Attack.performed -= PCM.control.BufferLightAttack;
         player.Dash.performed -= PCM.control.BufferDash;
+        player.AbilityOne.canceled -= PCM.control.BufferAbilityOne;
         player.AbilityOne.performed -= PCM.control.BufferAbilityOne;
+        player.AbilityTwo.canceled -= PCM.control.BufferAbilityTwo;
         player.AbilityTwo.performed -= PCM.control.BufferAbilityTwo;
+        player.AbilityThree.canceled -= PCM.control.BufferAbilityThree;
         player.AbilityThree.performed -= PCM.control.BufferAbilityThree;
         player.ToggleAbilities.performed -= PCM.abilities.ToggleActiveAbilitySet;
         player.Interact.performed -= PCM.control.Interact;

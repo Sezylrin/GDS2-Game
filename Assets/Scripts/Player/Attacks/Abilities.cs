@@ -75,6 +75,12 @@ public class Abilities : MonoBehaviour
         PCM.control.RemoveBufferInput();
         CastAbility(AbilitySetOne ? abilities[5] : abilities[2]);
     }
+    public bool IsRanged(int slot)
+    {
+        if (AbilitySetOne)
+            slot += 3;
+        return (abilities[slot].type == AbilityType.Projectile);
+    }
     public void SetSlot(ElementalSO abilityToUse, int slot)
     {
         if (slot < 0 || slot > 6)
