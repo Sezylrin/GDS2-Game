@@ -14,11 +14,6 @@ public class LevelGenerator : MonoBehaviour
     private static LevelGenerator _instance;
     public static LevelGenerator Instance { get { return _instance; }}
 
-    [Header("Components")]
-    [SerializeField]
-    private Animator crossFadeAnimator;
-    [SerializeField]
-    private float crossFadeTime = 1f;
 
     [Serializable]
     public enum Randomness
@@ -131,32 +126,16 @@ public class LevelGenerator : MonoBehaviour
 
     IEnumerator LoadLevel(string scenePath)
     {
-        crossFadeAnimator.SetTrigger("Start");
+        GameManager.Instance.sceneLoader.CrossFadeAnimator.SetTrigger("Start");
 
-        yield return new WaitForSeconds(crossFadeTime);
+        yield return new WaitForSeconds(GameManager.Instance.sceneLoader.CrossFadeTime);
 
         SceneManager.LoadScene(scenePath);
     }
-    //Move this region into a propper scene transition section later
-    #region FadeHack
-    public void TriggerFade(Scene scene)
-    {
-        StartCoroutine(TriggerCrossFadeStart(scene));
-    }
-    public IEnumerator TriggerCrossFadeStart(Scene scene)
-    {
-        crossFadeAnimator.SetTrigger("Start");
 
-        yield return new WaitForSeconds(crossFadeTime);
-        SceneManager.LoadSceneAsync(scene.ToString());
-        if (scene == Scene.Hub)
-            GameManager.Instance.sceneLoader.LoadedIntoHub();
-        TriggerCrossFadeEnd();
-    }
-    #endregion
     public void TriggerCrossFadeEnd()
     {
-        crossFadeAnimator.SetTrigger("End");
+        GameManager.Instance.sceneLoader.CrossFadeAnimator.SetTrigger("End");
     }
 
     private void DebugLoadLevelX(int x)

@@ -209,8 +209,10 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     public void OnDeath()
     {
         GameManager.Instance.EnemyManager.KillEnemies();
+        GameManager.Instance.sceneLoader.LoadHub();
+
+        GameManager.Instance.SetLostSouls();
         GameManager.Instance.SetSoulsToZero();
-        GameManager.Instance.sceneLoader.Load(Scene.Hub);
     }
 
     public void SetHitPoints()
