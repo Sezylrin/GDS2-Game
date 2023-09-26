@@ -33,8 +33,15 @@ public class Attacks : MonoBehaviour
     private Timer timers;
     [SerializeField]
     private PolygonCollider2D[] lightHitboxes = new PolygonCollider2D[3];
+    /// <summary>
+    /// the amount of time to reduce the ability point regen delay
+    /// </summary>
+    [SerializeField]
+    private float reduceDelay;
+    
     [SerializeField]
     private SpriteRenderer[] hitboxSprite = new SpriteRenderer[3];
+
     private attackStage currentAttackStage;
     private enum coolDownTimers : int
     {
@@ -125,6 +132,9 @@ public class Attacks : MonoBehaviour
             }
             foundEnemy.TakeDamage(lightAttackDamage[currentCombo - 1] + GameManager.Instance.StatsManager.attackDamageModifier, lightAttackStagger[currentCombo - 1],ElementType.noElement);
             foundEnemy.AddForce((collision.transform.position - transform.position).normalized * lightAttackKnockBack[currentCombo - 1]);
+
+            //enable quicker point regen rate
+            PCM.system.SpeedUpRegenDelay(reduceDelay);
         }
     }
 
