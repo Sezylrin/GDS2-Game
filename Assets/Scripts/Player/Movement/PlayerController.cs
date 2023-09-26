@@ -87,7 +87,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private LayerMask enemyLayer;
     [SerializeField]
+    private LayerMask terrainLayer;
+    [SerializeField, ReadOnly, HideOnPlay(true)]
     private Transform cursorPos;
+    [SerializeField]
+    private LineRenderer lineRend;
 
     [Header("Debug Values")]
 
@@ -131,7 +135,7 @@ public class PlayerController : MonoBehaviour
         currentMaxSpeed = maxSpeed;
         currentDashCharges = dashCharges;
         drag = rb.drag;
-        GameManager.Instance.OnControlSchemeSwitch += SchemeChange;
+        //GameManager.Instance.OnControlSchemeSwitch += SchemeChange;
     }
     #region Updates
     // Update is called once per frame
@@ -147,9 +151,11 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         Move();
+        UpdateAimLine();
     }
 
     #endregion
+
     #endregion
 
     #region GetInputs
@@ -171,7 +177,7 @@ public class PlayerController : MonoBehaviour
         GameManager.Instance.CallInteraction();
     }
 
-    public void SetMouseCursor(Transform cursor)
+    public void SetControllerCursor(Transform cursor)
     {
         cursorPos = cursor;
     }
@@ -179,27 +185,21 @@ public class PlayerController : MonoBehaviour
     public void MousePosition(InputAction.CallbackContext context)
     {
         Vector2 pos = context.ReadValue<Vector2>();
-        Debug.Log(GameManager.Instance.currentScheme);
         if (GameManager.Instance.currentScheme == ControlScheme.keyboardAndMouse)    
         {
-            Vector3 temp = Camera.main.ScreenToWorldPoint(pos);
-            temp.z = 0;
-            cursorPos.position = temp;
-            mousePos = cursorPos.position;
+            mousePos = Camera.main.ScreenToWorldPoint(pos);
         }
         else
         {
             stickPos = pos.normalized;
         }
-        //if (context.control  )
-        //Debug.Log(context.ReadValue<Vector2>() + " " + Input.mousePosition);
     }
 
-    private void SchemeChange(object sender, EventArgs e)
+    /*private void SchemeChange(object sender, EventArgs e)
     {
         if (GameManager.Instance.currentScheme == ControlScheme.keyboardAndMouse)
             GameManager.Instance.ShowCursor();
-    }
+    }*/
 
     public void ControllerCursor()
     {
@@ -208,10 +208,10 @@ public class PlayerController : MonoBehaviour
         if (stickPos.magnitude > 0)
         {
             cursorPos.position = (Vector2)transform.position + stickPos;
-            GameManager.Instance.ShowCursor();
+            GameManager.Instance.ShowControllerCursor();
         }
         else
-            GameManager.Instance.HideCursor();
+            GameManager.Instance.HideControllerCursor();
         mousePos = (Vector2)transform.position + stickPos;
     }
 
@@ -224,21 +224,57 @@ public class PlayerController : MonoBehaviour
     {
         BufferInput(actionState.dashing);
     }
-
     public void BufferAbilityOne(InputAction.CallbackContext context)
     {
-        if (context.interaction is PressInteraction)
+        if (context.performed)
+            AimLine(0);
+        if (context.canceled)
+        {
             BufferInput(actionState.abilityOne);
+            lineRend.enabled = false;
+        }
     }
     public void BufferAbilityTwo(InputAction.CallbackContext context)
     {
-        if (context.interaction is PressInteraction)
+        if (context.performed)
+            AimLine(1);
+        if (context.canceled)
+        {
             BufferInput(actionState.abilityTwo);
+            lineRend.enabled = false;
+        }
     }
     public void BufferAbilityThree(InputAction.CallbackContext context)
     {
-        if (context.interaction is PressInteraction)
+        if (context.performed)
+            AimLine(2);
+        if (context.canceled)
+        {
             BufferInput(actionState.abilityThree);
+            lineRend.enabled = false;
+        }
+    }
+
+    private void AimLine(int slot)
+    {
+        if (PCM.abilities.IsRanged(slot))
+        {
+            lineRend.enabled = true;
+        }
+    }
+
+    private void UpdateAimLine()
+    {
+        if (lineRend.enabled)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, mousePos - (Vector2)transform.position , float.MaxValue, terrainLayer);
+            if (hit.collider != null)
+            {
+                Debug.DrawRay(transform.position, hit.point - (Vector2)transform.position, Color.black);
+                lineRend.SetPosition(0, transform.position);
+                lineRend.SetPosition(1, hit.point);
+            }
+        }
     }
 
     public void Consume(InputAction.CallbackContext context)
@@ -289,6 +325,7 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Input Buffering
+    private playerState[] castState = { playerState.idle, playerState.moving, playerState.attackEnd, playerState.abilityLag };
     private void ExecuteInput()
     {
         switch ((int)bufferedState)
@@ -300,13 +337,16 @@ public class PlayerController : MonoBehaviour
                 PCM.attack.LightAttack();
                 break;
             case (int)actionState.abilityOne:
-                PCM.abilities.CastSlotOne();
+                if(CheckStates(castState))
+                    PCM.abilities.CastSlotOne();
                 break;
             case (int)actionState.abilityTwo:
-                PCM.abilities.CastSlotTwo();
+                if (CheckStates(castState))
+                    PCM.abilities.CastSlotTwo();
                 break;
             case (int)actionState.abilityThree:
-                PCM.abilities.CastSlotThree();
+                if (CheckStates(castState))
+                    PCM.abilities.CastSlotThree();
                 break;
 
         }

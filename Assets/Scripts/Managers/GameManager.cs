@@ -37,9 +37,9 @@ public class GameManager : MonoBehaviour
 
     #region Cursor
     [field: SerializeField]
-    public Transform cursosrTR { get;private set; }
+    public Transform controllerCursosrTR { get;private set; }
     [field: SerializeField]
-    public SpriteRenderer cursorRend { get; private set; }
+    public SpriteRenderer controllerCursorRend { get; private set; }
     #endregion
 
     private void Awake()
@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
         InputUser.onChange += SetScheme;
-        Cursor.visible = false;
+        SwitchToMouseCursor();
     }
 
 
@@ -131,7 +131,6 @@ public class GameManager : MonoBehaviour
     #region ControlScheme
     public void SetScheme(InputUser inputUser, InputUserChange change, InputDevice device)
     {
-        Debug.Log("triggering");
         if (!change.Equals(InputUserChange.ControlSchemeChanged))
             return;
         if (inputUser.controlScheme.Equals(null))
@@ -142,12 +141,15 @@ public class GameManager : MonoBehaviour
         {
             case "Keyboard&Mouse":
                 scheme = ControlScheme.keyboardAndMouse;
+                SwitchToMouseCursor();
                 break;
             case "Controller":
                 scheme = ControlScheme.controller;
+                SwitchToControllerCursor();
                 break;
             default:
                 scheme = ControlScheme.keyboardAndMouse;
+                SwitchToMouseCursor();
                 break;
         }
         User = inputUser;
@@ -158,16 +160,26 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Cursor
-    public void HideCursor()
+    public void SwitchToMouseCursor()
     {
-        if(cursorRend.enabled)
-            cursorRend.enabled = false;
+        Cursor.visible = true;
+        controllerCursosrTR.gameObject.SetActive(false);
+    }
+    public void SwitchToControllerCursor()
+    {
+        Cursor.visible = false;
+        controllerCursosrTR.gameObject.SetActive(true);
+    }
+    public void HideControllerCursor()
+    {
+        if(controllerCursorRend.enabled)
+            controllerCursorRend.enabled = false;
     }
 
-    public void ShowCursor()
+    public void ShowControllerCursor()
     {
-        if (!cursorRend.enabled)
-            cursorRend.enabled = true;
+        if (!controllerCursorRend.enabled)
+            controllerCursorRend.enabled = true;
     }
     #endregion
 }
