@@ -44,6 +44,10 @@ public class LevelGenerator : MonoBehaviour
     private List<SceneReference> levelList = new List<SceneReference>();
     [field: SerializeField, ReadOnly]
     public int activeLevelListIndex { get; private set; }
+    public int floorsCleared => Mathf.FloorToInt((float)(activeLevelListIndex + 1) / (fountainFrequency + 1));
+    public int lastFloorOnExit;
+    public int lastFloorOnExitIndex => lastFloorOnExit * (fountainFrequency+1) - 1;
+
     [field: SerializeField, ReadOnly]
     public int difficulty { get; private set; }
     [SerializeField]
@@ -67,14 +71,16 @@ public class LevelGenerator : MonoBehaviour
 
     private void Start()
     {
-        difficulty = startDifficulty;
-        Generate();
+        New();
         // DebugLevelList();
         // SceneManager.LoadScene(levelList[activeLevelListIndex]);
     }
 
-    private void Generate()
+    public void New()
     {
+        lastFloorOnExit = floorsCleared;
+        difficulty = startDifficulty;
+        levelList = new List<SceneReference>();
         AddNewFloor();
         activeLevelListIndex = -1;
     }
@@ -99,7 +105,7 @@ public class LevelGenerator : MonoBehaviour
         // }
         // if (Input.GetKeyDown(KeyCode.D))
         // {
-        //     Debug.Log(Level.Instance.totalEnemyPoints);
+        //     Debug.Log(floorsCleared);
         // }
     }
 
