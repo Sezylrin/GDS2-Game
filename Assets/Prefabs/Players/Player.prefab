@@ -2148,6 +2148,7 @@ MonoBehaviour:
   MaxCastPoints: 3
   currentCastPoints: 0
   pointRegenRate: 3
+  maxRegenTime: 4
   regenTimer: 0
   regenDelay: 2
   debugCost: 1
@@ -2234,6 +2235,7 @@ MonoBehaviour:
   - {fileID: 3543791458473558711}
   - {fileID: 3543791458936431154}
   - {fileID: 3543791457572395628}
+  reduceDelay: 0.66
   hitboxSprite:
   - {fileID: 543510121}
   - {fileID: 55193396}

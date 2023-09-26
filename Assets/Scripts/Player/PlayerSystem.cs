@@ -39,14 +39,15 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     [SerializeField]
     [ReadOnly]
     private int currentCastPoints;
-    [SerializeField]
+    [ReadOnly, SerializeField]
     private float pointRegenRate;
+    [SerializeField]
+    private float maxRegenTime;
     [SerializeField]
     [ReadOnly]
     private float regenTimer;
     [SerializeField]
     private float regenDelay;
-    private float maxRegenTime;
     [SerializeField]
     private int debugCost;
     private int CurrentCastPoints
@@ -107,7 +108,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     }
     private void UpdateCastPoints()
     {
-        maxRegenTime = MaxCastPoints * pointRegenRate;
+        pointRegenRate = maxRegenTime / MaxCastPoints;
         CurrentCastPoints = MaxCastPoints;
         regenTimer = maxRegenTime;
     }
@@ -128,6 +129,11 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     {
         regenTimer += amount * pointRegenRate;
         CalculatePoints();
+    }
+
+    public void SpeedUpRegenDelay(float amount)
+    {
+        timer.ReduceCoolDown((int)SystemCD.pointRegenDelay, amount);
     }
     #endregion
 
