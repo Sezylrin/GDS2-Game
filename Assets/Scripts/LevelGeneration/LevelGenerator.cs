@@ -137,18 +137,23 @@ public class LevelGenerator : MonoBehaviour
 
         SceneManager.LoadScene(scenePath);
     }
-    public void TriggerFade()
+    //Move this region into a propper scene transition section later
+    #region FadeHack
+    public void TriggerFade(Scene scene)
     {
-        StartCoroutine(TriggerCrossFadeStart());
+        StartCoroutine(TriggerCrossFadeStart(scene));
     }
-    public IEnumerator TriggerCrossFadeStart()
+    public IEnumerator TriggerCrossFadeStart(Scene scene)
     {
         crossFadeAnimator.SetTrigger("Start");
 
         yield return new WaitForSeconds(crossFadeTime);
-
+        SceneManager.LoadSceneAsync(scene.ToString());
+        if (scene == Scene.Hub)
+            GameManager.Instance.sceneLoader.LoadedIntoHub();
         TriggerCrossFadeEnd();
     }
+    #endregion
     public void TriggerCrossFadeEnd()
     {
         crossFadeAnimator.SetTrigger("End");

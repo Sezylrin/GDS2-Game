@@ -5,70 +5,27 @@ using UnityEngine.SceneManagement;
 
 public enum Scene
 {
-    Abilities,
-    EnemyTest,
-    LoadScene,
+    //Start,
+    Hub
 }
 
 public class SceneLoader : MonoBehaviour
 {
-    private Dictionary<string, AsyncOperation> loadedScenes = new Dictionary<string, AsyncOperation>();
-
-    public void PreloadScene(Scene scene)
+    public void Load(Scene scene, bool EnableDefaultTransition = true)
     {
-        string sceneName = scene.ToString();
-
-        if (loadedScenes.ContainsKey(sceneName))
-        {
-            Debug.LogWarning($"Scene '{sceneName}' is already preloaded.");
-            return;
-        }
-
-        StartCoroutine(LoadSceneAsync(sceneName));
-    }
-
-    private IEnumerator LoadSceneAsync(string sceneName)
-    {
-        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-        asyncOperation.allowSceneActivation = false;
-
-        while (!asyncOperation.isDone)
-        {
-            if (asyncOperation.progress >= 0.9f)
-            {
-                loadedScenes[sceneName] = asyncOperation;
-                break;
-            }
-
-            yield return null;
-        }
-    }
-
-    public void SwitchToPreloadedScene(Scene scene)
-    {
-        string sceneName = scene.ToString();
-        if (loadedScenes.ContainsKey(sceneName))
-        {
-            loadedScenes[sceneName].allowSceneActivation = true;
-        }
+        if (EnableDefaultTransition)
+            GameManager.Instance.LevelGenerator.TriggerFade(scene);
         else
-        {
-            Debug.LogWarning($"Scene '{sceneName}' has not been preloaded.");
-        }
+            SceneManager.LoadSceneAsync(scene.ToString());
     }
 
-    public void UnloadPreloadedScene(Scene scene)
+    public void LoadHub()
     {
-        string sceneName = scene.ToString();
-        if (loadedScenes.ContainsKey(sceneName))
-        {
-            SceneManager.UnloadSceneAsync(sceneName);
+        GameManager.Instance.LevelGenerator.TriggerFade(Scene.Hub);
+    }
 
-            loadedScenes.Remove(sceneName);
-        }
-        else
-        {
-            Debug.LogWarning($"Scene '{sceneName}' was not preloaded and cannot be unloaded.");
-        }
+    public void LoadedIntoHub()
+    {
+        GameManager.Instance.PCM.system.FullHeal();
     }
 }

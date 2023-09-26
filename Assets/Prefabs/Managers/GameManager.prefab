@@ -336,6 +336,7 @@ MonoBehaviour:
   <RangedEnemySpawnChance>k__BackingField: 25
   <debugMeleeSpawnChance>k__BackingField: 50
   <debugSetMeleeSpawnChance>k__BackingField: 0
+  enemyList: []
   <debugKillEnemies>k__BackingField: 0
 --- !u!1 &1778046464
 GameObject:
@@ -435,6 +436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bc67aa065fd0c74e8cddbf36accfa3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <sceneLoader>k__BackingField: {fileID: 3761662248408365453}
   <EnemyManager>k__BackingField: {fileID: 1602605067}
   <TimerManager>k__BackingField: {fileID: 539617236}
   <PoolingManager>k__BackingField: {fileID: 1778046466}
@@ -443,9 +445,10 @@ MonoBehaviour:
   <SkillTreeManager>k__BackingField: {fileID: 164168539288669410}
   <StatsManager>k__BackingField: {fileID: 707390839}
   <PlayerTransform>k__BackingField: {fileID: 0}
-  <currentScheme>k__BackingField: 0
   <controllerCursosrTR>k__BackingField: {fileID: 433756523}
   <controllerCursorRend>k__BackingField: {fileID: 433756522}
+  <currentScheme>k__BackingField: 0
+  <input>k__BackingField: {fileID: 1972795618}
 --- !u!114 &3761662248408365453
 MonoBehaviour:
   m_ObjectHideFlags: 0

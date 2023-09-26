@@ -154,11 +154,15 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         {
             Hitpoints -= (int)Mathf.Ceil(damage);
             timer.SetTime((int)SystemCD.iFrames, iframes);
+            PCM.control.SetHitStun(iframes);
         }
         SetHealthUI();
     }
-
-
+    [ContextMenu("AttemptDamage")]
+    public void AttemptDamage()
+    {
+        CalculateDamage(10);
+    }
 
     public void FullHeal()
     {
@@ -206,7 +210,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     {
         GameManager.Instance.EnemyManager.KillEnemies();
         GameManager.Instance.SetSoulsToZero();
-        Loader.Load(EN_Scene.Sprint2);
+        GameManager.Instance.sceneLoader.Load(Scene.Hub);
     }
 
     public void SetHitPoints()
@@ -227,7 +231,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
 
     public void AddForce(Vector2 force)
     {
-
+        PCM.control.rb.velocity += force;
     }
 
     public void ModifySpeed(float percentage)
@@ -270,5 +274,13 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         return canConsume;
     }
 
+    #endregion
+
+    #region Debugging
+    [ContextMenu("DebugKillPlayer")]
+    public void KillPlayerDebug()
+    {
+        OnDeath();
+    }
     #endregion
 }

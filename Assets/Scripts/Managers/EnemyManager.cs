@@ -43,6 +43,7 @@ public class EnemyManager : MonoBehaviour
     [field: SerializeField] bool debugSetMeleeSpawnChance { get; set; }
     private Pool<TestMeleeEnemy> testMeleeEnemyPool;
     private Pool<TestRangedEnemy> testRangedEnemyPool;
+    [SerializeField]
     private List<Enemy> enemyList = new List<Enemy>();
     [field: SerializeField] bool debugKillEnemies { get; set; }
 
@@ -298,18 +299,20 @@ public class EnemyManager : MonoBehaviour
     public void DecrementActiveEnemyCounter()
     {
         ActiveEnemiesCount--;
-        if (ActiveEnemiesCount <= 0)
+        if (ActiveEnemiesCount <= 0 && Level.Instance)
         {
             Level.Instance.ClearLevel();
         }
     }
-
+    [ContextMenu("KillAllEnemies")]
     public void KillEnemies()
     {
         foreach (Enemy enemy in enemyList)
         {
             enemy.OnDeath();
         }
+        enemyList.Clear();
+        ActiveEnemiesCount = 0;
     }
 
     public void EnableAggro()

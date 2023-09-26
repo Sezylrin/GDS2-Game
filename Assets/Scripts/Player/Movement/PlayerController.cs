@@ -23,7 +23,8 @@ public enum playerState
     attack,
     attackEnd,
     abilityCast,
-    abilityLag
+    abilityLag,
+    hit
 }
 public class PlayerController : MonoBehaviour
 {
@@ -31,7 +32,8 @@ public class PlayerController : MonoBehaviour
     {
         dashCD,
         abilityCast,
-        abilityLag
+        abilityLag,
+        hitStun
     }
 
     [field: Header("Core variables")]
@@ -195,12 +197,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    /*private void SchemeChange(object sender, EventArgs e)
-    {
-        if (GameManager.Instance.currentScheme == ControlScheme.keyboardAndMouse)
-            GameManager.Instance.ShowCursor();
-    }*/
-
     public void ControllerCursor()
     {
         if (GameManager.Instance.currentScheme != ControlScheme.controller)
@@ -209,10 +205,13 @@ public class PlayerController : MonoBehaviour
         {
             cursorPos.position = (Vector2)transform.position + stickPos;
             GameManager.Instance.ShowControllerCursor();
+            mousePos = (Vector2)transform.position + stickPos;
         }
         else
+        {
             GameManager.Instance.HideControllerCursor();
-        mousePos = (Vector2)transform.position + stickPos;
+            mousePos = (Vector2)transform.position + Vector2.up;
+        }
     }
 
     public void BufferLightAttack(InputAction.CallbackContext context)
@@ -282,8 +281,6 @@ public class PlayerController : MonoBehaviour
         GameManager.Instance.CallConsume();
     }
     #endregion
-
-    
 
     #region Ability 
 
@@ -393,7 +390,7 @@ public class PlayerController : MonoBehaviour
     #region Dash
     private void Dash()
     {
-        playerState[] unAllowed = { playerState.attack, playerState.abilityCast };
+        playerState[] unAllowed = { playerState.attack, playerState.abilityCast, playerState.hit };
         if (CheckStates(unAllowed))
             return;
         if (!timers.IsTimeZero((int)coolDownTimers.dashCD) || currentDashCharges < 1)
@@ -467,12 +464,21 @@ public class PlayerController : MonoBehaviour
     {
         isAttackEnd = isEnd;
     }
+
+    public void SetHitStun(float hitStun)
+    {
+        timers.SetTime((int)coolDownTimers.hitStun, hitStun);
+    }
     #endregion
 
     #region Utility
     private void StateDecider()
     {
-        if (isDashing)
+        if (!timers.IsTimeZero((int)coolDownTimers.hitStun))
+        {
+            CurrentState = playerState.hit;
+        }
+        else if (isDashing)
         {
             CurrentState = playerState.dashing;
         }

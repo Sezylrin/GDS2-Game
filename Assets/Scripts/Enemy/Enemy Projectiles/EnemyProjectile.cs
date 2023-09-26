@@ -19,6 +19,7 @@ public abstract class EnemyProjectile : MonoBehaviour, IPoolable<EnemyProjectile
     [field: SerializeField] protected LayerMask terrainMask { get; set; }
     protected Vector2 dir;
     protected int damage;
+    protected float knockbackForce;
     protected ElementType element;
     protected Transform owner;
     public virtual void NewInstance()
@@ -27,7 +28,7 @@ public abstract class EnemyProjectile : MonoBehaviour, IPoolable<EnemyProjectile
         ProjectileTimers.times[(int)ProjectileTimer.lifetimeTimer].OnTimeIsZero += PoolSelf;
     }
 
-    public virtual void Init(Vector2 dir, Vector3 spawnPos, LayerMask Target, int damage, ElementType element, Transform owner)
+    public virtual void Init(Vector2 dir, Vector3 spawnPos, LayerMask Target, int damage, float knockbackForce, ElementType element, Transform owner)
     {
         StartLifetime();
         this.dir = dir;
@@ -38,6 +39,7 @@ public abstract class EnemyProjectile : MonoBehaviour, IPoolable<EnemyProjectile
         col2d.excludeLayers = ~col2d.includeLayers;
         rb.excludeLayers = ~rb.includeLayers;
         this.damage = damage;
+        this.knockbackForce = knockbackForce;
         this.element = element;
         this.owner = owner;
     }
@@ -68,7 +70,9 @@ public abstract class EnemyProjectile : MonoBehaviour, IPoolable<EnemyProjectile
         IDamageable foundEnemy;
         if (UtilityFunction.FindComponent(collision.transform, out foundEnemy))
         {
+            
             foundEnemy.TakeDamage(damage, 0, element);
+            foundEnemy.AddForce(dir.normalized * knockbackForce);
         }
         PoolSelf();
     }

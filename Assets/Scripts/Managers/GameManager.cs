@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    public SceneLoader sceneLoader { get; private set; }
+    [field: SerializeField] public SceneLoader sceneLoader { get; private set; }
     [field: SerializeField] public EnemyManager EnemyManager { get; private set; }
     [field: SerializeField] public TimerManager TimerManager { get; private set; }
     [field: SerializeField] public PoolingManager PoolingManager { get; private set; }
@@ -22,18 +22,10 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public LevelGenerator LevelGenerator { get; private set; }
     [field: SerializeField] public SkillTreeManager SkillTreeManager { get; private set; }
     [field: SerializeField] public StatsManager StatsManager { get; private set; }
-    public int Souls { get; private set; }
-    [field: SerializeField, HideOnPlay(true)]
-    public Transform PlayerTransform { get; private set; }
+    [field: SerializeField, HideOnPlay(true)] public Transform PlayerTransform { get; private set; }
     public PlayerComponentManager PCM { get; private set; }
     private InteractionBase interaction;
     private Consume consume;
-    #region ControlScheme
-    [field: SerializeField]
-    public ControlScheme currentScheme { get; private set; }
-    public InputUser User { get; private set; }
-    public EventHandler OnControlSchemeSwitch;
-    #endregion
 
     #region Cursor
     [field: SerializeField]
@@ -47,14 +39,15 @@ public class GameManager : MonoBehaviour
         if (Instance != null)
         {
             DestroyImmediate(gameObject);
+            return;
         }
         else
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            input.onControlsChanged += SetScheme;
+            SwitchToMouseCursor();
         }
-        InputUser.onChange += SetScheme;
-        SwitchToMouseCursor();
     }
 
 
@@ -64,6 +57,8 @@ public class GameManager : MonoBehaviour
         this.PCM = PCM;
     }
     #region Souls
+    public int Souls { get; private set; }
+    public int LostSouls { get; private set; }
     public void AddSouls(int souls)
     {
         Souls += souls;
@@ -78,7 +73,9 @@ public class GameManager : MonoBehaviour
 
     public void SetSoulsToZero()
     {
+        LostSouls = Souls;
         Souls = 0;
+        PCM.UI.UpdateSoulsText();
     }
     #endregion
 
@@ -129,15 +126,18 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region ControlScheme
-    public void SetScheme(InputUser inputUser, InputUserChange change, InputDevice device)
+    [field: SerializeField]
+    public ControlScheme currentScheme { get; private set; }
+    [field: SerializeField]
+    public PlayerInput input { get; private set; }
+    public EventHandler OnControlSchemeSwitch;
+    public void SetScheme(PlayerInput input)
     {
-        if (!change.Equals(InputUserChange.ControlSchemeChanged))
+        if (input.currentControlScheme.Equals(null))
             return;
-        if (inputUser.controlScheme.Equals(null))
-            return;
-        InputControlScheme temp = (InputControlScheme)inputUser.controlScheme;
+        string temp = input.currentControlScheme;
         ControlScheme scheme;
-        switch (temp.name)
+        switch (temp)
         {
             case "Keyboard&Mouse":
                 scheme = ControlScheme.keyboardAndMouse;
@@ -152,7 +152,6 @@ public class GameManager : MonoBehaviour
                 SwitchToMouseCursor();
                 break;
         }
-        User = inputUser;
         currentScheme = scheme;
         OnControlSchemeSwitch?.Invoke(this, EventArgs.Empty);
     }

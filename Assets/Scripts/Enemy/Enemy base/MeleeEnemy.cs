@@ -11,8 +11,8 @@ public abstract class MeleeEnemy : Enemy
     [field: SerializeField] protected GameObject AttackHitbox { get; set; }
     [field: SerializeField] protected float MinimumAttackRange { get; set; }
     [field: SerializeField] protected BoxCollider2D col2D { get; set; }
-    [field: SerializeField] protected float KnockBackForce { get; set; }
     protected Vector2 dir { get; set; }
+    protected bool hitTarget = false;
     protected override void Start()
     {
         base.Start();
@@ -56,6 +56,7 @@ public abstract class MeleeEnemy : Enemy
         base.EndAttack(sender, e);
         AttackHitbox.SetActive(false);
         col2D.includeLayers = 0;
+        hitTarget = false;
     }
 
     protected override void InterruptAttack()
@@ -77,13 +78,14 @@ public abstract class MeleeEnemy : Enemy
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.isTrigger)
+        if (collision.isTrigger || !AttackHitbox.activeSelf || hitTarget)
             return;
         IDamageable foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
         {
             foundTarget.TakeDamage(Damage, 0, Element);
-            foundTarget.AddForce(dir.normalized * KnockBackForce);
+            foundTarget.AddForce(dir.normalized * AttackKnockback);
+            hitTarget = true;
         }
     }
 }
