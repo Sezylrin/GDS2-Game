@@ -90,7 +90,7 @@ public abstract class RangedEnemy : Enemy
         {
             temp.NewInstance();
         }
-        temp.Init(targetTr.position - transform.position, ProjectileSpawnPoint.position, TargetLayer, Damage, AttackKnockback, Element, transform);
+        temp.Init(targetTr.position - transform.position, ProjectileSpawnPoint.position, TargetLayer, Damage, AttackKnockback, Element, this);
     }
 
     protected override void EndAttack(object sender, EventArgs e)

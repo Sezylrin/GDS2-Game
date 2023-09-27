@@ -21,14 +21,15 @@ public abstract class EnemyProjectile : MonoBehaviour, IPoolable<EnemyProjectile
     protected int damage;
     protected float knockbackForce;
     protected ElementType element;
-    protected Transform owner;
+    protected Enemy owner;
+    protected Transform shooter;
     public virtual void NewInstance()
     {
         ProjectileTimers = GameManager.Instance.TimerManager.GenerateTimers(typeof(ProjectileTimer), gameObject);
         ProjectileTimers.times[(int)ProjectileTimer.lifetimeTimer].OnTimeIsZero += PoolSelf;
     }
 
-    public virtual void Init(Vector2 dir, Vector3 spawnPos, LayerMask Target, int damage, float knockbackForce, ElementType element, Transform owner)
+    public virtual void Init(Vector2 dir, Vector3 spawnPos, LayerMask Target, int damage, float knockbackForce, ElementType element, Enemy owner, Transform shooter = null)
     {
         StartLifetime();
         this.dir = dir;
@@ -42,6 +43,10 @@ public abstract class EnemyProjectile : MonoBehaviour, IPoolable<EnemyProjectile
         this.knockbackForce = knockbackForce;
         this.element = element;
         this.owner = owner;
+        if (shooter == null)
+            this.shooter = owner.transform;
+        else
+            this.shooter = shooter;
     }
 
     // Update is called once per frame
@@ -65,18 +70,40 @@ public abstract class EnemyProjectile : MonoBehaviour, IPoolable<EnemyProjectile
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform == owner)
+        if (collision.transform == shooter)
             return;
-        IDamageable foundEnemy;
-        if (UtilityFunction.FindComponent(collision.transform, out foundEnemy))
+        IDamageable foundTarget;
+        if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
         {
-            
-            foundEnemy.TakeDamage(damage, 0, element);
-            foundEnemy.AddForce(dir.normalized * knockbackForce);
+            if (foundTarget is PlayerSystem)
+            {
+                PlayerSystem temp = foundTarget as PlayerSystem;
+                if (temp.GetState() == playerState.perfectDodge)
+                {
+                    temp.InstantRegenPoint();
+                    temp.CounterSuccesful(owner, this);
+                    gameObject.SetActive(false);
+                }
+                else
+                {
+                    DoDamage(foundTarget);
+                    PoolSelf();
+                }
+            }
+            else
+            {
+                DoDamage(foundTarget);
+                PoolSelf();
+            }
+                
         }
-        PoolSelf();
     }
 
+    private void DoDamage(IDamageable target)
+    {
+        target.TakeDamage(damage, 0, element);
+        target.AddForce(dir.normalized * knockbackForce);
+    }
     #region Pooling
     public Pool<EnemyProjectile> Pool { get; set; }
     public bool IsPooled { get; set; }
@@ -92,6 +119,13 @@ public abstract class EnemyProjectile : MonoBehaviour, IPoolable<EnemyProjectile
         rb.excludeLayers = 0;
         if(!IsPooled)
             Pool.PoolObj(this);
+    }
+
+    public void CounterProjectile(Enemy target, Vector3 spawnPos, LayerMask enemy, Transform newShooter)
+    {
+        gameObject.SetActive(true);
+        Vector2 newDir = target.transform.position - spawnPos;
+        Init(newDir,spawnPos, enemy, damage, knockbackForce, element, owner, newShooter);
     }
     #endregion
 }

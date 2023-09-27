@@ -24,6 +24,7 @@ public enum playerState
     attackEnd,
     abilityCast,
     abilityLag,
+    perfectDodge,
     hit
 }
 public class PlayerController : MonoBehaviour
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour
         dashCD,
         abilityCast,
         abilityLag,
+        perfectDodge,
         hitStun
     }
 
@@ -69,6 +71,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] [ReadOnly]
     private int currentDashCharges;
 
+    [Header("Perfect Dodge")]
+    [SerializeField]
+    private float perfectDodgeDuration;
+
     [field: Header("Ability")]
     [SerializeField]
     private float abilityLag;
@@ -100,8 +106,6 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] [ReadOnly]
     private Vector2 direction;
-    [SerializeField] [ReadOnly]
-    private Vector2 LastDirection;
     [field: SerializeField] [field: ReadOnly]
     public playerState CurrentState { get; private set; }
     [SerializeField] [ReadOnly]
@@ -113,16 +117,18 @@ public class PlayerController : MonoBehaviour
 
     private Coroutine dashCoroutine;
     private Timer timers;
-    [SerializeField][ReadOnly]
+    [SerializeField, ReadOnly]
     private bool isDashing;
-    [SerializeField][ReadOnly]
+    [SerializeField, ReadOnly]
     private bool isMoving;
-    [SerializeField][ReadOnly]
+    [SerializeField, ReadOnly]
     private bool isAttacking;
-    [SerializeField][ReadOnly]
+    [SerializeField, ReadOnly]
     private bool isAttackEnd;
-    [SerializeField][ReadOnly]
+    [SerializeField, ReadOnly]
     private bool isUsingAbility;
+    [SerializeField, ReadOnly]
+    private bool isPerfectDodge;
 
     #region Unity Function
     void Awake()
@@ -136,6 +142,7 @@ public class PlayerController : MonoBehaviour
         timers.times[(int)coolDownTimers.abilityLag].OnTimeIsZero += AbilityLagOver;
         timers.times[(int)coolDownTimers.abilityCast].OnTimeIsZero += AbilityCastOver;
         timers.times[(int)coolDownTimers.dashCD].OnTimeIsZero += DashResetter;
+        timers.times[(int)coolDownTimers.perfectDodge].OnTimeIsZero += StopPerfectDodge;
         currentMaxSpeed = maxSpeed;
         currentDashCharges = dashCharges;
         drag = rb.drag;
@@ -167,7 +174,6 @@ public class PlayerController : MonoBehaviour
         if (!context.ReadValue<Vector2>().Equals(Vector2.zero))
         {
             direction = context.ReadValue<Vector2>().normalized;
-            LastDirection = direction;
         }
         else
         {
@@ -329,7 +335,10 @@ public class PlayerController : MonoBehaviour
         switch ((int)bufferedState)
         {
             case (int)actionState.dashing:
-                Dash();
+                if (direction.Equals(Vector2.zero))
+                    PerfectDodge();
+                else
+                    Dash();
                 break;
             case (int)actionState.attack:
                 PCM.attack.LightAttack();
@@ -391,7 +400,7 @@ public class PlayerController : MonoBehaviour
     #region Dash
     private void Dash()
     {
-        playerState[] unAllowed = { playerState.attack, playerState.abilityCast, playerState.hit };
+        playerState[] unAllowed = { playerState.attack, playerState.abilityCast, playerState.hit, playerState.perfectDodge };
         if (CheckStates(unAllowed))
             return;
         if (!timers.IsTimeZero((int)coolDownTimers.dashCastCD) || currentDashCharges < 1)
@@ -408,7 +417,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator StartDashing()
     {
         float startTime = Time.time;
-        Vector2 endPos = (Vector2)transform.position + (LastDirection * dashDistance);
+        Vector2 endPos = (Vector2)transform.position + (direction * dashDistance);
         Vector2 startPos = transform.position;
         for (float timer = 0; timer < dashDuration; timer += Time.deltaTime)
         {
@@ -449,6 +458,20 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
+    #region Perfect Dodge
+    private void PerfectDodge()
+    {
+        RemoveBufferInput();
+        isPerfectDodge = true;
+        timers.SetTime((int)coolDownTimers.perfectDodge, perfectDodgeDuration);
+    }
+
+    private void StopPerfectDodge(object sender, EventArgs e)
+    {
+        isPerfectDodge = false;
+    }
+    #endregion
+
     #region Setters
     public void SetIsAttacking(bool isAttack)
     {
@@ -472,6 +495,10 @@ public class PlayerController : MonoBehaviour
         if (!timers.IsTimeZero((int)coolDownTimers.hitStun))
         {
             CurrentState = playerState.hit;
+        }
+        else if (isPerfectDodge)
+        {
+            CurrentState = playerState.perfectDodge;
         }
         else if (isDashing)
         {

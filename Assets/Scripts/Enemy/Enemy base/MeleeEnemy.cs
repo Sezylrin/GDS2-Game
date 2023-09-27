@@ -83,9 +83,30 @@ public abstract class MeleeEnemy : Enemy
         IDamageable foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
         {
-            foundTarget.TakeDamage(Damage, 0, Element);
-            foundTarget.AddForce(dir.normalized * AttackKnockback);
-            hitTarget = true;
+            if (foundTarget is PlayerSystem)
+            {
+                PlayerSystem temp = foundTarget as PlayerSystem;
+                if (temp.GetState() == playerState.perfectDodge)
+                {
+                    InterruptAttack();
+                    temp.InstantRegenPoint();
+                    temp.CounterSuccesful(this);
+                }
+                else
+                {
+                    DoDamage(foundTarget);
+                }
+            }
+            else
+                DoDamage(foundTarget);
+            
         }
+    }
+
+    private void DoDamage(IDamageable target)
+    {
+        target.TakeDamage(Damage, 0, Element);
+        target.AddForce(dir.normalized * AttackKnockback);
+        hitTarget = true;
     }
 }
