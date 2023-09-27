@@ -9,11 +9,22 @@ public class StatsManager : MonoBehaviour
     private List<ElementalSO> lockedAbilities;
     [SerializeField] 
     private List<ElementalSO> unlockedAbilities;
+    [HideInInspector]
+    public Dictionary<int, ElementalSO> savedAbilityPositions = new(); 
 
     [Header("Stats")]
     public int abilityModifier = 0;
     public int attackDamageModifier = 0;
     public int bonusHealth = 0;
+    public bool secondSkillsetUnlocked = false;
+
+    private void Awake()
+    {
+        for (int i = 0; i < unlockedAbilities.Count; i++)
+        {
+            savedAbilityPositions.Add(i, unlockedAbilities[i]);
+        }
+    }
 
     public void UnlockAbility(ElementalSO abilityToUnlock)
     {

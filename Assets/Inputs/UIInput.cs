@@ -22,6 +22,7 @@ public class UIInput : MonoBehaviour
         ui.ToggleSkill.performed += skillSwitchManager.ToggleSkills;
         ui.Interact.performed += skillSwitchManager.Interact;
         ui.Navigate.performed += skillSwitchManager.Navigate;
+        ui.Return.performed += skillSwitchManager.Return;
     }
 
     private void OnDisable()
@@ -29,6 +30,7 @@ public class UIInput : MonoBehaviour
         ui.ToggleSkill.performed -= skillSwitchManager.ToggleSkills;
         ui.Interact.performed -= skillSwitchManager.Interact;
         ui.Navigate.performed -= skillSwitchManager.Navigate;
+        ui.Return.performed -= skillSwitchManager.Return;
         ui.Disable();
     }
 }
