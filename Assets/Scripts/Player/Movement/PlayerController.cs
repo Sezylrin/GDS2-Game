@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
 {
     private enum coolDownTimers : int
     {
+        dashCastCD,
         dashCD,
         abilityCast,
         abilityLag,
@@ -63,10 +64,10 @@ public class PlayerController : MonoBehaviour
     private float dashDuration;
     [SerializeField]
     private int dashCharges;
-    [SerializeField]
+    [SerializeField, Tooltip("Time before all charges refresh")]
     private float dashRechargeRate;
     [SerializeField] [ReadOnly]
-    private float currentDashCharges;
+    private int currentDashCharges;
 
     [field: Header("Ability")]
     [SerializeField]
@@ -134,6 +135,7 @@ public class PlayerController : MonoBehaviour
         timers = GameManager.Instance.TimerManager.GenerateTimers(typeof(coolDownTimers), gameObject);
         timers.times[(int)coolDownTimers.abilityLag].OnTimeIsZero += AbilityLagOver;
         timers.times[(int)coolDownTimers.abilityCast].OnTimeIsZero += AbilityCastOver;
+        timers.times[(int)coolDownTimers.dashCD].OnTimeIsZero += DashResetter;
         currentMaxSpeed = maxSpeed;
         currentDashCharges = dashCharges;
         drag = rb.drag;
@@ -145,7 +147,6 @@ public class PlayerController : MonoBehaviour
     {
         StateDecider();
         ExecuteInput();
-        DashCounter();
         AimAbility();
         ControllerCursor();
     }
@@ -393,13 +394,13 @@ public class PlayerController : MonoBehaviour
         playerState[] unAllowed = { playerState.attack, playerState.abilityCast, playerState.hit };
         if (CheckStates(unAllowed))
             return;
-        if (!timers.IsTimeZero((int)coolDownTimers.dashCD) || currentDashCharges < 1)
+        if (!timers.IsTimeZero((int)coolDownTimers.dashCastCD) || currentDashCharges < 1)
             return;
         PCM.attack.ResetTimer();
         RemoveBufferInput();
         isDashing = true;
         currentDashCharges--;
-        timers.SetTime((int)coolDownTimers.dashCD, dashCDTimer + dashDuration);
+        timers.SetTime((int)coolDownTimers.dashCastCD, dashCDTimer + dashDuration);
         col2D.excludeLayers += enemyLayer;
         dashCoroutine = StartCoroutine(StartDashing());
     }
@@ -425,20 +426,14 @@ public class PlayerController : MonoBehaviour
         StopDash();
     }
 
-    private void DashCounter()
+    private void DashResetter(object sender, EventArgs e)
     {
-        if (currentDashCharges < dashCharges && CurrentState != playerState.dashing)
-        {
-            currentDashCharges += (1 / dashRechargeRate) * Time.deltaTime;
-        }
-        else if (currentDashCharges > dashCharges)
-        {
-            currentDashCharges = dashCharges;
-        }
+        currentDashCharges = dashCharges;
     }
 
     private void StopDash()
     {
+        timers.SetTime((int)coolDownTimers.dashCD, dashRechargeRate);
         if (dashCoroutine != null)
         {
             dashCoroutine = null;
