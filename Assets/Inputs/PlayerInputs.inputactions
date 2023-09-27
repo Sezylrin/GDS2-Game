@@ -1,5 +1,5 @@
 {
-    "name": "PlayerInput",
+    "name": "PlayerInputs",
     "maps": [
         {
             "name": "Player",
@@ -99,6 +99,15 @@
                     "name": "Consume",
                     "type": "Button",
                     "id": "19e92c11-70d9-4494-a932-4f84839c1898",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Escape",
+                    "type": "Button",
+                    "id": "b1ac9463-3e56-42f3-94a5-969db48dec18",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -422,6 +431,28 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "LookMouse",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "468b2106-fa69-4e46-806b-5c86dca27ac7",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Escape",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "74df2b43-806b-43cc-9fc4-254ee282b649",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "Escape",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

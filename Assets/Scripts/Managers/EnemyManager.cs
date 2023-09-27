@@ -313,7 +313,7 @@ public class EnemyManager : MonoBehaviour
     {
         foreach (Enemy enemy in enemyList)
         {
-            enemy.OnDeath();
+            enemy.OnDeath(true);
         }
         enemyList.Clear();
         ActiveEnemiesCount = 0;
