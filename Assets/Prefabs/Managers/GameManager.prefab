@@ -453,6 +453,7 @@ GameObject:
   - component: {fileID: 3761662248408365455}
   - component: {fileID: 3761662248408365452}
   - component: {fileID: 1972795618}
+  - component: {fileID: 5072735212231037529}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -507,6 +508,8 @@ MonoBehaviour:
   <PlayerTransform>k__BackingField: {fileID: 0}
   <controllerCursosrTR>k__BackingField: {fileID: 433756523}
   <controllerCursorRend>k__BackingField: {fileID: 433756522}
+  <LostSouls>k__BackingField: 0
+  <FountainRoomToSpawn>k__BackingField: 0
   <currentScheme>k__BackingField: 0
   <input>k__BackingField: {fileID: 1972795618}
 --- !u!114 &1972795618
@@ -522,7 +525,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: 37ef9ad87081ca64185ee0a2910ad579, type: 3}
-  m_NotificationBehavior: 0
+  m_NotificationBehavior: 3
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
@@ -539,6 +542,14 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!81 &5072735212231037529
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3761662248408365442}
+  m_Enabled: 1
 --- !u!1 &4913112615128625035
 GameObject:
   m_ObjectHideFlags: 0

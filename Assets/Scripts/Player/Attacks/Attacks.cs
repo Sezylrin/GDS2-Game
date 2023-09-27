@@ -92,8 +92,8 @@ public class Attacks : MonoBehaviour
 
     public void LightAttack()
     {
-        playerState[] unAllowed = { playerState.dashing, playerState.abilityCast, playerState.hit};
-        if (PCM.control.CheckStates(unAllowed))
+        playerState[] unAllowed = { playerState.dashing, playerState.abilityCast, playerState.hit, playerState.perfectDodge};
+        if (PCM.control.CheckStates(unAllowed) || PCM.system.isCountered)
             return;
         if (currentCombo >= maxCombo || currentAttackStage == attackStage.attackStart)
             return;

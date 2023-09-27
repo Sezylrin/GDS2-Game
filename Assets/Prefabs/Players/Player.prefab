@@ -2068,7 +2068,7 @@ Transform:
   - {fileID: 1874316682}
   - {fileID: 490763409}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &3543791458973239727
 Rigidbody2D:
@@ -2154,6 +2154,12 @@ MonoBehaviour:
   debugCost: 1
   startingHitPoint: 100
   <Hitpoints>k__BackingField: 0
+  counterQTEDuration: 0.3
+  counterDamage: 40
+  counterStagger: 40
+  enemy:
+    serializedVersion: 2
+    m_Bits: 64
   consumeBar: 0
   consumeBarMax: 0
   canConsume: 0
@@ -2175,12 +2181,13 @@ MonoBehaviour:
   acceleration: 5
   maxSpeed: 8
   currentMaxSpeed: 0
-  dashCDTimer: 1
+  dashCDTimer: 0.1
   dashDistance: 4
   dashDuration: 0.1
   dashCharges: 3
   dashRechargeRate: 1
   currentDashCharges: 0
+  perfectDodgeDuration: 1
   abilityLag: 0.3
   abilityCast: 0.2
   <AbilityCentre>k__BackingField: {fileID: 1874316682}
@@ -2194,7 +2201,6 @@ MonoBehaviour:
   cursorPos: {fileID: 0}
   lineRend: {fileID: 1434561470}
   direction: {x: 0, y: 0}
-  LastDirection: {x: 0, y: 0}
   <CurrentState>k__BackingField: 0
   bufferedState: 0
   isDashing: 0
@@ -2202,6 +2208,7 @@ MonoBehaviour:
   isAttacking: 0
   isAttackEnd: 0
   isUsingAbility: 0
+  isPerfectDodge: 0
 --- !u!114 &3543791458973239696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2217,12 +2224,12 @@ MonoBehaviour:
   lightAttackDuration: 0.2
   lightAttackEndLag: 0.4
   lightAttackPullDist: 5
-  lightAttackDamage: 07000000090000000b000000
+  lightAttackDamage: bc020000090000000b000000
   lightAttackStagger: 0a0000000a0000000f000000
   lightAttackKnockBack:
-  - 3
-  - 4
   - 6
+  - 8
+  - 10
   maxCombo: 0
   currentCombo: 0
   comboEndLag: 1
@@ -2260,7 +2267,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b171dd3449f27d24b853ff66dc8d7750, type: 2}
   - {fileID: 11400000, guid: 10dea94313b3be64d800d6b8b5a96dd5, type: 2}
   - {fileID: 11400000, guid: 10ba623a21e2d014fa77d3bbb2d7b5b8, type: 2}
-  - {fileID: 11400000, guid: c488a9b6f3504bc429009542737aff68, type: 2}
+  - {fileID: 0}
   AbilitySetOne: 0
   abilityShapePF:
     _serializedList:
