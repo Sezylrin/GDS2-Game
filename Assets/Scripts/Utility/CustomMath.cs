@@ -5,11 +5,11 @@ using UnityEngine;
 public static class CustomMath
 {
     // Start is called before the first frame update
-    public static float ClampedDirection(Vector2 originVector, Vector2 dirVecotr)
+    public static float ClampedDirection(Vector2 originVector, Vector2 dirVector, bool fourMode = true)
     {
-        float signedAngle = Vector2.SignedAngle(originVector, dirVecotr);
+        float signedAngle = Vector2.SignedAngle(originVector, dirVector);
         float angle = signedAngle > 0 ? signedAngle : 360f + signedAngle;
-        float direction = (Mathf.Floor(angle / 90f) + (angle / 90f % 1 > 0.5 ? 1 : 0)) % 4;
-        return (90 * direction);
+        float direction = (Mathf.Floor(angle / (fourMode? 90f : 45f)) + (angle / (fourMode ? 90f : 45f) % 1 > 0.5 ? 1 : 0)) % (fourMode ? 4 : 8);
+        return ((fourMode ? 90 : 45) * direction);
     }
 }

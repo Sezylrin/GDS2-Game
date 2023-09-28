@@ -104,8 +104,10 @@ public class PlayerController : MonoBehaviour
 
     [Header("Debug Values")]
 
-    [SerializeField] [ReadOnly]
+    [SerializeField, ReadOnly]
     private Vector2 direction;
+    [SerializeField, ReadOnly]
+    private Vector2 lastDirection;
     [field: SerializeField] [field: ReadOnly]
     public playerState CurrentState { get; private set; }
     [SerializeField] [ReadOnly]
@@ -171,13 +173,10 @@ public class PlayerController : MonoBehaviour
     #region GetInputs
     public void SetDirection(InputAction.CallbackContext context)
     {
-        if (!context.ReadValue<Vector2>().Equals(Vector2.zero))
+        direction = context.ReadValue<Vector2>().normalized;
+        if (!direction.Equals(Vector2.zero))
         {
-            direction = context.ReadValue<Vector2>().normalized;
-        }
-        else
-        {
-            direction = Vector2.zero;
+            lastDirection = direction;
         }
     }
 
@@ -217,7 +216,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             GameManager.Instance.HideControllerCursor();
-            mousePos = (Vector2)transform.position + Vector2.up;
+            mousePos = (Vector2)transform.position + lastDirection;
         }
     }
 
