@@ -38,7 +38,7 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
     {
         if (timer == null)
         {
-            timer = TimerManager.Instance.GenerateTimers(typeof(AbilityTimer), gameObject);
+            timer = GameManager.Instance.TimerManager.GenerateTimers(typeof(AbilityTimer), gameObject);
         }
         timer.SetTime((int)AbilityTimer.lifeTime, selectedAbility.lifeTime);
         timer.times[(int)AbilityTimer.lifeTime].OnTimeIsZero += InvokePoolSelf;
@@ -76,9 +76,12 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
+        if (CurrentPierce <= 0)
+            return;
         IDamageable foundEnemy;
         if (UtilityFunction.FindComponent(collision.transform,out foundEnemy))
         {
+            
             if(!(foundEnemy as Enemy))
             {
                 return;
@@ -88,10 +91,19 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
                 return;
             }
             hitEnemy.Add(foundEnemy as Enemy);
-            foundEnemy.TakeDamage(selectedAbility.damage, selectedAbility.Stagger, selectedAbility.elementType, selectedAbility.castCost);
+            foundEnemy.TakeDamage(selectedAbility.damage + GameManager.Instance.StatsManager.abilityModifier, selectedAbility.Stagger, selectedAbility.elementType, selectedAbility.castCost);
+            Vector3 dir;
+            if (direction.Equals(Vector3.zero))
+            { 
+                dir = collision.transform.position - initialPos;
+            }
+            else
+            {
+                dir = direction;
+            }
+            foundEnemy.AddForce(dir.normalized * selectedAbility.knockback);
             if (CurrentPierce > 0)
             {
-
                 CurrentPierce--;
             }
         }

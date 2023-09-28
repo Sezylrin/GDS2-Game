@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class SkillTreeManager : MonoBehaviour
 {
+    [Header("Popup")]
     [SerializeField]
     private GameObject skillTreePopup;
     [SerializeField]
@@ -18,15 +19,37 @@ public class SkillTreeManager : MonoBehaviour
     private TMP_Text skillNameTxt;
     [SerializeField]
     private TMP_Text skillDescriptionTxt;
+    [SerializeField] 
+    private TMP_Text soulsTxt;
 
-    public void ShowSkillTree(string skillName, string skillDescription, int skillSoulCost, bool purchased)
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            HideSkillTree();
+        }
+    }
+
+    public void ShowSkillTree()
+    {
+        gameObject.SetActive(true);
+        UpdateSoulsText();
+    }
+
+    public void HideSkillTree()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void ShowSkillTreePopup(string skillName, string skillDescription, int skillSoulCost, bool purchased, bool prereqUnlocked)
     {
         skillNameTxt.text = skillName;
         skillDescriptionTxt.text = skillDescription;
         soulCostTxt.text = skillSoulCost.ToString() + " Souls";
 
-        if (GameManager.Instance.Souls < skillSoulCost && !purchased)
+        if ((GameManager.Instance.Souls < skillSoulCost && !purchased) || !prereqUnlocked)
         {
+            if (!prereqUnlocked) cantAffordText.GetComponent<TMP_Text>().text = "Previous skill not unlocked";
             cantAffordText.SetActive(true);
         }
         else if (purchased)
@@ -36,8 +59,9 @@ public class SkillTreeManager : MonoBehaviour
         skillTreePopup.SetActive(true);
     }
 
-    public void HideSkillTree()
+    public void HideSkillTreePopup()
     {
+        cantAffordText.GetComponent<TMP_Text>().text = "Can't Afford";
         cantAffordText.SetActive(false);
         skillTreePopup.SetActive(false);
         purchasedText.SetActive(false);
@@ -46,5 +70,10 @@ public class SkillTreeManager : MonoBehaviour
     public void ShowPurchased()
     {
         purchasedText.SetActive(true);
+    }
+
+    public void UpdateSoulsText()
+    {
+        soulsTxt.text = GameManager.Instance.Souls.ToString();
     }
 }

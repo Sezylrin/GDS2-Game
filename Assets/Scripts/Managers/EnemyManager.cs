@@ -43,6 +43,7 @@ public class EnemyManager : MonoBehaviour
     [field: SerializeField] bool debugSetMeleeSpawnChance { get; set; }
     private Pool<TestMeleeEnemy> testMeleeEnemyPool;
     private Pool<TestRangedEnemy> testRangedEnemyPool;
+    [SerializeField]
     private List<Enemy> enemyList = new List<Enemy>();
     [field: SerializeField] bool debugKillEnemies { get; set; }
 
@@ -54,14 +55,14 @@ public class EnemyManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        EnemyManagerTimers = TimerManager.Instance.GenerateTimers(typeof(EnemyManagerTimer), gameObject);
+        EnemyManagerTimers = GameManager.Instance.TimerManager.GenerateTimers(typeof(EnemyManagerTimer), gameObject);
         EnemyManagerTimers.times[(int)EnemyManagerTimer.attackDelayTimer].OnTimeIsZero += EnableAttack;
         EnemyManagerTimers.times[(int)EnemyManagerTimer.attackPointRefeshTimer].OnTimeIsZero += RefreshAttackPoint;
 
         AttackPoints = MaxAttackPoints;
 
-        PoolingManager.Instance.FindPool(enemyPrefabs[0], out testMeleeEnemyPool);
-        PoolingManager.Instance.FindPool(enemyPrefabs[1], out testRangedEnemyPool);
+        GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[0], out testMeleeEnemyPool);
+        GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[1], out testRangedEnemyPool);
     }
 
     // Update is called once per frame
@@ -97,12 +98,19 @@ public class EnemyManager : MonoBehaviour
             debugKillEnemies = false;
             KillEnemies();
         }
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            KillEnemies();
+        }
     }
 
     #region EnemyAttacking
     public bool CanAttack()
     {
-        return CanEnemyAttack;
+        bool CanAttack = CanEnemyAttack && AttackPoints > 0;
+        if (CanAttack)
+            ManagerAttack();
+        return CanAttack;
     }
 
     public void ManagerAttack()
@@ -295,17 +303,62 @@ public class EnemyManager : MonoBehaviour
     public void DecrementActiveEnemyCounter()
     {
         ActiveEnemiesCount--;
-        if (ActiveEnemiesCount <= 0)
+        if (ActiveEnemiesCount <= 0 && Level.Instance)
         {
             Level.Instance.ClearLevel();
         }
     }
-
-    private void KillEnemies()
+    [ContextMenu("KillAllEnemies")]
+    public void KillEnemies()
     {
         foreach (Enemy enemy in enemyList)
         {
-            enemy.OnDeath();
+            enemy.OnDeath(true);
         }
+        enemyList.Clear();
+        ActiveEnemiesCount = 0;
+    }
+
+    public void EnableAggro()
+    {
+        foreach (Enemy enemy in enemyList)
+        {
+            enemy.BeginAggro();
+        }
+    }
+
+    public void DebugAddEnemy(Enemy enemy)
+    {
+        enemyList.Add(enemy);
+    }
+
+    public Transform FindNearestEnemy(Transform origin)
+    {
+        Transform nearest;
+        float distance = float.MaxValue;
+        if (enemyList.Count == 1)
+            return null;
+        else if (enemyList[0].Equals(origin))
+        {
+            nearest = enemyList[1].transform;
+        }
+        else
+        {
+            nearest = enemyList[0].transform;
+        }
+        foreach(Enemy enemy in enemyList)
+        {
+            if (enemy.transform != origin)
+            {
+                float temp = Vector3.Distance(origin.position, enemy.transform.position);
+                if (temp < distance)
+                {
+                    distance = temp;
+                    nearest = enemy.transform;
+                }
+            }
+            
+        }
+        return nearest;
     }
 }

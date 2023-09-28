@@ -5,70 +5,50 @@ using UnityEngine.SceneManagement;
 
 public enum Scene
 {
-    Abilities,
-    EnemyTest,
-    LoadScene,
+    //Start,
+    Hub
 }
 
 public class SceneLoader : MonoBehaviour
 {
-    private Dictionary<string, AsyncOperation> loadedScenes = new Dictionary<string, AsyncOperation>();
-
-    public void PreloadScene(Scene scene)
+    public void Load(Scene scene, bool EnableDefaultTransition = true)
     {
-        string sceneName = scene.ToString();
-
-        if (loadedScenes.ContainsKey(sceneName))
-        {
-            Debug.LogWarning($"Scene '{sceneName}' is already preloaded.");
-            return;
-        }
-
-        StartCoroutine(LoadSceneAsync(sceneName));
-    }
-
-    private IEnumerator LoadSceneAsync(string sceneName)
-    {
-        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-        asyncOperation.allowSceneActivation = false;
-
-        while (!asyncOperation.isDone)
-        {
-            if (asyncOperation.progress >= 0.9f)
-            {
-                loadedScenes[sceneName] = asyncOperation;
-                break;
-            }
-
-            yield return null;
-        }
-    }
-
-    public void SwitchToPreloadedScene(Scene scene)
-    {
-        string sceneName = scene.ToString();
-        if (loadedScenes.ContainsKey(sceneName))
-        {
-            loadedScenes[sceneName].allowSceneActivation = true;
-        }
+        if (EnableDefaultTransition)
+            TriggerFade(scene);
         else
-        {
-            Debug.LogWarning($"Scene '{sceneName}' has not been preloaded.");
-        }
+            SceneManager.LoadSceneAsync(scene.ToString());
     }
 
-    public void UnloadPreloadedScene(Scene scene)
+    public void LoadHub()
     {
-        string sceneName = scene.ToString();
-        if (loadedScenes.ContainsKey(sceneName))
-        {
-            SceneManager.UnloadSceneAsync(sceneName);
-
-            loadedScenes.Remove(sceneName);
-        }
-        else
-        {
-            Debug.LogWarning($"Scene '{sceneName}' was not preloaded and cannot be unloaded.");
-        }
+        TriggerFade(Scene.Hub);
+        GameManager.Instance.LevelGenerator.New();
     }
+
+    public void LoadedIntoHub()
+    {
+        GameManager.Instance.PCM.system.FullHeal();
+    }
+    [field: Header("Default Transition")]
+    [field: SerializeField]
+    public Animator CrossFadeAnimator { get; private set; }
+    [field:SerializeField]
+    public float CrossFadeTime { get; private set; } = 1f;
+
+    #region Default Transition
+    public void TriggerFade(Scene scene)
+    {
+        StartCoroutine(TriggerCrossFadeStart(scene));
+    }
+    public IEnumerator TriggerCrossFadeStart(Scene scene)
+    {
+        CrossFadeAnimator.SetTrigger("Start");
+
+        yield return new WaitForSeconds(CrossFadeTime);
+        SceneManager.LoadSceneAsync(scene.ToString());
+        if (scene == Scene.Hub)
+            LoadedIntoHub();
+        CrossFadeAnimator.SetTrigger("End");
+    }
+    #endregion
 }

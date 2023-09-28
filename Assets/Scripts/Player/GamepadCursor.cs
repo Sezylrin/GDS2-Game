@@ -30,9 +30,6 @@ public class GamepadCursor : MonoBehaviour
 
     void Start()
     {
-        //TESTING
-        GameManager.Instance.Souls = 50;
-
         var uiMap = inputActionAsset.FindActionMap("UI");
         moveCursorAction = uiMap.FindAction("MoveCursor");
         clickAction = uiMap.FindAction("Click");
@@ -50,9 +47,6 @@ public class GamepadCursor : MonoBehaviour
 
     void Update()
     {
-        //TESTING
-        if (Input.GetKeyDown(KeyCode.E)) GameManager.Instance.Souls += 100;
-
         Vector2 scrollVector = scrollAction.ReadValue<Vector2>() * joystickScrollSpeed;
         Vector2 normalizedPos = scrollRect.normalizedPosition;
         normalizedPos.y = Mathf.Clamp01(normalizedPos.y + scrollVector.y);

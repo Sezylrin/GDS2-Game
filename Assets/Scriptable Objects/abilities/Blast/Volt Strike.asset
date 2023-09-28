@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6956b4cfa4fb0564cb1ac9f9f8012924, type: 3}
+  m_Name: Volt Strike
+  m_EditorClassIdentifier: 
+  color: {fileID: 2100000, guid: 7c4faa0fd6a98c343899f82f2da05ea7, type: 2}
+  elementType: 4
+  type: 0
+  castCost: 1
+  pierceAmount: 1
+  damage: 30
+  knockback: 5
+  Stagger: 40
+  lifeTime: 1
+  initialShape:
+  - {x: 0.016333938, y: 0.18848282}
+  - {x: -0.282193, y: 0.1591092}
+  - {x: -0.28703678, y: -0.14057478}
+  - {x: -0.0139632225, y: -0.17913699}
+  finalShape:
+  - {x: 2.3951154, y: 0.26571602}
+  - {x: -0.282193, y: 0.1591092}
+  - {x: -0.28703678, y: -0.14057478}
+  - {x: 2.387988, y: -0.1405204}
+  speed: 0.5
