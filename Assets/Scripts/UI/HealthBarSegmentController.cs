@@ -11,10 +11,17 @@ public class HealthBarSegmentController : MonoBehaviour
     [field: SerializeField] private int HealthOfSegment { get; set; } = 100;
     private int LowHealthThresholdPercent { get; set; }
 
-    public void SetInitialSegments(int maxHealth)
+    public void SetStats(int maxHealth, int lowHealthThresholdPercent)
     {
         MaxHealth = maxHealth;
+        HealthOfSegment = GameManager.Instance.HealthPerSegment;
+        LowHealthThresholdPercent = lowHealthThresholdPercent;
 
+        SetInitialSegments();
+    }
+
+    public void SetInitialSegments()
+    {
         float numberOfActualSegments = (float)MaxHealth / (float)HealthOfSegment;
         float numberOfFullSegments = Mathf.Floor(MaxHealth / HealthOfSegment);
         float leftoverHealthPercent = numberOfActualSegments - numberOfFullSegments;

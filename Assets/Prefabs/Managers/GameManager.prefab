@@ -483,7 +483,7 @@ Transform:
   - {fileID: 433756523}
   - {fileID: 8349322437832590667}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3761662248408365452
 MonoBehaviour:
@@ -506,10 +506,15 @@ MonoBehaviour:
   <SkillTreeManager>k__BackingField: {fileID: 164168539288669410}
   <StatsManager>k__BackingField: {fileID: 707390839}
   <PlayerTransform>k__BackingField: {fileID: 0}
+  <HealthPerSegment>k__BackingField: 100
   <controllerCursosrTR>k__BackingField: {fileID: 433756523}
   <controllerCursorRend>k__BackingField: {fileID: 433756522}
   <LostSouls>k__BackingField: 0
   <FountainRoomToSpawn>k__BackingField: 0
+  <ConsumeDelayDuration>k__BackingField: 2
+  <ConsumeTimers>k__BackingField:
+    <times>k__BackingField: []
+    owner: {fileID: 0}
   <currentScheme>k__BackingField: 0
   <input>k__BackingField: {fileID: 1972795618}
 --- !u!114 &1972795618

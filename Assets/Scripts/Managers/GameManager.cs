@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     public Transform CameraTrackPoint { get; private set; }
     private InteractionBase interaction;
     private Consume consume;
+    [field: SerializeField] public int HealthPerSegment { get; set; } = 100;
 
     #region Cursor
     [field: SerializeField]
@@ -49,6 +50,12 @@ public class GameManager : MonoBehaviour
             input.onControlsChanged += SetScheme;
             SwitchToMouseCursor();
         }
+    }
+
+    private void Start()
+    {
+        ConsumeTimers = TimerManager.GenerateTimers(typeof(ConsumeTimer), gameObject);
+        ConsumeTimers.times[(int)ConsumeTimer.consumeDelay].OnTimeIsZero += EndConsumeDelay;
     }
 
 
@@ -130,6 +137,13 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Consume (healing)
+    protected enum ConsumeTimer
+    {
+        consumeDelay
+    }
+    [field: SerializeField] private float ConsumeDelayDuration { get; set; } = 2;
+    [field: SerializeField] private Timer ConsumeTimers { get; set; }
+
     public void SetConsume(Consume consume)
     {
         this.consume = consume;
@@ -147,8 +161,19 @@ public class GameManager : MonoBehaviour
     {
         if (consume)
         {
-            consume.TriggerConsume();
+            StartConsumeDelay();
         }
+    }
+
+    private void StartConsumeDelay()
+    {
+        ConsumeTimers.SetTime((int)ConsumeTimer.consumeDelay, ConsumeDelayDuration);
+    }
+
+    private void EndConsumeDelay(object sender, EventArgs e)
+    {
+        consume.TriggerConsume();
+        if (consume) RemoveConsume(consume);
     }
     #endregion
 

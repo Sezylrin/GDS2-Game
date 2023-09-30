@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c19677e7e25c48458157dc951565335, type: 3}
+  m_Name: RhinoSO
+  m_EditorClassIdentifier: 
+  maxHealth: 500
+  speed: 0
+  souls: 10
+  effectDuration: 5
+  windupDuration: 1
+  attackCooldown: 10
+  attack1Damage: 10
+  attack1Duration: 1
+  attack2Damage: 0
+  attack2Duration: 0
+  attack3Damage: 0
+  attack3Duration: 0
+  consumableHealthPercentThreshold: 25
+  percentToHealOnConsume: 10
+  pointsToStagger: 100
+  staggerDuration: 3
+  staggerDelayDuration: 3
+  staggerDecayAmount: 4
+  staggerDecayRate: 0.25
