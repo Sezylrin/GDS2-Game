@@ -154,6 +154,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
         path.OnDestinationReached += SetOnDestination;
         Speed = path.maxSpeed;
+
+        Init();
     }
 
     public virtual void SetDefaultState()
@@ -294,7 +296,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
         if (!Consumable)
         {
-            if (Hitpoints / MaxHealth * 100 <= ConsumableHealthPercentThreshold)
+            if ((float)Hitpoints / (float)MaxHealth * 100 <= ConsumableHealthPercentThreshold)
             {
                 ConsumableHitbox.SetActive(true);
                 Consumable = true;

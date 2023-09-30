@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c19677e7e25c48458157dc951565335, type: 3}
   m_Name: RhinoSO
   m_EditorClassIdentifier: 
-  maxHealth: 0
+  maxHealth: 500
   speed: 0
-  souls: 0
+  souls: 10
   effectDuration: 5
   windupDuration: 1
   attackCooldown: 10
