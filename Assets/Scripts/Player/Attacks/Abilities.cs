@@ -81,6 +81,12 @@ public class Abilities : MonoBehaviour
             slot += 3;
         return (abilities[slot].type == AbilityType.Projectile);
     }
+    public bool CanCast(int slot)
+    {
+        if(AbilitySetOne)
+            slot += 3;
+        return (PCM.system.CanCast(abilities[slot].castCost));
+    }
     public void SetSlot(ElementalSO abilityToUse, int slot)
     {
         if (slot < 0 || slot > 6)

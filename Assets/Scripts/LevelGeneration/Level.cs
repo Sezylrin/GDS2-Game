@@ -37,6 +37,11 @@ public class Level : MonoBehaviour
         {
             _instance = this;
         }
+        if (!GameObject.FindWithTag(Tags.T_RequiredCamera))
+        {
+            Debug.LogWarning("The Required Camera Prefab object is not in the scene, please put one in. The prefab is located in the camera folder inside prefabs folder");
+            Debug.Break();
+        }
     }
 
     private void Start()

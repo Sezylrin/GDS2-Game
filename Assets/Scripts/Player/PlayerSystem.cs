@@ -86,6 +86,18 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         }
     }
 
+    public bool CanCast(int cost)
+    {
+        if (cost <= CurrentCastPoints)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     private void RegeneratePoints()
     {
         if (!timer.IsTimeZero((int)SystemCD.pointRegenDelay))
