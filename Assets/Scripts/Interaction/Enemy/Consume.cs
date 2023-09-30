@@ -8,6 +8,11 @@ public class Consume : MonoBehaviour
     [field: SerializeField] private GameObject UI;
     private int healthReceivedPercent;
 
+    public void SetStats(int healthReceivedOnConsumePercent)
+    {
+        healthReceivedPercent = healthReceivedOnConsumePercent;
+    }
+
     public void TriggerConsume()
     {
         if (enemy.CheckIfConsumable() && GameManager.Instance.PCM.system.CanConsume())
@@ -36,10 +41,5 @@ public class Consume : MonoBehaviour
             if (UI)
                 UI.SetActive(false);
         }
-    }
-
-    public void SetHealthRecievedPercent(int health)
-    {
-        healthReceivedPercent = health;
     }
 }

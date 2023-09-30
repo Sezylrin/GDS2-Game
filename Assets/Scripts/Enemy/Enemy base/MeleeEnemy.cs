@@ -105,7 +105,7 @@ public abstract class MeleeEnemy : Enemy
 
     private void DoDamage(IDamageable target)
     {
-        target.TakeDamage(Damage, 0, Element);
+        target.TakeDamage(Attack1Damage, 0, Element);
         target.AddForce(dir.normalized * AttackKnockback);
         hitTarget = true;
     }

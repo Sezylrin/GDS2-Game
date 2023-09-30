@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     public PlayerComponentManager PCM { get; private set; }
     private InteractionBase interaction;
     private Consume consume;
+    [field: SerializeField] public int HealthPerSegment { get; set; } = 100;
 
     #region Cursor
     [field: SerializeField]

@@ -162,7 +162,6 @@ public class EnemyManager : MonoBehaviour
         SpawnEnemy();
     }
     
-    
     public void SetEnemyPoints(int points)
     {
         EnemyPoints = points;
@@ -194,8 +193,8 @@ public class EnemyManager : MonoBehaviour
         switch (cost)
         {
             case 1:
-                if (randomValue < MeleeEnemySpawnChance) type = EnemyType.Type1;
-                else type = EnemyType.Type2;
+                if (randomValue < MeleeEnemySpawnChance) type = EnemyType.Test1;
+                else type = EnemyType.Test2;
                 break;
             case 2:
                 break;
@@ -282,12 +281,12 @@ public class EnemyManager : MonoBehaviour
         Enemy temp;
         switch (enemyToSpawn)
         {
-            case EnemyType.Type1:
+            case EnemyType.Test1:
                 temp = testMeleeEnemyPool.GetPooledObj();
                 temp.Init(spawnLocation, enemyElement);
                 enemyList.Add(temp);
                 break;
-            case EnemyType.Type2:
+            case EnemyType.Test2:
                 temp = testRangedEnemyPool.GetPooledObj();
                 temp.Init(spawnLocation, enemyElement);
                 enemyList.Add(temp);

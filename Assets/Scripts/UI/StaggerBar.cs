@@ -13,21 +13,30 @@ public class StaggerBar : MonoBehaviour
     }
 
     [field: SerializeField] private Image image;
-    [field: SerializeField] protected Timer StaggerTimers { get; private set; }
-    [field: SerializeField] protected float StaggerDelayDuration { get; set; } = 3;
-    [field: SerializeField] protected float StaggerDecayAmount { get; set; } = 4;
-    [field: SerializeField] protected float StaggerDecayRate { get; set; } = 0.25f;
-    [field: SerializeField] protected float StaggerDuration { get; set; } = 3;
     [field: SerializeField, ReadOnly] protected float Bar { get; set; }
-    [field: SerializeField] protected int PointsToStagger { get; set; } = 100;
+    [field: SerializeField, ReadOnly] protected int PointsToStagger { get; set; } = 100;
+    [field: SerializeField, ReadOnly] protected float StaggerDuration { get; set; } = 3;
+    [field: SerializeField, ReadOnly] protected bool Staggered { get; set; } = false;
+    [field: SerializeField, ReadOnly] protected float StaggerDelayDuration { get; set; } = 3;
+    [field: SerializeField, ReadOnly] protected float StaggerDecayAmount { get; set; } = 4;
+    [field: SerializeField, ReadOnly] protected float StaggerDecayRate { get; set; } = 0.25f;
+    [field: SerializeField] protected Timer StaggerTimers { get; private set; }
     [field: SerializeField] protected Enemy Parent { get; set; }
-    [field: SerializeField] protected bool Staggered { get; set; } = false;
 
 
     private void Start()
     {
         StaggerTimers = GameManager.Instance.TimerManager.GenerateTimers(typeof(StaggerTimer), gameObject);
         StaggerTimers.times[(int)StaggerTimer.staggerDecayTimer].OnTimeIsZero += DecrementStaggerBar;
+    }
+
+    public void SetStats(int pointsToStagger, float duration, float delayDuration, float decayAmount, float decayRate)
+    {
+        PointsToStagger = pointsToStagger;
+        StaggerDuration = duration;
+        StaggerDelayDuration = delayDuration;
+        StaggerDecayAmount = decayAmount;
+        StaggerDecayRate = decayRate;
     }
 
     public void SetToOrange()
