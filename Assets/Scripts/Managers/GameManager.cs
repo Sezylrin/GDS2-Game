@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public StatsManager StatsManager { get; private set; }
     [field: SerializeField, HideOnPlay(true)] public Transform PlayerTransform { get; private set; }
     public PlayerComponentManager PCM { get; private set; }
+    public Transform CameraTrackPoint { get; private set; }
     private InteractionBase interaction;
     private Consume consume;
     [field: SerializeField] public int HealthPerSegment { get; set; } = 100;
@@ -230,6 +231,13 @@ public class GameManager : MonoBehaviour
     {
         if (!controllerCursorRend.enabled)
             controllerCursorRend.enabled = true;
+    }
+    #endregion
+
+    #region Camera
+    public void SetCameraTrack(Transform trackTarget)
+    {
+        CameraTrackPoint = trackTarget;
     }
     #endregion
 }

@@ -9,4 +9,5 @@ public const string T_Player = @"Player";
 public const string T_GameController = @"GameController";
 public const string T_Terrain = @"Terrain";
 public const string T_SkillTreeCanvas = @"SkillTreeCanvas";
+public const string T_RequiredCamera = @"RequiredCamera";
 }

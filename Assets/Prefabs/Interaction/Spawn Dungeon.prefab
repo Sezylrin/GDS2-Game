@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7868470215295445531}
   - component: {fileID: 2379435552580010097}
   - component: {fileID: 4856078371638773257}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,7 +135,7 @@ Transform:
   m_Children:
   - {fileID: 8346255136277712472}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &7013352222801292264
 CircleCollider2D:
@@ -196,7 +196,7 @@ GameObject:
   - component: {fileID: 5081182756238810366}
   - component: {fileID: 3343474416411584412}
   - component: {fileID: 3489563800451170966}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -331,7 +331,7 @@ GameObject:
   - component: {fileID: 878015523858761013}
   - component: {fileID: 8744161918265149512}
   - component: {fileID: 5970416617087500740}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: F_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
