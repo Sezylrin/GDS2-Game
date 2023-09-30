@@ -42,6 +42,7 @@ public class InputController : MonoBehaviour
         player.Attack.performed += PCM.system.AttemptCounter;
         GameManager.Instance.SetPlayerTransform(transform, PCM);
         PCM.control.SetControllerCursor(GameManager.Instance.controllerCursosrTR);
+        GameManager.Instance.SetCameraTrack(PCM.control.CameraFollowPoint);
     }
 
     

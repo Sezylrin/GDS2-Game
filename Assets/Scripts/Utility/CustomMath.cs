@@ -12,4 +12,9 @@ public static class CustomMath
         float direction = (Mathf.Floor(angle / (fourMode? 90f : 45f)) + (angle / (fourMode ? 90f : 45f) % 1 > 0.5 ? 1 : 0)) % (fourMode ? 4 : 8);
         return ((fourMode ? 90 : 45) * direction);
     }
+
+    public static Vector3 CentreOfScreenInUnits()
+    {
+        return Camera.main.ScreenToWorldPoint(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
+    }
 }
