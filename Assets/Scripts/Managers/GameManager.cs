@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     public PlayerComponentManager PCM { get; private set; }
     private InteractionBase interaction;
     private Consume consume;
+    public AudioComponent AudioComponent;
     #region ControlScheme
     [field: SerializeField]
     public ControlScheme currentScheme { get; private set; }
@@ -54,6 +55,7 @@ public class GameManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
+        AudioComponent = gameObject.GetComponent<AudioComponent>();
         InputUser.onChange += SetScheme;
         SwitchToMouseCursor();
     }

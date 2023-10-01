@@ -17,6 +17,12 @@ public class UIAbility : MonoBehaviour
     public ElementalSO abilityData;
 
     private Tween hoverTween;
+    protected AudioComponent audioComponent;
+
+    private void Awake()
+    {
+        audioComponent = GetComponent<AudioComponent>();
+    }
 
     public void Start()
     {
@@ -41,6 +47,7 @@ public class UIAbility : MonoBehaviour
             bgImage.sprite = hoveredDisabledBg;
         }
         GameManager.Instance.SkillSwitchManager.UpdatePopup(abilityData);
+        audioComponent.PlaySound(SoundType.UIHover);
         PlayHoverAnimation();
     }
 

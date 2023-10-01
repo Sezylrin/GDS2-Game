@@ -18,7 +18,7 @@ public class UnusedAbility : UIAbility
             bgImage.sprite = hoveredDisabledBg;
         }
         GameManager.Instance.SkillSwitchManager.UpdatePopup(abilityData);
-
+        base.audioComponent.PlaySound(SoundType.UIHover);
         base.PlayHoverAnimation();
     }
 

@@ -41,9 +41,12 @@ public class SkillSwitchManager : MonoBehaviour
     private CurrentSkillMenu currentSkillMenu = CurrentSkillMenu.UnusedAbilities;
     private bool firstSkillsetSelected = true;
 
+    private AudioComponent audioComponent;
+
     private void Awake()
     {
         InitialiseSkillSwitchManager();
+        audioComponent = GetComponent<AudioComponent>();
     }
 
     public void InitialiseSkillSwitchManager()
@@ -107,6 +110,7 @@ public class SkillSwitchManager : MonoBehaviour
     public void OpenMenu()
     {
         gameObject.SetActive(true);
+        audioComponent.PlaySound(SoundType.UIOpenMenu);
         currentlyHoveredIndex = 0;
         currentSkillMenu = CurrentSkillMenu.UnusedAbilities;
         firstSkillsetSelected = true;
@@ -186,6 +190,7 @@ public class SkillSwitchManager : MonoBehaviour
     {
         if (currentSkillMenu == CurrentSkillMenu.UnusedAbilities)
         {
+            GameManager.Instance.AudioComponent.PlaySound(SoundType.UICloseMenu);
             gameObject.SetActive(false);
         }
         else
