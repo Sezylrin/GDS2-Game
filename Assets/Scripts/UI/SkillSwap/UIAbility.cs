@@ -1,19 +1,22 @@
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class UIAbility : MonoBehaviour
 {
     [SerializeField]
-    private Sprite bg;
+    protected Sprite bg;
     [SerializeField]
-    private Sprite hoverBg;
+    protected Sprite hoverBg;
     [SerializeField]
-    private Sprite disabledBg;
+    protected Sprite disabledBg;
     [SerializeField]
-    private Sprite hoveredDisabledBg;
+    protected Sprite hoveredDisabledBg;
 
     [HideInInspector]
     public ElementalSO abilityData;
+
+    private Tween hoverTween;
 
     public void Start()
     {
@@ -25,11 +28,11 @@ public class UIAbility : MonoBehaviour
         }
     }
 
-    public void ActivateHover()
+    public virtual void ActivateHover()
     {
         Image bgImage = gameObject.GetComponent<Image>();
 
-        if (GameManager.Instance.StatsManager.GetUnlockedAbilities().Contains(abilityData))
+        if (abilityData != null)
         {
             bgImage.sprite = hoverBg;
         }
@@ -38,13 +41,14 @@ public class UIAbility : MonoBehaviour
             bgImage.sprite = hoveredDisabledBg;
         }
         GameManager.Instance.SkillSwitchManager.UpdatePopup(abilityData);
+        PlayHoverAnimation();
     }
 
-    public void DisableHover()
+    public virtual void DisableHover()
     {
         Image bgImage = gameObject.GetComponent<Image>();
 
-        if (GameManager.Instance.StatsManager.GetUnlockedAbilities().Contains(abilityData))
+        if (abilityData != null)
         {
             bgImage.sprite = bg;
         }
@@ -52,5 +56,25 @@ public class UIAbility : MonoBehaviour
         {
             bgImage.sprite = disabledBg;
         }
+
+        StopHoverAnimation();
+    }
+
+    protected void StopHoverAnimation()
+    {
+        RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+        hoverTween?.Kill();
+        rectTransform.localScale = new Vector3(1f, 1f, 1f);
+    }
+
+    protected void PlayHoverAnimation()
+    {
+        RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+        hoverTween?.Kill();
+        hoverTween = DOTween.Sequence()
+            .Append(rectTransform.DOScale(new Vector3(1.05f, 1.05f, 1f), 0.3f).SetEase(Ease.InOutSine))
+            .Append(rectTransform.DOScale(new Vector3(1f, 1f, 1f), 0.3f).SetEase(Ease.InOutSine))
+            .SetLoops(-1, LoopType.Yoyo) 
+            .Play();
     }
 }

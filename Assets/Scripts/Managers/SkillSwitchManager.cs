@@ -18,6 +18,8 @@ public class SkillSwitchManager : MonoBehaviour
     private GameObject allAbilitiesContainer;
     [SerializeField]
     private GameObject activeAbilitiesContainer;
+    [SerializeField]
+    private GameObject popupContainer;
 
     [Header("Popup")]
     [SerializeField]
@@ -75,7 +77,7 @@ public class SkillSwitchManager : MonoBehaviour
 
         for (int i = 0; i < activeAbilitiesContainer.transform.childCount; i++)
         {
-            Transform childTransform = activeAbilitiesContainer.transform.GetChild(i);
+            Transform childTransform = activeAbilitiesContainer.transform.GetChild(i).transform.GetChild(0);
             activeAbilities.Add(childTransform.gameObject);
         }
 
@@ -87,21 +89,28 @@ public class SkillSwitchManager : MonoBehaviour
         Dictionary<int, ElementalSO> savedAbilityPositions = statsManager.savedAbilityPositions;
         for (int i = 0; i < activeAbilitiesContainer.transform.childCount; i++)
         {
-            Transform childTransform = activeAbilitiesContainer.transform.GetChild(i);
+            Transform childTransform = activeAbilitiesContainer.transform.GetChild(i).transform.GetChild(0);
             ActiveAbility activeAbility = childTransform.GetComponent<ActiveAbility>();
-            if (activeAbility != null)
+            if (activeAbility != null && savedAbilityPositions.ContainsKey(i))
             {
-                activeAbility.abilityData = savedAbilityPositions[i];
+                activeAbility.UpdateAbility(savedAbilityPositions[i]);
+                childTransform.GetChild(0).GetComponent<Image>().sprite = activeAbility.abilityData.icon;
             }
-            childTransform.GetChild(0).GetComponent<Image>().sprite = activeAbility.abilityData.icon;
+            else
+            {
+                childTransform.GetChild(0).GetComponent<Image>().enabled = false;
+            }
         }
     }
 
+    #region Interactions
     public void OpenMenu()
     {
-        InitialiseSkillSwitchManager();
+        gameObject.SetActive(true);
         currentlyHoveredIndex = 0;
         currentSkillMenu = CurrentSkillMenu.UnusedAbilities;
+        firstSkillsetSelected = true;
+        InitialiseSkillSwitchManager();
     }
 
     public void Interact(InputAction.CallbackContext context)
@@ -113,7 +122,7 @@ public class SkillSwitchManager : MonoBehaviour
             currentSkillMenu = CurrentSkillMenu.ActiveAbilities;
             currentlyHoveredAbility.DisableHover();
             selectedAbility = currentlyHoveredAbility;
-            UIAbility newSelectedAbility = activeAbilitiesContainer.transform.GetChild(0).GetComponent<UIAbility>();
+            UIAbility newSelectedAbility = activeAbilitiesContainer.transform.GetChild(0).transform.GetChild(0).GetComponent<UIAbility>();
             currentlyHoveredAbility = newSelectedAbility;
             currentlyHoveredIndex = 0;
             newSelectedAbility.ActivateHover();
@@ -121,11 +130,8 @@ public class SkillSwitchManager : MonoBehaviour
         else
         {
             //Activate skill in slot
-            int hoveredIndex = currentlyHoveredIndex;
-            if (!firstSkillsetSelected)
-            {
-                currentlyHoveredIndex += 3;
-            }
+            int offset = firstSkillsetSelected ? 0 : 3;
+            int hoveredIndex = currentlyHoveredIndex + offset;
             statsManager.savedAbilityPositions[hoveredIndex] = selectedAbility.abilityData;
             currentSkillMenu = CurrentSkillMenu.UnusedAbilities;
             currentlyHoveredAbility.DisableHover();
@@ -145,20 +151,42 @@ public class SkillSwitchManager : MonoBehaviour
         if (currentSkillMenu == CurrentSkillMenu.ActiveAbilities && statsManager.secondSkillsetUnlocked)
         {
             firstSkillsetSelected = !firstSkillsetSelected;
-            //Set currentlyHoveredIndex back to 0
-            //Activate hover on first index ability
-            //Set currentlyHoveredAbility back to 0
-            //Loop through all children of activeAbilities and set their abilityData and update image to that position in the savedAbilities in statsManager
-            //if firstSkillsetSelected, do positions 0-3, otherwise do positions i+3 in savedAbilities
-            //If i+3 positions dont exist, use position 0 instead (at the start, will set all second skillset abilities to first one)beca
+
+            Dictionary<int, ElementalSO> savedAbilityPositions = statsManager.savedAbilityPositions;
+
+            int offset = firstSkillsetSelected ? 0 : 3;
+
+            for (int i = 0; i < activeAbilitiesContainer.transform.childCount; i++)
+            {
+                int dictionaryKey = i + offset;
+                Transform childTransform = activeAbilitiesContainer.transform.GetChild(i).transform.GetChild(0);
+                ActiveAbility activeAbility = childTransform.GetComponent<ActiveAbility>();
+
+                if (savedAbilityPositions.ContainsKey(dictionaryKey))
+                {
+                    activeAbility.UpdateAbility(savedAbilityPositions[dictionaryKey]);
+                }
+                else
+                {
+                    activeAbility.abilityData = null;
+                    childTransform.GetChild(0).GetComponent<Image>().enabled = false;
+                    activeAbility.GreyBorder(currentlyHoveredIndex == i);
+                }
+
+                if (currentlyHoveredIndex == i)
+                {
+                    activeAbility.ActivateHover();
+                }
+            }
         }
     }
+
 
     public void Return(InputAction.CallbackContext context)
     {
         if (currentSkillMenu == CurrentSkillMenu.UnusedAbilities)
         {
-            //Exit menu
+            gameObject.SetActive(false);
         }
         else
         {
@@ -171,9 +199,16 @@ public class SkillSwitchManager : MonoBehaviour
             selectedAbility = null;
         }
     }
+    #endregion
 
     public void UpdatePopup(ElementalSO abilityData)
     {
+        if (!abilityData)
+        {
+            popupContainer.SetActive(false);
+            return;
+        }
+        popupContainer.SetActive(true);
         abilityName.text = abilityData.name;
         string s = "";
         if (abilityData.castCost != 1) s = "s";

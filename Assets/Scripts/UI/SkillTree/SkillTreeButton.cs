@@ -108,18 +108,16 @@ public class SkillTreeButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (!canAfford || purchased) return;
         foreach (SkillTreeButton skillTreeBtn in prerequisiteSkills)
         {
             if (!skillTreeBtn.purchased) return;
         }
-        if (canAfford && !purchased)
-        {
-            gameManager.RemoveSouls(soulCost);
-            purchased = true;
-            skillTreeManager.ShowPurchased();
-            skillTreeManager.UpdateSoulsText();
-            onPurchase.Invoke();
-        } 
+        gameManager.RemoveSouls(soulCost);
+        purchased = true;
+        skillTreeManager.ShowPurchased();
+        skillTreeManager.UpdateSoulsText();
+        onPurchase.Invoke();
     }
 
     private bool PrereqUnlocked()

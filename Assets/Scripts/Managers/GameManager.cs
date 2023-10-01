@@ -106,6 +106,14 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    //Temporary for now, remove when we have a proper way to open skillSwitchManager
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.M)) { 
+            SkillSwitchManager.OpenMenu();
+        }
+    }
+
     #region Consume (healing)
     public void SetConsume(Consume consume)
     {
