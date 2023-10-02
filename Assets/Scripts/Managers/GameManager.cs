@@ -113,6 +113,11 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.M)) { 
             SkillSwitchManager.OpenMenu();
+            AudioComponent.PlaySound(SoundType.UIOpenMenu);
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            AddSouls(10000);
         }
     }
 

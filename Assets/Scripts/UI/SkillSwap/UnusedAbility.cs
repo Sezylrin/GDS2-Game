@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class UnusedAbility : UIAbility
 {
-    public override void ActivateHover()
+    public override void ActivateHover(bool playSound = true)
     {
         Image bgImage = gameObject.GetComponent<Image>();
 
@@ -18,7 +18,10 @@ public class UnusedAbility : UIAbility
             bgImage.sprite = hoveredDisabledBg;
         }
         GameManager.Instance.SkillSwitchManager.UpdatePopup(abilityData);
-        base.audioComponent.PlaySound(SoundType.UIHover);
+        if (playSound)
+        {
+            base.audioComponent.PlaySound(SoundType.UIHover);
+        }
         base.PlayHoverAnimation();
     }
 
@@ -36,5 +39,11 @@ public class UnusedAbility : UIAbility
         }
 
         base.StopHoverAnimation();
+    }
+
+    public void UpdateBorder()
+    {
+        Image bgImage = gameObject.GetComponent<Image>();
+        bgImage.sprite = bg;
     }
 }

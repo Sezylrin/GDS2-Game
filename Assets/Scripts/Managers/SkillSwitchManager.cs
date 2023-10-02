@@ -67,6 +67,7 @@ public class SkillSwitchManager : MonoBehaviour
                 if (abilityIndex < unlockedAbilities.Count)
                 {
                     unusedAbility.abilityData = unlockedAbilities[abilityIndex];
+                    unusedAbility.UpdateBorder();
                 }
                 else if (abilityIndex - unlockedAbilities.Count < lockedAbilities.Count)
                 {
@@ -85,7 +86,7 @@ public class SkillSwitchManager : MonoBehaviour
         }
 
         UnusedAbility firstAbility = allAbilities[0].GetComponent<UnusedAbility>();
-        firstAbility.ActivateHover();
+        firstAbility.ActivateHover(false);
         currentlyHoveredAbility = firstAbility;
 
         //Initialise Active Abilities
@@ -110,7 +111,6 @@ public class SkillSwitchManager : MonoBehaviour
     public void OpenMenu()
     {
         gameObject.SetActive(true);
-        audioComponent.PlaySound(SoundType.UIOpenMenu);
         currentlyHoveredIndex = 0;
         currentSkillMenu = CurrentSkillMenu.UnusedAbilities;
         firstSkillsetSelected = true;
@@ -133,10 +133,10 @@ public class SkillSwitchManager : MonoBehaviour
         }
         else
         {
-            //Activate skill in slot
             int offset = firstSkillsetSelected ? 0 : 3;
             int hoveredIndex = currentlyHoveredIndex + offset;
             statsManager.savedAbilityPositions[hoveredIndex] = selectedAbility.abilityData;
+            GameManager.Instance.PCM.abilities.SetSlot(selectedAbility.abilityData, hoveredIndex);
             currentSkillMenu = CurrentSkillMenu.UnusedAbilities;
             currentlyHoveredAbility.DisableHover();
             ActiveAbility ability = (ActiveAbility)currentlyHoveredAbility;

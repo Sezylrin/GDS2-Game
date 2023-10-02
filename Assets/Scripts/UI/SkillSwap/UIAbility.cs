@@ -34,7 +34,7 @@ public class UIAbility : MonoBehaviour
         }
     }
 
-    public virtual void ActivateHover()
+    public virtual void ActivateHover(bool playSound = true)
     {
         Image bgImage = gameObject.GetComponent<Image>();
 
@@ -47,7 +47,10 @@ public class UIAbility : MonoBehaviour
             bgImage.sprite = hoveredDisabledBg;
         }
         GameManager.Instance.SkillSwitchManager.UpdatePopup(abilityData);
-        audioComponent.PlaySound(SoundType.UIHover);
+        if (playSound)
+        {
+            audioComponent.PlaySound(SoundType.UIHover);
+        }
         PlayHoverAnimation();
     }
 
