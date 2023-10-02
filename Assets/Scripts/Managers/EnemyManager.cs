@@ -43,6 +43,7 @@ public class EnemyManager : MonoBehaviour
     [field: SerializeField] bool debugSetMeleeSpawnChance { get; set; }
     private Pool<TestMeleeEnemy> testMeleeEnemyPool;
     private Pool<TestRangedEnemy> testRangedEnemyPool;
+    [SerializeField]
     private List<Enemy> enemyList = new List<Enemy>();
     [field: SerializeField] bool debugKillEnemies { get; set; }
 
@@ -95,6 +96,10 @@ public class EnemyManager : MonoBehaviour
         if (debugKillEnemies)
         {
             debugKillEnemies = false;
+            KillEnemies();
+        }
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
             KillEnemies();
         }
     }
@@ -157,7 +162,6 @@ public class EnemyManager : MonoBehaviour
         SpawnEnemy();
     }
     
-    
     public void SetEnemyPoints(int points)
     {
         EnemyPoints = points;
@@ -189,8 +193,8 @@ public class EnemyManager : MonoBehaviour
         switch (cost)
         {
             case 1:
-                if (randomValue < MeleeEnemySpawnChance) type = EnemyType.Type1;
-                else type = EnemyType.Type2;
+                if (randomValue < MeleeEnemySpawnChance) type = EnemyType.Test1;
+                else type = EnemyType.Test2;
                 break;
             case 2:
                 break;
@@ -277,12 +281,12 @@ public class EnemyManager : MonoBehaviour
         Enemy temp;
         switch (enemyToSpawn)
         {
-            case EnemyType.Type1:
+            case EnemyType.Test1:
                 temp = testMeleeEnemyPool.GetPooledObj();
                 temp.Init(spawnLocation, enemyElement);
                 enemyList.Add(temp);
                 break;
-            case EnemyType.Type2:
+            case EnemyType.Test2:
                 temp = testRangedEnemyPool.GetPooledObj();
                 temp.Init(spawnLocation, enemyElement);
                 enemyList.Add(temp);
@@ -298,18 +302,20 @@ public class EnemyManager : MonoBehaviour
     public void DecrementActiveEnemyCounter()
     {
         ActiveEnemiesCount--;
-        if (ActiveEnemiesCount <= 0)
+        if (ActiveEnemiesCount <= 0 && Level.Instance)
         {
             Level.Instance.ClearLevel();
         }
     }
-
+    [ContextMenu("KillAllEnemies")]
     public void KillEnemies()
     {
         foreach (Enemy enemy in enemyList)
         {
-            enemy.OnDeath();
+            enemy.OnDeath(true);
         }
+        enemyList.Clear();
+        ActiveEnemiesCount = 0;
     }
 
     public void EnableAggro()

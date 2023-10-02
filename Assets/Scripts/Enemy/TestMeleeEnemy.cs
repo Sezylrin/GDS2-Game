@@ -10,9 +10,9 @@ public class TestMeleeEnemy : MeleeEnemy, IPoolable<TestMeleeEnemy>
 
     #endregion
 
-    public override void OnDeath()
+    public override void OnDeath(bool overrideKill = false)
     {
-        base.OnDeath();
+        base.OnDeath(overrideKill);
         PoolSelf();
     }
 

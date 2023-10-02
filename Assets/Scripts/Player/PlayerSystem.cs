@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using KevinCastejon.MoreAttributes;
 using System;
+using UnityEngine.InputSystem;
 public class PlayerSystem : MonoBehaviour, IDamageable
 {
     private enum SystemCD
     {
         pointRegenDelay,
-        iFrames
+        iFrames,
+        counterAttackQTE
     }
 
     [Header("General")]
@@ -23,6 +25,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     {
         SetHitPoints();
         timer = GameManager.Instance.TimerManager.GenerateTimers(typeof(SystemCD), gameObject);
+        timer.times[(int)SystemCD.counterAttackQTE].OnTimeIsZero += RemoveCounterQTE;
         InitCastPoints();
     }
     #region Update
@@ -83,6 +86,18 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         }
     }
 
+    public bool CanCast(int cost)
+    {
+        if (cost <= CurrentCastPoints)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     private void RegeneratePoints()
     {
         if (!timer.IsTimeZero((int)SystemCD.pointRegenDelay))
@@ -127,8 +142,13 @@ public class PlayerSystem : MonoBehaviour, IDamageable
 
     public void InstantRegenPoint(float amount)
     {
-        regenTimer += amount * pointRegenRate;
+        regenTimer = Mathf.Clamp(regenTimer + amount * pointRegenRate, 0, maxRegenTime);
         CalculatePoints();
+    }
+
+    public void InstantRegenPoint()
+    {
+        InstantRegenPoint(MaxCastPoints * 0.5f);
     }
 
     public void SpeedUpRegenDelay(float amount)
@@ -154,11 +174,15 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         {
             Hitpoints -= (int)Mathf.Ceil(damage);
             timer.SetTime((int)SystemCD.iFrames, iframes);
+            PCM.control.SetHitStun(iframes);
         }
         SetHealthUI();
     }
-
-
+    [ContextMenu("AttemptDamage")]
+    public void AttemptDamage()
+    {
+        CalculateDamage(10);
+    }
 
     public void FullHeal()
     {
@@ -205,8 +229,10 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     public void OnDeath()
     {
         GameManager.Instance.EnemyManager.KillEnemies();
+        GameManager.Instance.sceneLoader.LoadHub();
+
+        GameManager.Instance.SetLostSouls();
         GameManager.Instance.SetSoulsToZero();
-        Loader.Load(EN_Scene.Sprint2);
     }
 
     public void SetHitPoints()
@@ -227,7 +253,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
 
     public void AddForce(Vector2 force)
     {
-
+        PCM.control.rb.velocity += force;
     }
 
     public void ModifySpeed(float percentage)
@@ -238,6 +264,66 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     public void ResetSpeed()
     {
 
+    }
+    #endregion
+
+    #region Counter
+    public bool isCountered { get; private set; }
+    [Header("Counter Attack")]
+    [SerializeField]
+    private float counterQTEDuration;
+
+    private Enemy target;
+    private EnemyProjectile storedProjectile;
+
+    [SerializeField]
+    private int counterDamage;
+    [SerializeField]
+    private int counterStagger;
+    [SerializeField]
+    private LayerMask enemy;
+    public void CounterSuccesful(Enemy target, EnemyProjectile projectile = null)
+    {
+        if (isCountered)
+            return;
+        isCountered = true;
+        this.target = target;
+        storedProjectile = projectile;
+        timer.SetTime((int)SystemCD.counterAttackQTE, counterQTEDuration);
+        PCM.control.CounteredAttack(counterQTEDuration);
+    }
+
+    [ContextMenu("test Counter")]
+    private void TestCounter()
+    {
+        PCM.control.CounteredAttack(counterQTEDuration);
+    }
+    private void RemoveCounterQTE(object sender, EventArgs e)
+    {
+        RemoveCounterQTE();
+    }
+
+    private void RemoveCounterQTE()
+    {
+        isCountered = false;
+        target = null;
+        storedProjectile = null;
+    }
+
+    public void AttemptCounter(InputAction.CallbackContext context)
+    {
+        if (isCountered)
+        {
+            if (storedProjectile)
+            {
+                storedProjectile.CounterProjectile(target, transform.position, enemy, transform);
+            }
+            else
+            {
+                target.TakeDamage(counterDamage,counterStagger,ElementType.noElement);
+            }
+            RemoveCounterQTE();
+        }
     }
     #endregion
 
@@ -270,5 +356,20 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         return canConsume;
     }
 
+    #endregion
+
+    #region Getter
+    public playerState GetState()
+    {
+        return PCM.control.CurrentState;
+    }
+    #endregion
+
+    #region Debugging
+    [ContextMenu("DebugKillPlayer")]
+    public void KillPlayerDebug()
+    {
+        OnDeath();
+    }
     #endregion
 }

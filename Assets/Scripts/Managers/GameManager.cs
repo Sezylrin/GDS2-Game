@@ -14,28 +14,25 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    public SceneLoader sceneLoader { get; private set; }
+    [field: SerializeField] public SceneLoader sceneLoader { get; private set; }
     [field: SerializeField] public EnemyManager EnemyManager { get; private set; }
     [field: SerializeField] public TimerManager TimerManager { get; private set; }
     [field: SerializeField] public PoolingManager PoolingManager { get; private set; }
     [field: SerializeField] public ElementCombo ComboManager { get; private set; }
     [field: SerializeField] public LevelGenerator LevelGenerator { get; private set; }
     [field: SerializeField] public SkillTreeManager SkillTreeManager { get; private set; }
+    [field: SerializeField, HideOnPlay(true)] public Transform PlayerTransform { get; private set; }
     [field: SerializeField] public SkillSwitchManager SkillSwitchManager { get; private set; }
     [field: SerializeField] public StatsManager StatsManager { get; private set; }
-    public int Souls { get; private set; }
     [field: SerializeField, HideOnPlay(true)]
-    public Transform PlayerTransform { get; private set; }
     public PlayerComponentManager PCM { get; private set; }
+    public Transform CameraTrackPoint { get; private set; }
     private InteractionBase interaction;
-    private Consume consume;
     public AudioComponent AudioComponent;
-    #region ControlScheme
-    [field: SerializeField]
-    public ControlScheme currentScheme { get; private set; }
-    public InputUser User { get; private set; }
-    public EventHandler OnControlSchemeSwitch;
-    #endregion
+
+    private Consume consume;
+    [field: SerializeField] public int HealthPerSegment { get; set; } = 100;
+
 
     #region Cursor
     [field: SerializeField]
@@ -49,6 +46,7 @@ public class GameManager : MonoBehaviour
         if (Instance != null)
         {
             DestroyImmediate(gameObject);
+            return;
         }
         else
         {
@@ -56,10 +54,30 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
         AudioComponent = gameObject.GetComponent<AudioComponent>();
-        InputUser.onChange += SetScheme;
+        input.onControlsChanged += SetScheme;
+
         SwitchToMouseCursor();
     }
 
+    private void Start()
+    {
+        ConsumeTimers = TimerManager.GenerateTimers(typeof(ConsumeTimer), gameObject);
+        ConsumeTimers.times[(int)ConsumeTimer.consumeDelay].OnTimeIsZero += EndConsumeDelay;
+    }
+
+    //Temporary for now, remove when we have a proper way to open skillSwitchManager
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            SkillSwitchManager.OpenMenu();
+            AudioComponent.PlaySound(SoundType.UIOpenMenu);
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            AddSouls(10000);
+        }
+    }
 
     public void SetPlayerTransform(Transform player, PlayerComponentManager PCM)
     {
@@ -67,6 +85,13 @@ public class GameManager : MonoBehaviour
         this.PCM = PCM;
     }
     #region Souls
+    public int Souls { get; private set; }
+
+    [field: SerializeField]
+
+    public int LostSouls { get; private set; }
+    [field:SerializeField]
+    public int FountainRoomToSpawn { get; private set; }
     public void AddSouls(int souls)
     {
         Souls += souls;
@@ -78,12 +103,38 @@ public class GameManager : MonoBehaviour
         Souls -= souls;
         PCM.UI.UpdateSoulsText();
     }
+    public void RemoveLostSouls()
+    {
+        LostSouls = 0;
+        FountainRoomToSpawn = -1;
+    }
+    public void SetLostSouls()
+    {
+        LostSouls = Souls;
+        FountainRoomToSpawn = LevelGenerator.lastFloorOnExit;
+        if (FountainRoomToSpawn == 0)
+            FountainRoomToSpawn = 1;
+    }
 
     public void SetSoulsToZero()
     {
         Souls = 0;
+        PCM.UI.UpdateSoulsText();
+    }
+
+    public void RetrieveSouls()
+    {
+        AddSouls(LostSouls);
+        LostSouls = 0;
+        FountainRoomToSpawn = -1;
+    }
+
+    public bool IsSoulRetrieveRoom()
+    {
+        return FountainRoomToSpawn == LevelGenerator.floorsCleared;
     }
     #endregion
+
 
     #region Interaction
     public void SetInteraction(InteractionBase interaction)
@@ -108,20 +159,15 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    //Temporary for now, remove when we have a proper way to open skillSwitchManager
-    private void Update()
+    #region Consume (healing)
+    protected enum ConsumeTimer
     {
-        if (Input.GetKeyDown(KeyCode.M)) { 
-            SkillSwitchManager.OpenMenu();
-            AudioComponent.PlaySound(SoundType.UIOpenMenu);
-        }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            AddSouls(10000);
-        }
+        consumeDelay
     }
 
-    #region Consume (healing)
+    [field: SerializeField] private float ConsumeDelayDuration { get; set; } = 2;
+    [field: SerializeField] private Timer ConsumeTimers { get; set; }
+
     public void SetConsume(Consume consume)
     {
         this.consume = consume;
@@ -139,39 +185,81 @@ public class GameManager : MonoBehaviour
     {
         if (consume)
         {
-            consume.TriggerConsume();
+            StartConsumeDelay();
         }
     }
+
+    private void StartConsumeDelay()
+    {
+        ConsumeTimers.SetTime((int)ConsumeTimer.consumeDelay, ConsumeDelayDuration);
+    }
+
+    private void EndConsumeDelay(object sender, EventArgs e)
+    {
+        consume.TriggerConsume();
+        if (consume) RemoveConsume(consume);
+    }
+
     #endregion
 
     #region ControlScheme
-    public void SetScheme(InputUser inputUser, InputUserChange change, InputDevice device)
+    [field: SerializeField]
+    public ControlScheme currentScheme { get; private set; }
+
+    [field: SerializeField]
+
+    public PlayerInput input { get; private set; }
+
+    public EventHandler OnControlSchemeSwitch;
+    public void SetScheme(PlayerInput input)
+
     {
-        if (!change.Equals(InputUserChange.ControlSchemeChanged))
+
+        if (input.currentControlScheme.Equals(null))
+
             return;
-        if (inputUser.controlScheme.Equals(null))
-            return;
-        InputControlScheme temp = (InputControlScheme)inputUser.controlScheme;
+
+        string temp = input.currentControlScheme;
+
         ControlScheme scheme;
-        switch (temp.name)
+
+        switch (temp)
+
         {
+
             case "Keyboard&Mouse":
+
                 scheme = ControlScheme.keyboardAndMouse;
+
                 SwitchToMouseCursor();
+
                 break;
+
             case "Controller":
+
                 scheme = ControlScheme.controller;
+
                 SwitchToControllerCursor();
+
                 break;
+
             default:
+
                 scheme = ControlScheme.keyboardAndMouse;
+
                 SwitchToMouseCursor();
+
                 break;
+
         }
-        User = inputUser;
+
         currentScheme = scheme;
+
         OnControlSchemeSwitch?.Invoke(this, EventArgs.Empty);
+
     }
+
+
 
     #endregion
 
@@ -196,6 +284,13 @@ public class GameManager : MonoBehaviour
     {
         if (!controllerCursorRend.enabled)
             controllerCursorRend.enabled = true;
+    }
+    #endregion
+
+    #region Camera
+    public void SetCameraTrack(Transform trackTarget)
+    {
+        CameraTrackPoint = trackTarget;
     }
     #endregion
 }

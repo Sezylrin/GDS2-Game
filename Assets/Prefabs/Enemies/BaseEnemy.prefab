@@ -163,7 +163,7 @@ GameObject:
   - component: {fileID: 237614624}
   - component: {fileID: 237614626}
   - component: {fileID: 237614625}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -479,7 +479,7 @@ GameObject:
   - component: {fileID: 1293667738}
   - component: {fileID: 1293667740}
   - component: {fileID: 1293667739}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: X_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -555,7 +555,7 @@ GameObject:
   - component: {fileID: 1440183273}
   - component: {fileID: 1440183275}
   - component: {fileID: 1440183274}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ConsumeHitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -649,7 +649,7 @@ GameObject:
   - component: {fileID: 1640814876}
   - component: {fileID: 1640814875}
   - component: {fileID: 1640814874}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -832,17 +832,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 1985056073}
-  <StaggerTimers>k__BackingField:
-    <times>k__BackingField: []
-    owner: {fileID: 0}
+  <Bar>k__BackingField: 0
+  <PointsToStagger>k__BackingField: 100
+  <StaggerDuration>k__BackingField: 3
+  <Staggered>k__BackingField: 0
   <StaggerDelayDuration>k__BackingField: 3
   <StaggerDecayAmount>k__BackingField: 4
   <StaggerDecayRate>k__BackingField: 0.25
-  <StaggerDuration>k__BackingField: 3
-  <Bar>k__BackingField: 0
-  <PointsToStagger>k__BackingField: 100
+  <StaggerTimers>k__BackingField:
+    <times>k__BackingField: []
+    owner: {fileID: 0}
   <Parent>k__BackingField: {fileID: 0}
-  <Staggered>k__BackingField: 0
 --- !u!1 &1781243287
 GameObject:
   m_ObjectHideFlags: 0
@@ -1015,7 +1015,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4430749194883615227}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BaseEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1050,7 +1050,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6494832649136334871}
   - component: {fileID: 6494832649136334868}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

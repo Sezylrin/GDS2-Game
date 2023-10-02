@@ -92,8 +92,8 @@ public class Attacks : MonoBehaviour
 
     public void LightAttack()
     {
-        playerState[] unAllowed = { playerState.dashing, playerState.abilityCast};
-        if (PCM.control.CheckStates(unAllowed))
+        playerState[] unAllowed = { playerState.dashing, playerState.abilityCast, playerState.hit, playerState.perfectDodge};
+        if (PCM.control.CheckStates(unAllowed) || PCM.system.isCountered)
             return;
         if (currentCombo >= maxCombo || currentAttackStage == attackStage.attackStart)
             return;
@@ -113,7 +113,7 @@ public class Attacks : MonoBehaviour
         // moves user in that direction via force
         Vector2 dir = (PCM.control.mousePos - (Vector2)transform.position).normalized;
         PCM.control.rb.velocity = dir * lightAttackPullDist;
-        centre.eulerAngles = new Vector3(0, 0, CustomMath.ClampedDirection(Vector2.up, dir));
+        centre.eulerAngles = new Vector3(0, 0, CustomMath.ClampedDirection(Vector2.up, dir, false));
         lightHitboxes[currentCombo].enabled = true;
         hitboxSprite[currentCombo].enabled = true;
         // play animation and state control in inherited classes

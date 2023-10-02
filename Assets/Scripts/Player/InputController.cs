@@ -8,15 +8,15 @@ using UnityEngine.InputSystem;
 public class InputController : MonoBehaviour
 {
     // Start is called before the first frame update
-    private PlayerInput input;
-    private PlayerInput.PlayerActions player;
+    private PlayerInputs input;
+    private PlayerInputs.PlayerActions player;
     
 
     [SerializeField]
     private PlayerComponentManager PCM;
     private void Awake()
     {
-        input = new PlayerInput();
+        input = new PlayerInputs();
         player = input.Player;
     }
 
@@ -39,8 +39,10 @@ public class InputController : MonoBehaviour
         player.Look.performed += PCM.control.MousePosition;
         player.Look.canceled += PCM.control.MousePosition;
         player.LookMouse.performed += PCM.control.MousePosition;
+        player.Attack.performed += PCM.system.AttemptCounter;
         GameManager.Instance.SetPlayerTransform(transform, PCM);
         PCM.control.SetControllerCursor(GameManager.Instance.controllerCursosrTR);
+        GameManager.Instance.SetCameraTrack(PCM.control.CameraFollowPoint);
     }
 
     
@@ -65,6 +67,7 @@ public class InputController : MonoBehaviour
         player.Look.performed -= PCM.control.MousePosition;
         player.Look.canceled -= PCM.control.MousePosition;
         player.LookMouse.performed -= PCM.control.MousePosition;
+        player.Attack.performed -= PCM.system.AttemptCounter;
         player.Disable();
     }
     // Update is called once per frame

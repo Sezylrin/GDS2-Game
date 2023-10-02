@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class UIInput : MonoBehaviour
 {
-    private PlayerInput input;
-    private PlayerInput.UIActions ui;
+    private PlayerInputs input;
+    private PlayerInputs.UIActions ui;
 
     [SerializeField] 
     private SkillSwitchManager skillSwitchManager;
 
     private void Awake()
     {
-        input = new PlayerInput();
+        input = new PlayerInputs();
         ui = input.UI;
     }
 

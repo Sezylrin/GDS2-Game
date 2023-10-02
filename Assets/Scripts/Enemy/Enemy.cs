@@ -11,12 +11,12 @@ using System.Threading;
 public enum EnemyType
 {
     TypeError,
-    Type1,
-    Type2, 
-    Type3, 
-    Type4, 
-    Type5, 
-    etc
+    Cheetah,
+    Lizard, 
+    Rhino, 
+    Snake, 
+    Test1, 
+    Test2
 }
 #endregion
 
@@ -51,16 +51,23 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     #region Balance Variables
     [field: Header("Balance Variables")]
-    [field: SerializeField] public int MaxHealth { get; private set; } = 100;
-    [field: SerializeField] protected int Damage { get; set; } = 10;
-    [field: SerializeField] protected float Speed { get; set; } = 1;
-    [field: SerializeField] protected int Souls { get; set; } = 1;
-    [field: SerializeField] protected float EffectDuration { get; set; } = 5;
-    [field: SerializeField] protected float AttackDuration { get; set; } = 1;
-    [field: SerializeField] protected float AttackCooldownDuration { get; set; } = 10;
-    [field: SerializeField] protected float WindupDuration { get; set; } = 1;
-    [field: SerializeField, Range(0, 100)] protected int ConsumableHealthPercentThreshold { get; set; } = 25;
-    [field: SerializeField, Range(0, 100)] protected int HealthPercentReceivedOnConsume { get; set; } = 10;
+    [field: SerializeField, ReadOnly] public int MaxHealth { get; private set; }
+    [field: SerializeField, ReadOnly] protected float Speed { get; set; }
+    [field: SerializeField, ReadOnly] protected int Souls { get; set; }
+    [field: SerializeField, ReadOnly] protected float EffectDuration { get; set; }
+    [field: SerializeField, ReadOnly] protected float WindupDuration { get; set; }
+    [field: SerializeField, ReadOnly] protected float AttackCooldownDuration { get; set; }
+
+    [field: SerializeField, ReadOnly] protected int Attack1Damage { get; set; }
+    [field: SerializeField, ReadOnly] protected float Attack1Duration { get; set; }
+    [field: SerializeField, ReadOnly] protected int Attack2Damage { get; set; }
+    [field: SerializeField, ReadOnly] protected float Attack2Duration { get; set; }
+    [field: SerializeField, ReadOnly] protected int Attack3Damage { get; set; }
+    [field: SerializeField, ReadOnly] protected float Attack3Duration { get; set; }
+    
+    [field: SerializeField, ReadOnly] protected float AttackKnockback { get; set; }
+    [field: SerializeField, ReadOnly, Range(0, 100)] protected int ConsumableHealthPercentThreshold { get; set; }
+    [field: SerializeField, ReadOnly, Range(0, 100)] protected int HealthPercentReceivedOnConsume { get; set; }
     #endregion
 
     #region Debug Variables
@@ -78,6 +85,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     #region Inspector Dependent Variables
     [field: Header("Inspector Set Variables")]
+    [field: SerializeField] protected BaseEnemyScriptableObject SO { get; set; }
     [field: SerializeField] protected HealthBarSegmentController HealthBarController { get; set; }
     [field: SerializeField] protected StaggerBar StaggerBar { get; set; }
     [field: SerializeField] protected Consume Consume { get; set; }
@@ -146,11 +154,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
         path.OnDestinationReached += SetOnDestination;
         Speed = path.maxSpeed;
-    }
 
+        Init();
+    }
 
     public virtual void SetDefaultState()
     {
+        SetStatsFromScriptableObject();
         SetHitPoints();
         SetElementImage();
 
@@ -168,13 +178,37 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
         EnemyTimers.ResetToZero();
 
-        HealthBarController.SetInitialSegments((int)MaxHealth);
-        HealthBarController.SetLowHealthThreshold(ConsumableHealthPercentThreshold);
-
-        Consume.SetHealthRecievedPercent(HealthPercentReceivedOnConsume);
         ConsumableHitbox.SetActive(false);
 
         StaggerBar.ResetStagger();
+    }
+
+    public virtual void SetStatsFromScriptableObject()
+    {
+        MaxHealth = SO.maxHealth;
+        Speed = SO.speed;
+        Souls = SO.souls;
+        ConsumableHealthPercentThreshold = SO.consumableHealthPercentThreshold;
+        HealthPercentReceivedOnConsume = SO.percentToHealOnConsume;
+        WindupDuration = SO.windupDuration;
+        AttackCooldownDuration = SO.attackCooldown;
+        EffectDuration = SO.effectDuration;
+
+        Attack1Damage = SO.attack1Damage;
+        Attack1Duration = SO.attack1Duration;
+        Attack2Damage = SO.attack2Damage;
+        Attack2Duration = SO.attack2Duration;
+        Attack3Damage = SO.attack3Damage;
+        Attack3Duration = SO.attack3Duration;
+
+        StaggerBar.SetStats(SO.pointsToStagger, SO.staggerDuration, SO.staggerDelayDuration, SO.staggerDecayAmount, SO.staggerDecayRate);
+        HealthBarController.SetStats(MaxHealth, ConsumableHealthPercentThreshold);
+        Consume.SetStats(HealthPercentReceivedOnConsume);
+    }
+
+    public void SetHitPoints()
+    {
+        Hitpoints = MaxHealth;
     }
 
     public void SetTimers()
@@ -262,7 +296,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
         if (!Consumable)
         {
-            if (Hitpoints / MaxHealth * 100 <= ConsumableHealthPercentThreshold)
+            if ((float)Hitpoints / (float)MaxHealth * 100 <= ConsumableHealthPercentThreshold)
             {
                 ConsumableHitbox.SetActive(true);
                 Consumable = true;
@@ -296,6 +330,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     public void AddForce(Vector2 force)
     {
+        rb.velocity = Vector2.zero;
         rb.velocity += force;
         path.enabled = false;
     }
@@ -314,16 +349,15 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     {
         return Consumable;
     }
-    public void SetHitPoints()
-    {
-        Hitpoints = MaxHealth;
-    }
 
-    public virtual void OnDeath()
+    public virtual void OnDeath(bool overrideKill = false)
     {
         if (DeathSoundPrefab) Instantiate(DeathSoundPrefab);
-        Manager.DecrementActiveEnemyCounter();
-        GameManager.Instance.AddSouls(Souls);
+        if (!overrideKill)
+        {
+            Manager.DecrementActiveEnemyCounter();
+            GameManager.Instance.AddSouls(Souls);
+        }
     }
     #endregion
 
@@ -364,7 +398,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     protected virtual void BeginAttack()
     {
-        EnemyTimers.SetTime((int)EnemyTimer.attackDurationTimer, AttackDuration);
+        EnemyTimers.SetTime((int)EnemyTimer.attackDurationTimer, Attack1Duration);
     }
 
     protected virtual void EndAttack(object sender, EventArgs e)
@@ -648,7 +682,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
             case (int)EnemyState.chasing:
                 AttemptAttack();
                 currentState = EnemyState.attacking;
-                timeToAdd = AttackDuration + WindupDuration;
+                timeToAdd = Attack1Duration + WindupDuration;
                 break;
             case (int)EnemyState.repositioning:
                 timeToAdd = UnityEngine.Random.Range(RepositionRateMin, RepositionRateMax);

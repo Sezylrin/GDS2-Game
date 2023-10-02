@@ -262,17 +262,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 1742834759}
-  <StaggerTimers>k__BackingField:
-    <times>k__BackingField: []
-    owner: {fileID: 0}
+  <Bar>k__BackingField: 0
+  <PointsToStagger>k__BackingField: 100
+  <StaggerDuration>k__BackingField: 3
+  <Staggered>k__BackingField: 0
   <StaggerDelayDuration>k__BackingField: 3
   <StaggerDecayAmount>k__BackingField: 4
   <StaggerDecayRate>k__BackingField: 0.25
-  <StaggerDuration>k__BackingField: 3
-  <Bar>k__BackingField: 0
-  <PointsToStagger>k__BackingField: 100
+  <StaggerTimers>k__BackingField:
+    <times>k__BackingField: []
+    owner: {fileID: 0}
   <Parent>k__BackingField: {fileID: 2996488685272666354}
-  <Staggered>k__BackingField: 0
 --- !u!1 &671474608
 GameObject:
   m_ObjectHideFlags: 0
@@ -1100,11 +1100,11 @@ GameObject:
   m_Component:
   - component: {fileID: 2996488685272666364}
   - component: {fileID: 2996488685272666367}
-  - component: {fileID: 2996488685272666365}
   - component: {fileID: 882732001}
   - component: {fileID: 2996488685272666354}
   - component: {fileID: 1090918736}
   - component: {fileID: 1090918735}
+  - component: {fileID: -2471552247702071909}
   m_Layer: 6
   m_Name: TestRangedEnemy
   m_TagString: Untagged
@@ -1183,51 +1183,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &2996488685272666365
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2996488685272666361}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 64
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
 --- !u!50 &882732001
 Rigidbody2D:
   serializedVersion: 4
@@ -1240,8 +1195,8 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 1
+  m_Mass: 15
+  m_LinearDrag: 10
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -1280,15 +1235,20 @@ MonoBehaviour:
     <times>k__BackingField: []
     owner: {fileID: 0}
   <MaxHealth>k__BackingField: 250
-  <Damage>k__BackingField: 10
   <Speed>k__BackingField: 0
   <Souls>k__BackingField: 40
   <EffectDuration>k__BackingField: 5
-  <AttackDuration>k__BackingField: 1
-  <AttackCooldownDuration>k__BackingField: 10
   <WindupDuration>k__BackingField: 1
-  <ConsumableHealthPercent>k__BackingField: 25
-  <HealthPercentReceivedOnConsume>k__BackingField: 0.1
+  <AttackCooldownDuration>k__BackingField: 10
+  <Attack1Damage>k__BackingField: 0
+  <Attack1Duration>k__BackingField: 0
+  <Attack2Damage>k__BackingField: 0
+  <Attack2Duration>k__BackingField: 0
+  <Attack3Damage>k__BackingField: 0
+  <Attack3Duration>k__BackingField: 0
+  <AttackKnockback>k__BackingField: 5
+  <ConsumableHealthPercentThreshold>k__BackingField: 25
+  <HealthPercentReceivedOnConsume>k__BackingField: 0
   <debugElement>k__BackingField: 2
   <debugDamage>k__BackingField: 20
   <debugStaggerPoints>k__BackingField: 50
@@ -1298,15 +1258,16 @@ MonoBehaviour:
   <debugAttemptAttack>k__BackingField: 0
   <debugInterruptAttack>k__BackingField: 0
   <debugEnemySpawn>k__BackingField: 0
+  <SO>k__BackingField: {fileID: 11400000, guid: 337e38328d3f73146bea394118771e89, type: 2}
   <HealthBarController>k__BackingField: {fileID: 972554465}
   <StaggerBar>k__BackingField: {fileID: 378752905}
   <Consume>k__BackingField: {fileID: 294510619}
   <ConsumableHitbox>k__BackingField: {fileID: 294510617}
   <ElementEffectImage>k__BackingField: {fileID: 988464900}
-  <WalkingSound>k__BackingField: {fileID: 0}
-  <DeathSoundPrefab>k__BackingField: {fileID: 0}
   <rb>k__BackingField: {fileID: 882732001}
   <path>k__BackingField: {fileID: 1090918735}
+  <WalkingSound>k__BackingField: {fileID: 0}
+  <DeathSoundPrefab>k__BackingField: {fileID: 0}
   <ActiveCombos>k__BackingField: 
   <ComboEffectTimer>k__BackingField:
     <times>k__BackingField: []
@@ -1411,6 +1372,41 @@ MonoBehaviour:
   slowWhenNotFacingTarget: 1
   whenCloseToDestination: 0
   constrainInsideGraph: 0
+--- !u!58 &-2471552247702071909
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2996488685272666361}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!1 &2996488685874130670
 GameObject:
   m_ObjectHideFlags: 0
