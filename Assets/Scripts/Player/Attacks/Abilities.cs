@@ -39,6 +39,11 @@ public class Abilities : MonoBehaviour
     public void ToggleActiveAbilitySet(InputAction.CallbackContext context)
     {
         AbilitySetOne = !AbilitySetOne;
+        UpdateUI();
+    }
+
+    public void UpdateUI()
+    {
         if (AbilitySetOne)
         {
             PCM.UI.UpdateAbilityText(GetName(3), GetName(4), GetName(5));
@@ -97,6 +102,7 @@ public class Abilities : MonoBehaviour
         if (!abilityToUse)
             return;
         abilities[slot] = abilityToUse;
+        UpdateUI();
     }
 
     private void CastAbility(ElementalSO selected)
