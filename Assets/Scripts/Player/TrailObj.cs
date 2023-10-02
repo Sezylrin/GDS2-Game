@@ -11,7 +11,7 @@ public class TrailObj : MonoBehaviour
     public SpriteRenderer render;
     void Start()
     {
-        
+        DontDestroyOnLoad(gameObject);
     }
 
     // Update is called once per frame
