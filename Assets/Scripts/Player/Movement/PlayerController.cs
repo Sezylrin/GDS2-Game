@@ -400,7 +400,7 @@ public class PlayerController : MonoBehaviour
     public void SetAbilityState()
     {
         isUsingAbility = true;
-        rb.drag = drag * 10;
+        rb.velocity = (mousePos - (Vector2)transform.position).normalized * 0.1f;
         timers.SetTime((int)coolDownTimers.abilityCast, abilityCast);
     }
 
@@ -511,6 +511,7 @@ public class PlayerController : MonoBehaviour
         timers.SetTime((int)coolDownTimers.dashCastCD, dashCDTimer + dashDuration);
         col2D.excludeLayers += enemyLayer;
         dashCoroutine = StartCoroutine(StartDashing());
+        PCM.Trail.DashAfterImage(dashDuration, 5);
     }
 
     private IEnumerator StartDashing()
@@ -560,14 +561,27 @@ public class PlayerController : MonoBehaviour
     #region Perfect Dodge
     private void PerfectDodge()
     {
+        playerState[] allowed = { playerState.idle, playerState.attackEnd, playerState.abilityLag };
+        if (!CheckStates(allowed))
+            return;
+        if (isPerfectDodge)
+            return;
         RemoveBufferInput();
         isPerfectDodge = true;
+        PCM.Trail.PerfectDodge(perfectDodgeDuration, true);
         timers.SetTime((int)coolDownTimers.perfectDodge, perfectDodgeDuration);
+        rb.velocity = Vector2.zero;
     }
 
     private void StopPerfectDodge(object sender, EventArgs e)
     {
         isPerfectDodge = false;
+    }
+
+    public void CounteredAttack(float counterQTE)
+    {
+        PCM.Trail.Countered(counterQTE, true);
+        timers.SetTime((int)coolDownTimers.perfectDodge, counterQTE);
     }
     #endregion
 
@@ -632,7 +646,11 @@ public class PlayerController : MonoBehaviour
             StopDash(dashCoroutine);
         }
     }
-
+    /// <summary>
+    /// returns true is the current state is any of the allowedstates
+    /// </summary>
+    /// <param name="allowedStates"></param>
+    /// <returns></returns>
     public bool CheckStates(playerState[] allowedStates)
     {
         bool allowed = false;
