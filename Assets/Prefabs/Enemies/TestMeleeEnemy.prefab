@@ -586,17 +586,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 2067706108}
-  <StaggerTimers>k__BackingField:
-    <times>k__BackingField: []
-    owner: {fileID: 0}
+  <Bar>k__BackingField: 0
+  <PointsToStagger>k__BackingField: 100
+  <StaggerDuration>k__BackingField: 3
+  <Staggered>k__BackingField: 0
   <StaggerDelayDuration>k__BackingField: 3
   <StaggerDecayAmount>k__BackingField: 4
   <StaggerDecayRate>k__BackingField: 0.25
-  <StaggerDuration>k__BackingField: 3
-  <Bar>k__BackingField: 0
-  <PointsToStagger>k__BackingField: 100
+  <StaggerTimers>k__BackingField:
+    <times>k__BackingField: []
+    owner: {fileID: 0}
   <Parent>k__BackingField: {fileID: 2489379560569873066}
-  <Staggered>k__BackingField: 0
 --- !u!1 &2067706106
 GameObject:
   m_ObjectHideFlags: 0
@@ -1397,14 +1397,18 @@ MonoBehaviour:
     <times>k__BackingField: []
     owner: {fileID: 0}
   <MaxHealth>k__BackingField: 300
-  <Damage>k__BackingField: 10
   <Speed>k__BackingField: 0
   <Souls>k__BackingField: 20
   <EffectDuration>k__BackingField: 5
-  <AttackDuration>k__BackingField: 0.5
-  <AttackCooldownDuration>k__BackingField: 10
-  <AttackKnockback>k__BackingField: 5
   <WindupDuration>k__BackingField: 1
+  <AttackCooldownDuration>k__BackingField: 10
+  <Attack1Damage>k__BackingField: 0
+  <Attack1Duration>k__BackingField: 0
+  <Attack2Damage>k__BackingField: 0
+  <Attack2Duration>k__BackingField: 0
+  <Attack3Damage>k__BackingField: 0
+  <Attack3Duration>k__BackingField: 0
+  <AttackKnockback>k__BackingField: 5
   <ConsumableHealthPercentThreshold>k__BackingField: 25
   <HealthPercentReceivedOnConsume>k__BackingField: 0
   <debugElement>k__BackingField: 2
@@ -1416,6 +1420,7 @@ MonoBehaviour:
   <debugAttemptAttack>k__BackingField: 0
   <debugInterruptAttack>k__BackingField: 0
   <debugEnemySpawn>k__BackingField: 0
+  <SO>k__BackingField: {fileID: 11400000, guid: 337e38328d3f73146bea394118771e89, type: 2}
   <HealthBarController>k__BackingField: {fileID: 1012920425}
   <StaggerBar>k__BackingField: {fileID: 1569979671}
   <Consume>k__BackingField: {fileID: 506776005}

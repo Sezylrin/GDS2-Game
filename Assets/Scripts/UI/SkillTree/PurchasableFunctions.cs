@@ -24,4 +24,14 @@ public class PurchasableFunctions : MonoBehaviour
     {
         GameManager.Instance.StatsManager.attackDamageModifier += AmountToIncrease;
     }
+
+    public void UnlockSecondSkillSet()
+    {
+        GameManager.Instance.StatsManager.secondSkillsetUnlocked = true;
+    }
+
+    public void SkillUnlock(ElementalSO skill)
+    {
+        GameManager.Instance.StatsManager.UnlockAbility(skill);
+    }
 }

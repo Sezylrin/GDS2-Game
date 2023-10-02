@@ -28,6 +28,10 @@ public class ElementalSO : ScriptableObject
 
     public float lifeTime;
 
+    public string description;
+
+    public Sprite icon;
+
 }
 
 
