@@ -21,13 +21,18 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public ElementCombo ComboManager { get; private set; }
     [field: SerializeField] public LevelGenerator LevelGenerator { get; private set; }
     [field: SerializeField] public SkillTreeManager SkillTreeManager { get; private set; }
-    [field: SerializeField] public StatsManager StatsManager { get; private set; }
     [field: SerializeField, HideOnPlay(true)] public Transform PlayerTransform { get; private set; }
+    [field: SerializeField] public SkillSwitchManager SkillSwitchManager { get; private set; }
+    [field: SerializeField] public StatsManager StatsManager { get; private set; }
+    [field: SerializeField, HideOnPlay(true)]
     public PlayerComponentManager PCM { get; private set; }
     public Transform CameraTrackPoint { get; private set; }
     private InteractionBase interaction;
+    public AudioComponent AudioComponent;
+
     private Consume consume;
     [field: SerializeField] public int HealthPerSegment { get; set; } = 100;
+
 
     #region Cursor
     [field: SerializeField]
@@ -47,9 +52,11 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            input.onControlsChanged += SetScheme;
-            SwitchToMouseCursor();
         }
+        AudioComponent = gameObject.GetComponent<AudioComponent>();
+        input.onControlsChanged += SetScheme;
+
+        SwitchToMouseCursor();
     }
 
     private void Start()
@@ -58,6 +65,19 @@ public class GameManager : MonoBehaviour
         ConsumeTimers.times[(int)ConsumeTimer.consumeDelay].OnTimeIsZero += EndConsumeDelay;
     }
 
+    //Temporary for now, remove when we have a proper way to open skillSwitchManager
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            SkillSwitchManager.OpenMenu();
+            AudioComponent.PlaySound(SoundType.UIOpenMenu);
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            AddSouls(10000);
+        }
+    }
 
     public void SetPlayerTransform(Transform player, PlayerComponentManager PCM)
     {
@@ -66,7 +86,9 @@ public class GameManager : MonoBehaviour
     }
     #region Souls
     public int Souls { get; private set; }
+
     [field: SerializeField]
+
     public int LostSouls { get; private set; }
     [field:SerializeField]
     public int FountainRoomToSpawn { get; private set; }
@@ -113,6 +135,7 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+
     #region Interaction
     public void SetInteraction(InteractionBase interaction)
     {
@@ -141,6 +164,7 @@ public class GameManager : MonoBehaviour
     {
         consumeDelay
     }
+
     [field: SerializeField] private float ConsumeDelayDuration { get; set; } = 2;
     [field: SerializeField] private Timer ConsumeTimers { get; set; }
 
@@ -175,38 +199,67 @@ public class GameManager : MonoBehaviour
         consume.TriggerConsume();
         if (consume) RemoveConsume(consume);
     }
+
     #endregion
 
     #region ControlScheme
     [field: SerializeField]
     public ControlScheme currentScheme { get; private set; }
+
     [field: SerializeField]
+
     public PlayerInput input { get; private set; }
+
     public EventHandler OnControlSchemeSwitch;
     public void SetScheme(PlayerInput input)
+
     {
+
         if (input.currentControlScheme.Equals(null))
+
             return;
+
         string temp = input.currentControlScheme;
+
         ControlScheme scheme;
+
         switch (temp)
+
         {
+
             case "Keyboard&Mouse":
+
                 scheme = ControlScheme.keyboardAndMouse;
+
                 SwitchToMouseCursor();
+
                 break;
+
             case "Controller":
+
                 scheme = ControlScheme.controller;
+
                 SwitchToControllerCursor();
+
                 break;
+
             default:
+
                 scheme = ControlScheme.keyboardAndMouse;
+
                 SwitchToMouseCursor();
+
                 break;
+
         }
+
         currentScheme = scheme;
+
         OnControlSchemeSwitch?.Invoke(this, EventArgs.Empty);
+
     }
+
+
 
     #endregion
 
