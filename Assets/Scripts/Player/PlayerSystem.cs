@@ -284,12 +284,20 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     private LayerMask enemy;
     public void CounterSuccesful(Enemy target, EnemyProjectile projectile = null)
     {
+        if (isCountered)
+            return;
         isCountered = true;
         this.target = target;
         storedProjectile = projectile;
         timer.SetTime((int)SystemCD.counterAttackQTE, counterQTEDuration);
+        PCM.control.CounteredAttack(counterQTEDuration);
     }
 
+    [ContextMenu("test Counter")]
+    private void TestCounter()
+    {
+        PCM.control.CounteredAttack(counterQTEDuration);
+    }
     private void RemoveCounterQTE(object sender, EventArgs e)
     {
         RemoveCounterQTE();

@@ -540,6 +540,52 @@ Transform:
   m_Father: {fileID: 3543791458973239699}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &247572585
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 247572586}
+  - component: {fileID: 247572587}
+  m_Layer: 3
+  m_Name: Trail Effect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &247572586
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247572585}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3543791457672997727}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &247572587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247572585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2c93da6dbbd86a48803241c9e9afa4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trailObj: {fileID: 4801490293196708577, guid: 4f060ff0e90620c48a4b5828d52926cb, type: 3}
+  rend: {fileID: 3543791457672997724}
 --- !u!1 &274715373
 GameObject:
   m_ObjectHideFlags: 0
@@ -1881,10 +1927,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3543791457672997726}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.05, y: 0.13, z: 0}
+  m_LocalPosition: {x: -0.000000048428774, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 247572586}
   m_Father: {fileID: 3543791458973239699}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1928,7 +1975,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1725982173
   m_SortingLayer: 4
-  m_SortingOrder: 17
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: ab1adeeae9e0a904bb5810aeec686e92, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2232,6 +2279,7 @@ MonoBehaviour:
   <attack>k__BackingField: {fileID: 3543791458973239696}
   <abilities>k__BackingField: {fileID: 864687015}
   <UI>k__BackingField: {fileID: 1114287056888059202}
+  <Trail>k__BackingField: {fileID: 247572587}
 --- !u!114 &3543791458973239726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2271,7 +2319,7 @@ MonoBehaviour:
   debugCost: 1
   startingHitPoint: 100
   <Hitpoints>k__BackingField: 0
-  counterQTEDuration: 0.3
+  counterQTEDuration: 0.4
   counterDamage: 40
   counterStagger: 40
   enemy:
@@ -2300,11 +2348,11 @@ MonoBehaviour:
   currentMaxSpeed: 0
   dashCDTimer: 0.1
   dashDistance: 4
-  dashDuration: 0.1
+  dashDuration: 0.3
   dashCharges: 3
   dashRechargeRate: 1
   currentDashCharges: 0
-  perfectDodgeDuration: 1
+  perfectDodgeDuration: 0.5
   abilityLag: 0.3
   abilityCast: 0.2
   <AbilityCentre>k__BackingField: {fileID: 1874316682}
@@ -2313,6 +2361,9 @@ MonoBehaviour:
   cameraMouseMax: 5
   cameraMaxOffset: 3
   <CameraFollowPoint>k__BackingField: {fileID: 247273588}
+  camLerpDur: 0.2
+  currentOffset: 0
+  snapPoint: 0.9
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
