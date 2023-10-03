@@ -13,12 +13,11 @@ public abstract class RangedEnemy : Enemy
 
     [field: SerializeField] protected Timer RangedTimers { get; private set; }
     [field: SerializeField] protected float FlashDuration { get; set; } = 0.1f;
-
     [field: SerializeField] protected GameObject WarningFlash { get; set; }
     [field: SerializeField] protected GameObject ProjectilePrefab { get; set; }
     [field: SerializeField] protected Transform ProjectileSpawnPoint { get; set; }
 
-    protected Pool<EnemyProjectile> pool;
+    //protected Pool<EnemyProjectile> pool;
 
     protected bool FlashedOnce { get; set; } = false;
 
@@ -26,21 +25,12 @@ public abstract class RangedEnemy : Enemy
     {
         base.Start();
         RangedTimers = GameManager.Instance.TimerManager.GenerateTimers(typeof(RangedTimer), gameObject);
-        RangedTimers.times[(int)RangedTimer.warningFlashTimer].OnTimeIsZero += DisableWarningSign;
-        RangedTimers.times[(int)RangedTimer.warningFlashDelay].OnTimeIsZero += SecondWarningFlash;
-        GameManager.Instance.PoolingManager.FindPool(ProjectilePrefab, out pool);
+        //RangedTimers.times[(int)RangedTimer.warningFlashTimer].OnTimeIsZero += DisableWarningSign;
+        //RangedTimers.times[(int)RangedTimer.warningFlashDelay].OnTimeIsZero += SecondWarningFlash;
+        //GameManager.Instance.PoolingManager.FindPool(ProjectilePrefab, out pool);
     }
 
-    protected override void Update()
-    {
-        base.Update();
-    }
-
-    protected override void Attack()
-    {
-        base.Attack();
-    }
-
+    /*
     protected override void BeginWindup()
     {
         base.BeginWindup();
@@ -80,7 +70,7 @@ public abstract class RangedEnemy : Enemy
         EnableWarningSign();
         FlashedOnce = false;
     }
-
+    
     protected override void BeginAttack()
     {
         base.BeginAttack();
@@ -101,4 +91,6 @@ public abstract class RangedEnemy : Enemy
     {
         SetDestination(transform.position);
     }
+
+    */
 }

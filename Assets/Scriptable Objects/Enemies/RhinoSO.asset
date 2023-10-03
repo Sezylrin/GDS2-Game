@@ -13,17 +13,20 @@ MonoBehaviour:
   m_Name: RhinoSO
   m_EditorClassIdentifier: 
   maxHealth: 500
-  speed: 0
+  speed: 5
   souls: 10
   effectDuration: 5
-  windupDuration: 1
+  attackKnockback: 5
   attackCooldown: 10
   attack1Damage: 10
-  attack1Duration: 1
-  attack2Damage: 0
-  attack2Duration: 0
-  attack3Damage: 0
-  attack3Duration: 0
+  attack1Duration: 2
+  windup1Duration: 1
+  attack2Damage: 10
+  attack2Duration: 1
+  windup2Duration: 1
+  attack3Damage: 10
+  attack3Duration: 3
+  windup3Duration: 1
   consumableHealthPercentThreshold: 25
   percentToHealOnConsume: 10
   pointsToStagger: 100
