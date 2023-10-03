@@ -347,6 +347,18 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 17
       objectReference: {fileID: 0}
+    - target: {fileID: 3543791458973239696, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
+      propertyPath: lightAttackDamage.Array.data[0]
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3543791458973239696, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
+      propertyPath: lightAttackDamage.Array.data[1]
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3543791458973239696, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
+      propertyPath: lightAttackDamage.Array.data[2]
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 3543791458973239699, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
       propertyPath: m_RootOrder
       value: 1
