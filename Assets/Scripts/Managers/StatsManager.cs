@@ -9,6 +9,8 @@ public class StatsManager : MonoBehaviour
     private List<ElementalSO> lockedAbilities;
     [SerializeField] 
     private List<ElementalSO> unlockedAbilities;
+    [SerializeField]
+    private ElementalSO[] startingEquippedAbilities = new ElementalSO[0];
     [HideInInspector]
     public Dictionary<int, ElementalSO> savedAbilityPositions = new(); 
 
@@ -20,9 +22,9 @@ public class StatsManager : MonoBehaviour
 
     private void Awake()
     {
-        for (int i = 0; i < unlockedAbilities.Count; i++)
+        for (int i = 0; i < startingEquippedAbilities.Length; i++)
         {
-            savedAbilityPositions.Add(i, unlockedAbilities[i]);
+            savedAbilityPositions.Add(i, startingEquippedAbilities[i]);
         }
     }
 
