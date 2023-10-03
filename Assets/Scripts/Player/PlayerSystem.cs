@@ -293,6 +293,17 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         PCM.control.CounteredAttack(counterQTEDuration);
     }
 
+    public void CounterSuccesfulTutorial(Transform target, EnemyProjectile projectile)
+    {
+        if (isCountered)
+            return;
+        isCountered = true;
+        tutorialTarget = target;
+        storedProjectile = projectile;
+        timer.SetTime((int)SystemCD.counterAttackQTE, counterQTEDuration);
+        PCM.control.CounteredAttack(counterQTEDuration);
+    }
+    private Transform tutorialTarget;
     [ContextMenu("test Counter")]
     private void TestCounter()
     {
@@ -314,7 +325,11 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     {
         if (isCountered)
         {
-            if (storedProjectile)
+            if (GameManager.Instance.IsTutorial)
+            {
+                storedProjectile.CounterProjectile(tutorialTarget, transform.position, enemy, transform);
+            }
+            else if (storedProjectile)
             {
                 storedProjectile.CounterProjectile(target, transform.position, enemy, transform);
             }

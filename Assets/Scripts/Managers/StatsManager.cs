@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AYellowpaper.SerializedCollections;
 
 public class StatsManager : MonoBehaviour
 {
@@ -11,8 +12,8 @@ public class StatsManager : MonoBehaviour
     private List<ElementalSO> unlockedAbilities;
     [SerializeField]
     private ElementalSO[] startingEquippedAbilities = new ElementalSO[0];
-    [HideInInspector]
-    public Dictionary<int, ElementalSO> savedAbilityPositions = new(); 
+    [SerializedDictionary("slot", "SO")]
+    public SerializedDictionary<int, ElementalSO> savedAbilityPositions;
 
     [Header("Stats")]
     public int abilityModifier = 0;
@@ -21,6 +22,17 @@ public class StatsManager : MonoBehaviour
     public bool secondSkillsetUnlocked = false;
 
     private void Awake()
+    {
+        if (savedAbilityPositions.Count == 0)
+        {
+            for (int i = 0; i < startingEquippedAbilities.Length; i++)
+            {
+                savedAbilityPositions.Add(i, startingEquippedAbilities[i]);
+            }
+        }
+    }
+
+    public void SetEquippedSkill()
     {
         for (int i = 0; i < startingEquippedAbilities.Length; i++)
         {

@@ -6,13 +6,16 @@ using UnityEngine.SceneManagement;
 public enum Scene
 {
     //Start,
-    Hub
+    Hub,
+    Tutorial
 }
 
 public class SceneLoader : MonoBehaviour
 {
     public void Load(Scene scene, bool EnableDefaultTransition = true)
     {
+        if (scene == Scene.Tutorial)
+            GameManager.Instance.SetIsTutorial(true);
         if (EnableDefaultTransition)
             TriggerFade(scene);
         else

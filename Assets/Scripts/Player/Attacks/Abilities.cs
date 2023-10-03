@@ -38,6 +38,8 @@ public class Abilities : MonoBehaviour
     }
     public void ToggleActiveAbilitySet(InputAction.CallbackContext context)
     {
+        if (!GameManager.Instance.StatsManager.secondSkillsetUnlocked)
+            return;
         AbilitySetOne = !AbilitySetOne;
         UpdateUI();
     }
