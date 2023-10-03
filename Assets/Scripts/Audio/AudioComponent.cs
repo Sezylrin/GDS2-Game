@@ -1,8 +1,15 @@
 using AYellowpaper.SerializedCollections;
+using Mono.Cecil;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+public enum Sound
+{
+    sfx,
+    bgm,
+}
 
 public class AudioComponent : MonoBehaviour
 {
@@ -12,7 +19,7 @@ public class AudioComponent : MonoBehaviour
     [SerializedDictionary("Sound Type", "Possible Sounds")]
     private SerializedDictionary<SoundType, AudioClip[]> sounds;
 
-    public void PlaySound(SoundType type)
+    public void PlaySound(SoundType type, Sound sound = Sound.sfx, int soundOffset = 0)
     {
         if (!sounds.ContainsKey(type))
         {
@@ -24,6 +31,7 @@ public class AudioComponent : MonoBehaviour
         AudioClip clip = clips[UnityEngine.Random.Range(0, clips.Length)];
 
         AudioSource newSource = gameObject.AddComponent<AudioSource>();
+        newSource.volume = Mathf.Clamp01(GetVolume(sound) + soundOffset / 100f);
         newSource.playOnAwake = false;
         newSource.loop = false;
         newSource.clip = clip;
@@ -32,7 +40,7 @@ public class AudioComponent : MonoBehaviour
         StartCoroutine(DestroyAudioSourceWhenFinished(newSource));
     }
 
-    public void PlayLoopingSound(SoundType type)
+    public void PlayLoopingSound(SoundType type, Sound sound = Sound.sfx, int soundOffset = 0)
     {
         if (!sounds.ContainsKey(type))
         {
@@ -44,12 +52,26 @@ public class AudioComponent : MonoBehaviour
         AudioClip clip = clips[UnityEngine.Random.Range(0, clips.Length)];
 
         AudioSource newSource = gameObject.AddComponent<AudioSource>();
+        newSource.volume = Mathf.Clamp01(GetVolume(sound) + soundOffset / 100f);
         newSource.playOnAwake = false;
         newSource.loop = true;
         newSource.clip = clip;
         newSource.Play();
 
         LoopingSounds.Add(newSource);
+    }
+
+    private float GetVolume(Sound sound)
+    {
+        switch (sound)
+        {
+            case Sound.sfx:
+                return GameManager.Instance.AudioManager.sfxVolume;
+            case Sound.bgm:
+                return GameManager.Instance.AudioManager.bgmVolume;
+            default:
+                return 0;
+        }
     }
 
     public void DestroyLoopingSound(SoundType type)

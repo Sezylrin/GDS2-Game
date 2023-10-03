@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public PoolingManager PoolingManager { get; private set; }
     [field: SerializeField] public ElementCombo ComboManager { get; private set; }
     [field: SerializeField] public LevelGenerator LevelGenerator { get; private set; }
+    [field: SerializeField] public AudioManager AudioManager { get; private set; }
     [field: SerializeField] public SkillTreeManager SkillTreeManager { get; private set; }
     [field: SerializeField, HideOnPlay(true)] public Transform PlayerTransform { get; private set; }
     [field: SerializeField] public SkillSwitchManager SkillSwitchManager { get; private set; }
