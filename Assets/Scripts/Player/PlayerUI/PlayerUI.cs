@@ -82,7 +82,7 @@ public class PlayerUI : MonoBehaviour
     public void UpdateConsumeBar(float fillAmount)
     {
         consumeBarImage.fillAmount = fillAmount;
-        if (fillAmount == 1)
+        if (PCM.system.CanConsume())
         {
             consumeBarImage.color = Color.red;
         }
@@ -91,6 +91,6 @@ public class PlayerUI : MonoBehaviour
     public void EmptyConsumeBar()
     {
         consumeBarImage.fillAmount = 0;
-        consumeBarImage.color = new Color(255, 162, 0);
+        consumeBarImage.color = Color.yellow;
     }
 }

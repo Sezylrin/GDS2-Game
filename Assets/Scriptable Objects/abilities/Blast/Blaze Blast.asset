@@ -17,10 +17,11 @@ MonoBehaviour:
   type: 0
   castCost: 1
   pierceAmount: 3
-  damage: 20
-  knockback: 8
-  Stagger: 40
-  lifeTime: 0.75
+  damage: 100
+  knockback: 5
+  Stagger: 30
+  consumePoints: 10
+  lifeTime: 0.5
   description: Blaze Blast Description
   icon: {fileID: 21300000, guid: b1a8e1deb0d1ef3428ba581d0d4f7be8, type: 3}
   initialShape:
@@ -33,4 +34,4 @@ MonoBehaviour:
   - {x: -0.282193, y: 0.1591092}
   - {x: -0.28703678, y: -0.14057478}
   - {x: 2.387988, y: -0.7768433}
-  speed: 0.5
+  speed: 0.35

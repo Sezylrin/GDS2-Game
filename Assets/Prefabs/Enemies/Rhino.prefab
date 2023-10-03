@@ -707,7 +707,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9185797213366295347
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1306,6 +1306,7 @@ MonoBehaviour:
   <ShockwaveHitbox>k__BackingField: {fileID: 21723366}
   <StompPrefab>k__BackingField: {fileID: 3524762612804635211, guid: d90f785141a0696499e5b0cf9e8617ab, type: 3}
   <StompSpawnPoint>k__BackingField: {fileID: 266498436}
+  <StompMoveSpeed>k__BackingField: 0
   <Attack2Range>k__BackingField: 0
   <col2D>k__BackingField: {fileID: 9185797213798890991}
   <shockwaveCol2D>k__BackingField: {fileID: 21723369}

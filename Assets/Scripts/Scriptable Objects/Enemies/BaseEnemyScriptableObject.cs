@@ -7,7 +7,8 @@ public class BaseEnemyScriptableObject : ScriptableObject
 {
     public int maxHealth;
     public float speed;
-    public int souls;
+    public int minSouls;
+    public int maxSouls;
     public float effectDuration = 5;
     [Space(20)]
     public float attackKnockback = 5;

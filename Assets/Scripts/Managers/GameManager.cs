@@ -180,8 +180,9 @@ public class GameManager : MonoBehaviour
         consumeDelay
     }
 
-    [field: SerializeField] private float ConsumeDelayDuration { get; set; } = 2;
+    [field: SerializeField] private float ConsumeDelayDuration { get; set; } = 1;
     [field: SerializeField] private Timer ConsumeTimers { get; set; }
+    private bool consuming = false;
 
     public void SetConsume(Consume consume)
     {
@@ -190,7 +191,7 @@ public class GameManager : MonoBehaviour
 
     public void RemoveConsume(Consume consume)
     {
-        if (this.consume == consume)
+        if (this.consume == consume && !consuming)
         {
             this.consume = null;
         }
@@ -201,6 +202,8 @@ public class GameManager : MonoBehaviour
         if (consume)
         {
             StartConsumeDelay();
+            consume.StartConsuming();
+            consuming = true;
         }
     }
 

@@ -13,6 +13,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
     [field: SerializeField] protected GameObject ShockwaveHitbox { get; set; }
     [field: SerializeField] protected GameObject StompPrefab { get; set; }
     [field: SerializeField] protected Transform StompSpawnPoint { get; set; }
+    [field: SerializeField] protected float StompMoveSpeed { get; set; }
     [field: SerializeField] protected float Attack2Range { get; set; } = 3;
     [field: SerializeField] protected Collider2D col2D { get; set; }
     [field: SerializeField] protected CircleCollider2D shockwaveCol2D { get; set; }
@@ -52,6 +53,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
         ShockwaveStartRadius = RhinoSO.shockwaveStartRadius;
         ShockwaveEndRadius = RhinoSO.shockwaveEndRadius;
         ShockwaveGrowthSpeed = RhinoSO.shockwaveGrowthSpeed;
+        StompMoveSpeed = RhinoSO.stompMoveSpeed;
     }
 
     protected override void DetermineAttackPathing()
@@ -92,11 +94,10 @@ public class Rhino : Enemy, IPoolable<Rhino>
         StartCoroutine(AutoEndCharge());
         
         Charging = true;
-        ModifySpeed(ChargeSpeedMultiplier);
         while (Charging)
         {
             yield return null;
-            transform.Translate(dir * Time.deltaTime * Speed);
+            transform.Translate(dir * Time.deltaTime * Speed * ChargeSpeedMultiplier);
         }
         EndCharge();
     }
@@ -110,6 +111,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
     protected void EndCharge()
     {
         EnemyTimers.ResetSpecificToZero((int)EnemyTimer.attackDurationTimer);
+        ChargeHitbox.SetActive(false);
     }
     #endregion
 
@@ -173,7 +175,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
         {
             temp.NewInstance();
         }
-        temp.Init(targetTr.position - transform.position, StompSpawnPoint.position, TargetLayer, Attack3Damage, Attack3Duration, AttackKnockback, this);
+        temp.Init(targetTr.position - transform.position, StompSpawnPoint.position, TargetLayer, Attack3Damage, Attack3Duration, StompMoveSpeed, AttackKnockback, this);
         Debug.Log("Using Stomp");
     }
     #endregion

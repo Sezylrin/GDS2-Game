@@ -203,7 +203,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         MaxHealth = SO.maxHealth;
         Speed = SO.speed;
         ResetSpeed();
-        Souls = SO.souls;
+        Souls = UnityEngine.Random.Range(SO.minSouls, SO.maxSouls + 1);
         ConsumableHealthPercentThreshold = SO.consumableHealthPercentThreshold;
         HealthPercentReceivedOnConsume = SO.percentToHealOnConsume;
         AttackCooldownDuration = SO.attackCooldown;
@@ -686,7 +686,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     protected virtual void EnemyAi()
     {
-        if (debugDisableAI) return;
+        if (debugDisableAI || Consume.BeingConsumed()) return;
         if (IsStunned || Staggered) return;
         if (currentState == EnemyState.chasing)
         {
@@ -816,7 +816,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     }
 
-    protected void StopPathing()
+    public void StopPathing()
     {
         hasDestination = false;
         path.destination = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);

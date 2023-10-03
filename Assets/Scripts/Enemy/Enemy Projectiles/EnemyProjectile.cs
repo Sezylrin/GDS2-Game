@@ -31,7 +31,7 @@ public abstract class EnemyProjectile : MonoBehaviour
         ProjectileTimers.times[(int)ProjectileTimer.lifetimeTimer].OnTimeIsZero += PoolSelf;
     }
 
-    public virtual void Init(Vector2 dir, Vector3 spawnPos, LayerMask Target, int damage, float duration, float knockbackForce, Enemy owner, Transform shooter = null)
+    public virtual void Init(Vector2 dir, Vector3 spawnPos, LayerMask Target, int damage, float duration, float speed, float knockbackForce, Enemy owner, Transform shooter = null)
     {
         StartLifetime();
         this.dir = dir;
@@ -45,6 +45,7 @@ public abstract class EnemyProjectile : MonoBehaviour
         this.knockbackForce = knockbackForce;
         this.owner = owner;
         Duration = duration;
+        Speed = speed;
         if (shooter == null)
             this.shooter = owner.transform;
         else
@@ -139,7 +140,7 @@ public abstract class EnemyProjectile : MonoBehaviour
     {
         gameObject.SetActive(true);
         Vector2 newDir = target.transform.position - spawnPos;
-        Init(newDir,spawnPos, enemy, damage, Duration, knockbackForce, owner, newShooter);
+        Init(newDir,spawnPos, enemy, damage, Duration, Speed, knockbackForce, owner, newShooter);
     }
 
     public void CounterProjectile(Transform target, Vector3 spawnPos, LayerMask enemy, Transform newShooter)
