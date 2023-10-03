@@ -9,6 +9,7 @@ public class Cheetah : Enemy, IPoolable<Cheetah>
     [field: SerializeField] protected GameObject SwipeHitbox { get; set; }
     [field: SerializeField] protected GameObject DaggerPrefab { get; set; }
     [field: SerializeField] protected Transform DaggerSpawnPoint { get; set; }
+    [field: SerializeField] protected float DaggerMoveSpeed { get; set; } = 3;
     [field: SerializeField] protected GameObject ChainHitbox { get; set; }
     [field: SerializeField] protected BoxCollider2D col2D { get; set; }
 
@@ -43,7 +44,7 @@ public class Cheetah : Enemy, IPoolable<Cheetah>
         {
             temp.NewInstance();
         }
-        temp.Init(targetTr.position - transform.position, DaggerSpawnPoint.position, TargetLayer, Attack2Damage, Attack2Duration, AttackKnockback, this);
+        temp.Init(targetTr.position - transform.position, DaggerSpawnPoint.position, TargetLayer, Attack2Damage, Attack2Duration, DaggerMoveSpeed, AttackKnockback, this);
     }
     #endregion
 

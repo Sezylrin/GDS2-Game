@@ -11,5 +11,7 @@ public class RhinoScriptableObject : BaseEnemyScriptableObject
     public float shockwaveStartRadius = 0.13f;
     public float shockwaveEndRadius;
     public float shockwaveGrowthSpeed;
+    public float stompMoveSpeed = 3;
+    
 }
 

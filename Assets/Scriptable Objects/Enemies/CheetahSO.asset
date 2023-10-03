@@ -9,35 +9,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c19677e7e25c48458157dc951565335, type: 3}
-  m_Name: RhinoSO
+  m_Script: {fileID: 11500000, guid: eedd7e4cce9856c45b9f1b8af48ebf94, type: 3}
+  m_Name: CheetahSO
   m_EditorClassIdentifier: 
-  maxHealth: 500
-  speed: 3
-  minSouls: 8
-  maxSouls: 16
+  maxHealth: 400
+  speed: 6
+  minSouls: 7
+  maxSouls: 15
   effectDuration: 5
-  attackKnockback: 8
+  attackKnockback: 5
   attackCooldown: 10
   attack1Damage: 20
-  attack1Duration: 2
+  attack1Duration: 0.5
   windup1Duration: 1
-  attack2Damage: 10
-  attack2Duration: 1
+  attack2Damage: 15
+  attack2Duration: 3
   windup2Duration: 1
   attack3Damage: 15
-  attack3Duration: 3
+  attack3Duration: 2.4
   windup3Duration: 1
-  consumableHealthPercentThreshold: 10
-  percentToHealOnConsume: 20
+  consumableHealthPercentThreshold: 15
+  percentToHealOnConsume: 15
   pointsToStagger: 100
   staggerDuration: 3
   staggerDelayDuration: 3
   staggerDecayAmount: 4
   staggerDecayRate: 0.25
-  chargeSpeedMultiplier: 2
-  attack2Range: 3
-  shockwaveStartRadius: 0.13
-  shockwaveEndRadius: 0
-  shockwaveGrowthSpeed: 0
-  stompMoveSpeed: 5

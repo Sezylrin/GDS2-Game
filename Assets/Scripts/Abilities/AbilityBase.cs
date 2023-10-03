@@ -92,6 +92,7 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
             }
             hitEnemy.Add(foundEnemy as Enemy);
             foundEnemy.TakeDamage(selectedAbility.damage + GameManager.Instance.StatsManager.abilityModifier, selectedAbility.Stagger, selectedAbility.elementType, selectedAbility.castCost);
+            GameManager.Instance.PCM.system.AddToConsumeBar(selectedAbility.consumePoints);
             Vector3 dir;
             if (direction.Equals(Vector3.zero))
             { 

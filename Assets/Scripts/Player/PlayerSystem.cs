@@ -24,10 +24,13 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     private void Start()
     {
         SetHitPoints();
+        consumeBar = 0;
+        canConsume = false;
         timer = GameManager.Instance.TimerManager.GenerateTimers(typeof(SystemCD), gameObject);
         timer.times[(int)SystemCD.counterAttackQTE].OnTimeIsZero += RemoveCounterQTE;
         InitCastPoints();
     }
+
     #region Update
     private void Update()
     {
@@ -164,7 +167,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     private int actualMaxHealth;
     private void CalculateDamage(float damage)
     {
-        if (!timer.IsTimeZero((int)SystemCD.iFrames))
+        if (!timer.IsTimeZero((int)SystemCD.iFrames) || PCM.control.CurrentState == playerState.consuming)
             return;
         if (Hitpoints - damage < 0)
         {
@@ -329,14 +332,14 @@ public class PlayerSystem : MonoBehaviour, IDamageable
 
     #region Consume
     [Header("Consume")]
-    [SerializeField] private int consumeBar;
-    [SerializeField] private int consumeBarMax;
+    [SerializeField] private int consumeBar = 0;
+    [SerializeField] private int consumeBarMax = 100;
     [SerializeField] private bool canConsume = false;
 
     public void AddToConsumeBar(int consumeValue)
     {
         consumeBar += consumeValue;
-        PCM.UI.UpdateConsumeBar(consumeBar / consumeBarMax);
+        PCM.UI.UpdateConsumeBar((float)consumeBar / (float)consumeBarMax);
         if (consumeBar > consumeBarMax)
         {
             canConsume = true;

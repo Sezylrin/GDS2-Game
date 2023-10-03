@@ -17,11 +17,12 @@ MonoBehaviour:
   type: 1
   castCost: 2
   pierceAmount: 99
-  damage: 0
-  knockback: 0
-  Stagger: 0
-  lifeTime: 0
+  damage: 100
+  knockback: 3
+  Stagger: 45
+  consumePoints: 5
+  lifeTime: 0.25
   description: Electric Vortex Description
   icon: {fileID: 21300000, guid: a8e011715b3856c48809609785722590, type: 3}
-  radius: 0
-  growthSpeed: 0
+  radius: 5
+  growthSpeed: 0.1

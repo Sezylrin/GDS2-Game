@@ -25,7 +25,8 @@ public enum playerState
     abilityCast,
     abilityLag,
     perfectDodge,
-    hit
+    hit,
+    consuming
 }
 public class PlayerController : MonoBehaviour
 {
@@ -499,7 +500,7 @@ public class PlayerController : MonoBehaviour
     #region Dash
     private void Dash()
     {
-        playerState[] unAllowed = { playerState.attack, playerState.abilityCast, playerState.hit, playerState.perfectDodge };
+        playerState[] unAllowed = { playerState.attack, playerState.abilityCast, playerState.hit, playerState.perfectDodge, playerState.consuming };
         if (CheckStates(unAllowed))
             return;
         if (!timers.IsTimeZero((int)coolDownTimers.dashCastCD) || currentDashCharges < 1)
