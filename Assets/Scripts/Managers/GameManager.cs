@@ -155,6 +155,7 @@ public class GameManager : MonoBehaviour
         if (interaction)
         {
             interaction.Interact();
+            RemoveInteraction(interaction);
         }
     }
     #endregion

@@ -8,19 +8,19 @@ public class Rhino : Enemy, IPoolable<Rhino>
 {
     [field: Header("Rhino")]
     [field: SerializeField] protected GameObject ChargeHitbox { get; set; }
-    [field: SerializeField] protected Transform ChargeEndLocation { get; set; }
     [field: SerializeField] protected float ChargeSpeedMultiplier { get; set; } = 1.5f;
-    [field: SerializeField] protected bool Charging { get; set; } = false;
+    [field: SerializeField] public bool Charging { get; set; } = false;
     [field: SerializeField] protected GameObject ShockwaveHitbox { get; set; }
     [field: SerializeField] protected GameObject StompPrefab { get; set; }
     [field: SerializeField] protected Transform StompSpawnPoint { get; set; }
     [field: SerializeField] protected float Attack2Range { get; set; } = 3;
     [field: SerializeField] protected Collider2D col2D { get; set; }
     [field: SerializeField] protected CircleCollider2D shockwaveCol2D { get; set; }
-    [field: SerializeField] protected float ShockwaveStartRadius { get; set; } = 0.1f;
-    [field: SerializeField] protected float ShockwaveEndRadius { get; set; } = 0.2f;
+    [field: SerializeField] protected float ShockwaveStartRadius { get; set; } = 3;
+    [field: SerializeField] protected float ShockwaveEndRadius { get; set; } = 8;
     [field: SerializeField] protected float ShockwaveGrowthSpeed { get; set; } = 1;
     private Coroutine shockwaveCoroutine;
+    private RhinoScriptableObject RhinoSO;
 
 
     #region PoolingVariables
@@ -36,12 +36,28 @@ public class Rhino : Enemy, IPoolable<Rhino>
         GameManager.Instance.PoolingManager.FindPool(StompPrefab, out pool);
     }
 
+    public override void SetInheritanceSO()
+    {
+        RhinoSO = SO as RhinoScriptableObject;
+    }
+
+    public override void SetStatsFromScriptableObject()
+    {
+        base.SetStatsFromScriptableObject();
+        ChargeSpeedMultiplier = RhinoSO.chargeSpeedMultiplier;
+        Attack2Range = RhinoSO.attack2Range;
+        ShockwaveStartRadius = RhinoSO.shockwaveStartRadius;
+        ShockwaveEndRadius = RhinoSO.shockwaveEndRadius;
+        ShockwaveGrowthSpeed = RhinoSO.shockwaveGrowthSpeed;
+    }
+
     protected override void DetermineAttackPathing()
     {
         switch (CurrentAttack)
         {
             case 1:
                 SetDestination(transform.position);
+                Debug.Log("Attempting to Charge");
                 break;
             case 2:
                 Vector3 targetpoint = targetTr.position;
@@ -49,9 +65,11 @@ public class Rhino : Enemy, IPoolable<Rhino>
                 minimumRange = minimumRange.normalized * Attack2Range;
                 targetpoint += minimumRange;
                 SetDestination(targetpoint);
+                Debug.Log("Attempting to Shockwave");
                 break;
             case 3:
                 SetDestination(transform.position);
+                Debug.Log("Attempting to Stomp");
                 break;
         }
     }
@@ -61,20 +79,21 @@ public class Rhino : Enemy, IPoolable<Rhino>
     {
         dir = (targetTr.position - transform.position).normalized;
         col2D.includeLayers = TargetLayer;
-
+        ChargeHitbox.SetActive(true);
         StartCoroutine(StartCharge());
+        Debug.Log("Using Charge");
     }
 
     protected IEnumerator StartCharge()
     {
         StartCoroutine(AutoEndCharge());
-        ChargeHitbox.SetActive(true);
+        
         Charging = true;
         ModifySpeed(ChargeSpeedMultiplier);
         while (Charging)
         {
             yield return null;
-            transform.Translate(dir);
+            transform.Translate(dir * Time.deltaTime * Speed);
         }
         EndCharge();
     }
@@ -96,7 +115,8 @@ public class Rhino : Enemy, IPoolable<Rhino>
     {
         col2D.includeLayers = TargetLayer;
         ShockwaveHitbox.SetActive(true);
-        StartShockwave();
+        //StartShockwave();
+        Debug.Log("Using Shockwave");
     }
 
     private void StartShockwave()
@@ -151,6 +171,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
             temp.NewInstance();
         }
         temp.Init(targetTr.position - transform.position, StompSpawnPoint.position, TargetLayer, Attack3Damage, Attack3Duration, AttackKnockback, this);
+        Debug.Log("Using Stomp");
     }
     #endregion
 
@@ -193,7 +214,6 @@ public class Rhino : Enemy, IPoolable<Rhino>
             }
             else
                 DoDamage(foundTarget);
-
         }
     }
 

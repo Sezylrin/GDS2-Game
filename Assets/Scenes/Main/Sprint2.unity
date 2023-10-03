@@ -6423,6 +6423,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 707390839, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: startingEquippedAbilities.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 707390839, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: startingEquippedAbilities.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 418ea2c3934df71459d836d5d9631746, type: 2}
+    - target: {fileID: 707390839, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: startingEquippedAbilities.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: bfa1d90d7346b0d478313eedc9d02ef0, type: 2}
+    - target: {fileID: 707390839, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: startingEquippedAbilities.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: b171dd3449f27d24b853ff66dc8d7750, type: 2}
     - target: {fileID: 3761662248408365442, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
       propertyPath: m_Name
       value: GameManager
