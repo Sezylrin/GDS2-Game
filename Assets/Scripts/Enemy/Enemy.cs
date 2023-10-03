@@ -137,6 +137,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     #region Object Initialization Functions
     public virtual void Init()
     {
+        SetInheritanceSO();
         SetDefaultState();
 
         if (debugDisableAI) Debug.LogWarning(this + "'s AI is Disabled");
@@ -162,6 +163,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         Speed = path.maxSpeed;
 
         Init();
+    }
+
+    public virtual void SetInheritanceSO()
+    {
+
     }
 
     public virtual void SetDefaultState()
@@ -467,7 +473,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     }
 
-    protected void DoDamage(IDamageable target)
+    public void DoDamage(IDamageable target)
     {
         switch (CurrentAttack)
         {
