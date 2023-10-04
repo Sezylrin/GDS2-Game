@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -22,6 +23,13 @@ public class SkillTreeManager : MonoBehaviour
     [SerializeField] 
     private TMP_Text soulsTxt;
 
+    private AudioComponent audioComponent;
+
+    private void Start()
+    {
+        audioComponent = GetComponent<AudioComponent>();
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -33,11 +41,13 @@ public class SkillTreeManager : MonoBehaviour
     public void ShowSkillTree()
     {
         gameObject.SetActive(true);
+        GameManager.Instance.AudioComponent.PlaySound(SoundType.UIOpenMenu);
         UpdateSoulsText();
     }
 
     public void HideSkillTree()
     {
+        GameManager.Instance.PlayCloseMenuSound();
         gameObject.SetActive(false);
     }
 

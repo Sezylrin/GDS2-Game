@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using KevinCastejon.MoreAttributes;
 using System;
+using UnityEngine.InputSystem;
 public class PlayerSystem : MonoBehaviour, IDamageable
 {
     private enum SystemCD
     {
         pointRegenDelay,
-        iFrames
+        iFrames,
+        counterAttackQTE
     }
 
     [Header("General")]
@@ -22,9 +24,13 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     private void Start()
     {
         SetHitPoints();
+        consumeBar = 0;
+        canConsume = false;
         timer = GameManager.Instance.TimerManager.GenerateTimers(typeof(SystemCD), gameObject);
+        timer.times[(int)SystemCD.counterAttackQTE].OnTimeIsZero += RemoveCounterQTE;
         InitCastPoints();
     }
+
     #region Update
     private void Update()
     {
@@ -36,15 +42,18 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     [Header("Ability Stats")]
     [SerializeField]
     private int MaxCastPoints;
-    [SerializeField][ReadOnly]
-    private int currentCastPoints;
     [SerializeField]
+    [ReadOnly]
+    private int currentCastPoints;
+    [ReadOnly, SerializeField]
     private float pointRegenRate;
-    [SerializeField][ReadOnly]
+    [SerializeField]
+    private float maxRegenTime;
+    [SerializeField]
+    [ReadOnly]
     private float regenTimer;
     [SerializeField]
     private float regenDelay;
-    private float maxRegenTime;
     [SerializeField]
     private int debugCost;
     private int CurrentCastPoints
@@ -80,6 +89,18 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         }
     }
 
+    public bool CanCast(int cost)
+    {
+        if (cost <= CurrentCastPoints)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     private void RegeneratePoints()
     {
         if (!timer.IsTimeZero((int)SystemCD.pointRegenDelay))
@@ -105,7 +126,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     }
     private void UpdateCastPoints()
     {
-        maxRegenTime = MaxCastPoints * pointRegenRate;
+        pointRegenRate = maxRegenTime / MaxCastPoints;
         CurrentCastPoints = MaxCastPoints;
         regenTimer = maxRegenTime;
     }
@@ -124,63 +145,108 @@ public class PlayerSystem : MonoBehaviour, IDamageable
 
     public void InstantRegenPoint(float amount)
     {
-        regenTimer += amount * pointRegenRate;
+        regenTimer = Mathf.Clamp(regenTimer + amount * pointRegenRate, 0, maxRegenTime);
         CalculatePoints();
+    }
+
+    public void InstantRegenPoint()
+    {
+        InstantRegenPoint(MaxCastPoints * 0.5f);
+    }
+
+    public void SpeedUpRegenDelay(float amount)
+    {
+        timer.ReduceCoolDown((int)SystemCD.pointRegenDelay, amount);
     }
     #endregion
 
     #region Health
     [Header("Health")]
     [SerializeField]
-    private float startingHitPoint;
-    private void CalculateDamage(float amount)
+    private int startingHitPoint;
+    private int actualMaxHealth;
+    private void CalculateDamage(float damage)
     {
-        if (!timer.IsTimeZero((int)SystemCD.iFrames))
+        if (!timer.IsTimeZero((int)SystemCD.iFrames) || PCM.control.CurrentState == playerState.consuming)
             return;
-        if (Hitpoints - amount < 0)
+        if (Hitpoints - damage < 0)
         {
             OnDeath();
         }
         else
         {
-            Hitpoints -= amount;
+            Hitpoints -= (int)Mathf.Ceil(damage);
             timer.SetTime((int)SystemCD.iFrames, iframes);
+            PCM.control.SetHitStun(iframes);
         }
         SetHealthUI();
+    }
+    [ContextMenu("AttemptDamage")]
+    public void AttemptDamage()
+    {
+        CalculateDamage(10);
     }
 
     public void FullHeal()
     {
-        Hitpoints = startingHitPoint + GameManager.Instance.StatsManager.bonusHealth;
+        Hitpoints = actualMaxHealth;
         SetHealthUI();
     }
 
+    public void Heal(int health)
+    {
+        Hitpoints += health;
+        if (Hitpoints > actualMaxHealth) Hitpoints = actualMaxHealth;
+        SetHealthUI();
+    }
+
+    public void HealByPercentage(int percentageToHeal)
+    {
+        if (percentageToHeal < 0) percentageToHeal = 0;
+
+        int healAmount = (int)Mathf.Ceil(actualMaxHealth * percentageToHeal / 100);
+        Heal(healAmount);
+    }
+
+
     private void SetHealthUI()
     {
-        PCM.UI.SetGreenHealthBar(Hitpoints / (startingHitPoint + GameManager.Instance.StatsManager.bonusHealth));
+        float heathPercent = (float)Hitpoints / (float)actualMaxHealth;
+        PCM.UI.SetGreenHealthBar(heathPercent);
+    }
+
+    public void UpdateHealthUI()
+    {
+        SetHealthUI();
     }
 
     public void UpgradeHealth()
     {
+        actualMaxHealth = startingHitPoint + GameManager.Instance.StatsManager.bonusHealth;
         FullHeal();
     }
+
     #endregion
 
     #region Damage Interface
-    [field: SerializeField][field:ReadOnly]
-    public float Hitpoints { get; set; }
+    [field: SerializeField]
+    [field: ReadOnly]
+    public int Hitpoints { get; set; }
     Rigidbody2D IDamageable.rb { get => PCM.control.rb; }
 
     public void OnDeath()
     {
         GameManager.Instance.EnemyManager.KillEnemies();
+        GameManager.Instance.sceneLoader.LoadHub();
+
+        GameManager.Instance.SetLostSouls();
         GameManager.Instance.SetSoulsToZero();
-        Loader.Load(EN_Scene.Sprint2);
     }
 
     public void SetHitPoints()
     {
-        Hitpoints = startingHitPoint;
+        actualMaxHealth = startingHitPoint + GameManager.Instance.StatsManager.bonusHealth;
+        Hitpoints = actualMaxHealth;
     }
 
     public void TakeDamage(float amount, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement)
@@ -195,17 +261,138 @@ public class PlayerSystem : MonoBehaviour, IDamageable
 
     public void AddForce(Vector2 force)
     {
-
+        PCM.control.rb.velocity += force;
     }
 
     public void ModifySpeed(float percentage)
     {
-        
+
     }
 
     public void ResetSpeed()
     {
-        
+
+    }
+    #endregion
+
+    #region Counter
+    public bool isCountered { get; private set; }
+    [Header("Counter Attack")]
+    [SerializeField]
+    private float counterQTEDuration;
+
+    private Enemy target;
+    private EnemyProjectile storedProjectile;
+
+    [SerializeField]
+    private int counterDamage;
+    [SerializeField]
+    private int counterStagger;
+    [SerializeField]
+    private LayerMask enemy;
+    public void CounterSuccesful(Enemy target, EnemyProjectile projectile = null)
+    {
+        if (isCountered)
+            return;
+        isCountered = true;
+        this.target = target;
+        storedProjectile = projectile;
+        timer.SetTime((int)SystemCD.counterAttackQTE, counterQTEDuration);
+        PCM.control.CounteredAttack(counterQTEDuration);
+    }
+
+    public void CounterSuccesfulTutorial(Transform target, EnemyProjectile projectile)
+    {
+        if (isCountered)
+            return;
+        isCountered = true;
+        tutorialTarget = target;
+        storedProjectile = projectile;
+        timer.SetTime((int)SystemCD.counterAttackQTE, counterQTEDuration);
+        PCM.control.CounteredAttack(counterQTEDuration);
+    }
+    private Transform tutorialTarget;
+    [ContextMenu("test Counter")]
+    private void TestCounter()
+    {
+        PCM.control.CounteredAttack(counterQTEDuration);
+    }
+    private void RemoveCounterQTE(object sender, EventArgs e)
+    {
+        RemoveCounterQTE();
+    }
+
+    private void RemoveCounterQTE()
+    {
+        isCountered = false;
+        target = null;
+        storedProjectile = null;
+    }
+
+    public void AttemptCounter(InputAction.CallbackContext context)
+    {
+        if (isCountered)
+        {
+            if (GameManager.Instance.IsTutorial)
+            {
+                storedProjectile.CounterProjectile(tutorialTarget, transform.position, enemy, 2f, transform);
+            }
+            else if (storedProjectile)
+            {
+                storedProjectile.CounterProjectile(target, transform.position, enemy, 2f, transform);
+            }
+            else
+            {
+                target.TakeDamage(counterDamage,counterStagger,ElementType.noElement);
+            }
+            RemoveCounterQTE();
+        }
+    }
+    #endregion
+
+    #region Consume
+    [Header("Consume")]
+    [SerializeField] private int consumeBar = 0;
+    [SerializeField] private int consumeBarMax = 100;
+    [SerializeField] private bool canConsume = false;
+
+    public void AddToConsumeBar(int consumeValue)
+    {
+        consumeBar += consumeValue;
+        PCM.UI.UpdateConsumeBar((float)consumeBar / (float)consumeBarMax);
+        if (consumeBar > consumeBarMax)
+        {
+            canConsume = true;
+        }
+    }
+
+    public void UseConsume(int percentageToHeal)
+    {
+        canConsume = false;
+        consumeBar = 0;
+        HealByPercentage(percentageToHeal);
+        PCM.UI.EmptyConsumeBar();
+    }
+
+    public bool CanConsume()
+    {
+        return canConsume;
+    }
+
+    #endregion
+
+    #region Getter
+    public playerState GetState()
+    {
+        return PCM.control.CurrentState;
+    }
+    #endregion
+
+    #region Debugging
+    [ContextMenu("DebugKillPlayer")]
+    public void KillPlayerDebug()
+    {
+        OnDeath();
     }
     #endregion
 }

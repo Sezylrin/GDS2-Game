@@ -41,8 +41,9 @@ public class EnemyManager : MonoBehaviour
     [field: SerializeField, ReadOnly] int RangedEnemySpawnChance { get; set; } = 25;
     [field: SerializeField, Range(0, 100)] int debugMeleeSpawnChance { get; set; } = 50;
     [field: SerializeField] bool debugSetMeleeSpawnChance { get; set; }
-    private Pool<TestMeleeEnemy> testMeleeEnemyPool;
+    private Pool<Rhino> rhinoPool;
     private Pool<TestRangedEnemy> testRangedEnemyPool;
+    [SerializeField]
     private List<Enemy> enemyList = new List<Enemy>();
     [field: SerializeField] bool debugKillEnemies { get; set; }
 
@@ -60,7 +61,7 @@ public class EnemyManager : MonoBehaviour
 
         AttackPoints = MaxAttackPoints;
 
-        GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[0], out testMeleeEnemyPool);
+        GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[0], out rhinoPool);
         GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[1], out testRangedEnemyPool);
     }
 
@@ -95,6 +96,10 @@ public class EnemyManager : MonoBehaviour
         if (debugKillEnemies)
         {
             debugKillEnemies = false;
+            KillEnemies();
+        }
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
             KillEnemies();
         }
     }
@@ -157,7 +162,6 @@ public class EnemyManager : MonoBehaviour
         SpawnEnemy();
     }
     
-    
     public void SetEnemyPoints(int points)
     {
         EnemyPoints = points;
@@ -189,8 +193,8 @@ public class EnemyManager : MonoBehaviour
         switch (cost)
         {
             case 1:
-                if (randomValue < MeleeEnemySpawnChance) type = EnemyType.Type1;
-                else type = EnemyType.Type2;
+                if (randomValue < MeleeEnemySpawnChance) type = EnemyType.Test1;
+                else type = EnemyType.Test2;
                 break;
             case 2:
                 break;
@@ -277,18 +281,20 @@ public class EnemyManager : MonoBehaviour
         Enemy temp;
         switch (enemyToSpawn)
         {
-            case EnemyType.Type1:
-                temp = testMeleeEnemyPool.GetPooledObj();
+            case EnemyType.Test1:
+                temp = rhinoPool.GetPooledObj();
                 temp.Init(spawnLocation, enemyElement);
                 enemyList.Add(temp);
                 break;
-            case EnemyType.Type2:
+            case EnemyType.Test2:
                 temp = testRangedEnemyPool.GetPooledObj();
                 temp.Init(spawnLocation, enemyElement);
                 enemyList.Add(temp);
                 break;
         }
         ActiveEnemiesCount++;
+
+
         if (EnemyPoints > 0) SpawnEnemy();
     }
     #endregion
@@ -296,20 +302,20 @@ public class EnemyManager : MonoBehaviour
     public void DecrementActiveEnemyCounter()
     {
         ActiveEnemiesCount--;
-        if (ActiveEnemiesCount <= 0)
+        if (ActiveEnemiesCount <= 0 && Level.Instance)
         {
-            enemyList.Clear();
-            if(Level.Instance)
-                Level.Instance.ClearLevel();
+            Level.Instance.ClearLevel();
         }
     }
-
+    [ContextMenu("KillAllEnemies")]
     public void KillEnemies()
     {
         foreach (Enemy enemy in enemyList)
         {
-            enemy.OnDeath();
+            enemy.OnDeath(true);
         }
+        enemyList.Clear();
+        ActiveEnemiesCount = 0;
     }
 
     public void EnableAggro()
@@ -323,7 +329,6 @@ public class EnemyManager : MonoBehaviour
     public void DebugAddEnemy(Enemy enemy)
     {
         enemyList.Add(enemy);
-        ActiveEnemiesCount++;
     }
 
     public Transform FindNearestEnemy(Transform origin)

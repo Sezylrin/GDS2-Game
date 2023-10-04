@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class SkillTreeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
@@ -36,12 +37,16 @@ public class SkillTreeButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private bool hovering = false;
     public bool purchased { get; private set; } = false;
 
+    private Tween hoverTween;
+    protected AudioComponent audioComponent;
+
     private void Start()
     {
         gameManager = GameManager.Instance;
         skillTreeManager = GameObject.FindGameObjectWithTag("SkillTreeCanvas").GetComponent<SkillTreeManager>();
         canAfford = gameManager.Souls >= soulCost;
         Image bgImage = gameObject.GetComponent<Image>();
+        audioComponent = gameObject.GetComponent<AudioComponent>();
 
         if ((!canAfford && !purchased) || !PrereqUnlocked())
         {
@@ -76,7 +81,8 @@ public class SkillTreeButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
         {
             bgImage.sprite = bgSpriteHovered;
         }
-        
+        PlayHoverAnimation();
+        audioComponent.PlaySound(SoundType.UIHover);
         skillTreeManager.ShowSkillTreePopup(skillName, skillDescription, soulCost, purchased, PrereqUnlocked());
     }
 
@@ -92,7 +98,7 @@ public class SkillTreeButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
             bgImage.sprite = bgSprite;
         }
         hovering = false;
-
+        StopHoverAnimation();
         skillTreeManager.HideSkillTreePopup();
     }
 
@@ -108,18 +114,25 @@ public class SkillTreeButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (!canAfford || purchased)
+        {
+            audioComponent.PlaySound(SoundType.UIClickFail);
+            return;
+        }
         foreach (SkillTreeButton skillTreeBtn in prerequisiteSkills)
         {
-            if (!skillTreeBtn.purchased) return;
+            if (!skillTreeBtn.purchased)
+            {
+                audioComponent.PlaySound(SoundType.UIClickFail);
+                return;
+            };
         }
-        if (canAfford)
-        {
-            gameManager.RemoveSouls(soulCost);
-            purchased = true;
-            skillTreeManager.ShowPurchased();
-            skillTreeManager.UpdateSoulsText();
-            onPurchase.Invoke();
-        } 
+        audioComponent.PlaySound(SoundType.UIUnlockSkill);
+        gameManager.RemoveSouls(soulCost);
+        purchased = true;
+        skillTreeManager.ShowPurchased();
+        skillTreeManager.UpdateSoulsText();
+        onPurchase.Invoke();
     }
 
     private bool PrereqUnlocked()
@@ -132,5 +145,23 @@ public class SkillTreeButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
         }
 
         return preReqUnlocked;
+    }
+
+    protected void StopHoverAnimation()
+    {
+        RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+        hoverTween?.Kill();
+        rectTransform.localScale = new Vector3(1f, 1f, 1f);
+    }
+
+    protected void PlayHoverAnimation()
+    {
+        RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+        hoverTween?.Kill();
+        hoverTween = DOTween.Sequence()
+            .Append(rectTransform.DOScale(new Vector3(1.05f, 1.05f, 1f), 0.3f).SetEase(Ease.InOutSine))
+            .Append(rectTransform.DOScale(new Vector3(1f, 1f, 1f), 0.3f).SetEase(Ease.InOutSine))
+            .SetLoops(-1, LoopType.Yoyo)
+            .Play();
     }
 }

@@ -14,11 +14,6 @@ public class LevelGenerator : MonoBehaviour
     private static LevelGenerator _instance;
     public static LevelGenerator Instance { get { return _instance; }}
 
-    [Header("Components")]
-    [SerializeField]
-    private Animator crossFadeAnimator;
-    [SerializeField]
-    private float crossFadeTime = 1f;
 
     [Serializable]
     public enum Randomness
@@ -44,6 +39,10 @@ public class LevelGenerator : MonoBehaviour
     private List<SceneReference> levelList = new List<SceneReference>();
     [field: SerializeField, ReadOnly]
     public int activeLevelListIndex { get; private set; }
+    public int floorsCleared => Mathf.FloorToInt((float)(activeLevelListIndex + 1) / (fountainFrequency + 1));
+    public int lastFloorOnExit;
+    public int lastFloorOnExitIndex => lastFloorOnExit * (fountainFrequency+1) - 1;
+
     [field: SerializeField, ReadOnly]
     public int difficulty { get; private set; }
     [SerializeField]
@@ -67,14 +66,16 @@ public class LevelGenerator : MonoBehaviour
 
     private void Start()
     {
-        difficulty = startDifficulty;
-        Generate();
+        New();
         // DebugLevelList();
         // SceneManager.LoadScene(levelList[activeLevelListIndex]);
     }
 
-    private void Generate()
+    public void New()
     {
+        lastFloorOnExit = floorsCleared;
+        difficulty = startDifficulty;
+        levelList = new List<SceneReference>();
         AddNewFloor();
         activeLevelListIndex = -1;
     }
@@ -99,7 +100,7 @@ public class LevelGenerator : MonoBehaviour
         // }
         // if (Input.GetKeyDown(KeyCode.D))
         // {
-        //     Debug.Log(Level.Instance.totalEnemyPoints);
+        //     Debug.Log(floorsCleared);
         // }
     }
 
@@ -125,27 +126,16 @@ public class LevelGenerator : MonoBehaviour
 
     IEnumerator LoadLevel(string scenePath)
     {
-        crossFadeAnimator.SetTrigger("Start");
+        GameManager.Instance.sceneLoader.CrossFadeAnimator.SetTrigger("Start");
 
-        yield return new WaitForSeconds(crossFadeTime);
+        yield return new WaitForSeconds(GameManager.Instance.sceneLoader.CrossFadeTime);
 
         SceneManager.LoadScene(scenePath);
     }
-    public void TriggerFade()
-    {
-        StartCoroutine(TriggerCrossFadeStart());
-    }
-    public IEnumerator TriggerCrossFadeStart()
-    {
-        crossFadeAnimator.SetTrigger("Start");
 
-        yield return new WaitForSeconds(crossFadeTime);
-
-        TriggerCrossFadeEnd();
-    }
     public void TriggerCrossFadeEnd()
     {
-        crossFadeAnimator.SetTrigger("End");
+        GameManager.Instance.sceneLoader.CrossFadeAnimator.SetTrigger("End");
     }
 
     private void DebugLoadLevelX(int x)

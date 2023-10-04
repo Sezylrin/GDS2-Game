@@ -38,7 +38,14 @@ public class Abilities : MonoBehaviour
     }
     public void ToggleActiveAbilitySet(InputAction.CallbackContext context)
     {
+        if (!GameManager.Instance.StatsManager.secondSkillsetUnlocked)
+            return;
         AbilitySetOne = !AbilitySetOne;
+        UpdateUI();
+    }
+
+    public void UpdateUI()
+    {
         if (AbilitySetOne)
         {
             PCM.UI.UpdateAbilityText(GetName(3), GetName(4), GetName(5));
@@ -57,7 +64,7 @@ public class Abilities : MonoBehaviour
         }
         else
         {
-            return abilities[index].name;
+            return abilities[index].name + " " + abilities[index].castCost;
         }
     }
     public void CastSlotOne()
@@ -75,6 +82,20 @@ public class Abilities : MonoBehaviour
         PCM.control.RemoveBufferInput();
         CastAbility(AbilitySetOne ? abilities[5] : abilities[2]);
     }
+    public bool IsRanged(int slot)
+    {
+        if (AbilitySetOne)
+            slot += 3;
+        if (!abilities[slot])
+            return false;
+        return (abilities[slot].type == AbilityType.Projectile);
+    }
+    public bool CanCast(int slot)
+    {
+        if(AbilitySetOne)
+            slot += 3;
+        return (PCM.system.CanCast(abilities[slot].castCost));
+    }
     public void SetSlot(ElementalSO abilityToUse, int slot)
     {
         if (slot < 0 || slot > 6)
@@ -85,6 +106,7 @@ public class Abilities : MonoBehaviour
         if (!abilityToUse)
             return;
         abilities[slot] = abilityToUse;
+        UpdateUI();
     }
 
     private void CastAbility(ElementalSO selected)

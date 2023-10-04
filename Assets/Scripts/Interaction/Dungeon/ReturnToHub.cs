@@ -7,7 +7,8 @@ public class ReturnToHub : InteractionBase
     // Start is called before the first frame update
     public override void Interact()
     {
-        Loader.Load(EN_Scene.Sprint2);
+        GameManager.Instance.sceneLoader.LoadHub();
+        GameManager.Instance.RemoveLostSouls();
     }
 
 }

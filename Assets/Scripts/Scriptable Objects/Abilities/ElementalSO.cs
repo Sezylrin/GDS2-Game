@@ -25,8 +25,13 @@ public class ElementalSO : ScriptableObject
     public float knockback;
 
     public int Stagger;
+    public int consumePoints;
 
     public float lifeTime;
+
+    public string description;
+
+    public Sprite icon;
 
 }
 

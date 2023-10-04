@@ -12,27 +12,51 @@ EditorBuildSettings:
     path: Assets/Scenes/Dev/EnemyTest.unity
     guid: bb1b0c546f6749042b242f65d6d4c653
   - enabled: 0
-    path: Assets/Scenes/Dev/Abilities.unity
+    path: Assets/Scenes/Dev/Sprint2/Abilities.unity
     guid: 4bd347272920acf44a1ff685c7e5da57
   - enabled: 0
     path: Assets/Scenes/Dev/LoadScene.unity
     guid: ebccab1752dcb1744bf81300a4e40ca7
   - enabled: 0
-    path: Assets/Scenes/Dev/LevelGeneration/LevelGenerationScene.unity
+    path: Assets/Scenes/Dev/Sprint2/LevelGeneration/LevelGenerationScene.unity
     guid: 9c885a0b766e92c44a91805aba6f9a61
   - enabled: 1
-    path: Assets/Scenes/Main/Sprint2.unity
-    guid: f39598f1f72c0ee46a1e2e08bdf2ff6c
+    path: Assets/Scenes/Dev/Tutorial/Tutorial.unity
+    guid: ffac03b92ccad4043be33e89d8a40fdd
   - enabled: 1
-    path: Assets/Scenes/Dev/LevelGeneration/Rooms/FountainRoom.unity
+    path: Assets/Scenes/Main/Hub.unity
+    guid: fa02ae7c34074f54fba9ac3f29028676
+  - enabled: 1
+    path: Assets/Scenes/Dev/LevelGeneration/FountainRoom.unity
     guid: 6af4e05ea69351f449af3ecef4f02bf2
   - enabled: 1
-    path: Assets/Scenes/Dev/LevelGeneration/Rooms/Room1.unity
-    guid: 2ce3e6b785228954eb58dd251485aac1
-  - enabled: 0
-    path: Assets/Scenes/Dev/LevelGeneration/Rooms/Room2.unity
-    guid: 0d4a4bd713334a64ba2c873f5b60dd9d
-  - enabled: 0
-    path: Assets/Scenes/Dev/LevelGeneration/Rooms/Room3.unity
-    guid: 1c226b643b23dcb4caf8c3b4f3b00ad7
+    path: Assets/Scenes/Dev/LevelGeneration/Levels/Level1.unity
+    guid: ae37912561355d74cbbb7d45a26f29c6
+  - enabled: 1
+    path: Assets/Scenes/Dev/LevelGeneration/Levels/Level2.unity
+    guid: c39346304c8df0749b97fd6e967ce7b7
+  - enabled: 1
+    path: Assets/Scenes/Dev/LevelGeneration/Levels/Level3.unity
+    guid: d3f4d524a0e7edf4e9dc378dcc4650a8
+  - enabled: 1
+    path: Assets/Scenes/Dev/LevelGeneration/Levels/Level4.unity
+    guid: 129ee1f24543e8a4696d42e14a22ce72
+  - enabled: 1
+    path: Assets/Scenes/Dev/LevelGeneration/Levels/Level5.unity
+    guid: fe7e1984b1602ab47a0a0fac73fae311
+  - enabled: 1
+    path: Assets/Scenes/Dev/LevelGeneration/Levels/Level6.unity
+    guid: fd4fd5df9edd9014f96b6f2251ce0563
+  - enabled: 1
+    path: Assets/Scenes/Dev/LevelGeneration/Levels/Level7.unity
+    guid: 029012a54001faa49b2a800222186832
+  - enabled: 1
+    path: Assets/Scenes/Dev/LevelGeneration/Levels/Level8.unity
+    guid: cf714e3d612ec3f4085b903764f26218
+  - enabled: 1
+    path: Assets/Scenes/Dev/LevelGeneration/Levels/Level9.unity
+    guid: 228244b22b15bce4cb47d9916a4b55a7
+  - enabled: 1
+    path: Assets/Scenes/Dev/LevelGeneration/Levels/Level10.unity
+    guid: 96955eaaa6c68134c964989aa29a707c
   m_configObjects: {}

@@ -9,10 +9,8 @@ public abstract class MeleeEnemy : Enemy
     [field: SerializeField] protected Transform hitboxCentre { get; set; }
     [field: SerializeField] protected GameObject WarningBox { get; set; }
     [field: SerializeField] protected GameObject AttackHitbox { get; set; }
-    [field: SerializeField] protected float MinimumAttackRange { get; set; }
     [field: SerializeField] protected BoxCollider2D col2D { get; set; }
-    [field: SerializeField] protected float KnockBackForce { get; set; }
-    protected Vector2 dir { get; set; }
+
     protected override void Start()
     {
         base.Start();
@@ -23,12 +21,7 @@ public abstract class MeleeEnemy : Enemy
         base.Update();
     }
 
-    protected override void Attack()
-    {
-        base.Attack();
-        BeginWindup();
-    }
-
+    /*
     protected override void BeginWindup()
     {
         dir = (targetTr.position - transform.position).normalized;
@@ -36,6 +29,7 @@ public abstract class MeleeEnemy : Enemy
         base.BeginWindup();
         WarningBox.SetActive(true);
     }
+    
 
     protected override void EndWindup(object sender, EventArgs e)
     {
@@ -43,6 +37,7 @@ public abstract class MeleeEnemy : Enemy
         WarningBox.SetActive(false);
         BeginAttack();
     }
+    
 
     protected override void BeginAttack()
     {
@@ -50,12 +45,14 @@ public abstract class MeleeEnemy : Enemy
         col2D.includeLayers = TargetLayer;
         AttackHitbox.SetActive(true);
     }
+    */
 
     protected override void EndAttack(object sender, EventArgs e)
     {
         base.EndAttack(sender, e);
         AttackHitbox.SetActive(false);
         col2D.includeLayers = 0;
+        hitTarget = false;
     }
 
     protected override void InterruptAttack()
@@ -77,13 +74,28 @@ public abstract class MeleeEnemy : Enemy
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.isTrigger)
+        if (collision.isTrigger || !AttackHitbox.activeSelf || hitTarget)
             return;
         IDamageable foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
         {
-            foundTarget.TakeDamage(Damage, 0, Element);
-            foundTarget.AddForce(dir.normalized * KnockBackForce);
+            if (foundTarget is PlayerSystem)
+            {
+                PlayerSystem temp = foundTarget as PlayerSystem;
+                if (temp.GetState() == playerState.perfectDodge)
+                {
+                    InterruptAttack();
+                    temp.InstantRegenPoint();
+                    temp.CounterSuccesful(this);
+                }
+                else
+                {
+                    DoDamage(foundTarget);
+                }
+            }
+            else
+                DoDamage(foundTarget);
+            
         }
     }
 }

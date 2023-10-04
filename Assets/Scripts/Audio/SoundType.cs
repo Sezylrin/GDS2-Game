@@ -1,0 +1,26 @@
+public enum SoundType
+{
+    UIOpenMenu,
+    UICloseMenu,
+    UIHover,
+    UIClick,
+    UIClickFail,
+    UIUnlockSkill,
+    PlayerAttackElementalBubble,
+    PlayerAttackElementalElectricity,
+    PlayerAttackElementalFireball,
+    PlayerAttackElementalSplashInterim,
+    PlayerAttackElementalSplashEnd,
+    PlayerAttackElementalPoisonOrb,
+    PlayerAttackElementalWindGust,
+    PlayerAttackPunchHard,
+    PlayerAttackPunchSoft,
+    PlayerAttackParry,
+    PlayerAttackStagger,
+    PlayerWalkStone,
+    PlayerWalkGrassL,
+    PlayerWalkGrassR,
+    GeneralFountainHeal,
+    EnemyAttackSlam,
+    EnemyGrunt
+}

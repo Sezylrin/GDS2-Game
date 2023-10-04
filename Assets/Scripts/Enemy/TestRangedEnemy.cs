@@ -10,11 +10,12 @@ public class TestRangedEnemy : RangedEnemy, IPoolable<TestRangedEnemy>
 
     #endregion
 
-    public override void OnDeath()
+    public override void OnDeath(bool overrideKill = false)
     {
-        base.OnDeath();
+        base.OnDeath(overrideKill);
         PoolSelf();
     }
+
 
     #region PoolingFunctions
     public void PoolSelf()

@@ -20,6 +20,8 @@ public class PlayerUI : MonoBehaviour
     private List<SkillPointUI> skillPoints = new List<SkillPointUI>();
     [Header("Active SKills")]
     [SerializeField]
+    private GameObject abilities;
+    [SerializeField]
     private TMP_Text QAbilityText;
     [SerializeField]
     private TMP_Text EAbilityText;
@@ -28,9 +30,13 @@ public class PlayerUI : MonoBehaviour
     [Header("Souls UI")]
     [SerializeField]
     private TMP_Text soulsTxt;
+    [Header("Consume UI")]
+    [SerializeField]
+    private Image consumeBarImage;
 
     void Start()
     {
+        
     }
 
     // Update is called once per frame
@@ -74,5 +80,31 @@ public class PlayerUI : MonoBehaviour
     public void UpdateSoulsText()
     {
         soulsTxt.text = GameManager.Instance.Souls.ToString();
+    }
+
+    public void UpdateConsumeBar(float fillAmount)
+    {
+        consumeBarImage.fillAmount = fillAmount;
+        if (PCM.system.CanConsume())
+        {
+            consumeBarImage.color = Color.red;
+        }
+    }
+
+    public void EmptyConsumeBar()
+    {
+        consumeBarImage.fillAmount = 0;
+        consumeBarImage.color = Color.yellow;
+    }
+
+    public void EnableAbilityUI()
+    {
+        abilities.SetActive(true);
+    }
+
+    public void DisableAbilityUI()
+    {
+        if (GameManager.Instance.IsTutorial)
+            abilities.SetActive(false);
     }
 }

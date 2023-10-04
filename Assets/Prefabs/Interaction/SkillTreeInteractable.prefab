@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9068655018464616415}
   - component: {fileID: 1384524531860410629}
   - component: {fileID: 5116694332987114042}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: F_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5cb1423e5eacabd4a9bdd9224c916448, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7200792136a5c124faf4d59e6abb4df7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 500562813546505913}
   - component: {fileID: 5156336169894340512}
   - component: {fileID: 4698184258841160513}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -144,8 +144,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Open Skill Tree
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 26f667b7d60f0fd45a031debe1d19e9f, type: 2}
+  m_sharedMaterial: {fileID: 6206602388807629937, guid: 08e80f00adb793c439e82cbc5e9c2d47, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -208,7 +208,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &6694387530368639851
@@ -223,7 +223,7 @@ GameObject:
   - component: {fileID: 2086193944583923864}
   - component: {fileID: 6836568017205622254}
   - component: {fileID: 6131290408631443510}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
