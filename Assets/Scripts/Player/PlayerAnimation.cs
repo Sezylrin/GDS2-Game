@@ -11,11 +11,14 @@ public class PlayerAnimation : MonoBehaviour
     private Animator anim;
     [SerializeField]
     private Transform Sprite;
+    [SerializeField]
+    private float footstepSoundSpeed;
+    private bool left = false;
     void Start()
     {
         
     }
-
+    private Coroutine PlayFootStepCoroutine;
     // Update is called once per frame
     void Update()
     {
@@ -26,7 +29,29 @@ public class PlayerAnimation : MonoBehaviour
         else if( PCM.system.GetState() == playerState.moving)
         {
             Moving();
+            //PlayFootStep();
         }
+    }
+    private void PlayFootStep()
+    {
+        if (PlayFootStepCoroutine == null)
+            PlayFootStepCoroutine = StartCoroutine(PlayFootStep(footstepSoundSpeed));
+    }
+
+    private IEnumerator PlayFootStep(float time)
+    {
+        if (left)
+        {
+            left = !left;
+            PCM.Audio.PlaySound(SoundType.PlayerWalkGrassL);
+        }
+        else
+        {
+            left = !left;
+            PCM.Audio.PlaySound(SoundType.PlayerWalkGrassR);
+        }
+        yield return new WaitForSeconds(time);
+        PlayFootStepCoroutine = null;
     }
     private void Moving()
     {
