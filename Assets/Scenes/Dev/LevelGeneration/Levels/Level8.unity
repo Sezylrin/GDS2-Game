@@ -59015,6 +59015,38 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3976232692456254324, guid: 50f2c0e0b7cb92041a468042baf16c42, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].x
+      value: -0.059635222
+      objectReference: {fileID: 0}
+    - target: {fileID: 3976232692456254324, guid: 50f2c0e0b7cb92041a468042baf16c42, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].y
+      value: 23.088451
+      objectReference: {fileID: 0}
+    - target: {fileID: 3976232692456254324, guid: 50f2c0e0b7cb92041a468042baf16c42, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].x
+      value: -23.018538
+      objectReference: {fileID: 0}
+    - target: {fileID: 3976232692456254324, guid: 50f2c0e0b7cb92041a468042baf16c42, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].y
+      value: -0.10421181
+      objectReference: {fileID: 0}
+    - target: {fileID: 3976232692456254324, guid: 50f2c0e0b7cb92041a468042baf16c42, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[2].x
+      value: -0.03445244
+      objectReference: {fileID: 0}
+    - target: {fileID: 3976232692456254324, guid: 50f2c0e0b7cb92041a468042baf16c42, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[2].y
+      value: -23.284409
+      objectReference: {fileID: 0}
+    - target: {fileID: 3976232692456254324, guid: 50f2c0e0b7cb92041a468042baf16c42, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[3].x
+      value: 22.933506
+      objectReference: {fileID: 0}
+    - target: {fileID: 3976232692456254324, guid: 50f2c0e0b7cb92041a468042baf16c42, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[3].y
+      value: 0.0805521
+      objectReference: {fileID: 0}
     - target: {fileID: 5257679574246580382, guid: 50f2c0e0b7cb92041a468042baf16c42, type: 3}
       propertyPath: m_Name
       value: Camera
