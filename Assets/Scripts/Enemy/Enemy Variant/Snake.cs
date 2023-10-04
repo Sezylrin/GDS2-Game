@@ -3,23 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cheetah : Enemy, IPoolable<Cheetah>
+public class Snake : Enemy, IPoolable<Snake>
 {
-    [field: Header("Cheetah")]
+    [field: Header("Snake")]
     [field: SerializeField] protected GameObject SwipeHitbox { get; set; }
     [field: SerializeField] protected GameObject DaggerPrefab { get; set; }
     [field: SerializeField] protected Transform DaggerSpawnPoint { get; set; }
     [field: SerializeField] protected float DaggerMoveSpeed { get; set; } = 3;
     [field: SerializeField] protected GameObject ChainHitbox { get; set; }
     [field: SerializeField] protected BoxCollider2D col2D { get; set; }
-    private CheetahScriptableObject CheetahSO;
+    private SnakeScriptableObject SnakeSO;
 
 
     #region PoolingVariables
-    public Pool<Cheetah> Pool { get; set; }
+    public Pool<Snake> Pool { get; set; }
     public bool IsPooled { get; set; }
 
     protected Pool<Dagger> pool;
+    //protected Pool<Dagger> pool;
     #endregion
 
     protected override void Start()
@@ -30,7 +31,7 @@ public class Cheetah : Enemy, IPoolable<Cheetah>
 
     public override void SetInheritanceSO()
     {
-        CheetahSO = SO as CheetahScriptableObject;
+        SnakeSO = SO as SnakeScriptableObject;
     }
 
     public override void SetStatsFromScriptableObject()
@@ -44,59 +45,42 @@ public class Cheetah : Enemy, IPoolable<Cheetah>
         {
             case 1:
                 SetDestination(transform.position);
-                Debug.Log("Attempting to Swipe");
+                Debug.Log("Attempting to Lunge");
                 break;
             case 2:
-                Debug.Log("Attempting to Shoot Daggers");
+                Debug.Log("Attempting to Spit Venom");
                 break;
             case 3:
                 SetDestination(transform.position);
-                Debug.Log("Attempting to Chain");
+                Debug.Log("Attempting to Acid Pool");
                 break;
         }
     }
 
-    #region 1 - Swipe
+    #region 1 - Lunge
     protected override void Attack1()
     {
-        dir = (targetTr.position - transform.position).normalized;
-        PivotPoint.eulerAngles = new Vector3(0, 0, CustomMath.ClampedDirection(Vector2.right, dir));
-        col2D.includeLayers = TargetLayer;
-        SwipeHitbox.SetActive(true);
+
     }
     #endregion
 
-    #region 2 - Shoot Daggers
+    #region 2 - Spit Venom
     protected override void Attack2()
     {
-        dir = (targetTr.position - transform.position).normalized;
-        PivotPoint.eulerAngles = new Vector3(0, 0, CustomMath.ClampedDirection(Vector2.right, dir));
-        col2D.includeLayers = TargetLayer;
-        bool initial;
-        Dagger temp = pool.GetPooledObj(out initial);
-        if (initial)
-        {
-            temp.NewInstance();
-        }
-        temp.Init(targetTr.position - transform.position, DaggerSpawnPoint.position, TargetLayer, Attack2Damage, Attack2Duration, DaggerMoveSpeed, AttackKnockback, this);
+
     }
     #endregion
 
-    #region 3 - Chain
+    #region 3 - Acid Pool
     protected override void Attack3()
     {
-        dir = (targetTr.position - transform.position).normalized;
-        PivotPoint.eulerAngles = new Vector3(0, 0, CustomMath.ClampedDirection(Vector2.right, dir));
-        col2D.includeLayers = TargetLayer;
-        ChainHitbox.SetActive(true);
+
     }
     #endregion
 
     protected override void EndAttack(object sender, EventArgs e)
     {
         base.EndAttack(sender, e);
-        SwipeHitbox.SetActive(false);
-        ChainHitbox.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

@@ -12,14 +12,14 @@ public abstract class RangedEnemy : Enemy
     }
 
     [field: SerializeField] protected Timer RangedTimers { get; private set; }
-    [field: SerializeField] protected float FlashDuration { get; set; } = 0.1f;
-    [field: SerializeField] protected GameObject WarningFlash { get; set; }
+    //[field: SerializeField] protected float FlashDuration { get; set; } = 0.1f;
+   // [field: SerializeField] protected GameObject WarningFlash { get; set; }
     [field: SerializeField] protected GameObject ProjectilePrefab { get; set; }
     [field: SerializeField] protected Transform ProjectileSpawnPoint { get; set; }
 
     //protected Pool<EnemyProjectile> pool;
 
-    protected bool FlashedOnce { get; set; } = false;
+  //  protected bool FlashedOnce { get; set; } = false;
 
     protected override void Start()
     {
