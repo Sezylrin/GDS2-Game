@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Pathfinding;
 using System.Threading;
+using TMPro;
 
 #region EnemyType Enum
 public enum EnemyType
@@ -118,6 +119,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     public bool IsWither { get; set; }
     public bool IsBrambled { get; set; }
     public bool IsStunned { get; set; }
+    [SerializeField]
+    protected TMP_Text comboText;
     #endregion
 
     #region Damage Modifier Variables
@@ -217,13 +220,22 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         Attack3Windup = SO.windup3Duration;
 
         StaggerBar.SetStats(SO.pointsToStagger, SO.staggerDuration, SO.staggerDelayDuration, SO.staggerDecayAmount, SO.staggerDecayRate);
-        HealthBarController.SetStats(MaxHealth, ConsumableHealthPercentThreshold);
+        if (!debugDisableAI)
+            HealthBarController.SetStats(MaxHealth, ConsumableHealthPercentThreshold);
         Consume.SetStats(HealthPercentReceivedOnConsume);
     }
 
     public void SetHitPoints()
     {
         Hitpoints = MaxHealth;
+    }
+
+    public void SetOverRideHealth(int amount)
+    {
+        
+        MaxHealth = amount;
+        SetHitPoints();
+        HealthBarController.SetStats(MaxHealth, ConsumableHealthPercentThreshold);
     }
 
     public void SetTimers()
@@ -345,6 +357,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     public void AddForce(Vector2 force)
     {
+        if (debugDisableAI)
+            return;
         rb.velocity = Vector2.zero;
         rb.velocity += force;
         path.enabled = false;
@@ -553,6 +567,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     public void ApplyFireSurge(float damage, int Stagger)
     {
         TakeDamage(damage, Stagger, ElementType.fire, ElementType.electric);
+        comboText.text = "FireSurge";
+        comboText.color = Color.red;
+        Invoke("RemoveSurgeText", 1f);
+    }
+
+    private void RemoveSurgeText()
+    {
+        comboText.text = "";
     }
 
     public void ApplyAquaVolt(float damage, int stagger, float duration)
@@ -565,6 +587,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         InterruptAttack();
         StopPathing();
         EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, float.MaxValue);
+        comboText.text = "Stunned";
+        comboText.color = Color.yellow;
     }
 
     private void RemoveStun(object sender, EventArgs e)
@@ -576,6 +600,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     {
         IsStunned = false;
         EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, 0);
+        comboText.text = "";
     }
 
     public void ApplyNoxiousGas(float damage, int stagger, float duration)
@@ -589,6 +614,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         targetTr = Manager.FindNearestEnemy(transform);
         //ignore manager bucket, instantly attack enemy
         currentState = EnemyState.chasing;
+        CurrentAttack = ChooseAttack();
+        comboText.text = "Noxious";
+        comboText.color = Color.magenta;
     }
 
     private void RemoveNoxious(object sender, EventArgs e)
@@ -601,6 +629,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         IsNoxious = false;
         TargetLayer = PlayerLayer;
         targetTr = GameManager.Instance.PlayerTransform;
+        comboText.text = "";
     }
 
     public void ApplyWither(float damage, int stagger, float duration, float witherBonus)
@@ -610,6 +639,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         duration *= currentElementResist;
         currentWitherBonus = (witherBonus - 1) * currentElementResist + 1;
         ComboEffectTimer.SetTime((int)ElementCombos.noxiousGas, duration);
+        comboText.text = "Withered";
+        comboText.color = Color.black;
     }
 
     private void RemoveWither(object sender, EventArgs e)
@@ -620,6 +651,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     {
         IsWither = false;
         currentWitherBonus = 1;
+        comboText.text = "";
     }
     #endregion
 
@@ -655,7 +687,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     protected virtual void EnemyAi()
     {
         if (debugDisableAI || Consume.BeingConsumed()) return;
-        
+        if (IsStunned || Staggered) return;
         if (currentState == EnemyState.chasing)
         {
             DetermineAttackPathing();
@@ -786,6 +818,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     public void StopPathing()
     {
+        if (GameManager.Instance.IsTutorial)
+            return;
         hasDestination = false;
         path.destination = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
     }

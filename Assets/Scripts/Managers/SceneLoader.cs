@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public enum Scene
 {
     //Start,
+    Tutorial,
     Hub
 }
 
@@ -13,6 +14,15 @@ public class SceneLoader : MonoBehaviour
 {
     public void Load(Scene scene, bool EnableDefaultTransition = true)
     {
+        if (scene == Scene.Tutorial)
+        {
+            GameManager.Instance.SetIsTutorial(true);
+            GameManager.Instance.PCM.UI.DisableAbilityUI();
+        }
+        else
+        {
+            GameManager.Instance.SetIsTutorial(false);
+        }
         if (EnableDefaultTransition)
             TriggerFade(scene);
         else
@@ -23,6 +33,7 @@ public class SceneLoader : MonoBehaviour
     {
         TriggerFade(Scene.Hub);
         GameManager.Instance.LevelGenerator.New();
+        GameManager.Instance.SetIsTutorial(false);
     }
 
     public void LoadedIntoHub()

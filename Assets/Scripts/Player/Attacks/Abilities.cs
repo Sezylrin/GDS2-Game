@@ -38,6 +38,8 @@ public class Abilities : MonoBehaviour
     }
     public void ToggleActiveAbilitySet(InputAction.CallbackContext context)
     {
+        if (!GameManager.Instance.StatsManager.secondSkillsetUnlocked)
+            return;
         AbilitySetOne = !AbilitySetOne;
         UpdateUI();
     }
@@ -84,6 +86,8 @@ public class Abilities : MonoBehaviour
     {
         if (AbilitySetOne)
             slot += 3;
+        if (!abilities[slot])
+            return false;
         return (abilities[slot].type == AbilityType.Projectile);
     }
     public bool CanCast(int slot)

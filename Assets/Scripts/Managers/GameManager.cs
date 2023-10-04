@@ -31,10 +31,12 @@ public class GameManager : MonoBehaviour
     private InteractionBase interaction;
     public AudioComponent AudioComponent;
 
+    public PlayerInputs playerInputs { get; private set; }
+
     private Consume consume;
     [field: SerializeField] public int HealthPerSegment { get; set; } = 100;
 
-
+    public bool IsTutorial { get; private set; }
     #region Cursor
     [field: SerializeField]
     public Transform controllerCursosrTR { get;private set; }
@@ -54,9 +56,10 @@ public class GameManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
+        playerInputs = new PlayerInputs();
         AudioComponent = gameObject.GetComponent<AudioComponent>();
         input.onControlsChanged += SetScheme;
-
+        
         SwitchToMouseCursor();
     }
 
@@ -64,6 +67,17 @@ public class GameManager : MonoBehaviour
     {
         ConsumeTimers = TimerManager.GenerateTimers(typeof(ConsumeTimer), gameObject);
         ConsumeTimers.times[(int)ConsumeTimer.consumeDelay].OnTimeIsZero += EndConsumeDelay;
+    }
+
+    public void OpenMenu(InputAction.CallbackContext context)
+    {
+        SkillSwitchManager.OpenMenu();
+
+        if(SkillSwitchManager.transform.gameObject.activeSelf)
+        {
+            AudioComponent.PlaySound(SoundType.UIOpenMenu);
+            PlayerTransform.gameObject.SetActive(false);
+        }
     }
 
     //Temporary for now, remove when we have a proper way to open skillSwitchManager
@@ -135,7 +149,6 @@ public class GameManager : MonoBehaviour
         return FountainRoomToSpawn == LevelGenerator.floorsCleared;
     }
     #endregion
-
 
     #region Interaction
     public void SetInteraction(InteractionBase interaction)
@@ -296,6 +309,14 @@ public class GameManager : MonoBehaviour
     public void SetCameraTrack(Transform trackTarget)
     {
         CameraTrackPoint = trackTarget;
+    }
+    #endregion
+
+    #region Setter
+    public void SetIsTutorial(bool tutorial)
+    {
+        IsTutorial = tutorial;
+        StatsManager.ResetEquipForTutorial();
     }
     #endregion
 }
