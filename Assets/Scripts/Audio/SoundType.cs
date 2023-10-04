@@ -18,7 +18,8 @@ public enum SoundType
     PlayerAttackParry,
     PlayerAttackStagger,
     PlayerWalkStone,
-    PlayerWalkGrass,
+    PlayerWalkGrassL,
+    PlayerWalkGrassR,
     GeneralFountainHeal,
     EnemyAttackSlam,
     EnemyGrunt

@@ -586,6 +586,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trailObj: {fileID: 4801490293196708577, guid: 4f060ff0e90620c48a4b5828d52926cb, type: 3}
   rend: {fileID: 3543791457672997724}
+  sprite: {fileID: 3543791457672997727}
 --- !u!1 &274715373
 GameObject:
   m_ObjectHideFlags: 0
@@ -2143,6 +2144,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3543791457672997727}
   - component: {fileID: 3543791457672997724}
+  - component: {fileID: 980143085}
   m_Layer: 3
   m_Name: PlayerSprite
   m_TagString: Player
@@ -2218,6 +2220,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &980143085
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3543791457672997726}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e339201248166a44391475f96a9b452c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &3543791458002022353
 GameObject:
   m_ObjectHideFlags: 0
@@ -2432,12 +2454,14 @@ GameObject:
   - component: {fileID: 3543791458973239726}
   - component: {fileID: 5754933048486312608}
   - component: {fileID: 3543791458973239697}
+  - component: {fileID: 796045613}
   - component: {fileID: 3543791458973239696}
   - component: {fileID: 864687015}
   - component: {fileID: 1811655617}
   - component: {fileID: 1114287056888059202}
   - component: {fileID: 3274319934512244340}
   - component: {fileID: 1434561470}
+  - component: {fileID: 1969045132}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -2463,7 +2487,7 @@ Transform:
   - {fileID: 490763409}
   - {fileID: 247273588}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &3543791458973239727
 Rigidbody2D:
@@ -2511,6 +2535,7 @@ MonoBehaviour:
   <abilities>k__BackingField: {fileID: 864687015}
   <UI>k__BackingField: {fileID: 1114287056888059202}
   <Trail>k__BackingField: {fileID: 247572587}
+  <Audio>k__BackingField: {fileID: 1969045132}
 --- !u!114 &3543791458973239726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2604,7 +2629,7 @@ MonoBehaviour:
   cursorPos: {fileID: 0}
   lineRend: {fileID: 1434561470}
   direction: {x: 0, y: 0}
-  lastDirection: {x: 0, y: 0}
+  <lastDirection>k__BackingField: {x: 0, y: 0}
   <CurrentState>k__BackingField: 0
   bufferedState: 0
   isDashing: 0
@@ -2613,6 +2638,22 @@ MonoBehaviour:
   isAttackEnd: 0
   isUsingAbility: 0
   isPerfectDodge: 0
+--- !u!114 &796045613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3543791458973239701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c91f6c050d9fc943b84b7754b2b07ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PCM: {fileID: 864687022}
+  anim: {fileID: 980143085}
+  Sprite: {fileID: 3543791457672997727}
+  footstepSoundSpeed: 0.166
 --- !u!114 &3543791458973239696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2855,6 +2896,29 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &1969045132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3543791458973239701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a6e58df1cb19254fa063bd5efe715da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+    _serializedList:
+    - Key: 15
+      Value:
+      - {fileID: 8300000, guid: 5ad41acd89fb32d4588ee465d50dfccb, type: 3}
+    - Key: 18
+      Value:
+      - {fileID: 8300000, guid: 5caf910521ec59442b0ad98de874474e, type: 3}
+    - Key: 19
+      Value:
+      - {fileID: 8300000, guid: 70c68b86be9b4f644bc253a35aa622fd, type: 3}
 --- !u!1 &3543791459337211977
 GameObject:
   m_ObjectHideFlags: 0

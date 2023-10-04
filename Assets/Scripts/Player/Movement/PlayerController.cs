@@ -125,8 +125,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField, ReadOnly]
     private Vector2 direction;
-    [SerializeField, ReadOnly]
-    private Vector2 lastDirection;
+    [field: SerializeField, ReadOnly]
+    public Vector2 lastDirection { get; private set; }
     [field: SerializeField] [field: ReadOnly]
     public playerState CurrentState { get; private set; }
     [SerializeField] [ReadOnly]

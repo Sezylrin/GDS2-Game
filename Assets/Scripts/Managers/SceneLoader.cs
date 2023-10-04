@@ -56,7 +56,7 @@ public class SceneLoader : MonoBehaviour
         CrossFadeAnimator.SetTrigger("Start");
 
         yield return new WaitForSeconds(CrossFadeTime);
-        SceneManager.LoadSceneAsync(scene.ToString());
+        SceneManager.LoadSceneAsync((int)scene);
         if (scene == Scene.Hub)
             LoadedIntoHub();
         CrossFadeAnimator.SetTrigger("End");
