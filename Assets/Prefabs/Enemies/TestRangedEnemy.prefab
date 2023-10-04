@@ -1222,11 +1222,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b32f68944282414c95e0f642ff033c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Type>k__BackingField: 1
+  <Type>k__BackingField: 4
   <Element>k__BackingField: 1
   <Hitpoints>k__BackingField: 250
   <ActiveElementEffect>k__BackingField: 0
   <ElementTier>k__BackingField: 0
+  <CurrentAttack>k__BackingField: 0
   <WindingUp>k__BackingField: 0
   <Staggered>k__BackingField: 0
   <AbleToAttack>k__BackingField: 1
@@ -1238,14 +1239,16 @@ MonoBehaviour:
   <Speed>k__BackingField: 0
   <Souls>k__BackingField: 40
   <EffectDuration>k__BackingField: 5
-  <WindupDuration>k__BackingField: 1
   <AttackCooldownDuration>k__BackingField: 10
   <Attack1Damage>k__BackingField: 0
   <Attack1Duration>k__BackingField: 0
+  <Attack1Windup>k__BackingField: 0
   <Attack2Damage>k__BackingField: 0
   <Attack2Duration>k__BackingField: 0
+  <Attack2Windup>k__BackingField: 0
   <Attack3Damage>k__BackingField: 0
   <Attack3Duration>k__BackingField: 0
+  <Attack3Windup>k__BackingField: 0
   <AttackKnockback>k__BackingField: 5
   <ConsumableHealthPercentThreshold>k__BackingField: 25
   <HealthPercentReceivedOnConsume>k__BackingField: 0
@@ -1259,6 +1262,7 @@ MonoBehaviour:
   <debugInterruptAttack>k__BackingField: 0
   <debugEnemySpawn>k__BackingField: 0
   <SO>k__BackingField: {fileID: 11400000, guid: 337e38328d3f73146bea394118771e89, type: 2}
+  <PivotPoint>k__BackingField: {fileID: 0}
   <HealthBarController>k__BackingField: {fileID: 972554465}
   <StaggerBar>k__BackingField: {fileID: 378752905}
   <Consume>k__BackingField: {fileID: 294510619}
@@ -1266,8 +1270,6 @@ MonoBehaviour:
   <ElementEffectImage>k__BackingField: {fileID: 988464900}
   <rb>k__BackingField: {fileID: 882732001}
   <path>k__BackingField: {fileID: 1090918735}
-  <WalkingSound>k__BackingField: {fileID: 0}
-  <DeathSoundPrefab>k__BackingField: {fileID: 0}
   <ActiveCombos>k__BackingField: 
   <ComboEffectTimer>k__BackingField:
     <times>k__BackingField: []
@@ -1291,6 +1293,7 @@ MonoBehaviour:
   RepositionRateMin: 2
   RepositionRateMax: 4
   AttackEndAiCD: 0.5
+  MinimumAttackRange: 1
   currentState: 0
   hasDestination: 0
   targetTr: {fileID: 0}

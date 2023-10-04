@@ -5,18 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="866baa2f-6ec0-4fcb-83d5-85b52a489f51" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.GDS2-Game/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GDS2-Game/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/LevelGeneration/Level.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/LevelGeneration/Level.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/LevelGeneration/LevelDoor.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/LevelGeneration/LevelDoor.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/LevelGeneration/LevelGenerator.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/LevelGeneration/LevelGenerator.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/LevelGenerationScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/LevelGenerationScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Rooms/FountainRoom.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Rooms/FountainRoom.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Rooms/Room1.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Rooms/Room1.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Rooms/Room2.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Rooms/Room2.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Rooms/Room3.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Rooms/Room3.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/LevelGeneration/Level.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/LevelGeneration/Level.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/LevelGeneration/LevelGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/LevelGeneration/LevelGenerator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Levels/Level1.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Levels/Level1.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Levels/Level10.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Levels/Level10.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Levels/Level2.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Levels/Level2.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Levels/Level3.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Levels/Level3.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Levels/Level4.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Levels/Level4.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Levels/Level5.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Levels/Level5.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Levels/Level6.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Levels/Level6.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Levels/Level7.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Levels/Level7.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Levels/Level8.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Levels/Level8.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Levels/Level9.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Dev/LevelGeneration/Levels/Level9.unity" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,10 +88,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="23296">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="23296" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -113,6 +111,8 @@
       <workItem from="1694239448647" duration="12440000" />
       <workItem from="1694347831426" duration="3991000" />
       <workItem from="1694419830927" duration="3909000" />
+      <workItem from="1696398934594" duration="3201000" />
+      <workItem from="1696405640368" duration="597000" />
     </task>
     <servers />
   </component>

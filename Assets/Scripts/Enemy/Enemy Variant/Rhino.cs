@@ -20,9 +20,12 @@ public class Rhino : Enemy, IPoolable<Rhino>
     [field: SerializeField] protected float ShockwaveStartRadius { get; set; } = 3;
     [field: SerializeField] protected float ShockwaveEndRadius { get; set; } = 8;
     [field: SerializeField] protected float ShockwaveGrowthSpeed { get; set; } = 1;
-    private Coroutine shockwaveCoroutine;
     private RhinoScriptableObject RhinoSO;
+    private Coroutine shockwaveCoroutine;
 
+    #region Tutorial
+    public ModifyBoundary boundary;
+    #endregion
 
     #region PoolingVariables
     public Pool<Rhino> Pool { get; set; }
@@ -222,7 +225,14 @@ public class Rhino : Enemy, IPoolable<Rhino>
     #region PoolingFunctions
     public void PoolSelf()
     {
-        Pool.PoolObj(this);
+        if(Pool != null)
+            Pool.PoolObj(this);
+        else
+        {
+            Destroy(gameObject);
+            if (boundary)
+                boundary.DisableBoundary();
+        }
     }
     #endregion 
 }
