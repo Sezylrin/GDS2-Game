@@ -69,13 +69,12 @@ public class GameManager : MonoBehaviour
         ConsumeTimers.times[(int)ConsumeTimer.consumeDelay].OnTimeIsZero += EndConsumeDelay;
     }
 
-    public void OpenMenu(InputAction.CallbackContext context)
+    public void OpenSkillSwitchManager(InputAction.CallbackContext context)
     {
         SkillSwitchManager.OpenMenu();
 
         if(SkillSwitchManager.transform.gameObject.activeSelf)
         {
-            AudioComponent.PlaySound(SoundType.UIOpenMenu);
             PlayerTransform.gameObject.SetActive(false);
         }
     }
@@ -86,19 +85,30 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.M))
         {
             SkillSwitchManager.OpenMenu();
-            AudioComponent.PlaySound(SoundType.UIOpenMenu);
         }
         if (Input.GetKeyDown(KeyCode.L))
         {
             AddSouls(10000);
         }
     }
-
     public void SetPlayerTransform(Transform player, PlayerComponentManager PCM)
     {
         PlayerTransform = player;
         this.PCM = PCM;
     }
+
+    #region Sounds
+    public void PlayOpenMenuSound()
+    {
+        AudioComponent.PlaySound(SoundType.UIOpenMenu);
+    }
+
+    public void PlayCloseMenuSound()
+    {
+        AudioComponent.PlaySound(SoundType.UICloseMenu);
+    }
+    #endregion
+
     #region Souls
     public int Souls { get; private set; }
 

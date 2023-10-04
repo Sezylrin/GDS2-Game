@@ -5,4 +5,5 @@ public enum SoundType
     UIHover,
     UIClick,
     UIClickFail,
+    UIUnlockSkill,
 }
