@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16be2fd2b85380842a475ac6cb89778a, type: 3}
+  m_Name: LizardSO
+  m_EditorClassIdentifier: 
+  maxHealth: 400
+  speed: 5
+  minSouls: 10
+  maxSouls: 20
+  effectDuration: 5
+  attackKnockback: 5
+  attackCooldown: 10
+  attack1Damage: 15
+  attack1Duration: 1
+  windup1Duration: 1
+  attack2Damage: 30
+  attack2Duration: 2
+  windup2Duration: 0.5
+  attack3Damage: 15
+  attack3Duration: 2
+  windup3Duration: 1
+  consumableHealthPercentThreshold: 20
+  percentToHealOnConsume: 15
+  pointsToStagger: 100
+  staggerDuration: 3
+  staggerDelayDuration: 3
+  staggerDecayAmount: 4
+  staggerDecayRate: 0.25

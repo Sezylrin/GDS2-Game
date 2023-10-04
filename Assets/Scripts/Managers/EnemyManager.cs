@@ -41,7 +41,7 @@ public class EnemyManager : MonoBehaviour
     [field: SerializeField, ReadOnly] int RangedEnemySpawnChance { get; set; } = 25;
     [field: SerializeField, Range(0, 100)] int debugMeleeSpawnChance { get; set; } = 50;
     [field: SerializeField] bool debugSetMeleeSpawnChance { get; set; }
-    private Pool<TestMeleeEnemy> testMeleeEnemyPool;
+    private Pool<Rhino> rhinoPool;
     private Pool<TestRangedEnemy> testRangedEnemyPool;
     [SerializeField]
     private List<Enemy> enemyList = new List<Enemy>();
@@ -61,7 +61,7 @@ public class EnemyManager : MonoBehaviour
 
         AttackPoints = MaxAttackPoints;
 
-        GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[0], out testMeleeEnemyPool);
+        GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[0], out rhinoPool);
         GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[1], out testRangedEnemyPool);
     }
 
@@ -282,7 +282,7 @@ public class EnemyManager : MonoBehaviour
         switch (enemyToSpawn)
         {
             case EnemyType.Test1:
-                temp = testMeleeEnemyPool.GetPooledObj();
+                temp = rhinoPool.GetPooledObj();
                 temp.Init(spawnLocation, enemyElement);
                 enemyList.Add(temp);
                 break;

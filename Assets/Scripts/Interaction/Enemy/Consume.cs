@@ -7,6 +7,7 @@ public class Consume : MonoBehaviour
     [field: SerializeField] private Enemy enemy;
     [field: SerializeField] private GameObject UI;
     private int healthReceivedPercent;
+    private bool beingConsumed = false;
 
     public void SetStats(int healthReceivedOnConsumePercent)
     {
@@ -28,7 +29,7 @@ public class Consume : MonoBehaviour
         if (collision.CompareTag(Tags.T_Player))
         {
             GameManager.Instance.SetConsume(this);
-            if (UI)
+            if (UI && GameManager.Instance.PCM.system.CanConsume())
                 UI.SetActive(true);
         }
     }
@@ -41,5 +42,17 @@ public class Consume : MonoBehaviour
             if (UI)
                 UI.SetActive(false);
         }
+    }
+
+    public void StartConsuming()
+    {
+        if (UI) UI.SetActive(false);
+        beingConsumed = true;
+        enemy.StopPathing();
+    }
+
+    public bool BeingConsumed()
+    {
+        return beingConsumed;
     }
 }

@@ -20,6 +20,8 @@ public class PlayerUI : MonoBehaviour
     private List<SkillPointUI> skillPoints = new List<SkillPointUI>();
     [Header("Active SKills")]
     [SerializeField]
+    private GameObject abilities;
+    [SerializeField]
     private TMP_Text QAbilityText;
     [SerializeField]
     private TMP_Text EAbilityText;
@@ -34,6 +36,7 @@ public class PlayerUI : MonoBehaviour
 
     void Start()
     {
+        
     }
 
     // Update is called once per frame
@@ -82,7 +85,7 @@ public class PlayerUI : MonoBehaviour
     public void UpdateConsumeBar(float fillAmount)
     {
         consumeBarImage.fillAmount = fillAmount;
-        if (fillAmount == 1)
+        if (PCM.system.CanConsume())
         {
             consumeBarImage.color = Color.red;
         }
@@ -91,6 +94,17 @@ public class PlayerUI : MonoBehaviour
     public void EmptyConsumeBar()
     {
         consumeBarImage.fillAmount = 0;
-        consumeBarImage.color = new Color(255, 162, 0);
+        consumeBarImage.color = Color.yellow;
+    }
+
+    public void EnableAbilityUI()
+    {
+        abilities.SetActive(true);
+    }
+
+    public void DisableAbilityUI()
+    {
+        if (GameManager.Instance.IsTutorial)
+            abilities.SetActive(false);
     }
 }

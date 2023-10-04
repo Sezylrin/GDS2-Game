@@ -7,20 +7,24 @@ public class BaseEnemyScriptableObject : ScriptableObject
 {
     public int maxHealth;
     public float speed;
-    public int souls;
+    public int minSouls;
+    public int maxSouls;
     public float effectDuration = 5;
-    public float windupDuration = 1;
     [Space(20)]
+    public float attackKnockback = 5;
     public float attackCooldown = 10;
     [Space(20)]
     public int attack1Damage;
     public float attack1Duration;
+    public float windup1Duration;
     [Space(20)]
     public int attack2Damage;
     public float attack2Duration;
+    public float windup2Duration;
     [Space(20)]
     public int attack3Damage;
     public float attack3Duration;
+    public float windup3Duration;
     [Space(20)]
     [Range(0, 100)] public int consumableHealthPercentThreshold = 25;
     [Range(0, 100)] public int percentToHealOnConsume = 10;

@@ -24,10 +24,13 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     private void Start()
     {
         SetHitPoints();
+        consumeBar = 0;
+        canConsume = false;
         timer = GameManager.Instance.TimerManager.GenerateTimers(typeof(SystemCD), gameObject);
         timer.times[(int)SystemCD.counterAttackQTE].OnTimeIsZero += RemoveCounterQTE;
         InitCastPoints();
     }
+
     #region Update
     private void Update()
     {
@@ -164,7 +167,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     private int actualMaxHealth;
     private void CalculateDamage(float damage)
     {
-        if (!timer.IsTimeZero((int)SystemCD.iFrames))
+        if (!timer.IsTimeZero((int)SystemCD.iFrames) || PCM.control.CurrentState == playerState.consuming)
             return;
         if (Hitpoints - damage < 0)
         {
@@ -210,6 +213,11 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     {
         float heathPercent = (float)Hitpoints / (float)actualMaxHealth;
         PCM.UI.SetGreenHealthBar(heathPercent);
+    }
+
+    public void UpdateHealthUI()
+    {
+        SetHealthUI();
     }
 
     public void UpgradeHealth()
@@ -293,6 +301,17 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         PCM.control.CounteredAttack(counterQTEDuration);
     }
 
+    public void CounterSuccesfulTutorial(Transform target, EnemyProjectile projectile)
+    {
+        if (isCountered)
+            return;
+        isCountered = true;
+        tutorialTarget = target;
+        storedProjectile = projectile;
+        timer.SetTime((int)SystemCD.counterAttackQTE, counterQTEDuration);
+        PCM.control.CounteredAttack(counterQTEDuration);
+    }
+    private Transform tutorialTarget;
     [ContextMenu("test Counter")]
     private void TestCounter()
     {
@@ -314,9 +333,13 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     {
         if (isCountered)
         {
-            if (storedProjectile)
+            if (GameManager.Instance.IsTutorial)
             {
-                storedProjectile.CounterProjectile(target, transform.position, enemy, transform);
+                storedProjectile.CounterProjectile(tutorialTarget, transform.position, enemy, 2f, transform);
+            }
+            else if (storedProjectile)
+            {
+                storedProjectile.CounterProjectile(target, transform.position, enemy, 2f, transform);
             }
             else
             {
@@ -329,14 +352,14 @@ public class PlayerSystem : MonoBehaviour, IDamageable
 
     #region Consume
     [Header("Consume")]
-    [SerializeField] private int consumeBar;
-    [SerializeField] private int consumeBarMax;
+    [SerializeField] private int consumeBar = 0;
+    [SerializeField] private int consumeBarMax = 100;
     [SerializeField] private bool canConsume = false;
 
     public void AddToConsumeBar(int consumeValue)
     {
         consumeBar += consumeValue;
-        PCM.UI.UpdateConsumeBar(consumeBar / consumeBarMax);
+        PCM.UI.UpdateConsumeBar((float)consumeBar / (float)consumeBarMax);
         if (consumeBar > consumeBarMax)
         {
             canConsume = true;

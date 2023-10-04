@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Pathfinding;
 using System.Threading;
+using TMPro;
 
 #region EnemyType Enum
 public enum EnemyType
@@ -42,6 +43,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: SerializeField, ReadOnly] public int Hitpoints { get; set; }
     [field: SerializeField, ReadOnly] protected ElementType ActiveElementEffect { get; set; }
     [field: SerializeField, ReadOnly] protected int ElementTier { get; set; }
+    [field: SerializeField, ReadOnly] protected int CurrentAttack { get; set; }
     [field: SerializeField, ReadOnly] protected bool WindingUp { get; set; }
     [field: SerializeField, ReadOnly] protected bool Staggered { get; set; }
     [field: SerializeField, ReadOnly] protected bool AbleToAttack { get; set; }
@@ -55,16 +57,18 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: SerializeField, ReadOnly] protected float Speed { get; set; }
     [field: SerializeField, ReadOnly] protected int Souls { get; set; }
     [field: SerializeField, ReadOnly] protected float EffectDuration { get; set; }
-    [field: SerializeField, ReadOnly] protected float WindupDuration { get; set; }
     [field: SerializeField, ReadOnly] protected float AttackCooldownDuration { get; set; }
 
     [field: SerializeField, ReadOnly] protected int Attack1Damage { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack1Duration { get; set; }
+    [field: SerializeField, ReadOnly] protected float Attack1Windup { get; set; }
     [field: SerializeField, ReadOnly] protected int Attack2Damage { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack2Duration { get; set; }
+    [field: SerializeField, ReadOnly] protected float Attack2Windup { get; set; }
     [field: SerializeField, ReadOnly] protected int Attack3Damage { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack3Duration { get; set; }
-    
+    [field: SerializeField, ReadOnly] protected float Attack3Windup { get; set; }
+
     [field: SerializeField, ReadOnly] protected float AttackKnockback { get; set; }
     [field: SerializeField, ReadOnly, Range(0, 100)] protected int ConsumableHealthPercentThreshold { get; set; }
     [field: SerializeField, ReadOnly, Range(0, 100)] protected int HealthPercentReceivedOnConsume { get; set; }
@@ -86,6 +90,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     #region Inspector Dependent Variables
     [field: Header("Inspector Set Variables")]
     [field: SerializeField] protected BaseEnemyScriptableObject SO { get; set; }
+    [field: SerializeField] protected Transform PivotPoint { get; set; }
     [field: SerializeField] protected HealthBarSegmentController HealthBarController { get; set; }
     [field: SerializeField] protected StaggerBar StaggerBar { get; set; }
     [field: SerializeField] protected Consume Consume { get; set; }
@@ -93,11 +98,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: SerializeField] protected Image ElementEffectImage { get; set; }
     Rigidbody2D IDamageable.rb => rb;
     [field: SerializeField] protected Rigidbody2D rb { get; private set; }
-    [field:SerializeField] protected AIPath path { get; set; }
-    [field: SerializeField] protected AudioSource WalkingSound { get; set; }
-    [field: SerializeField] protected GameObject DeathSoundPrefab { get; set; }
+    [field: SerializeField] protected AIPath path { get; set; }
+    protected AudioSource WalkingSound { get; set; }
+    protected GameObject DeathSoundPrefab { get; set; }
     protected EnemyManager Manager { get; set; }
     protected ElementCombo ComboManager { get; set; }
+    protected Vector2 dir { get; set; }
+    protected bool hitTarget = false;
     #endregion
 
     #region Combo Interface Variables
@@ -112,6 +119,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     public bool IsWither { get; set; }
     public bool IsBrambled { get; set; }
     public bool IsStunned { get; set; }
+    [SerializeField]
+    protected TMP_Text comboText;
     #endregion
 
     #region Damage Modifier Variables
@@ -131,6 +140,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     #region Object Initialization Functions
     public virtual void Init()
     {
+        SetInheritanceSO();
         SetDefaultState();
 
         if (debugDisableAI) Debug.LogWarning(this + "'s AI is Disabled");
@@ -156,6 +166,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         Speed = path.maxSpeed;
 
         Init();
+    }
+
+    public virtual void SetInheritanceSO()
+    {
+
     }
 
     public virtual void SetDefaultState()
@@ -187,28 +202,40 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     {
         MaxHealth = SO.maxHealth;
         Speed = SO.speed;
-        Souls = SO.souls;
+        ResetSpeed();
+        Souls = UnityEngine.Random.Range(SO.minSouls, SO.maxSouls + 1);
         ConsumableHealthPercentThreshold = SO.consumableHealthPercentThreshold;
         HealthPercentReceivedOnConsume = SO.percentToHealOnConsume;
-        WindupDuration = SO.windupDuration;
         AttackCooldownDuration = SO.attackCooldown;
         EffectDuration = SO.effectDuration;
 
         Attack1Damage = SO.attack1Damage;
         Attack1Duration = SO.attack1Duration;
+        Attack1Windup = SO.windup1Duration;
         Attack2Damage = SO.attack2Damage;
         Attack2Duration = SO.attack2Duration;
+        Attack2Windup = SO.windup2Duration;
         Attack3Damage = SO.attack3Damage;
         Attack3Duration = SO.attack3Duration;
+        Attack3Windup = SO.windup3Duration;
 
         StaggerBar.SetStats(SO.pointsToStagger, SO.staggerDuration, SO.staggerDelayDuration, SO.staggerDecayAmount, SO.staggerDecayRate);
-        HealthBarController.SetStats(MaxHealth, ConsumableHealthPercentThreshold);
+        if (!debugDisableAI)
+            HealthBarController.SetStats(MaxHealth, ConsumableHealthPercentThreshold);
         Consume.SetStats(HealthPercentReceivedOnConsume);
     }
 
     public void SetHitPoints()
     {
         Hitpoints = MaxHealth;
+    }
+
+    public void SetOverRideHealth(int amount)
+    {
+        
+        MaxHealth = amount;
+        SetHitPoints();
+        HealthBarController.SetStats(MaxHealth, ConsumableHealthPercentThreshold);
     }
 
     public void SetTimers()
@@ -248,7 +275,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         if (debugAttemptAttack)
         {
             debugAttemptAttack = false;
-            AttemptAttack();
+            //AttemptAttack();
         }
         if (debugInterruptAttack)
         {
@@ -330,6 +357,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     public void AddForce(Vector2 force)
     {
+        if (debugDisableAI)
+            return;
         rb.velocity = Vector2.zero;
         rb.velocity += force;
         path.enabled = false;
@@ -362,15 +391,27 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     #endregion
 
     #region Attacking Functions
-    protected virtual void AttemptAttack()
+
+    protected virtual int ChooseAttack()
     {
-        if (AbleToAttack && !Staggered) Attack();
+        return UnityEngine.Random.Range(1, 4);
     }
 
     protected virtual void Attack()
     {
+        switch (CurrentAttack)
+        {
+            case 1:
+                BeginWindup(Attack1Windup);
+                break;
+            case 2:
+                BeginWindup(Attack2Windup);
+                break;
+            case 3:
+                BeginWindup(Attack3Windup);
+                break;
+        }
         BeginAttackCooldown();
-        BeginWindup();
     }
 
     protected virtual void BeginAttackCooldown()
@@ -384,9 +425,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         AbleToAttack = true;
     }
 
-    protected virtual void BeginWindup()
+    protected virtual void BeginWindup(float windupDuration)
     {
-        EnemyTimers.SetTime((int)EnemyTimer.windupDurationTimer, WindupDuration);
+        EnemyTimers.SetTime((int)EnemyTimer.windupDurationTimer, windupDuration);
         WindingUp = true;
     }
 
@@ -398,7 +439,23 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     protected virtual void BeginAttack()
     {
-        EnemyTimers.SetTime((int)EnemyTimer.attackDurationTimer, Attack1Duration);
+        float duration = 0;
+        switch (CurrentAttack)
+        {
+            case 1:
+                duration = Attack1Duration;
+                Attack1();
+                break;
+            case 2:
+                duration = Attack2Duration;
+                Attack2();
+                break;  
+            case 3:
+                duration = Attack3Duration;
+                Attack3();
+                break;
+        }
+        EnemyTimers.SetTime((int)EnemyTimer.attackDurationTimer, duration);
     }
 
     protected virtual void EndAttack(object sender, EventArgs e)
@@ -417,6 +474,36 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, AttackEndAiCD);
     }
 
+    protected virtual void Attack1()
+    {
+
+    }
+    protected virtual void Attack2()
+    {
+
+    }
+    protected virtual void Attack3()
+    {
+
+    }
+
+    public void DoDamage(IDamageable target)
+    {
+        switch (CurrentAttack)
+        {
+            case 1: 
+                target.TakeDamage(Attack1Damage, 0, Element);
+                break;
+            case 2:
+                target.TakeDamage(Attack2Damage, 0, Element);
+                break;
+            case 3:
+                target.TakeDamage(Attack3Damage, 0, Element);
+                break;
+        }
+        target.AddForce(dir.normalized * AttackKnockback);
+        hitTarget = true;
+    }
     #endregion
 
     #region Element Functions
@@ -480,6 +567,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     public void ApplyFireSurge(float damage, int Stagger)
     {
         TakeDamage(damage, Stagger, ElementType.fire, ElementType.electric);
+        comboText.text = "FireSurge";
+        comboText.color = Color.red;
+        Invoke("RemoveSurgeText", 1f);
+    }
+
+    private void RemoveSurgeText()
+    {
+        comboText.text = "";
     }
 
     public void ApplyAquaVolt(float damage, int stagger, float duration)
@@ -492,6 +587,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         InterruptAttack();
         StopPathing();
         EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, float.MaxValue);
+        comboText.text = "Stunned";
+        comboText.color = Color.yellow;
     }
 
     private void RemoveStun(object sender, EventArgs e)
@@ -503,6 +600,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     {
         IsStunned = false;
         EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, 0);
+        comboText.text = "";
     }
 
     public void ApplyNoxiousGas(float damage, int stagger, float duration)
@@ -516,6 +614,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         targetTr = Manager.FindNearestEnemy(transform);
         //ignore manager bucket, instantly attack enemy
         currentState = EnemyState.chasing;
+        CurrentAttack = ChooseAttack();
+        comboText.text = "Noxious";
+        comboText.color = Color.magenta;
     }
 
     private void RemoveNoxious(object sender, EventArgs e)
@@ -528,6 +629,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         IsNoxious = false;
         TargetLayer = PlayerLayer;
         targetTr = GameManager.Instance.PlayerTransform;
+        comboText.text = "";
     }
 
     public void ApplyWither(float damage, int stagger, float duration, float witherBonus)
@@ -537,6 +639,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         duration *= currentElementResist;
         currentWitherBonus = (witherBonus - 1) * currentElementResist + 1;
         ComboEffectTimer.SetTime((int)ElementCombos.noxiousGas, duration);
+        comboText.text = "Withered";
+        comboText.color = Color.black;
     }
 
     private void RemoveWither(object sender, EventArgs e)
@@ -547,6 +651,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     {
         IsWither = false;
         currentWitherBonus = 1;
+        comboText.text = "";
     }
     #endregion
 
@@ -569,6 +674,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [SerializeField] protected float RepositionRateMin;
     [SerializeField] protected float RepositionRateMax;
     [SerializeField] protected float AttackEndAiCD;
+    [SerializeField] protected float MinimumAttackRange = 1; 
     [SerializeField][ReadOnly]
     protected EnemyState currentState;
     [SerializeField][ReadOnly]
@@ -580,8 +686,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     protected virtual void EnemyAi()
     {
-        if (debugDisableAI) return;
-        
+        if (debugDisableAI || Consume.BeingConsumed()) return;
+        if (IsStunned || Staggered) return;
         if (currentState == EnemyState.chasing)
         {
             DetermineAttackPathing();
@@ -595,6 +701,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         {
             if (AbleToAttack && Manager.CanAttack())
             {
+                CurrentAttack = ChooseAttack();
                 currentState = EnemyState.chasing;
             }
             else
@@ -621,7 +728,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     //call in child class to determine pathing choice
     protected virtual void DetermineAttackPathing()
     {
-
+        
     }
 
     protected virtual void AttackPathPicker()
@@ -680,9 +787,20 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
                 timeToAdd = UnityEngine.Random.Range(IdleMoveRateMin, IdleMoveRateMax);
                 break;
             case (int)EnemyState.chasing:
-                AttemptAttack();
+                Attack();
                 currentState = EnemyState.attacking;
-                timeToAdd = Attack1Duration + WindupDuration;
+                switch (CurrentAttack)
+                {
+                    case 1:
+                        timeToAdd = Attack1Duration + Attack1Windup;
+                        break;
+                    case 2:
+                        timeToAdd = Attack2Duration + Attack2Windup;
+                        break;
+                    case 3:
+                        timeToAdd = Attack3Duration + Attack3Windup;
+                        break;
+                }
                 break;
             case (int)EnemyState.repositioning:
                 timeToAdd = UnityEngine.Random.Range(RepositionRateMin, RepositionRateMax);
@@ -698,8 +816,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     }
 
-    protected void StopPathing()
+    public void StopPathing()
     {
+        if (GameManager.Instance.IsTutorial)
+            return;
         hasDestination = false;
         path.destination = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
     }

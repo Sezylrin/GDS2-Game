@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Wither
   m_EditorClassIdentifier: 
   BaseDamage:
-  - 5
-  - 8
-  - 14
-  StaggerDamage: 050000000a0000000f000000
+  - 150
+  - 200
+  - 300
+  StaggerDamage: 14000000190000001e000000
   Duration:
-  - 2
   - 3
   - 4
+  - 5
   WitherStrength:
   - 1.2
   - 1.4

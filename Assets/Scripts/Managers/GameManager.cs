@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public PoolingManager PoolingManager { get; private set; }
     [field: SerializeField] public ElementCombo ComboManager { get; private set; }
     [field: SerializeField] public LevelGenerator LevelGenerator { get; private set; }
+    [field: SerializeField] public AudioManager AudioManager { get; private set; }
     [field: SerializeField] public SkillTreeManager SkillTreeManager { get; private set; }
     [field: SerializeField, HideOnPlay(true)] public Transform PlayerTransform { get; private set; }
     [field: SerializeField] public SkillSwitchManager SkillSwitchManager { get; private set; }
@@ -30,10 +31,12 @@ public class GameManager : MonoBehaviour
     private InteractionBase interaction;
     public AudioComponent AudioComponent;
 
+    public PlayerInputs playerInputs { get; private set; }
+
     private Consume consume;
     [field: SerializeField] public int HealthPerSegment { get; set; } = 100;
 
-
+    public bool IsTutorial { get; private set; }
     #region Cursor
     [field: SerializeField]
     public Transform controllerCursosrTR { get;private set; }
@@ -53,9 +56,10 @@ public class GameManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
+        playerInputs = new PlayerInputs();
         AudioComponent = gameObject.GetComponent<AudioComponent>();
         input.onControlsChanged += SetScheme;
-
+        
         SwitchToMouseCursor();
     }
 
@@ -63,6 +67,17 @@ public class GameManager : MonoBehaviour
     {
         ConsumeTimers = TimerManager.GenerateTimers(typeof(ConsumeTimer), gameObject);
         ConsumeTimers.times[(int)ConsumeTimer.consumeDelay].OnTimeIsZero += EndConsumeDelay;
+    }
+
+    public void OpenMenu(InputAction.CallbackContext context)
+    {
+        SkillSwitchManager.OpenMenu();
+
+        if(SkillSwitchManager.transform.gameObject.activeSelf)
+        {
+            AudioComponent.PlaySound(SoundType.UIOpenMenu);
+            PlayerTransform.gameObject.SetActive(false);
+        }
     }
 
     //Temporary for now, remove when we have a proper way to open skillSwitchManager
@@ -135,7 +150,6 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-
     #region Interaction
     public void SetInteraction(InteractionBase interaction)
     {
@@ -155,6 +169,7 @@ public class GameManager : MonoBehaviour
         if (interaction)
         {
             interaction.Interact();
+            RemoveInteraction(interaction);
         }
     }
     #endregion
@@ -165,8 +180,9 @@ public class GameManager : MonoBehaviour
         consumeDelay
     }
 
-    [field: SerializeField] private float ConsumeDelayDuration { get; set; } = 2;
+    [field: SerializeField] private float ConsumeDelayDuration { get; set; } = 1;
     [field: SerializeField] private Timer ConsumeTimers { get; set; }
+    private bool consuming = false;
 
     public void SetConsume(Consume consume)
     {
@@ -175,7 +191,7 @@ public class GameManager : MonoBehaviour
 
     public void RemoveConsume(Consume consume)
     {
-        if (this.consume == consume)
+        if (this.consume == consume && !consuming)
         {
             this.consume = null;
         }
@@ -186,6 +202,8 @@ public class GameManager : MonoBehaviour
         if (consume)
         {
             StartConsumeDelay();
+            consume.StartConsuming();
+            consuming = true;
         }
     }
 
@@ -291,6 +309,14 @@ public class GameManager : MonoBehaviour
     public void SetCameraTrack(Transform trackTarget)
     {
         CameraTrackPoint = trackTarget;
+    }
+    #endregion
+
+    #region Setter
+    public void SetIsTutorial(bool tutorial)
+    {
+        IsTutorial = tutorial;
+        StatsManager.ResetEquipForTutorial();
     }
     #endregion
 }

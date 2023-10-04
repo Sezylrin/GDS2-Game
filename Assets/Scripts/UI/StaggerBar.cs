@@ -41,12 +41,12 @@ public class StaggerBar : MonoBehaviour
 
     public void SetToOrange()
     {
-        image.color = new Color(255, 162, 0);
+        image.color = new Color(1, 0.633435f, 0);
     }
 
     public void SetToPink()
     {
-        image.color = new Color(255, 0, 255);
+        image.color = new Color(1, 0, 1);
     }
 
     public void UpdateFillPercent(float percent)

@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff4e45ad80ddcbb499ea1a635e9cbb92, type: 3}
+  m_Name: SnakeSO
+  m_EditorClassIdentifier: 
+  maxHealth: 300
+  speed: 5
+  minSouls: 5
+  maxSouls: 15
+  effectDuration: 5
+  attackKnockback: 10
+  attackCooldown: 10
+  attack1Damage: 15
+  attack1Duration: 1
+  windup1Duration: 1
+  attack2Damage: 20
+  attack2Duration: 3
+  windup2Duration: 1
+  attack3Damage: 10
+  attack3Duration: 8
+  windup3Duration: 1
+  consumableHealthPercentThreshold: 25
+  percentToHealOnConsume: 10
+  pointsToStagger: 100
+  staggerDuration: 3
+  staggerDelayDuration: 3
+  staggerDecayAmount: 4
+  staggerDecayRate: 0.25
