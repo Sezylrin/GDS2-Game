@@ -2418,6 +2418,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Camera
       objectReference: {fileID: 0}
+    - target: {fileID: 6310325432650285864, guid: 50f2c0e0b7cb92041a468042baf16c42, type: 3}
+      propertyPath: m_Lens.OrthographicSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7849273406632755694, guid: 50f2c0e0b7cb92041a468042baf16c42, type: 3}
+      propertyPath: orthographic size
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 7970814410419470273, guid: 50f2c0e0b7cb92041a468042baf16c42, type: 3}
       propertyPath: m_RootOrder
       value: 9
