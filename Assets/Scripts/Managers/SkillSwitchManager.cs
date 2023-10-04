@@ -124,7 +124,11 @@ public class SkillSwitchManager : MonoBehaviour
         StatsManager statsManager = GameManager.Instance.StatsManager;
         if (currentSkillMenu == CurrentSkillMenu.UnusedAbilities)
         {
-            if (!statsManager.GetUnlockedAbilities().Contains(currentlyHoveredAbility.abilityData)) return;
+            if (!statsManager.GetUnlockedAbilities().Contains(currentlyHoveredAbility.abilityData))
+            {
+                audioComponent.PlaySound(SoundType.UIClickFail);
+                return;
+            }
             currentSkillMenu = CurrentSkillMenu.ActiveAbilities;
             currentlyHoveredAbility.DisableHover();
             selectedAbility = currentlyHoveredAbility;
@@ -146,7 +150,8 @@ public class SkillSwitchManager : MonoBehaviour
             UIAbility newSelectedAbility = allAbilitiesContainer.transform.GetChild(0).GetComponent<UIAbility>();
             currentlyHoveredAbility = newSelectedAbility;
             currentlyHoveredIndex = 0;
-            newSelectedAbility.ActivateHover();
+            audioComponent.PlaySound(SoundType.UIClick);
+            newSelectedAbility.ActivateHover(false);
             selectedAbility = null;
         }
     }
