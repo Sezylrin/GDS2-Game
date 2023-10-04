@@ -62,6 +62,11 @@ public class TrailObj : MonoBehaviour
         render.sprite = sprite;
     }
 
+    public void SetXScale(Vector3 xScale)
+    {
+        transform.localScale = xScale;
+    }
+
     private void OnComplete()
     {
         if (gameObject.activeSelf)

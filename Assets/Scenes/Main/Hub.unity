@@ -131,6 +131,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 247572587, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
+      propertyPath: sprite
+      value: 
+      objectReference: {fileID: 980143087}
     - target: {fileID: 3543791458973239699, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -182,7 +186,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3543791458973239701, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
+      insertIndex: 6
+      addedObject: {fileID: 796045613}
+    - targetCorrespondingSourceObject: {fileID: 3543791457672997726, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 980143085}
   m_SourcePrefab: {fileID: 100100000, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
 --- !u!1 &206840754
 GameObject:
@@ -2106,6 +2116,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &796045611 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3543791458973239701, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
+  m_PrefabInstance: {fileID: 59354145}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &796045613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 796045611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c91f6c050d9fc943b84b7754b2b07ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PCM: {fileID: 796045623}
+  anim: {fileID: 980143085}
+  Sprite: {fileID: 980143087}
+--- !u!114 &796045623 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 864687022, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
+  m_PrefabInstance: {fileID: 59354145}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 796045611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87f66ffdb1c2c4143921d32d50e5b284, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &806046848
 GameObject:
   m_ObjectHideFlags: 0
@@ -2820,6 +2861,36 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &980143083 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3543791457672997726, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
+  m_PrefabInstance: {fileID: 59354145}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &980143085
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980143083}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e339201248166a44391475f96a9b452c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+--- !u!4 &980143087 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3543791457672997727, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
+  m_PrefabInstance: {fileID: 59354145}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1146900427
 GameObject:
   m_ObjectHideFlags: 0
@@ -39761,6 +39832,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1309138668, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: sounds._serializedList.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1309138668, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: sounds._serializedList.Array.data[1].Key
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1309138668, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: sounds._serializedList.Array.data[2].Value.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1309138668, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: sounds._serializedList.Array.data[1].Value.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: d101b0877c675654da30ca64004c613d, type: 3}
+    - target: {fileID: 1309138668, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: sounds._serializedList.Array.data[2].Value.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: a3b84be9e12f5d543afed76f4fd532e8, type: 3}
     - target: {fileID: 3761662248408365442, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
       propertyPath: m_Name
       value: GameManager

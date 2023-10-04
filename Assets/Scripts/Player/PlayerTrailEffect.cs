@@ -9,6 +9,8 @@ public class PlayerTrailEffect : MonoBehaviour
     private GameObject trailObj;
     [SerializeField]
     private SpriteRenderer rend;
+    [SerializeField]
+    private Transform sprite;
 
     private Stack<TrailObj> trails = new Stack<TrailObj>();
     // Start is called before the first frame update
@@ -94,6 +96,7 @@ public class PlayerTrailEffect : MonoBehaviour
         obj.transform.position = transform.position;
         obj.SetAlpha(alpha);
         obj.SetSprite(rend.sprite);
+        obj.SetXScale(sprite.localScale);
     }
 
     public void AddTrailObj(TrailObj obj)
