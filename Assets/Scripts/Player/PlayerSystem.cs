@@ -215,6 +215,11 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         PCM.UI.SetGreenHealthBar(heathPercent);
     }
 
+    public void UpdateHealthUI()
+    {
+        SetHealthUI();
+    }
+
     public void UpgradeHealth()
     {
         actualMaxHealth = startingHitPoint + GameManager.Instance.StatsManager.bonusHealth;
@@ -330,11 +335,11 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         {
             if (GameManager.Instance.IsTutorial)
             {
-                storedProjectile.CounterProjectile(tutorialTarget, transform.position, enemy, transform);
+                storedProjectile.CounterProjectile(tutorialTarget, transform.position, enemy, 2f, transform);
             }
             else if (storedProjectile)
             {
-                storedProjectile.CounterProjectile(target, transform.position, enemy, transform);
+                storedProjectile.CounterProjectile(target, transform.position, enemy, 2f, transform);
             }
             else
             {

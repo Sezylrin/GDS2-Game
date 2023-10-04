@@ -467,8 +467,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 36}
-  m_SizeDelta: {x: 20, y: 20}
+  m_AnchoredPosition: {x: -5, y: 36}
+  m_SizeDelta: {x: 15, y: 15}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &247228936
 CanvasRenderer:
@@ -498,7 +498,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5349ee2210a214841a2fcc8ea1016411, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8fc43ff9ad11a6c43a481f736eb500cb, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1144,8 +1144,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 18}
-  m_SizeDelta: {x: 20, y: 20}
+  m_AnchoredPosition: {x: -5, y: 18}
+  m_SizeDelta: {x: 15, y: 15}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &1280708428
 CanvasRenderer:
@@ -1175,7 +1175,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 174a2aab9034ee74eaea92eafc8c6803, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 44173b74a6923864d986206be137b9fb, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1221,8 +1221,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 20}
+  m_AnchoredPosition: {x: -5, y: 0}
+  m_SizeDelta: {x: 15, y: 15}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &1375134902
 CanvasRenderer:
@@ -1252,7 +1252,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a30c7355bb5a3de409ce786b8deeb711, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4bbaf94dc21bb2746ac38ddc89bb76b5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2463,7 +2463,7 @@ Transform:
   - {fileID: 490763409}
   - {fileID: 247273588}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &3543791458973239727
 Rigidbody2D:
@@ -2667,10 +2667,10 @@ MonoBehaviour:
   abilitySpawnPoint: {fileID: 1699224757}
   abilities:
   - {fileID: 11400000, guid: 418ea2c3934df71459d836d5d9631746, type: 2}
-  - {fileID: 11400000, guid: bfa1d90d7346b0d478313eedc9d02ef0, type: 2}
-  - {fileID: 11400000, guid: b171dd3449f27d24b853ff66dc8d7750, type: 2}
-  - {fileID: 11400000, guid: 10dea94313b3be64d800d6b8b5a96dd5, type: 2}
-  - {fileID: 11400000, guid: 10ba623a21e2d014fa77d3bbb2d7b5b8, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   AbilitySetOne: 0
   abilityShapePF:
@@ -2698,7 +2698,7 @@ CapsuleCollider2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_LayerOverridePriority: 0
+  m_LayerOverridePriority: 100
   m_ForceSendLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -2733,6 +2733,7 @@ MonoBehaviour:
   greenHealth: {fileID: 274715375}
   skillPointHoriLayout: {fileID: 1513752738}
   skillPointPrefab: {fileID: 5290838886581607042, guid: 2fd3dec431a162c458567ade7aa493a1, type: 3}
+  abilities: {fileID: 6031447678690263635}
   QAbilityText: {fileID: 1504015763}
   EAbilityText: {fileID: 1840893958}
   shiftAbilityText: {fileID: 1071448700}

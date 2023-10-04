@@ -20,6 +20,8 @@ public class PlayerUI : MonoBehaviour
     private List<SkillPointUI> skillPoints = new List<SkillPointUI>();
     [Header("Active SKills")]
     [SerializeField]
+    private GameObject abilities;
+    [SerializeField]
     private TMP_Text QAbilityText;
     [SerializeField]
     private TMP_Text EAbilityText;
@@ -34,6 +36,7 @@ public class PlayerUI : MonoBehaviour
 
     void Start()
     {
+        
     }
 
     // Update is called once per frame
@@ -92,5 +95,16 @@ public class PlayerUI : MonoBehaviour
     {
         consumeBarImage.fillAmount = 0;
         consumeBarImage.color = Color.yellow;
+    }
+
+    public void EnableAbilityUI()
+    {
+        abilities.SetActive(true);
+    }
+
+    public void DisableAbilityUI()
+    {
+        if (GameManager.Instance.IsTutorial)
+            abilities.SetActive(false);
     }
 }

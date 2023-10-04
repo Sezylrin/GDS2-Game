@@ -86,6 +86,8 @@ public class Abilities : MonoBehaviour
     {
         if (AbilitySetOne)
             slot += 3;
+        if (!abilities[slot])
+            return false;
         return (abilities[slot].type == AbilityType.Projectile);
     }
     public bool CanCast(int slot)

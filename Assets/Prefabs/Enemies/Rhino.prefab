@@ -1287,7 +1287,7 @@ MonoBehaviour:
   comboText: {fileID: 6904817272868814758}
   staggerBonusDamage: 2
   elementResistAmount: 0
-  baseArmour: 0.5
+  baseArmour: 1
   IdleRadius: 3
   RepositionPoint: 5
   IdleMoveRateMin: 2
@@ -1299,7 +1299,7 @@ MonoBehaviour:
   currentState: 0
   hasDestination: 0
   targetTr: {fileID: 0}
-  debugDisableAI: 1
+  debugDisableAI: 0
   <ChargeHitbox>k__BackingField: {fileID: 1386738843}
   <ChargeSpeedMultiplier>k__BackingField: 0
   <Charging>k__BackingField: 0
@@ -1450,7 +1450,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: eaadb1cae9d38a84fa0b78fdb4ef2d87, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c9b521610182bd74f9c68e64a35a6c75, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

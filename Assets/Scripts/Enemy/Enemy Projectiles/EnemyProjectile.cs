@@ -23,7 +23,7 @@ public abstract class EnemyProjectile : MonoBehaviour
     protected Enemy owner;
     protected Transform shooter;
     protected Transform target;
-
+    [SerializeField]
     protected bool overrideProjectile = false;
     public virtual void NewInstance()
     {
@@ -52,10 +52,10 @@ public abstract class EnemyProjectile : MonoBehaviour
             this.shooter = shooter;
     }
 
-    public void Init(Vector2 dir, Vector3 spawnPos, LayerMask Target, int damage, float duration, float knockbackForce, Transform target, Transform shooter = null)
+    public void Init(Vector2 dir, Vector3 spawnPos, LayerMask Target, int damage, float duration, float speed, float knockbackForce, Transform target, Transform shooter = null)
     {
         this.target = target;
-        Init(dir, spawnPos, Target, damage, duration, knockbackForce, (Enemy)null, shooter);
+        Init(dir, spawnPos, Target, damage, duration, speed, knockbackForce, (Enemy)null, shooter);
     }
 
     public void OverrideProjectile()
@@ -106,8 +106,6 @@ public abstract class EnemyProjectile : MonoBehaviour
                 else
                 {
                     DoDamage(foundTarget);
-                    if (overrideProjectile)
-                        Destroy(gameObject);
                     PoolSelf();
                 }
             }
@@ -116,6 +114,10 @@ public abstract class EnemyProjectile : MonoBehaviour
                 DoDamage(foundTarget);
                 PoolSelf();
             }   
+        }
+        else
+        {
+            PoolSelf();
         }
     }
 
@@ -127,27 +129,26 @@ public abstract class EnemyProjectile : MonoBehaviour
     #region Pooling
     public void PoolSelf(object sender, EventArgs e)
     {
-        if (overrideProjectile)
-            Destroy(gameObject);
         PoolSelf();
     }
     public virtual void PoolSelf()
     {
-        
+        if (overrideProjectile)
+            Destroy(gameObject);
     }
 
-    public void CounterProjectile(Enemy target, Vector3 spawnPos, LayerMask enemy, Transform newShooter)
+    public void CounterProjectile(Enemy target, Vector3 spawnPos, LayerMask enemy, float speedMultiplier,Transform newShooter)
     {
         gameObject.SetActive(true);
         Vector2 newDir = target.transform.position - spawnPos;
-        Init(newDir,spawnPos, enemy, damage, Duration, Speed, knockbackForce, owner, newShooter);
+        Init(newDir,spawnPos, enemy, damage, Duration, Speed * speedMultiplier, knockbackForce, owner, newShooter);
     }
 
-    public void CounterProjectile(Transform target, Vector3 spawnPos, LayerMask enemy, Transform newShooter)
+    public void CounterProjectile(Transform target, Vector3 spawnPos, LayerMask enemy, float speedMultiplier, Transform newShooter)
     {
         gameObject.SetActive(true);
         Vector2 newDir = target.position - spawnPos;
-        Init(newDir, spawnPos, enemy, damage, Duration, knockbackForce, owner, newShooter);
+        Init(newDir, spawnPos, enemy, damage, Duration, Speed * speedMultiplier, knockbackForce, owner, newShooter);
     }
     #endregion
 }

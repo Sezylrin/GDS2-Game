@@ -18,11 +18,11 @@ public class ProjectileShooter : MonoBehaviour
         EnemyProjectile temp = Instantiate(projectile).GetComponent<EnemyProjectile>();
         temp.NewInstance();
         temp.OverrideProjectile();
-        temp.Init(Vector2.down, spawnPointOne.position, TargetLayer, 0, 1, 25, transform, transform);
+        temp.Init(Vector2.down, spawnPointOne.position, TargetLayer, 0, 1, 5, 25, transform, transform);
         EnemyProjectile temp2 = Instantiate(projectile).GetComponent<EnemyProjectile>();
         temp2.NewInstance();
         temp2.OverrideProjectile();
-        temp2.Init(Vector2.down, spawnPointTwo.position, TargetLayer, 0, 1, 25, transform, transform);
+        temp2.Init(Vector2.down, spawnPointTwo.position, TargetLayer, 0, 1, 5, 25, transform, transform);
     }
     // Update is called once per frame
     

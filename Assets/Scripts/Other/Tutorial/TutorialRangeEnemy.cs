@@ -8,6 +8,7 @@ public class TutorialRangeEnemy : MonoBehaviour, IDamageable
     public GameObject projectile;
     public LayerMask TargetLayer;
     public Transform target;
+    public ModifyBoundary boundary;
 
     public int Hitpoints { get; set; }
 
@@ -24,7 +25,7 @@ public class TutorialRangeEnemy : MonoBehaviour, IDamageable
         EnemyProjectile temp = Instantiate(projectile).GetComponent<EnemyProjectile>();
         temp.NewInstance();
         temp.OverrideProjectile();
-        temp.Init((target.position - transform.position).normalized, transform.position, TargetLayer, 0, 1, 25, transform, transform);
+        temp.Init((target.position - transform.position).normalized, transform.position, TargetLayer, 0, 1, 5, 25, transform, transform);
 
     }
 
@@ -41,6 +42,7 @@ public class TutorialRangeEnemy : MonoBehaviour, IDamageable
     public void TakeDamage(float amount, int staggerPoints, ElementType type, ElementType typeTwo = ElementType.noElement)
     {
         Destroy(gameObject);
+        boundary.DisableBoundary();
     }
 
     public void AddForce(Vector2 force)

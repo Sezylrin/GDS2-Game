@@ -818,6 +818,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     public void StopPathing()
     {
+        if (GameManager.Instance.IsTutorial)
+            return;
         hasDestination = false;
         path.destination = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
     }

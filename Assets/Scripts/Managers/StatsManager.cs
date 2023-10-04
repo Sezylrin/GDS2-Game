@@ -25,10 +25,16 @@ public class StatsManager : MonoBehaviour
     {
         if (savedAbilityPositions.Count == 0)
         {
-            for (int i = 0; i < startingEquippedAbilities.Length; i++)
-            {
-                savedAbilityPositions.Add(i, startingEquippedAbilities[i]);
-            }
+            ResetEquipForTutorial();
+        }
+    }
+
+    public void ResetEquipForTutorial()
+    {
+        savedAbilityPositions.Clear();
+        for (int i = 0; i < startingEquippedAbilities.Length; i++)
+        {
+            savedAbilityPositions.Add(i, startingEquippedAbilities[i]);
         }
     }
 

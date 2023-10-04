@@ -21,7 +21,6 @@ public class ModifyBoundary : MonoBehaviour
 
     public void DisableBoundary()
     {
-        boundaries[slot].SetActive(false);
         grids[slot].SetActive(false);
         slot++;
     }

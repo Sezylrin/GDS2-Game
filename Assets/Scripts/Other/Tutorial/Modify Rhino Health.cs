@@ -6,6 +6,7 @@ public class ModifyRhinoHealth : MonoBehaviour
 {
     public Rhino rhino;
     public int Amount;
+    public int Damage;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +17,7 @@ public class ModifyRhinoHealth : MonoBehaviour
     void Update()
     {
         rhino.SetOverRideHealth(Amount);
+        rhino.TakeDamage(Damage, 0, ElementType.noElement);
         Destroy(gameObject);
     }
 }

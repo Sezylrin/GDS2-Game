@@ -316,6 +316,7 @@ public class GameManager : MonoBehaviour
     public void SetIsTutorial(bool tutorial)
     {
         IsTutorial = tutorial;
+        StatsManager.ResetEquipForTutorial();
     }
     #endregion
 }
