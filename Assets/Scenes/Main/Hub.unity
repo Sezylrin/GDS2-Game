@@ -39761,6 +39761,46 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 215602149, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: soulCost
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 303054836, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: soulCost
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 980073815, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: soulCost
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 1048405840, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: soulCost
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 1172834452, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: soulCost
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 1592405571, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: soulCost
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 1858878506, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: soulCost
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 1909639685, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: soulCost
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 2108414023, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: soulCost
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 2137826672, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: soulCost
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 3761662248408365442, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
       propertyPath: m_Name
       value: GameManager
