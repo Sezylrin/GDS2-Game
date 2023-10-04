@@ -64,7 +64,7 @@ public class Abilities : MonoBehaviour
         }
         else
         {
-            return abilities[index].name;
+            return abilities[index].name + " " + abilities[index].castCost;
         }
     }
     public void CastSlotOne()
