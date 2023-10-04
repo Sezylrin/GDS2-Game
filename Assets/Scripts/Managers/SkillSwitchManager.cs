@@ -110,8 +110,6 @@ public class SkillSwitchManager : MonoBehaviour
     #region Interactions
     public void OpenMenu()
     {
-        if (gameObject.activeSelf)
-            return;
         gameObject.SetActive(true);
         currentlyHoveredIndex = 0;
         currentSkillMenu = CurrentSkillMenu.UnusedAbilities;
@@ -194,7 +192,6 @@ public class SkillSwitchManager : MonoBehaviour
         {
             GameManager.Instance.AudioComponent.PlaySound(SoundType.UICloseMenu);
             gameObject.SetActive(false);
-            GameManager.Instance.PlayerTransform.gameObject.SetActive(true);
         }
         else
         {

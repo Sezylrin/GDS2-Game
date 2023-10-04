@@ -16,7 +16,7 @@ public class InputController : MonoBehaviour
     private PlayerComponentManager PCM;
     private void Awake()
     {
-        input = GameManager.Instance.playerInputs;
+        input = new PlayerInputs();
         player = input.Player;
     }
 
@@ -40,7 +40,6 @@ public class InputController : MonoBehaviour
         player.Look.canceled += PCM.control.MousePosition;
         player.LookMouse.performed += PCM.control.MousePosition;
         player.Attack.performed += PCM.system.AttemptCounter;
-        player.OpenMenu.performed += GameManager.Instance.OpenMenu;
         GameManager.Instance.SetPlayerTransform(transform, PCM);
         PCM.control.SetControllerCursor(GameManager.Instance.controllerCursosrTR);
         GameManager.Instance.SetCameraTrack(PCM.control.CameraFollowPoint);
@@ -50,9 +49,8 @@ public class InputController : MonoBehaviour
 
     private void OnDisable()
     {
-        //GameManager.Instance.SetPlayerTransform(null, null);
+        GameManager.Instance.SetPlayerTransform(null, null);
         PCM.control.SetControllerCursor(null);
-        player.OpenMenu.performed -= GameManager.Instance.OpenMenu;
         player.Move.performed -= PCM.control.SetDirection;
         player.Move.canceled -= PCM.control.SetDirection;
         player.Attack.performed -= PCM.control.BufferLightAttack;

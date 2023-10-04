@@ -18,8 +18,6 @@ public class Level : MonoBehaviour
     [SerializeField]
     private Transform playerSpawnPoint;
     [SerializeField]
-    private GameObject enemySpawnPointsContainer;
-    [SerializeField]
     private List<Transform> enemySpawnPoints;
     [SerializeField]
     private bool isFountain = false;
@@ -60,14 +58,7 @@ public class Level : MonoBehaviour
 
     private void GetEnemySpawnPoints()
     {
-        Transform[] enemySpawnPointsArray = enemySpawnPointsContainer.GetComponentsInChildren<Transform>();
-        foreach (var ESP in enemySpawnPointsArray)
-        {
-            if (ESP.gameObject != enemySpawnPointsContainer)
-            {
-                enemySpawnPoints.Add(ESP);
-            }
-        }
+        //TODO: Get List of enemy spawn points
     }
 
     public void ClearLevel()

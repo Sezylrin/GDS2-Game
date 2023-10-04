@@ -22,9 +22,6 @@ public abstract class EnemyProjectile : MonoBehaviour
     protected float knockbackForce;
     protected Enemy owner;
     protected Transform shooter;
-    protected Transform target;
-    [SerializeField]
-    protected bool overrideProjectile = false;
     public virtual void NewInstance()
     {
         ProjectileTimers = GameManager.Instance.TimerManager.GenerateTimers(typeof(ProjectileTimer), gameObject);
@@ -52,16 +49,6 @@ public abstract class EnemyProjectile : MonoBehaviour
             this.shooter = shooter;
     }
 
-    public void Init(Vector2 dir, Vector3 spawnPos, LayerMask Target, int damage, float duration, float speed, float knockbackForce, Transform target, Transform shooter = null)
-    {
-        this.target = target;
-        Init(dir, spawnPos, Target, damage, duration, speed, knockbackForce, (Enemy)null, shooter);
-    }
-
-    public void OverrideProjectile()
-    {
-        overrideProjectile = true;
-    }
     // Update is called once per frame
     protected virtual void Update()
     {
@@ -91,13 +78,7 @@ public abstract class EnemyProjectile : MonoBehaviour
             if (foundTarget is PlayerSystem)
             {
                 PlayerSystem temp = foundTarget as PlayerSystem;
-                if (GameManager.Instance.IsTutorial && temp.GetState() == playerState.perfectDodge)
-                {
-                    temp.InstantRegenPoint();
-                    temp.CounterSuccesfulTutorial(target, this);
-                    gameObject.SetActive(false);
-                }
-                else if (temp.GetState() == playerState.perfectDodge)
+                if (temp.GetState() == playerState.perfectDodge)
                 {
                     temp.InstantRegenPoint();
                     temp.CounterSuccesful(owner, this);
@@ -115,10 +96,6 @@ public abstract class EnemyProjectile : MonoBehaviour
                 PoolSelf();
             }   
         }
-        else
-        {
-            PoolSelf();
-        }
     }
 
     private void DoDamage(IDamageable target)
@@ -133,22 +110,14 @@ public abstract class EnemyProjectile : MonoBehaviour
     }
     public virtual void PoolSelf()
     {
-        if (overrideProjectile)
-            Destroy(gameObject);
+        
     }
 
-    public void CounterProjectile(Enemy target, Vector3 spawnPos, LayerMask enemy, float speedMultiplier,Transform newShooter)
+    public void CounterProjectile(Enemy target, Vector3 spawnPos, LayerMask enemy, Transform newShooter)
     {
         gameObject.SetActive(true);
         Vector2 newDir = target.transform.position - spawnPos;
-        Init(newDir,spawnPos, enemy, damage, Duration, Speed * speedMultiplier, knockbackForce, owner, newShooter);
-    }
-
-    public void CounterProjectile(Transform target, Vector3 spawnPos, LayerMask enemy, float speedMultiplier, Transform newShooter)
-    {
-        gameObject.SetActive(true);
-        Vector2 newDir = target.position - spawnPos;
-        Init(newDir, spawnPos, enemy, damage, Duration, Speed * speedMultiplier, knockbackForce, owner, newShooter);
+        Init(newDir,spawnPos, enemy, damage, Duration, Speed, knockbackForce, owner, newShooter);
     }
     #endregion
 }

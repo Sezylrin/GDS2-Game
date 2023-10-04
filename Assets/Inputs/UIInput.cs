@@ -12,10 +12,9 @@ public class UIInput : MonoBehaviour
 
     private void Awake()
     {
-        input = GameManager.Instance.playerInputs;
+        input = new PlayerInputs();
         ui = input.UI;
     }
-
 
     private void OnEnable()
     {
