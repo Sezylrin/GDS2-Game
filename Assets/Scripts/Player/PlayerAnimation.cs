@@ -29,7 +29,7 @@ public class PlayerAnimation : MonoBehaviour
         else if( PCM.system.GetState() == playerState.moving)
         {
             Moving();
-            //PlayFootStep();
+            PlayFootStep();
         }
     }
     private void PlayFootStep()
@@ -43,12 +43,12 @@ public class PlayerAnimation : MonoBehaviour
         if (left)
         {
             left = !left;
-            PCM.Audio.PlaySound(SoundType.PlayerWalkGrassL);
+            GameManager.Instance.AudioManager.PlaySound(AudioRef.FootStepGrassL);
         }
         else
         {
             left = !left;
-            PCM.Audio.PlaySound(SoundType.PlayerWalkGrassR);
+            GameManager.Instance.AudioManager.PlaySound(AudioRef.FootStepGrassR);
         }
         yield return new WaitForSeconds(time);
         PlayFootStepCoroutine = null;

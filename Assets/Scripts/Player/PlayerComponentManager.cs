@@ -18,8 +18,6 @@ public class PlayerComponentManager : MonoBehaviour
     public PlayerUI UI{ get; private set; }
     [field: SerializeField]
     public PlayerTrailEffect Trail { get; private set; }
-    [field:SerializeField]
-    public AudioComponent Audio { get; private set; }
 
     public static GameObject Instance { get; private set; }
 
