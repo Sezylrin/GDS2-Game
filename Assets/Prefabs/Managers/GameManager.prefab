@@ -5239,8 +5239,8 @@ MonoBehaviour:
   <debugSetEnemyPoints>k__BackingField: 0
   <MeleeEnemySpawnChance>k__BackingField: 75
   <RangedEnemySpawnChance>k__BackingField: 25
-  <debugMeleeSpawnChance>k__BackingField: 50
-  <debugSetMeleeSpawnChance>k__BackingField: 0
+  <debugMeleeSpawnChance>k__BackingField: 100
+  <debugSetMeleeSpawnChance>k__BackingField: 1
   enemyList: []
   <debugKillEnemies>k__BackingField: 0
 --- !u!1 &1605319376
@@ -6425,6 +6425,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sfxVolume: 100
   bgmVolume: 100
+  LoadedAudioClips:
+    _serializedList: []
+  audioObjPF: {fileID: 4554925132576604545, guid: 7938d901dcbec3a4aaf67d72d3c1b407, type: 3}
+  loadedAudio: {fileID: 11400000, guid: affa53585a39f1744a2e1aed20025035, type: 2}
 --- !u!1 &1848244100
 GameObject:
   m_ObjectHideFlags: 0
@@ -9258,6 +9262,10 @@ PrefabInstance:
     - target: {fileID: 5532266870728586681, guid: 07b9bb39e8fcd6144ab4258ca971fead, type: 3}
       propertyPath: startDifficulty
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5532266870728586681, guid: 07b9bb39e8fcd6144ab4258ca971fead, type: 3}
+      propertyPath: roomsListReference.Array.size
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 5532266870728586694, guid: 07b9bb39e8fcd6144ab4258ca971fead, type: 3}
       propertyPath: m_Name
