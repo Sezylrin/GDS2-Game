@@ -520,12 +520,19 @@ public class PlayerController : MonoBehaviour
         float startTime = Time.time;
         Vector2 endPos = (Vector2)transform.position + (direction * dashDistance);
         Vector2 startPos = transform.position;
+        Vector2 dashDirection = endPos - startPos;
         for (float timer = 0; timer < dashDuration; timer += Time.deltaTime)
         {
+            
             float ratio = (Time.time - startTime) / dashDuration;
-            if (Vector2.Distance(transform.position, endPos) > 0.1f)
+            Vector2 nextPosition = Vector2.Lerp(startPos, endPos, ratio);
+            if (Physics2D.CapsuleCast(transform.position, col2D.size, CapsuleDirection2D.Vertical, 0, dashDirection,Vector2.Distance(transform.position,nextPosition),terrainLayer))
             {
-                transform.position = Vector2.Lerp(startPos, endPos, ratio);
+                break;
+            }
+            if (Vector2.Distance(transform.position, endPos) > 0.1f)
+            {                
+                transform.position = nextPosition;
             }
             else
             {
@@ -640,13 +647,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag(Tags.T_Terrain) && dashCoroutine != null)
-        {
-            StopDash(dashCoroutine);
-        }
-    }
+
     /// <summary>
     /// returns true is the current state is any of the allowedstates
     /// </summary>
