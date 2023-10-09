@@ -98,6 +98,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: SerializeField] protected Image ElementEffectImage { get; set; }
     Rigidbody2D IDamageable.rb => rb;
     [field: SerializeField] protected Rigidbody2D rb { get; private set; }
+    [field: SerializeField] protected Collider2D col2D { get; private set; }
     [field: SerializeField] protected AIPath path { get; set; }
     protected AudioSource WalkingSound { get; set; }
     protected GameObject DeathSoundPrefab { get; set; }
@@ -105,6 +106,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     protected ElementCombo ComboManager { get; set; }
     protected Vector2 dir { get; set; }
     protected bool hitTarget = false;
+    [SerializeField]
+    protected float collisionDisabledDur;
     #endregion
 
     #region Combo Interface Variables
@@ -121,6 +124,18 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     public bool IsStunned { get; set; }
     [SerializeField]
     protected TMP_Text comboText;
+    #endregion
+
+    #region Shader
+    [Header("Shaders")]
+    [SerializeField]
+    private float flashDuration;
+    [SerializeField]
+    private AnimationCurve curve;
+    [SerializeField]
+    private SpriteRenderer rend;
+    [SerializeField]
+    private MaterialPropertyBlock block;
     #endregion
 
     #region Damage Modifier Variables
@@ -142,7 +157,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     {
         SetInheritanceSO();
         SetDefaultState();
-
+        if(block == null)
+            block = new MaterialPropertyBlock();
         if (debugDisableAI) Debug.LogWarning(this + "'s AI is Disabled");
     }
 
@@ -152,7 +168,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         Element = element;
         Init();
     }
-
+    private void Awake()
+    {
+    }
     protected virtual void Start()
     {
         ComboManager = GameManager.Instance.ComboManager;
@@ -166,6 +184,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         Speed = path.maxSpeed;
 
         Init();
+
+        defaultLayer = col2D.excludeLayers;
     }
 
     public virtual void SetInheritanceSO()
@@ -296,7 +316,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         if (Hitpoints <= 0) return;
         
         if(currentState == EnemyState.idle) Manager.EnableAggro(); //Makes all enemies on screen aggro'd
-
+        PlayFlash();
         CalculateResist(type, typeTwo);
         float modifier = CalculateModifer();
         float modifiedDamage = damage * modifier;
@@ -309,12 +329,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
             return;
         }
 
-        if (typeTwo == ElementType.noElement) ComboManager.AttemptCombo(type, ActiveElementEffect, this, EnemyLayer, CalculateTier(tier, ElementTier), transform.position);
-
-        if (typeTwo.Equals(ElementType.noElement) && type != ElementType.noElement)
+        if (typeTwo == ElementType.noElement) 
+        {
+            ComboManager.AttemptCombo(type, ActiveElementEffect, this, EnemyLayer, CalculateTier(tier, ElementTier), transform.position);
+            ApplyElementEffect(type);
+        } 
+        if (Staggered)
         {
             ElementTier = tier;
-            ApplyElementEffect(type);
             InterruptAttack();
         }
 
@@ -387,6 +409,40 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
             Manager.DecrementActiveEnemyCounter();
             GameManager.Instance.AddSouls(Souls);
         }
+    }
+    #endregion
+
+    #region Shader
+    private Coroutine flash;
+    private void PlayFlash()
+    {
+        if (flash == null)
+        {
+            flash = StartCoroutine(DamageFlash());
+        }
+        else
+        {
+            StopCoroutine(DamageFlash());
+            block.SetFloat("_FlashAmount", 0);
+            rend.SetPropertyBlock(block);
+            flash = StartCoroutine(DamageFlash());
+        }
+    }
+    private IEnumerator DamageFlash()
+    {
+        float currentFlashAmount = 0f;
+        float elapsedTime = 0f;
+        while (elapsedTime < flashDuration)
+        {
+            elapsedTime += Time.deltaTime;
+
+            currentFlashAmount = curve.Evaluate(elapsedTime / flashDuration);
+            block.SetFloat("_FlashAmount", currentFlashAmount);
+            rend.SetPropertyBlock(block);
+            yield return null;
+        }
+        block.SetFloat("_FlashAmount", 0);
+        rend.SetPropertyBlock(block);
     }
     #endregion
 
@@ -463,6 +519,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         //set state to stationary as enemy is done with an attack
         currentState = EnemyState.stationary;
         EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, AttackEndAiCD);
+        Manager.DoneAttack();
     }
 
     protected virtual void InterruptAttack()
@@ -472,6 +529,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         //interrupted enemy should stop current action
         currentState = EnemyState.stationary;
         EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, AttackEndAiCD);
+        Manager.DoneAttack();
     }
 
     protected virtual void Attack1()
@@ -746,6 +804,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     protected virtual void RepositionPicker()
     {
+        
+    }
+
+    protected void BasicReposition()
+    {
         Vector3 destination = Vector3.zero;
         Vector3 midPoint = targetTr.position - transform.position;
         float distance = midPoint.magnitude - RepositionPoint;
@@ -830,6 +893,30 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         {
             path.enabled = true;
         }
+    }
+    #endregion
+
+    #region collisionPrevention
+    private float collisionTime = 0;
+    private LayerMask defaultLayer;
+    
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (!collision.collider.CompareTag(Tags.T_Player))
+        {
+            if (collisionTime > 1f)
+            {
+                col2D.excludeLayers += EnemyLayer;
+                Invoke("ResumeCollision", collisionDisabledDur);
+            }
+            collisionTime += Time.deltaTime;
+        }
+    }
+
+    private void ResumeCollision()
+    {
+        col2D.excludeLayers = defaultLayer;
+        collisionTime = 0;
     }
     #endregion
 

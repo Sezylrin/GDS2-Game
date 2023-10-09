@@ -102,7 +102,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1270,7 +1270,9 @@ MonoBehaviour:
   <ConsumableHitbox>k__BackingField: {fileID: 9185797214022210930}
   <ElementEffectImage>k__BackingField: {fileID: 9185797214043638601}
   <rb>k__BackingField: {fileID: 9185797213798890978}
+  <col2D>k__BackingField: {fileID: 9185797213798890991}
   <path>k__BackingField: {fileID: 9185797213798890988}
+  collisionDisabledDur: 1
   <ActiveCombos>k__BackingField: 
   <ComboEffectTimer>k__BackingField:
     <times>k__BackingField: []
@@ -1285,6 +1287,32 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   comboText: {fileID: 6904817272868814758}
+  flashDuration: 0.3
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  rend: {fileID: 9185797214111529790}
   staggerBonusDamage: 2
   elementResistAmount: 0
   baseArmour: 1
@@ -1308,7 +1336,6 @@ MonoBehaviour:
   <StompSpawnPoint>k__BackingField: {fileID: 266498436}
   <StompMoveSpeed>k__BackingField: 0
   <Attack2Range>k__BackingField: 0
-  <col2D>k__BackingField: {fileID: 9185797213798890991}
   <shockwaveCol2D>k__BackingField: {fileID: 21723369}
   <ShockwaveStartRadius>k__BackingField: 0
   <ShockwaveEndRadius>k__BackingField: 0
@@ -1681,7 +1708,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 60eb254f33c1d824eb4326813d200cc1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

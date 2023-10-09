@@ -13,15 +13,17 @@ public enum actionState
     attack,
     abilityOne,
     abilityTwo,
-    abilityThree
+    abilityThree,
+    abilityFour
 }
 public enum playerState
 {
     idle,
     moving,
     dashing,
-    attack,
-    attackEnd,
+    //attack,
+    //attackEnd,
+    abilityStart,
     abilityCast,
     abilityLag,
     perfectDodge,
@@ -34,6 +36,7 @@ public class PlayerController : MonoBehaviour
     {
         dashCastCD,
         dashCD,
+        abilitystart,
         abilityCast,
         abilityLag,
         perfectDodge,
@@ -143,12 +146,16 @@ public class PlayerController : MonoBehaviour
     private bool isDashing;
     [SerializeField, ReadOnly]
     private bool isMoving;
-    [SerializeField, ReadOnly]
+    /*[SerializeField, ReadOnly]
     private bool isAttacking;
     [SerializeField, ReadOnly]
-    private bool isAttackEnd;
+    private bool isAttackEnd;*/
+    [SerializeField, ReadOnly]
+    private bool isStartingAbility;
     [SerializeField, ReadOnly]
     private bool isUsingAbility;
+    [SerializeField, ReadOnly]
+    private bool isAbilityLag;
     [SerializeField, ReadOnly]
     private bool isPerfectDodge;
 
@@ -165,6 +172,7 @@ public class PlayerController : MonoBehaviour
         timers.times[(int)coolDownTimers.abilityCast].OnTimeIsZero += AbilityCastOver;
         timers.times[(int)coolDownTimers.dashCD].OnTimeIsZero += DashResetter;
         timers.times[(int)coolDownTimers.perfectDodge].OnTimeIsZero += StopPerfectDodge;
+        timers.times[(int)coolDownTimers.abilitystart].OnTimeIsZero += CastAbility;
         currentMaxSpeed = maxSpeed;
         currentDashCharges = dashCharges;
         drag = rb.drag;
@@ -177,7 +185,7 @@ public class PlayerController : MonoBehaviour
         StateDecider();
         ExecuteInput();
         UpdateMousePos();
-        AimAbility();
+        //AimAbility();
         ControllerCursor();
     }
 
@@ -391,23 +399,37 @@ public class PlayerController : MonoBehaviour
 
     #region Ability 
 
-    private void AimAbility()
+    /*private void AimAbility()
     {
         Vector3 vectorToTarget = (Vector3)mousePos - AbilityCentre.position;
         float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
         AbilityCentre.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+    }*/
+
+    public void StartAbility(float startSpeed)
+    {
+        isStartingAbility = true;
+        rb.velocity = (mousePos - (Vector2)transform.position).normalized * 0.1f;
+        timers.SetTime((int)coolDownTimers.abilitystart, startSpeed);
     }
 
-    public void SetAbilityState()
+    public void CastAbility(object sender, EventArgs e)
     {
+        isStartingAbility = false;
+        if (CurrentState != playerState.abilityStart)
+            return;
         isUsingAbility = true;
-        rb.velocity = (mousePos - (Vector2)transform.position).normalized * 0.1f;
-        timers.SetTime((int)coolDownTimers.abilityCast, abilityCast);
+        float castDur;
+        PCM.abilities.CastAbility(out castDur);
+        timers.SetTime((int)coolDownTimers.abilityCast, castDur);
     }
 
     private void AbilityCastOver(object sender, EventArgs e)
     {
+        isUsingAbility = false;
+        isAbilityLag = true;
         GoIntoAbilityLag();
+        
     }
 
     private void GoIntoAbilityLag()
@@ -418,18 +440,13 @@ public class PlayerController : MonoBehaviour
 
     private void AbilityLagOver(object sender, EventArgs e)
     {
-        StopAbilityLag();
+        isAbilityLag = false;
     }
 
-    private void StopAbilityLag()
-    {
-        isUsingAbility = false;
-        timers.ResetSpecificToZero((int)coolDownTimers.abilityLag);
-    }
     #endregion
 
     #region Input Buffering
-    private playerState[] castState = { playerState.idle, playerState.moving, playerState.attackEnd, playerState.abilityLag };
+    private playerState[] castState = { playerState.idle, playerState.moving, playerState.abilityLag };
     private void ExecuteInput()
     {
         switch ((int)bufferedState)
@@ -441,7 +458,8 @@ public class PlayerController : MonoBehaviour
                     Dash();
                 break;
             case (int)actionState.attack:
-                PCM.attack.LightAttack();
+                if (CheckStates(castState))
+                    PCM.abilities.CastSlotFour();
                 break;
             case (int)actionState.abilityOne:
                 if(CheckStates(castState))
@@ -483,7 +501,10 @@ public class PlayerController : MonoBehaviour
         playerState[] allowed = { playerState.idle, playerState.moving };
 
         if (!CheckStates(allowed))
+        {
+            rb.velocity = Vector2.zero;
             return;
+        }
         if (rb.velocity.magnitude <= currentMaxSpeed && !direction.Equals(Vector2.zero))
         {
             rb.drag = 0;
@@ -500,31 +521,43 @@ public class PlayerController : MonoBehaviour
     #region Dash
     private void Dash()
     {
-        playerState[] unAllowed = { playerState.attack, playerState.abilityCast, playerState.hit, playerState.perfectDodge, playerState.consuming };
+        playerState[] unAllowed = { playerState.abilityCast, playerState.hit, playerState.perfectDodge, playerState.consuming };
         if (CheckStates(unAllowed))
             return;
         if (!timers.IsTimeZero((int)coolDownTimers.dashCastCD) || currentDashCharges < 1)
             return;
-        PCM.attack.ResetTimer();
         RemoveBufferInput();
         isDashing = true;
         currentDashCharges--;
         timers.SetTime((int)coolDownTimers.dashCastCD, dashCDTimer + dashDuration);
-        col2D.excludeLayers += enemyLayer;
-        dashCoroutine = StartCoroutine(StartDashing());
-        PCM.Trail.DashAfterImage(dashDuration, 5);
+        
+        BeginDash(dashDistance, dashDuration, direction);
     }
 
-    private IEnumerator StartDashing()
+    public void Dash(float distance, float dur, Vector2 dir)
+    {
+        dashCoroutine = StartCoroutine(StartDashing(distance, dur, dir));
+        PCM.Trail.DashAfterImage(dur, 5);
+    }
+
+    private void BeginDash(float distance, float dur, Vector2 dir)
+    {
+        col2D.excludeLayers += enemyLayer;
+        dashCoroutine = StartCoroutine(StartDashing(distance, dur, dir));
+        PCM.Trail.DashAfterImage(dur, 5);
+    }
+
+    private IEnumerator StartDashing(float distance, float dur, Vector2 dir)
     {
         float startTime = Time.time;
-        Vector2 endPos = (Vector2)transform.position + (direction * dashDistance);
+        Vector2 endPos = (Vector2)transform.position + (dir * distance);
         Vector2 startPos = transform.position;
         Vector2 dashDirection = endPos - startPos;
-        for (float timer = 0; timer < dashDuration; timer += Time.deltaTime)
+        for (float timer = 0; timer < dur; timer += Time.deltaTime)
         {
             
-            float ratio = (Time.time - startTime) / dashDuration;
+            float ratio = (Time.time - startTime) / dur;
+            //float cubic = Mathf.Sin((ratio * Mathf.PI) * 0.5f);
             Vector2 nextPosition = Vector2.Lerp(startPos, endPos, ratio);
             if (Physics2D.CapsuleCast(transform.position, col2D.size, CapsuleDirection2D.Vertical, 0, dashDirection,Vector2.Distance(transform.position,nextPosition),terrainLayer))
             {
@@ -554,7 +587,7 @@ public class PlayerController : MonoBehaviour
         if (dashCoroutine != null)
         {
             dashCoroutine = null;
-            col2D.excludeLayers -= enemyLayer;
+            col2D.excludeLayers = 0;
             isDashing = false;
         }
     }
@@ -569,7 +602,7 @@ public class PlayerController : MonoBehaviour
     #region Perfect Dodge
     private void PerfectDodge()
     {
-        playerState[] allowed = { playerState.idle, playerState.attackEnd, playerState.abilityLag };
+        playerState[] allowed = { playerState.idle, playerState.abilityLag, playerState.abilityStart };
         if (!CheckStates(allowed))
             return;
         if (isPerfectDodge)
@@ -593,20 +626,25 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    #region Setters
+    #region Setters Getter
     public void SetIsAttacking(bool isAttack)
     {
-        isAttacking = isAttack;
+        //isAttacking = isAttack;
     }
 
     public void SetIsAttackEnd(bool isEnd)
     {
-        isAttackEnd = isEnd;
+        //isAttackEnd = isEnd;
     }
 
     public void SetHitStun(float hitStun)
     {
         timers.SetTime((int)coolDownTimers.hitStun, hitStun);
+    }
+
+    public bool GetAbilityLag()
+    {
+        return timers.IsTimeZero((int)coolDownTimers.abilityLag);
     }
     #endregion
 
@@ -625,18 +663,26 @@ public class PlayerController : MonoBehaviour
         {
             CurrentState = playerState.dashing;
         }
+        else if (isStartingAbility)
+        {
+            CurrentState = playerState.abilityStart;
+        }
         else if (isUsingAbility)
         {
             CurrentState = playerState.abilityCast;
         }
-        else if (isAttacking)
+        else if (isAbilityLag)
+        {
+            CurrentState = playerState.abilityLag;
+        }
+        /*else if (isAttacking)
         {
             CurrentState = playerState.attack;
         }
         else if (isAttackEnd)
         {
             CurrentState = playerState.attackEnd;
-        }
+        }*/
         else if (isMoving)
         {
             CurrentState = playerState.moving;

@@ -2188,7 +2188,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 98456f548bd76b94faf5270c24bfe581, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2487,7 +2487,7 @@ Transform:
   - {fileID: 490763409}
   - {fileID: 247273588}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &3543791458973239727
 Rigidbody2D:
@@ -2535,7 +2535,6 @@ MonoBehaviour:
   <abilities>k__BackingField: {fileID: 864687015}
   <UI>k__BackingField: {fileID: 1114287056888059202}
   <Trail>k__BackingField: {fileID: 247572587}
-  <Audio>k__BackingField: {fileID: 1969045132}
 --- !u!114 &3543791458973239726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2566,6 +2565,8 @@ MonoBehaviour:
     owner: {fileID: 0}
   PCM: {fileID: 864687022}
   iframes: 0.7
+  flashDuration: 0.1
+  damageFlash: {fileID: 2100000, guid: 98456f548bd76b94faf5270c24bfe581, type: 2}
   MaxCastPoints: 3
   currentCastPoints: 0
   pointRegenRate: 3

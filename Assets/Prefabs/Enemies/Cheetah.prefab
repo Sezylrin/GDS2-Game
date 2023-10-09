@@ -88,7 +88,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -893,6 +893,7 @@ MonoBehaviour:
   <EnemyLayer>k__BackingField:
     serializedVersion: 2
     m_Bits: 0
+  comboText: {fileID: 0}
   staggerBonusDamage: 0
   elementResistAmount: 0
   baseArmour: 0.5
@@ -911,6 +912,7 @@ MonoBehaviour:
   <SwipeHitbox>k__BackingField: {fileID: 0}
   <DaggerPrefab>k__BackingField: {fileID: 683658288675410235, guid: d561433a91d479747989429d625d254f, type: 3}
   <DaggerSpawnPoint>k__BackingField: {fileID: 0}
+  <DaggerMoveSpeed>k__BackingField: 3
   <ChainHitbox>k__BackingField: {fileID: 0}
   <col2D>k__BackingField: {fileID: 0}
 --- !u!114 &3200451849759215169
@@ -1434,7 +1436,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -19,11 +19,13 @@ public class EnemyManager : MonoBehaviour
     [field: SerializeField] private Timer EnemyManagerTimers { get; set; }
 
     [field: Header("EnemyAttacking")]
-    [field: SerializeField, ReadOnly] private int AttackPoints { get; set; }
+    /*[field: SerializeField, ReadOnly] private int AttackPoints { get; set; }
     [field: SerializeField] private int MaxAttackPoints { get; set; } = 10;
     [field: SerializeField] private float AttackPointRefreshRate { get; set; } = 2;
     [field: SerializeField, ReadOnly] private bool CanEnemyAttack { get; set; } = true;
-    [field: SerializeField] private float AttackDelay { get; set; } = 0.5f;
+    [field: SerializeField] private float AttackDelay { get; set; } = 0.5f;*/
+    [field: SerializeField] public int CurrentAttackers { get; private set; } = 0;
+    [SerializeField, ReadOnly] private int maxAttackers;
     [field: SerializeField] ElementType debugElementForAttacksList { get; set; }
     [field: SerializeField] bool debugUpdateAttacksList { get; set; }
     [field: SerializeField] bool debugEmptyAttacksList { get; set; }
@@ -56,10 +58,8 @@ public class EnemyManager : MonoBehaviour
     void Start()
     {
         EnemyManagerTimers = GameManager.Instance.TimerManager.GenerateTimers(typeof(EnemyManagerTimer), gameObject);
-        EnemyManagerTimers.times[(int)EnemyManagerTimer.attackDelayTimer].OnTimeIsZero += EnableAttack;
-        EnemyManagerTimers.times[(int)EnemyManagerTimer.attackPointRefeshTimer].OnTimeIsZero += RefreshAttackPoint;
-
-        AttackPoints = MaxAttackPoints;
+        //EnemyManagerTimers.times[(int)EnemyManagerTimer.attackDelayTimer].OnTimeIsZero += EnableAttack;
+        //EnemyManagerTimers.times[(int)EnemyManagerTimer.attackPointRefeshTimer].OnTimeIsZero += RefreshAttackPoint;
 
         GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[0], out rhinoPool);
         GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[1], out testRangedEnemyPool);
@@ -107,13 +107,24 @@ public class EnemyManager : MonoBehaviour
     #region EnemyAttacking
     public bool CanAttack()
     {
-        bool CanAttack = CanEnemyAttack && AttackPoints > 0;
-        if (CanAttack)
-            ManagerAttack();
-        return CanAttack;
+        bool canAttack = CurrentAttackers < maxAttackers;
+        if (canAttack)
+            CurrentAttackers++;
+        return canAttack;
     }
 
-    public void ManagerAttack()
+    public void DoneAttack()
+    {
+        CurrentAttackers--;
+        if (CurrentAttackers < 0)
+        {
+            Debug.LogWarning("smth has gone wrong, the current amount of attackers was miscalculated, you can resume and contrinue or attempt to debug");
+            Debug.Break();
+            CurrentAttackers = 0;
+        }
+    }
+
+    /*public void ManagerAttack()
     {
         if (AttackPoints == MaxAttackPoints) StartAttackPointRefresh();
         AttackPoints--;
@@ -135,6 +146,11 @@ public class EnemyManager : MonoBehaviour
     {
         if (AttackPoints < MaxAttackPoints) AttackPoints++;
         if (AttackPoints < MaxAttackPoints) StartAttackPointRefresh();
+    }*/
+
+    private void RecalculateMaxAttackers()
+    {
+        maxAttackers = Mathf.CeilToInt(ActiveEnemiesCount * 0.5f);
     }
     #endregion
 
@@ -293,7 +309,7 @@ public class EnemyManager : MonoBehaviour
                 break;
         }
         ActiveEnemiesCount++;
-
+        RecalculateMaxAttackers();
 
         if (EnemyPoints > 0) SpawnEnemy();
     }

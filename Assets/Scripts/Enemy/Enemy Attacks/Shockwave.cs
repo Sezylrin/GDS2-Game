@@ -6,7 +6,7 @@ public class Shockwave : MonoBehaviour
 {
     [field: SerializeField] private Rhino Parent { get; set; }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    /*private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.isTrigger)
             return;
@@ -31,5 +31,5 @@ public class Shockwave : MonoBehaviour
                 Parent.DoDamage(foundTarget);
             }
         }
-    }
+    }*/
 }
