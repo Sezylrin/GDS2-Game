@@ -15,7 +15,6 @@ public class Rhino : Enemy, IPoolable<Rhino>
     [field: SerializeField] protected Transform StompSpawnPoint { get; set; }
     [field: SerializeField] protected float StompMoveSpeed { get; set; }
     [field: SerializeField] protected float Attack2Range { get; set; } = 3;
-    [field: SerializeField] protected Collider2D col2D { get; set; }
     [field: SerializeField] protected CircleCollider2D shockwaveCol2D { get; set; }
     [field: SerializeField] protected float ShockwaveStartRadius { get; set; } = 3;
     [field: SerializeField] protected float ShockwaveEndRadius { get; set; } = 8;
@@ -209,7 +208,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
                 {
                     InterruptAttack();
                     temp.InstantRegenPoint();
-                    temp.CounterSuccesful(this);
+                    temp.Counter();
                 }
                 else
                 {
@@ -217,10 +216,15 @@ public class Rhino : Enemy, IPoolable<Rhino>
                     if (Charging) Charging = false;
                 }
             }
-            else
-                DoDamage(foundTarget);
         }
     }
+
+    #region AI
+    protected override void RepositionPicker()
+    {
+        base.RepositionPicker();
+    }
+    #endregion
 
     #region PoolingFunctions
     public void PoolSelf()

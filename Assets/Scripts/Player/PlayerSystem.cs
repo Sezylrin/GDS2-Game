@@ -9,8 +9,8 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     private enum SystemCD
     {
         pointRegenDelay,
-        iFrames,
-        counterAttackQTE
+        iFrames
+        //counterAttackQTE
     }
 
     [Header("General")]
@@ -21,13 +21,19 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     [SerializeField]
     private float iframes;
 
+    [Header("Damage Flash")]
+    [SerializeField]
+    private float flashDuration;
+    [SerializeField]
+    private Material damageFlash;
+
     private void Start()
     {
         SetHitPoints();
         consumeBar = 0;
         canConsume = false;
         timer = GameManager.Instance.TimerManager.GenerateTimers(typeof(SystemCD), gameObject);
-        timer.times[(int)SystemCD.counterAttackQTE].OnTimeIsZero += RemoveCounterQTE;
+        //timer.times[(int)SystemCD.counterAttackQTE].OnTimeIsZero += RemoveCounterQTE;
         InitCastPoints();
     }
 
@@ -169,6 +175,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     {
         if (!timer.IsTimeZero((int)SystemCD.iFrames) || PCM.control.CurrentState == playerState.consuming)
             return;
+        StartCoroutine(DamageFlash());
         if (Hitpoints - damage < 0)
         {
             OnDeath();
@@ -275,8 +282,65 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     }
     #endregion
 
+    #region Shader
+
+    private IEnumerator DamageFlash()
+    {
+        float currentFlashAmount = 0f;
+        float elapsedTime = 0f;
+        while (elapsedTime < flashDuration)
+        {
+            elapsedTime += Time.deltaTime;
+
+            currentFlashAmount = Mathf.Lerp(1f, 0f, (elapsedTime / flashDuration));
+            damageFlash.SetFloat("_FlashAmount", currentFlashAmount);
+            yield return null;
+        }
+        damageFlash.SetFloat("_FlashAmount", 0);
+    }
+    #endregion
+
     #region Counter
+    [field: SerializeField, ReadOnly]
     public bool isCountered { get; private set; }
+    [SerializeField]
+    private bool multiplicative;
+    [SerializeField]
+    private int bonusDamage;
+    [SerializeField]
+    private int bonusStagger;
+    [SerializeField, Range(1,3)]
+    private float damageMultiplier;
+    [SerializeField, Range(1,3)]
+    private float staggerMultiplier;
+    public void Counter()
+    {
+        isCountered = true;
+    }
+
+    public void CounterUsed()
+    {
+        isCountered = false;
+    }
+
+    public int ModifyDamage(int baseDamage)
+    {
+        if (multiplicative)
+            return Mathf.FloorToInt(baseDamage * damageMultiplier);
+        else
+            return baseDamage + bonusDamage;
+    }
+    public int ModifyStagger(int baseStagger)
+    {
+        if (multiplicative)
+            return Mathf.FloorToInt(baseStagger * staggerMultiplier);
+        else
+            return baseStagger + bonusStagger;
+    }
+    #endregion
+
+    #region Old Counter
+    /*public bool isCountered { get; private set; }
     [Header("Counter Attack")]
     [SerializeField]
     private float counterQTEDuration;
@@ -347,7 +411,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
             }
             RemoveCounterQTE();
         }
-    }
+    }*/
     #endregion
 
     #region Consume

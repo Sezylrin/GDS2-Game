@@ -22,6 +22,7 @@ public class Abilities : MonoBehaviour
 
     private Dictionary<AbilityType, Pool<AbilityBase>> pools = new Dictionary<AbilityType, Pool<AbilityBase>>();
 
+    private ElementalSO lastUsed;
     [SerializeField][SerializedDictionary("Element Type", "Description")]
     private SerializedDictionary<AbilityType, GameObject> abilityShapePF;
     private void Start()
@@ -69,18 +70,19 @@ public class Abilities : MonoBehaviour
     }
     public void CastSlotOne()
     {
-        PCM.control.RemoveBufferInput();
-        CastAbility(AbilitySetOne ? abilities[3] : abilities[0]);
+        StartCast(AbilitySetOne ? abilities[4] : abilities[0]);
     }
     public void CastSlotTwo()
     {
-        PCM.control.RemoveBufferInput();
-        CastAbility(AbilitySetOne ? abilities[4] : abilities[1]);
+        StartCast(AbilitySetOne ? abilities[5] : abilities[1]);
     }
     public void CastSlotThree()
     {
-        PCM.control.RemoveBufferInput();
-        CastAbility(AbilitySetOne ? abilities[5] : abilities[2]);
+        StartCast(AbilitySetOne ? abilities[6] : abilities[2]);
+    }
+    public void CastSlotFour()
+    {
+        StartCast(AbilitySetOne ? abilities[7] : abilities[3]);
     }
     public bool IsRanged(int slot)
     {
@@ -108,28 +110,44 @@ public class Abilities : MonoBehaviour
         abilities[slot] = abilityToUse;
         UpdateUI();
     }
-
-    private void CastAbility(ElementalSO selected)
+    private ElementalSO abilityToCast;
+    private void StartCast(ElementalSO selected)
     {
         if (!selected)
             return;
-        if (!PCM.system.AttemptCast(selected.castCost))
+        if (selected == lastUsed && !PCM.control.GetAbilityLag())
             return;
-        PCM.control.SetAbilityState();
+        abilityToCast = selected;
+        PCM.control.RemoveBufferInput();
+        PCM.control.StartAbility(selected.castStartSpeed);
+    }
+    public void CastAbility(out float castDur)
+    {
+        lastUsed = abilityToCast;
+        castDur = abilityToCast.castDuration;
         //play animation
         Pool<AbilityBase> temp;
-        if (pools.TryGetValue(selected.type, out temp))
+        if (pools.TryGetValue(abilityToCast.type, out temp))
         {
-
-            AbilityBase ability = temp.GetPooledObj();
-            if (selected.type.Equals(AbilityType.AOE))
+            
+            AbilityBase ability = temp.GetPooledObj(out bool initial);
+            if (initial)
             {
-                ability.SetSelectedAbility(selected, transform.position);
+                ability.init();
+            }
+            if (abilityToCast.type.Equals(AbilityType.AOE))
+            {
+                ability.SetSelectedAbility(abilityToCast, transform.position);
+            }
+            else if (abilityToCast.type.Equals(AbilityType.blast))
+            {
+                Vector3 dir = abilitySpawnPoint.position - transform.position;
+                ability.SetSelectedAbility(abilityToCast, abilitySpawnPoint.position, dir);
             }
             else
             {
-                Vector3 dir = abilitySpawnPoint.position - transform.position;
-                ability.SetSelectedAbility(selected, abilitySpawnPoint.position, dir);
+                Vector3 dir = PCM.control.lastDirection;
+                ability.SetSelectedAbility(abilityToCast, transform.position, dir, transform);
             }
             
         }
@@ -142,7 +160,7 @@ public class Abilities : MonoBehaviour
     [ContextMenu("castAbility")]
     private void CastAbility()
     {
-        CastAbility(test);
+        CastAbility();
     }
 
     [ContextMenu("SetAbilitiesToDebug")]

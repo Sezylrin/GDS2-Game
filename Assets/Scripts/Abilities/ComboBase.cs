@@ -19,7 +19,8 @@ public class ComboBase : MonoBehaviour, IPoolable<ComboBase>
     protected Timer timer;
 
     protected LayerMask targetLayer;
-
+    [SerializeField]
+    protected Transform spriteTR;
     [SerializeField]
     protected List<IDamageable> hitTargets = new List<IDamageable>();
 
@@ -33,6 +34,8 @@ public class ComboBase : MonoBehaviour, IPoolable<ComboBase>
         areaComboSO = SO;
         col2D.radius = SO.radius[tier];
         col2D.includeLayers = target;
+        col2D.excludeLayers = ~target;
+        spriteTR.localScale = (new Vector3(SO.radius[tier], SO.radius[tier], SO.radius[tier])) * 2;
         
         timer.SetTime((int)ComboTimers.lifetime, areaComboSO.Duration[tier]);
         timer.SetTime((int)ComboTimers.damageTick, 0.1f);
@@ -92,6 +95,7 @@ public class ComboBase : MonoBehaviour, IPoolable<ComboBase>
     {
         timer.ResetToZero();
         col2D.includeLayers = 0;
+        col2D.excludeLayers = 0;
         Pool.PoolObj(this);
     }
     #endregion
