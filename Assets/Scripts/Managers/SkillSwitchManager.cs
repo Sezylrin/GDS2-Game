@@ -46,6 +46,10 @@ public class SkillSwitchManager : MonoBehaviour
     private void Awake()
     {
         InitialiseSkillSwitchManager();
+    }
+
+    private void Start()
+    {
         audioComponent = GetComponent<AudioComponent>();
     }
 
@@ -113,6 +117,7 @@ public class SkillSwitchManager : MonoBehaviour
         if (gameObject.activeSelf)
             return;
         gameObject.SetActive(true);
+        GameManager.Instance.AudioComponent.PlaySound(SoundType.UIOpenMenu);
         currentlyHoveredIndex = 0;
         currentSkillMenu = CurrentSkillMenu.UnusedAbilities;
         firstSkillsetSelected = true;
