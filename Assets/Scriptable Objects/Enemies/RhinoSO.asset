@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c19677e7e25c48458157dc951565335, type: 3}
   m_Name: RhinoSO
   m_EditorClassIdentifier: 
-  maxHealth: 500
+  maxHealth: 5000
   speed: 3
   minSouls: 8
   maxSouls: 16
@@ -30,11 +30,13 @@ MonoBehaviour:
   windup3Duration: 1
   consumableHealthPercentThreshold: 10
   percentToHealOnConsume: 20
-  pointsToStagger: 100
-  staggerDuration: 3
+  basePointsToStagger: 100
+  staggerMinDuration: 1.5
+  staggerMaxDuration: 3
   staggerDelayDuration: 3
   staggerDecayAmount: 4
   staggerDecayRate: 0.25
+  damageToReachMaxDuration: 100
   chargeSpeedMultiplier: 2
   attack2Range: 3
   shockwaveStartRadius: 0.13

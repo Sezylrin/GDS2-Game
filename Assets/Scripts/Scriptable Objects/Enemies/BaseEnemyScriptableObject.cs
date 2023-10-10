@@ -29,9 +29,11 @@ public class BaseEnemyScriptableObject : ScriptableObject
     [Range(0, 100)] public int consumableHealthPercentThreshold = 25;
     [Range(0, 100)] public int percentToHealOnConsume = 10;
     [Space(20)]
-    public int pointsToStagger = 100;
-    public float staggerDuration = 3;
+    public int basePointsToStagger = 100;
+    public float staggerMinDuration = 1.5f;
+    public float staggerMaxDuration = 3;
     public float staggerDelayDuration = 3;
     public float staggerDecayAmount = 4;
     public float staggerDecayRate = 0.25f;
+    public int damageToReachMaxDuration;
 }

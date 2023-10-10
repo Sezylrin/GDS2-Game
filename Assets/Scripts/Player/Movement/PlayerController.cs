@@ -185,7 +185,7 @@ public class PlayerController : MonoBehaviour
         StateDecider();
         ExecuteInput();
         UpdateMousePos();
-        //AimAbility();
+        AimAbility();
         ControllerCursor();
     }
 
@@ -399,12 +399,16 @@ public class PlayerController : MonoBehaviour
 
     #region Ability 
 
-    /*private void AimAbility()
+    private void AimAbility()
     {
-        Vector3 vectorToTarget = (Vector3)mousePos - AbilityCentre.position;
+        Vector2 vectorToTarget;
+        if (mousePos != Vector2.zero)
+            vectorToTarget = mousePos - (Vector2)AbilityCentre.position;
+        else
+            vectorToTarget = lastDirection;
         float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
         AbilityCentre.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-    }*/
+    }
 
     public void StartAbility(float startSpeed)
     {

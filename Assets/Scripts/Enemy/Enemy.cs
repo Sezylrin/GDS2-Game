@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using Pathfinding;
 using System.Threading;
 using TMPro;
+using Random = UnityEngine.Random;
 
 #region EnemyType Enum
 public enum EnemyType
@@ -21,7 +22,7 @@ public enum EnemyType
 }
 #endregion
 
-public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
+public abstract class Enemy : MonoBehaviour, IDamageable
 {
     // Enums
     #region EnemyTimer Enum
@@ -96,8 +97,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: SerializeField] protected Consume Consume { get; set; }
     [field: SerializeField] protected GameObject ConsumableHitbox { get; set; }
     [field: SerializeField] protected Image ElementEffectImage { get; set; }
-    Rigidbody2D IDamageable.rb => rb;
-    [field: SerializeField] protected Rigidbody2D rb { get; private set; }
+    [field: SerializeField] public Rigidbody2D rb { get; private set; }
     [field: SerializeField] protected Collider2D col2D { get; private set; }
     [field: SerializeField] protected AIPath path { get; set; }
     protected AudioSource WalkingSound { get; set; }
@@ -112,12 +112,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     #region Combo Interface Variables
     [field: Header("Combo Interface")]
-    [field: SerializeField] public List<ElementCombos> ActiveCombos { get; set; }
     [field: SerializeField] public Timer ComboEffectTimer { get; set; }
     [field: SerializeField, ReadOnly] public LayerMask TargetLayer { get; set; }
     [field: SerializeField] protected LayerMask PlayerLayer { get; set; }
     [field: SerializeField] protected LayerMask EnemyLayer { get; set; }
-    float IComboable.CurrentWitherBonus { get => currentWitherBonus; set => currentWitherBonus = value; }
     public bool IsNoxious { get; set; }
     public bool IsWither { get; set; }
     public bool IsBrambled { get; set; }
@@ -148,7 +146,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     private float currentElementResist = 1;
     [SerializeField, Range(0.5f, 1)]
     private float baseArmour = 0.5f;
-    private float currentWitherBonus = 1;
+    private float currentBlizzardBonus = 1;
     #endregion
 
     // Functions
@@ -160,6 +158,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         if(block == null)
             block = new MaterialPropertyBlock();
         if (debugDisableAI) Debug.LogWarning(this + "'s AI is Disabled");
+        CancelFlash();
     }
 
     public virtual void Init(Vector2 spawnLocation, ElementType element)
@@ -207,7 +206,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         currentState = EnemyState.idle;
 
         ActiveElementEffect = Element;
-        spawnPos = transform.position;
         targetTr = GameManager.Instance.PlayerTransform;
         TargetLayer = PlayerLayer;
 
@@ -239,9 +237,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         Attack3Duration = SO.attack3Duration;
         Attack3Windup = SO.windup3Duration;
 
-        StaggerBar.SetStats(SO.pointsToStagger, SO.staggerDuration, SO.staggerDelayDuration, SO.staggerDecayAmount, SO.staggerDecayRate);
-        if (!debugDisableAI)
-            HealthBarController.SetStats(MaxHealth, ConsumableHealthPercentThreshold);
+        StaggerBar.SetStats(SO.basePointsToStagger, SO.staggerMinDuration, SO.staggerMaxDuration, SO.staggerDelayDuration, SO.staggerDecayAmount, SO.staggerDecayRate, SO.damageToReachMaxDuration);
+        HealthBarController.SetStats(MaxHealth, ConsumableHealthPercentThreshold);
         Consume.SetStats(HealthPercentReceivedOnConsume);
     }
 
@@ -266,10 +263,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         EnemyTimers.times[(int)EnemyTimer.windupDurationTimer].OnTimeIsZero += EndWindup;
         EnemyTimers.times[(int)EnemyTimer.attackDurationTimer].OnTimeIsZero += EndAttack;
 
-        ComboEffectTimer = GameManager.Instance.TimerManager.GenerateTimers(typeof(ElementCombos), gameObject);
-        ComboEffectTimer.times[(int)ElementCombos.aquaVolt].OnTimeIsZero += RemoveStun;
+        //ComboEffectTimer = GameManager.Instance.TimerManager.GenerateTimers(typeof(ElementCombos), gameObject);
+        /*ComboEffectTimer.times[(int)ElementCombos.aquaVolt].OnTimeIsZero += RemoveStun;
         ComboEffectTimer.times[(int)ElementCombos.noxiousGas].OnTimeIsZero += RemoveNoxious;
-        ComboEffectTimer.times[(int)ElementCombos.wither].OnTimeIsZero += RemoveWither;
+        ComboEffectTimer.times[(int)ElementCombos.wither].OnTimeIsZero += RemoveWither;*/
     }
 
     #endregion
@@ -302,7 +299,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
             debugInterruptAttack = false;
             InterruptAttack();
         }
-        EnemyAi();
+        StateMachine();
+        DeterminePathing();
+        //EnemyAi();
     }
     private void FixedUpdate()
     {
@@ -325,6 +324,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         if (Hitpoints <= 0) //Handles death
         {
             Hitpoints = 0;
+            InterruptAttack();
             OnDeath();
             return;
         }
@@ -338,6 +338,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         {
             ElementTier = tier;
             InterruptAttack();
+            StaggerBar.IncreaseStaggerDuration((int)Mathf.Ceil(modifiedDamage));
         }
 
         StaggerBar.AddToStaggerBar(staggerPoints);
@@ -374,7 +375,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     }
     protected float CalculateModifer()
     {
-        return currentStaggerDamage * currentElementResist * baseArmour * currentWitherBonus;
+        return currentStaggerDamage * currentElementResist * baseArmour * currentBlizzardBonus;
     } 
 
     public void AddForce(Vector2 force)
@@ -441,6 +442,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
             rend.SetPropertyBlock(block);
             yield return null;
         }
+        block.SetFloat("_FlashAmount", 0);
+        rend.SetPropertyBlock(block);
+    }
+
+    protected void CancelFlash()
+    {
         block.SetFloat("_FlashAmount", 0);
         rend.SetPropertyBlock(block);
     }
@@ -520,6 +527,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         currentState = EnemyState.stationary;
         EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, AttackEndAiCD);
         Manager.DoneAttack();
+        isAttacking = false;
     }
 
     protected virtual void InterruptAttack()
@@ -529,7 +537,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         //interrupted enemy should stop current action
         currentState = EnemyState.stationary;
         EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, AttackEndAiCD);
-        Manager.DoneAttack();
+        if (isAttacking)
+            Manager.DoneAttack();
+        isAttacking = false;
     }
 
     protected virtual void Attack1()
@@ -597,12 +607,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
             case ElementType.wind:
                 ElementEffectImage.color = Color.white;
                 break;
-            case ElementType.poison:
-                ElementEffectImage.color = Color.magenta;
-                break;
-            case ElementType.nature:
-                ElementEffectImage.color = Color.green;
-                break;
         }
     }
     #endregion
@@ -622,7 +626,43 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     #endregion
 
     #region Combo Interface Functions
-    public void ApplyFireSurge(float damage, int Stagger)
+
+    public void ComboAttack(ComboSO combo, ElementType typeOne, ElementType typeTwo, Color textColour)
+    {
+        TakeDamage(combo.BaseDamage, combo.StaggerDamage, typeOne, typeTwo);
+        comboText.text = combo.name;
+        comboText.color = textColour;
+        StartCoroutine(RemoveText(combo.name));
+    }
+
+    private IEnumerator RemoveText(string textToRemove)
+    {
+        yield return new WaitForSeconds(1f);
+        if (comboText.text.Equals(textToRemove))
+            comboText.text = "";
+    }
+
+    public IEnumerator StunTarget(float dur)
+    {
+        IsStunned = true;
+        StopPathing();
+
+        yield return new WaitForSeconds(dur);
+
+        IsStunned = false;
+    }
+
+    public void InBlizzard(float bonusDamage)
+    {
+        currentBlizzardBonus = bonusDamage;
+    }
+
+    public void ExitBlizzard()
+    {
+        currentBlizzardBonus = 1;
+    }
+    #region old
+    /*public void ApplyFireSurge(float damage, int Stagger)
     {
         TakeDamage(damage, Stagger, ElementType.fire, ElementType.electric);
         comboText.text = "FireSurge";
@@ -710,7 +750,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         IsWither = false;
         currentWitherBonus = 1;
         comboText.text = "";
-    }
+    }*/
+    #endregion
+
     #endregion
 
     //AI
@@ -737,11 +779,39 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     protected EnemyState currentState;
     [SerializeField][ReadOnly]
     protected bool hasDestination;
-    private Vector3 spawnPos;
     [SerializeField][ReadOnly]
     protected Transform targetTr;
     [SerializeField] protected bool debugDisableAI = false;
-
+    protected bool isAttacking;
+    protected virtual void StateMachine()
+    {
+        if (debugDisableAI || Consume.BeingConsumed()) return;
+        if (IsStunned || Staggered) return;
+        if (!hasDestination && currentState.Equals(EnemyState.stationary) && EnemyTimers.IsTimeZero((int)EnemyTimer.aiActionTimer))
+        {
+            if (Manager.CanAttack())
+            {
+                currentState = EnemyState.chasing;
+            }
+            else
+            {
+                currentState = EnemyState.repositioning;
+                repositionRange = Random.Range(3f, 6f);
+            }
+        }
+    }
+    protected virtual void DeterminePathing()
+    {
+        switch ((int)currentState)
+        {
+            case (int)EnemyState.chasing:
+                DetermineAttackPathing();
+                break;
+            case (int)EnemyState.repositioning:
+                RepositionPicker();
+                break;
+        }
+    }
     protected virtual void EnemyAi()
     {
         if (debugDisableAI || Consume.BeingConsumed()) return;
@@ -759,6 +829,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         {
             if (AbleToAttack && Manager.CanAttack())
             {
+                isAttacking = true;
                 CurrentAttack = ChooseAttack();
                 currentState = EnemyState.chasing;
             }
@@ -799,32 +870,21 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     {
         float x = UnityEngine.Random.Range(-IdleRadius, IdleRadius);
         float y = UnityEngine.Random.Range(-IdleRadius, IdleRadius);
-        SetDestination(new Vector3(x,y,0) + spawnPos);
+        SetDestination(new Vector3(x,y,0) + transform.position);
     }
 
     protected virtual void RepositionPicker()
     {
-        
+        BasicReposition();
     }
-
+    private float repositionRange;
     protected void BasicReposition()
     {
-        Vector3 destination = Vector3.zero;
-        Vector3 midPoint = targetTr.position - transform.position;
-        float distance = midPoint.magnitude - RepositionPoint;
-        midPoint = midPoint.normalized * distance;
-        while (destination == Vector3.zero)
-        {
-            float x = UnityEngine.Random.Range(-RepositionPoint * 2, RepositionPoint * 2);
-            float y = UnityEngine.Random.Range(-RepositionPoint * 2, RepositionPoint * 2);
-            Vector3 point = new Vector3(x, y, 0);
-            point += midPoint + transform.position;
-            if (!(Vector3.Distance(point, targetTr.position) < RepositionPoint))
-            {
-                destination = point;
-            }
-        }
-        SetDestination(destination);
+        Vector3 targetpoint = targetTr.position;
+        Vector3 minimumRange = transform.position - targetpoint;
+        minimumRange = minimumRange.normalized * repositionRange;
+        targetpoint += minimumRange;
+        SetDestination(targetpoint);
     }
 
     public void SetTarget(Transform targetPos)
@@ -866,11 +926,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
                 }
                 break;
             case (int)EnemyState.repositioning:
-                timeToAdd = UnityEngine.Random.Range(RepositionRateMin, RepositionRateMax);
+                IdlePathPicker();
+                timeToAdd = Random.Range(1, 3f);
                 currentState = EnemyState.stationary;
                 break;
         }
-        EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, timeToAdd);
+        if (timeToAdd != 0)
+            EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, timeToAdd);
     }
     protected void SetDestination(Vector3 destination)
     {

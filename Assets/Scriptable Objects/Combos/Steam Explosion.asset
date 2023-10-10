@@ -10,14 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97c6395b40e7099449e38d31c81947d7, type: 3}
-  m_Name: NoxiousGas
+  m_Name: Steam Explosion
   m_EditorClassIdentifier: 
-  BaseDamage:
-  - 100
-  - 200
-  - 300
-  StaggerDamage: 0a000000140000001e000000
-  Duration:
-  - 2.5
-  - 5
-  - 8
+  BaseDamage: 35
+  StaggerDamage: 45

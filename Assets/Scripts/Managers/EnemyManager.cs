@@ -244,8 +244,6 @@ public class EnemyManager : MonoBehaviour
                 case ElementType.water: waterCount++; break;
                 case ElementType.electric: shockCount++; break;
                 case ElementType.wind: windCount++; break;
-                case ElementType.poison: poisonCount++; break;
-                case ElementType.nature: natureCount++; break;
             }
         }
         int randomValue = Random.Range(1,101);
@@ -261,8 +259,6 @@ public class EnemyManager : MonoBehaviour
         else if (fireChance < randomValue && randomValue < waterChance) return ElementType.water;      
         else if (waterChance < randomValue && randomValue < shockChance) return ElementType.electric;
         else if (shockChance < randomValue && randomValue < windChance) return ElementType.wind;
-        else if (windChance < randomValue && randomValue < poisonChance) return ElementType.poison;
-        else if (poisonChance < randomValue && randomValue < natureChance) return ElementType.nature;
         else return ElementType.noElement;
     }
 
