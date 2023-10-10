@@ -317,22 +317,22 @@ public class EnemyManager : MonoBehaviour
         {
             case EnemyType.Rhino:
                 temp = rhinoPool.GetPooledObj();
-                temp.Init(spawnLocation, enemyElement);
+                temp.Init(spawnLocation, enemyElement, tier);
                 enemyList.Add(temp);
                 break;
             case EnemyType.Snake:
                 temp = snakePool.GetPooledObj();
-                temp.Init(spawnLocation, enemyElement);
+                temp.Init(spawnLocation, enemyElement, tier);
                 enemyList.Add(temp);
                 break;
             case EnemyType.Cheetah:
                 temp = cheetahPool.GetPooledObj();
-                temp.Init(spawnLocation, enemyElement);
+                temp.Init(spawnLocation, enemyElement, tier);
                 enemyList.Add(temp);
                 break;
             case EnemyType.Lizard:
                 temp = lizardPool.GetPooledObj();
-                temp.Init(spawnLocation, enemyElement);
+                temp.Init(spawnLocation, enemyElement, tier);
                 enemyList.Add(temp);
                 break;
         }

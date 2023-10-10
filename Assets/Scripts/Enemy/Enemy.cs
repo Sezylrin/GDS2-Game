@@ -40,6 +40,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: Header("Enemy Info")]
     [field: SerializeField] public EnemyType Type { get; set; }
     [field: SerializeField] public ElementType Element { get; set; } = ElementType.noElement;
+    [field: SerializeField] public int Tier { get; set; } = 1;
     [field: SerializeField, ReadOnly] public int Hitpoints { get; set; }
     [field: SerializeField, ReadOnly] protected ElementType ActiveElementEffect { get; set; }
     [field: SerializeField, ReadOnly] protected int ElementTier { get; set; }
@@ -162,10 +163,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         if (debugDisableAI) Debug.LogWarning(this + "'s AI is Disabled");
     }
 
-    public virtual void Init(Vector2 spawnLocation, ElementType element)
+    public virtual void Init(Vector2 spawnLocation, ElementType element, int tier)
     {
         transform.position = spawnLocation;
         Element = element;
+        Tier = tier;
         Init();
     }
     private void Awake()
