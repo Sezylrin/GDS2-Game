@@ -39882,6 +39882,14 @@ PrefabInstance:
       propertyPath: soulCost
       value: 150
       objectReference: {fileID: 0}
+    - target: {fileID: 1619667750, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: randomness
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1619667750, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: fountainFrequency
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1858878506, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
       propertyPath: soulCost
       value: 200

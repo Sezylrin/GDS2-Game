@@ -33,23 +33,28 @@ public class LevelGenerator : MonoBehaviour
     public int difficultyIncreaseLeft = 1;
     [Tooltip("The amount that the difficulty will increase when moving through the right/harder room")]
     public int difficultyIncreaseRight = 2;
+    [SerializeField]
+    private int floorsToWin = 42;
+    [SerializeField]
+    private int startDifficulty = 5;
 
     [Header("ReadOnly")]
+    [ReadOnly]
+    public bool hardNextLevel;
+    [field: SerializeField, ReadOnly]
+    public int difficulty { get; private set; }
     private List<SceneReference> roomPool = new List<SceneReference>();
     private List<SceneReference> levelList = new List<SceneReference>();
     [field: SerializeField, ReadOnly]
     public int activeLevelListIndex { get; private set; }
     public int floorsCleared => Mathf.FloorToInt((float)(activeLevelListIndex + 1) / (fountainFrequency + 1));
+    [ReadOnly]
     public int lastFloorOnExit;
     public int lastFloorOnExitIndex => lastFloorOnExit * (fountainFrequency+1) - 1;
 
-    [field: SerializeField, ReadOnly]
-    public int difficulty { get; private set; }
-    [SerializeField]
-    private int startDifficulty = 5;
-
     [Header("Debug")]
     public bool debugNextLevel;
+
 
     private void Awake()
     {
@@ -114,6 +119,7 @@ public class LevelGenerator : MonoBehaviour
     //TODO: Change to AsyncLoading
     private void LoadNextLevel()
     {
+        if (floorsCleared >= floorsToWin)
         // If the next level is not in list
         if (activeLevelListIndex + 1 >= levelList.Count)
         {
@@ -152,6 +158,7 @@ public class LevelGenerator : MonoBehaviour
     public void EnterDoorRight()
     {
         difficulty += difficultyIncreaseRight;
+        hardNextLevel = true;
         LoadNextLevel();
     }
 

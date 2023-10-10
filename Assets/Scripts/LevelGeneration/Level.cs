@@ -10,6 +10,12 @@ public class Level : MonoBehaviour
     private static Level _instance;
     public static Level Instance { get { return _instance; } }
 
+    private enum LevelDifficulty
+    {
+        Normal,
+        Hard
+    }
+    private LevelDifficulty levelDifficulty;
     [SerializeField]
     private int baseEnemyPoints = 5;
     public int totalEnemyPoints { get; private set; }
@@ -22,12 +28,14 @@ public class Level : MonoBehaviour
     [SerializeField]
     private List<Transform> enemySpawnPoints;
     [SerializeField]
-    private bool isFountain = false;
+    private bool isFountain;
     [Header("Debug")]
     public bool debugClearLevel;
     [field: SerializeField, ReadOnly]
     public bool isCleared { get; private set; }
     public static event Action OnLevelClear;
+
+
     private void Awake()
     {
         // Singleton pattern
@@ -48,6 +56,7 @@ public class Level : MonoBehaviour
 
     private void Start()
     {
+        ValidateHardLevel();
         ValidateTotalEnemyPoints();
         SpawnPlayer();
         GetEnemySpawnPoints();
@@ -56,6 +65,13 @@ public class Level : MonoBehaviour
             GameManager.Instance.EnemyManager.StartEnemySpawning(enemySpawnPoints, totalEnemyPoints);
         else
             ClearLevel();
+    }
+
+    private void ValidateHardLevel()
+    {
+        if (!LevelGenerator.Instance.hardNextLevel) return;
+        LevelGenerator.Instance.hardNextLevel = false;
+        levelDifficulty = LevelDifficulty.Hard;
     }
 
     private void GetEnemySpawnPoints()
