@@ -1125,8 +1125,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1725982173
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: -700998111, guid: d21410b16107eb84091773d493803aec, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1585,11 +1585,6 @@ MonoBehaviour:
   hasDestination: 0
   targetTr: {fileID: 0}
   debugDisableAI: 0
-  <SwipeHitbox>k__BackingField: {fileID: 0}
-  <DaggerPrefab>k__BackingField: {fileID: 0}
-  <DaggerSpawnPoint>k__BackingField: {fileID: 0}
-  <DaggerMoveSpeed>k__BackingField: 3
-  <ChainHitbox>k__BackingField: {fileID: 0}
 --- !u!114 &5393515603401796050
 MonoBehaviour:
   m_ObjectHideFlags: 0
