@@ -53,7 +53,7 @@ public class Level : MonoBehaviour
         GetEnemySpawnPoints();
         LevelGenerator.Instance.TriggerCrossFadeEnd();
         if (!isFountain)
-            GameManager.Instance.EnemyManager.StartEnemySpawning(enemySpawnPoints, totalEnemyPoints);
+            GameManager.Instance.EnemyManager.StartEnemySpawning(enemySpawnPoints);
         else
             ClearLevel();
     }

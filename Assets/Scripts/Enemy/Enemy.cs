@@ -12,10 +12,10 @@ using TMPro;
 public enum EnemyType
 {
     TypeError,
-    Cheetah,
-    Lizard, 
     Rhino, 
-    Snake, 
+    Snake,
+    Cheetah,
+    Lizard,
     Test1, 
     Test2
 }
@@ -38,8 +38,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     // Variables
     #region Enemy Info Variables
     [field: Header("Enemy Info")]
-    [field: SerializeField] protected EnemyType Type { get; set; }
-    [field: SerializeField] protected ElementType Element { get; set; } = ElementType.noElement;
+    [field: SerializeField] public EnemyType Type { get; set; }
+    [field: SerializeField] public ElementType Element { get; set; } = ElementType.noElement;
     [field: SerializeField, ReadOnly] public int Hitpoints { get; set; }
     [field: SerializeField, ReadOnly] protected ElementType ActiveElementEffect { get; set; }
     [field: SerializeField, ReadOnly] protected int ElementTier { get; set; }

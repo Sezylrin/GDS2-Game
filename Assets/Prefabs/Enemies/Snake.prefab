@@ -435,7 +435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c02c3ce0d42a09a46b96ae9407cf9984, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy: {fileID: 0}
+  enemy: {fileID: 6384816974836193804}
   UI: {fileID: 1752878506580189178}
 --- !u!1 &1752878505554647728
 GameObject:
@@ -1176,7 +1176,7 @@ MonoBehaviour:
   <StaggerTimers>k__BackingField:
     <times>k__BackingField: []
     owner: {fileID: 0}
-  <Parent>k__BackingField: {fileID: 0}
+  <Parent>k__BackingField: {fileID: 6384816974836193804}
 --- !u!1 &1752878506409264276
 GameObject:
   m_ObjectHideFlags: 0
@@ -1188,6 +1188,7 @@ GameObject:
   - component: {fileID: 1752878506409264286}
   - component: {fileID: 1752878506409264273}
   - component: {fileID: 1752878506409264272}
+  - component: {fileID: 6384816974836193804}
   - component: {fileID: 1752878506409264274}
   - component: {fileID: 1752878506409264277}
   m_Layer: 6
@@ -1214,7 +1215,7 @@ Transform:
   - {fileID: 1752878505191741674}
   - {fileID: 1752878505782548790}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &1752878506409264273
 CircleCollider2D:
@@ -1278,6 +1279,105 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &6384816974836193804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752878506409264276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52bc2136ca4a45b4295228be07a9ed23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Type>k__BackingField: 2
+  <Element>k__BackingField: 0
+  <Hitpoints>k__BackingField: 0
+  <ActiveElementEffect>k__BackingField: 0
+  <ElementTier>k__BackingField: 0
+  <CurrentAttack>k__BackingField: 0
+  <WindingUp>k__BackingField: 0
+  <Staggered>k__BackingField: 0
+  <AbleToAttack>k__BackingField: 0
+  <Consumable>k__BackingField: 0
+  <EnemyTimers>k__BackingField:
+    <times>k__BackingField: []
+    owner: {fileID: 0}
+  <MaxHealth>k__BackingField: 0
+  <Speed>k__BackingField: 0
+  <Souls>k__BackingField: 0
+  <EffectDuration>k__BackingField: 0
+  <AttackCooldownDuration>k__BackingField: 0
+  <Attack1Damage>k__BackingField: 0
+  <Attack1Duration>k__BackingField: 0
+  <Attack1Windup>k__BackingField: 0
+  <Attack2Damage>k__BackingField: 0
+  <Attack2Duration>k__BackingField: 0
+  <Attack2Windup>k__BackingField: 0
+  <Attack3Damage>k__BackingField: 0
+  <Attack3Duration>k__BackingField: 0
+  <Attack3Windup>k__BackingField: 0
+  <AttackKnockback>k__BackingField: 0
+  <ConsumableHealthPercentThreshold>k__BackingField: 0
+  <HealthPercentReceivedOnConsume>k__BackingField: 0
+  <debugElement>k__BackingField: 2
+  <debugDamage>k__BackingField: 20
+  <debugStaggerPoints>k__BackingField: 50
+  <debugTakeDamage>k__BackingField: 0
+  <debugApplyElement>k__BackingField: 0
+  <debugStartStagger>k__BackingField: 0
+  <debugAttemptAttack>k__BackingField: 0
+  <debugInterruptAttack>k__BackingField: 0
+  <debugEnemySpawn>k__BackingField: 0
+  <SO>k__BackingField: {fileID: 11400000, guid: c5a13ab39f7277340b95e5b464d64eab, type: 2}
+  <PivotPoint>k__BackingField: {fileID: 1752878505782548790}
+  <HealthBarController>k__BackingField: {fileID: 1752878505803884468}
+  <StaggerBar>k__BackingField: {fileID: 1752878506399643401}
+  <Consume>k__BackingField: {fileID: 1752878505191741675}
+  <ConsumableHitbox>k__BackingField: {fileID: 1752878505191741676}
+  <ElementEffectImage>k__BackingField: {fileID: 1752878506021712888}
+  <rb>k__BackingField: {fileID: 1752878506409264272}
+  <col2D>k__BackingField: {fileID: 1752878506409264273}
+  <path>k__BackingField: {fileID: 1752878506409264277}
+  collisionDisabledDur: 0
+  <ActiveCombos>k__BackingField: 
+  <ComboEffectTimer>k__BackingField:
+    <times>k__BackingField: []
+    owner: {fileID: 0}
+  <TargetLayer>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 0
+  <PlayerLayer>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 0
+  <EnemyLayer>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 0
+  comboText: {fileID: 0}
+  flashDuration: 0
+  curve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  rend: {fileID: 0}
+  staggerBonusDamage: 0
+  elementResistAmount: 0
+  baseArmour: 0.5
+  IdleRadius: 0
+  RepositionPoint: 0
+  IdleMoveRateMin: 0
+  IdleMoveRateMax: 0
+  RepositionRateMin: 0
+  RepositionRateMax: 0
+  AttackEndAiCD: 0
+  MinimumAttackRange: 1
+  currentState: 0
+  hasDestination: 0
+  targetTr: {fileID: 0}
+  debugDisableAI: 0
 --- !u!114 &1752878506409264274
 MonoBehaviour:
   m_ObjectHideFlags: 0
