@@ -222,22 +222,20 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     public virtual void SetStatsFromScriptableObject()
     {
-        MaxHealth = SO.maxHealth;
-        Speed = SO.speed;
+        MaxHealth = SO.maxHealth[Tier];
+        Speed = SO.speed[Tier];
         ResetSpeed();
-        Souls = UnityEngine.Random.Range(SO.minSouls, SO.maxSouls + 1);
-        ConsumableHealthPercentThreshold = SO.consumableHealthPercentThreshold;
-        HealthPercentReceivedOnConsume = SO.percentToHealOnConsume;
-        AttackCooldownDuration = SO.attackCooldown;
+        Souls = UnityEngine.Random.Range(SO.minSouls[Tier], SO.maxSouls[Tier] + 1);
+        AttackCooldownDuration = SO.attackCooldown[Tier];
         EffectDuration = SO.effectDuration;
 
-        Attack1Damage = SO.attack1Damage;
+        Attack1Damage = SO.attack1Damage[Tier];
         Attack1Duration = SO.attack1Duration;
         Attack1Windup = SO.windup1Duration;
-        Attack2Damage = SO.attack2Damage;
+        Attack2Damage = SO.attack2Damage[Tier];
         Attack2Duration = SO.attack2Duration;
         Attack2Windup = SO.windup2Duration;
-        Attack3Damage = SO.attack3Damage;
+        Attack3Damage = SO.attack3Damage[Tier];
         Attack3Duration = SO.attack3Duration;
         Attack3Windup = SO.windup3Duration;
 
@@ -254,7 +252,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     public void SetOverRideHealth(int amount)
     {
-        
         MaxHealth = amount;
         SetHitPoints();
         HealthBarController.SetStats(MaxHealth, ConsumableHealthPercentThreshold);
@@ -345,6 +342,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         StaggerBar.AddToStaggerBar(staggerPoints);
         HealthBarController.UpdateSegments(Hitpoints);
 
+        /*
         if (!Consumable)
         {
             if ((float)Hitpoints / (float)MaxHealth * 100 <= ConsumableHealthPercentThreshold)
@@ -353,6 +351,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
                 Consumable = true;
             }
         }
+        */
     }
 
     public virtual void TakeDamage(float damage, int staggerPoints, ElementType type, ElementType typeTwo = ElementType.noElement)
