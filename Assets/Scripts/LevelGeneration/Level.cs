@@ -73,6 +73,7 @@ public class Level : MonoBehaviour
     public void ClearLevel()
     {
         isCleared = true;
+        if (!isFountain) LevelGenerator.Instance.IncrementLevelsCleared();
         OnLevelClear?.Invoke();
     }
 

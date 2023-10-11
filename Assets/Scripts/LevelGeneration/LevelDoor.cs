@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class LevelDoor : InteractionBase
 {
+    private bool doorAlreadyUsed;
+
     [Serializable]
     public enum DoorPosition
     {
@@ -31,8 +33,11 @@ public class LevelDoor : InteractionBase
 
     public override void Interact()
     {
-        if(Level.Instance.isCleared)
+        if (Level.Instance.isCleared && !doorAlreadyUsed)
+        {
+            doorAlreadyUsed = true;
             ExitLevel();
+        }
     }
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
