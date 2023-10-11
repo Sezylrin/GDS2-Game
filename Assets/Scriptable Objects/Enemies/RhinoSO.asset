@@ -30,13 +30,13 @@ MonoBehaviour:
   windup3Duration: 1
   consumableHealthPercentThreshold: 10
   percentToHealOnConsume: 20
-  basePointsToStagger: 100
+  basePointsToStagger: 300
   staggerMinDuration: 1.5
-  staggerMaxDuration: 3
+  staggerMaxDuration: 5
   staggerDelayDuration: 3
   staggerDecayAmount: 4
   staggerDecayRate: 0.25
-  damageToReachMaxDuration: 100
+  damageToReachMaxDuration: 700
   chargeSpeedMultiplier: 2
   attack2Range: 3
   shockwaveStartRadius: 0.13

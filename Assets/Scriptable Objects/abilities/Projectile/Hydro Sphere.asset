@@ -16,6 +16,8 @@ MonoBehaviour:
   elementType: 2
   type: 2
   castCost: 1
+  castStartSpeed: 0.2
+  castDuration: 0
   pierceAmount: 1
   damage: 90
   knockback: 4
@@ -24,4 +26,4 @@ MonoBehaviour:
   lifeTime: 5
   description: Hydro Sphere Description
   icon: {fileID: 21300000, guid: 72f9f3f9827064547bf46c47f853901b, type: 3}
-  speed: 5
+  speed: 25
