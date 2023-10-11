@@ -34,7 +34,7 @@ public class LevelGenerator : MonoBehaviour
     [Tooltip("The amount that the difficulty will increase when moving through the right/harder room")]
     public int difficultyIncreaseRight = 2;
     [SerializeField]
-    private int floorsToWin = 42;
+    private int floorsToWin = 7;
     [SerializeField]
     private int startDifficulty = 5;
 
@@ -119,7 +119,11 @@ public class LevelGenerator : MonoBehaviour
     //TODO: Change to AsyncLoading
     private void LoadNextLevel()
     {
-        if (floorsCleared >= floorsToWin)
+        if (DungeonCleared())
+        {
+            //TODO: Win
+            return;
+        }
         // If the next level is not in list
         if (activeLevelListIndex + 1 >= levelList.Count)
         {
@@ -129,6 +133,8 @@ public class LevelGenerator : MonoBehaviour
         activeLevelListIndex++;
         StartCoroutine(LoadLevel(levelList[activeLevelListIndex]));
     }
+
+    private bool DungeonCleared() => Mathf.FloorToInt((float)(activeLevelListIndex + 2)/(fountainFrequency + 1)) >= floorsToWin;
 
     IEnumerator LoadLevel(string scenePath)
     {
