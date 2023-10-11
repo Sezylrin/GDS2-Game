@@ -5194,18 +5194,17 @@ MonoBehaviour:
   <EnemyManagerTimers>k__BackingField:
     <times>k__BackingField: []
     owner: {fileID: 0}
-  <AttackPoints>k__BackingField: 0
-  <MaxAttackPoints>k__BackingField: 10
-  <AttackPointRefreshRate>k__BackingField: 10
-  <CanEnemyAttack>k__BackingField: 1
-  <AttackDelay>k__BackingField: 0.5
+  <CurrentAttackers>k__BackingField: 0
+  maxAttackers: 0
   <debugElementForAttacksList>k__BackingField: 0
   <debugUpdateAttacksList>k__BackingField: 0
   <debugEmptyAttacksList>k__BackingField: 0
   <AttacksList>k__BackingField: 
   enemyPrefabs:
   - {fileID: 9185797213798890984, guid: 07edf47e31410f949aeef7826ecf0481, type: 3}
-  - {fileID: 2996488685272666361, guid: a5522729e3ef6f14f87b8540e40c70ba, type: 3}
+  - {fileID: 1752878506409264276, guid: 74e514a8f3fbc2e49872e5a3aee84b27, type: 3}
+  - {fileID: 3200451849759215175, guid: 06faa7f54c6f8744881c8d7f0eb816db, type: 3}
+  - {fileID: 5393515603401796057, guid: d51d7b73a4c492843b5bbe22b38ecfa3, type: 3}
   <SpawnLocations>k__BackingField:
   - {fileID: 0}
   - {fileID: 0}
@@ -5232,15 +5231,17 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  <SpawnLocationsCopy>k__BackingField: []
   <ActiveEnemiesCount>k__BackingField: 0
   <debugTestSpawn>k__BackingField: 0
   <EnemyPoints>k__BackingField: 0
-  <debugEnemyPoints>k__BackingField: 10
-  <debugSetEnemyPoints>k__BackingField: 0
-  <MeleeEnemySpawnChance>k__BackingField: 75
-  <RangedEnemySpawnChance>k__BackingField: 25
-  <debugMeleeSpawnChance>k__BackingField: 100
-  <debugSetMeleeSpawnChance>k__BackingField: 1
+  <RhinoSpawnChance>k__BackingField: 25
+  <SnakeSpawnChance>k__BackingField: 25
+  <CheetahSpawnChance>k__BackingField: 25
+  <LizardSpawnChance>k__BackingField: 25
+  <Tier1SpawnChance>k__BackingField: 100
+  <Tier2SpawnChance>k__BackingField: 0
+  <Tier3SpawnChance>k__BackingField: 0
   enemyList: []
   <debugKillEnemies>k__BackingField: 0
 --- !u!1 &1605319376
@@ -8455,7 +8456,7 @@ Transform:
   - {fileID: 598326448}
   - {fileID: 3296080151572235050}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3761662248408365452
 MonoBehaviour:

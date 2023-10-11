@@ -16,6 +16,8 @@ public class EnemyManager : MonoBehaviour
     }
 
     [field: Header("Info")]
+    [field: SerializeField, ReadOnly] private int NumberOfEnemiesToSpawn { get; set; }
+    [field: SerializeField, ReadOnly] private int ActiveEnemiesCount { get; set; }
     [field: SerializeField] private Timer EnemyManagerTimers { get; set; }
 
     [field: Header("EnemyAttacking")]
@@ -34,25 +36,27 @@ public class EnemyManager : MonoBehaviour
     [field: Header("Spawning")]
     [field: SerializeField] private GameObject[] enemyPrefabs;
     [field: SerializeField] private List<Transform> SpawnLocations { get; set; }
-    [field: SerializeField, ReadOnly] private int ActiveEnemiesCount { get; set; }
+    [field: SerializeField] private List<Transform> SpawnLocationsCopy { get; set; }
     [field: SerializeField] bool debugTestSpawn { get; set; }
-    [field: SerializeField, ReadOnly] private int EnemyPoints { get; set; }
-    [field: SerializeField] int debugEnemyPoints { get; set; } = 10;
-    [field: SerializeField] bool debugSetEnemyPoints { get; set; }
-    [field: SerializeField, ReadOnly] int MeleeEnemySpawnChance { get; set; } = 75;
-    [field: SerializeField, ReadOnly] int RangedEnemySpawnChance { get; set; } = 25;
-    [field: SerializeField, Range(0, 100)] int debugMeleeSpawnChance { get; set; } = 50;
-    [field: SerializeField] bool debugSetMeleeSpawnChance { get; set; }
+    [field: SerializeField] bool debugSpawnAll { get; set; }
+    [field: SerializeField] bool debugShowNumberStats { get; set; }
+    [field: SerializeField] bool debugShowElementStats { get; set; }
+    [field: SerializeField] int RhinoSpawnChance { get; set; } = 25;
+    [field: SerializeField] int SnakeSpawnChance { get; set; } = 25;
+    [field: SerializeField] int CheetahSpawnChance { get; set; } = 25;
+    [field: SerializeField] int LizardSpawnChance { get; set; } = 25;
+    [field: SerializeField] int Tier1SpawnChance { get; set; } = 100;
+    [field: SerializeField] int Tier2SpawnChance { get; set; } = 0;
+    [field: SerializeField] int Tier3SpawnChance { get; set; } = 0;
+
     private Pool<Rhino> rhinoPool;
-    private Pool<TestRangedEnemy> testRangedEnemyPool;
+    private Pool<Snake> snakePool;
+    private Pool<Cheetah> cheetahPool;
+    private Pool<Lizard> lizardPool;
+
     [SerializeField]
     private List<Enemy> enemyList = new List<Enemy>();
     [field: SerializeField] bool debugKillEnemies { get; set; }
-
-    private void Awake()
-    {
-       
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -62,7 +66,11 @@ public class EnemyManager : MonoBehaviour
         //EnemyManagerTimers.times[(int)EnemyManagerTimer.attackPointRefeshTimer].OnTimeIsZero += RefreshAttackPoint;
 
         GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[0], out rhinoPool);
-        GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[1], out testRangedEnemyPool);
+        GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[1], out snakePool);
+        GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[2], out cheetahPool);
+        GameManager.Instance.PoolingManager.FindPool(enemyPrefabs[3], out lizardPool);
+
+        SetSpawnLocations(SpawnLocations);
     }
 
     // Update is called once per frame
@@ -73,6 +81,23 @@ public class EnemyManager : MonoBehaviour
             debugTestSpawn = false;
             SpawnEnemy();
         }
+        if (debugSpawnAll)
+        {
+            debugSpawnAll = false;
+            StartEnemySpawning(SpawnLocations);
+            DisplayEnemyNumberStats();
+            DisplayEnemyElementStats();
+        }
+        if (debugShowNumberStats)
+        {
+            debugShowNumberStats = false;
+            DisplayEnemyNumberStats();
+        }
+        if (debugShowElementStats)
+        {
+            debugShowElementStats = false;
+            DisplayEnemyElementStats();
+        }
         if (debugUpdateAttacksList)
         {
             debugUpdateAttacksList = false;
@@ -82,16 +107,6 @@ public class EnemyManager : MonoBehaviour
         {
             debugEmptyAttacksList = false;
             EmptyAttacksList();
-        }
-        if (debugSetEnemyPoints)
-        {
-            debugSetEnemyPoints = false;
-            SetEnemyPoints(debugEnemyPoints);
-        }
-        if (debugSetMeleeSpawnChance)
-        {
-            debugSetMeleeSpawnChance = false;
-            SetMeleeSpawnChance(debugMeleeSpawnChance);
         }
         if (debugKillEnemies)
         {
@@ -118,7 +133,7 @@ public class EnemyManager : MonoBehaviour
         CurrentAttackers--;
         if (CurrentAttackers < 0)
         {
-            Debug.LogWarning("smth has gone wrong, the current amount of attackers was miscalculated, you can resume and contrinue or attempt to debug");
+            Debug.LogWarning("smth has gone wrong, the current amount of attackers was miscalculated, you can resume and continue or attempt to debug");
             Debug.Break();
             CurrentAttackers = 0;
         }
@@ -141,7 +156,6 @@ public class EnemyManager : MonoBehaviour
     {
         EnemyManagerTimers.SetTime((int)EnemyManagerTimer.attackPointRefeshTimer, AttackPointRefreshRate);
     }
-
     private void RefreshAttackPoint(object sender, EventArgs e)
     {
         if (AttackPoints < MaxAttackPoints) AttackPoints++;
@@ -171,58 +185,48 @@ public class EnemyManager : MonoBehaviour
     #endregion
 
     #region Spawning
-    public void StartEnemySpawning(List<Transform> spawnPoints, int enemyPoints)
+    public void StartEnemySpawning(List<Transform> spawnPoints)
     {
-        SetEnemyPoints(enemyPoints);
-        SpawnLocations = spawnPoints;
-        SpawnEnemy();
-    }
-    
-    public void SetEnemyPoints(int points)
-    {
-        EnemyPoints = points;
-    }
-
-    private void SetMeleeSpawnChance(int chance)
-    {
-        MeleeEnemySpawnChance = chance;
-        RangedEnemySpawnChance = 100 - MeleeEnemySpawnChance;
-    }
-
-    private EnemyType SelectEnemyToSpawn()
-    {
-        EnemyType type = EnemyType.TypeError;
-        int cost = 0;
-        if (EnemyPoints > 2) cost = Random.Range(1, 4);
-        else if (EnemyPoints == 2) cost = Random.Range(1, 3);
-        else if (EnemyPoints == 1) cost = 1;
-        else
+        SetSpawnLocations(spawnPoints);
+        NumberOfEnemiesToSpawn = SelectNumberOfEnemiesToSpawnw();
+        int temp = NumberOfEnemiesToSpawn;
+        while (temp > 0)
         {
-            Debug.LogWarning("No More Enemy Points");
-            return type;
-        } 
+            SpawnEnemy();
+            temp--;
+        }
+        if (enemyList.Count() != NumberOfEnemiesToSpawn) Debug.Log("Did Not Spawn the Correct Amount of Enemies. enemyList.Count() = " + enemyList.Count() + ", NumberOfEnemiesToSpawn = " + NumberOfEnemiesToSpawn); 
+    }
 
+    private void SetSpawnLocations(List<Transform> spawnLocations)
+    {
+        SpawnLocations = spawnLocations;
+        SpawnLocationsCopy = SpawnLocations;
+    }
+    private int SelectNumberOfEnemiesToSpawnw()
+    {
+        return Random.Range(3, 6);
+    }
+
+    private EnemyType SelectEnemyType()
+    {
         int randomValue = Random.Range(1, 101);
 
+        int rhinoChance = RhinoSpawnChance;
+        int snakeChance = rhinoChance + SnakeSpawnChance;
+        int cheetahChance = snakeChance + CheetahSpawnChance;
+        int lizardChance = cheetahChance + LizardSpawnChance;
 
-        cost = 1; // Temp ----------------------------------------------- Temp \\
-        switch (cost)
+        if (randomValue <= rhinoChance) return EnemyType.Rhino; // Attempt to select an Enemy Type
+        else if (rhinoChance < randomValue && randomValue <= snakeChance) return EnemyType.Snake;
+        else if (snakeChance < randomValue && randomValue <= cheetahChance) return EnemyType.Cheetah;
+        else if (cheetahChance < randomValue && randomValue <= lizardChance) return EnemyType.Lizard;
+        else
         {
-            case 1:
-                if (randomValue < MeleeEnemySpawnChance) type = EnemyType.Test1;
-                else type = EnemyType.Test2;
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            default:
-                Debug.LogWarning("Failed To Select Type");
-                return type;
+            int totalChance = RhinoSpawnChance + SnakeSpawnChance + CheetahSpawnChance + LizardSpawnChance;
+            Debug.LogWarning("Failed to Select Enemy Type. randomValue = " + randomValue + ", totalChance = " + totalChance);
+            return EnemyType.TypeError;
         }
-        EnemyPoints -= cost;
-        
-        return type;
     }
 
     private ElementType SelectEnemyElement()
@@ -232,12 +236,10 @@ public class EnemyManager : MonoBehaviour
         int waterCount = 0;
         int shockCount = 0;
         int windCount = 0;
-        int poisonCount = 0;
-        int natureCount = 0;
 
         foreach (ElementType element in AttacksList)
         {
-            switch (element) 
+            switch (element) //Count the elements of the previous 25 attacks
             {
                 case ElementType.noElement: noElementCount++; break;
                 case ElementType.fire: fireCount++; break;
@@ -248,66 +250,94 @@ public class EnemyManager : MonoBehaviour
         }
         int randomValue = Random.Range(1,101);
 
-        int fireChance = fireCount * 3;
+        int fireChance = fireCount * 3; // Element Spawn chance = Amount of attacks of this element in the past 25 attacks multiplied by 3 (Max 75% spawn chance)
         int waterChance = fireChance + waterCount * 3;
         int shockChance = waterChance + shockCount * 3;
         int windChance = shockChance + windCount * 3;
-        int poisonChance = windChance + poisonCount * 3;
-        int natureChance = poisonChance + natureCount * 3;
 
-        if (randomValue < fireChance) return ElementType.fire;
-        else if (fireChance < randomValue && randomValue < waterChance) return ElementType.water;      
-        else if (waterChance < randomValue && randomValue < shockChance) return ElementType.electric;
-        else if (shockChance < randomValue && randomValue < windChance) return ElementType.wind;
-        else return ElementType.noElement;
+        if (randomValue <= fireChance) return ElementType.fire; // Attempt to select an element
+        else if (fireChance < randomValue && randomValue <= waterChance) return ElementType.water;      
+        else if (waterChance < randomValue && randomValue <= shockChance) return ElementType.electric;
+        else if (shockChance < randomValue && randomValue <= windChance) return ElementType.wind;
+        else return ElementType.noElement; //If failed, return no element
+    }
+
+    private int SelectEnemyTier()
+    {
+        int randomValue = Random.Range(1, 101);
+
+        int tier1Chance = Tier1SpawnChance;
+        int tier2Chance = tier1Chance + Tier2SpawnChance;
+        int tier3Chance = tier2Chance + Tier3SpawnChance;
+
+        if (randomValue <= tier1Chance) return 1; // Attempt to select an Enemy Tier
+        else if (tier1Chance < randomValue && randomValue <= tier2Chance) return 2;
+        else if (tier2Chance < randomValue && randomValue <= tier3Chance) return 3;
+        else
+        {
+            int totalChance = Tier1SpawnChance + Tier2SpawnChance + Tier3SpawnChance;
+            Debug.LogWarning("Failed to Select Enemy Tier. randomValue = " + randomValue + ", totalChance = " + totalChance);
+            return 0;
+        }
     }
 
     private Vector2 SelectSpawnLocation()
     {
-        int index = Random.Range(0, SpawnLocations.Count());
+        int index = Random.Range(0, SpawnLocationsCopy.Count());
         Vector2 spawnLocation;
 
-        if (SpawnLocations.Count > 0)
+        if (SpawnLocationsCopy.Count > 0)
         {
-            spawnLocation = SpawnLocations[index].position;
-            SpawnLocations.RemoveAt(index);
+            spawnLocation = SpawnLocationsCopy[index].position;
+            SpawnLocationsCopy.RemoveAt(index);
             return spawnLocation;
         }
         else 
         {
-            Debug.LogWarning("No More Spawn Locations");
+            Debug.LogWarning("Ran Out of Spawn Locations. NumberOfEnemiesToSpawn = " + NumberOfEnemiesToSpawn + ", SpawnLocations.Count() = " + SpawnLocations.Count());
             return Vector2.zero;
         }
     }
 
     private void SpawnEnemy()
     {
-        EnemyType enemyToSpawn = SelectEnemyToSpawn();
-        if (enemyToSpawn == EnemyType.TypeError) return;
+        EnemyType type = SelectEnemyType();
+        if (type == EnemyType.TypeError) return;
 
         Vector2 spawnLocation = SelectSpawnLocation();
         if (spawnLocation == Vector2.zero) return;
 
+        int tier = SelectEnemyTier();
+        if (tier == 0) return;
+
         ElementType enemyElement = SelectEnemyElement();
 
         Enemy temp;
-        switch (enemyToSpawn)
+        switch (type)
         {
-            case EnemyType.Test1:
+            case EnemyType.Rhino:
                 temp = rhinoPool.GetPooledObj();
-                temp.Init(spawnLocation, enemyElement);
+                temp.Init(spawnLocation, enemyElement, tier);
                 enemyList.Add(temp);
                 break;
-            case EnemyType.Test2:
-                temp = testRangedEnemyPool.GetPooledObj();
-                temp.Init(spawnLocation, enemyElement);
+            case EnemyType.Snake:
+                temp = snakePool.GetPooledObj();
+                temp.Init(spawnLocation, enemyElement, tier);
+                enemyList.Add(temp);
+                break;
+            case EnemyType.Cheetah:
+                temp = cheetahPool.GetPooledObj();
+                temp.Init(spawnLocation, enemyElement, tier);
+                enemyList.Add(temp);
+                break;
+            case EnemyType.Lizard:
+                temp = lizardPool.GetPooledObj();
+                temp.Init(spawnLocation, enemyElement, tier);
                 enemyList.Add(temp);
                 break;
         }
         ActiveEnemiesCount++;
         RecalculateMaxAttackers();
-
-        if (EnemyPoints > 0) SpawnEnemy();
     }
     #endregion
 
@@ -371,5 +401,46 @@ public class EnemyManager : MonoBehaviour
             
         }
         return nearest;
+    }
+
+    public void DisplayEnemyNumberStats()
+    {
+        int rhinoCount = 0;
+        int snakeCount = 0;
+        int cheetahCount = 0;
+        int lizardCount = 0;
+
+        foreach (Enemy enemy in enemyList)
+        {
+            switch (enemy.Type) //Count the elements of the previous 25 attacks
+            {
+                case EnemyType.Rhino: rhinoCount++; break;
+                case EnemyType.Snake: snakeCount++; break;
+                case EnemyType.Cheetah: cheetahCount++; break;
+                case EnemyType.Lizard: lizardCount++; break;
+            }
+        }
+        Debug.Log("Number of Enemies = " + enemyList.Count() + ". rhinoCount = " + rhinoCount + ", snakeCount = " + snakeCount + ", cheeetahCount = " + cheetahCount + ", lizardCount = " + lizardCount);
+    }
+    public void DisplayEnemyElementStats()
+    {
+        int noElementCount = 0;
+        int fireCount = 0;
+        int waterCount = 0;
+        int shockCount = 0;
+        int windCount = 0;
+
+        foreach (Enemy enemy in enemyList)
+        {
+            switch (enemy.Element) //Count the elements of the previous 25 attacks
+            {
+                case ElementType.noElement: noElementCount++; break;
+                case ElementType.fire: fireCount++; break;
+                case ElementType.water: waterCount++; break;
+                case ElementType.electric: shockCount++; break;
+                case ElementType.wind: windCount++; break;
+            }
+        }
+        Debug.Log("Number of Enemies = " + enemyList.Count() + ". noElementCount = " + noElementCount + ", fireCount = " + fireCount + ", waterCount = " + waterCount + ", shockCount = " + shockCount + ", windCount = " + windCount);
     }
 }

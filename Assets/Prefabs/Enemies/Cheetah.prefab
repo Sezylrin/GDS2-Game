@@ -489,7 +489,7 @@ MonoBehaviour:
   <StaggerTimers>k__BackingField:
     <times>k__BackingField: []
     owner: {fileID: 0}
-  <Parent>k__BackingField: {fileID: 0}
+  <Parent>k__BackingField: {fileID: 3200451849759215230}
 --- !u!1 &3200451849672547904
 GameObject:
   m_ObjectHideFlags: 0
@@ -756,7 +756,7 @@ Transform:
   - {fileID: 3200451849692041868}
   - {fileID: 3200451850082114949}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &3200451849759215228
 CircleCollider2D:
@@ -832,7 +832,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a021f83939171d9469978e2d0b6cdf3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Type>k__BackingField: 1
+  <Type>k__BackingField: 3
   <Element>k__BackingField: 0
   <Hitpoints>k__BackingField: 0
   <ActiveElementEffect>k__BackingField: 0
@@ -871,7 +871,7 @@ MonoBehaviour:
   <debugAttemptAttack>k__BackingField: 0
   <debugInterruptAttack>k__BackingField: 0
   <debugEnemySpawn>k__BackingField: 0
-  <SO>k__BackingField: {fileID: 0}
+  <SO>k__BackingField: {fileID: 11400000, guid: 39a240203747ad6489126ae2283cbbc8, type: 2}
   <PivotPoint>k__BackingField: {fileID: 3200451850082114949}
   <HealthBarController>k__BackingField: {fileID: 3200451849547443034}
   <StaggerBar>k__BackingField: {fileID: 3200451849585953289}
@@ -879,7 +879,9 @@ MonoBehaviour:
   <ConsumableHitbox>k__BackingField: {fileID: 3200451849692041874}
   <ElementEffectImage>k__BackingField: {fileID: 3200451849948569542}
   <rb>k__BackingField: {fileID: 3200451849759215171}
+  <col2D>k__BackingField: {fileID: 3200451849759215228}
   <path>k__BackingField: {fileID: 3200451849759215168}
+  collisionDisabledDur: 0
   <ActiveCombos>k__BackingField: 
   <ComboEffectTimer>k__BackingField:
     <times>k__BackingField: []
@@ -894,6 +896,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   comboText: {fileID: 0}
+  flashDuration: 0
+  curve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  rend: {fileID: 0}
   staggerBonusDamage: 0
   elementResistAmount: 0
   baseArmour: 0.5
@@ -914,7 +924,6 @@ MonoBehaviour:
   <DaggerSpawnPoint>k__BackingField: {fileID: 0}
   <DaggerMoveSpeed>k__BackingField: 3
   <ChainHitbox>k__BackingField: {fileID: 0}
-  <col2D>k__BackingField: {fileID: 0}
 --- !u!114 &3200451849759215169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1454,8 +1463,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1725982173
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 590278081, guid: d21410b16107eb84091773d493803aec, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
