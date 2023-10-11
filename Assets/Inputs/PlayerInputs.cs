@@ -109,6 +109,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""AbilityFour"",
+                    ""type"": ""Button"",
+                    ""id"": ""b7feb0e7-946a-4a62-b858-26cbecdc1ec6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""ToggleAbilities"",
                     ""type"": ""Button"",
                     ""id"": ""252e4fe7-2655-47fc-aae2-12f707fd7448"",
@@ -336,7 +345,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""f30228cf-4f9a-4e32-941f-c46ac376772f"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": ""Hold(duration=0.2)"",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -347,7 +356,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""79870e04-b77f-4013-bab9-c95598f25fed"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": ""Hold(duration=0.2)"",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -358,7 +367,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""7b2d6b34-000d-4b24-932d-408323c3342c"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -380,7 +389,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""05bc4d93-1b31-46dc-85ea-15bc84544e55"",
-                    ""path"": ""<Keyboard>/shift"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -391,8 +400,8 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""401788a3-cbcb-4c26-9549-b58341674121"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
-                    ""interactions"": """",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": ""Hold(duration=0.2)"",
                     ""processors"": """",
                     ""groups"": ""Controller"",
                     ""action"": ""AbilityThree"",
@@ -495,6 +504,28 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Controller"",
                     ""action"": ""Open Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2d693827-1f87-41e8-b681-77f0474a445c"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""AbilityFour"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1a217e4d-ed7e-4219-aa0b-c952a57e718a"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": ""Hold(duration=0.2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AbilityFour"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1112,6 +1143,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Player_AbilityOne = m_Player.FindAction("AbilityOne", throwIfNotFound: true);
         m_Player_AbilityTwo = m_Player.FindAction("AbilityTwo", throwIfNotFound: true);
         m_Player_AbilityThree = m_Player.FindAction("AbilityThree", throwIfNotFound: true);
+        m_Player_AbilityFour = m_Player.FindAction("AbilityFour", throwIfNotFound: true);
         m_Player_ToggleAbilities = m_Player.FindAction("ToggleAbilities", throwIfNotFound: true);
         m_Player_Consume = m_Player.FindAction("Consume", throwIfNotFound: true);
         m_Player_Escape = m_Player.FindAction("Escape", throwIfNotFound: true);
@@ -1204,6 +1236,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_AbilityOne;
     private readonly InputAction m_Player_AbilityTwo;
     private readonly InputAction m_Player_AbilityThree;
+    private readonly InputAction m_Player_AbilityFour;
     private readonly InputAction m_Player_ToggleAbilities;
     private readonly InputAction m_Player_Consume;
     private readonly InputAction m_Player_Escape;
@@ -1221,6 +1254,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @AbilityOne => m_Wrapper.m_Player_AbilityOne;
         public InputAction @AbilityTwo => m_Wrapper.m_Player_AbilityTwo;
         public InputAction @AbilityThree => m_Wrapper.m_Player_AbilityThree;
+        public InputAction @AbilityFour => m_Wrapper.m_Player_AbilityFour;
         public InputAction @ToggleAbilities => m_Wrapper.m_Player_ToggleAbilities;
         public InputAction @Consume => m_Wrapper.m_Player_Consume;
         public InputAction @Escape => m_Wrapper.m_Player_Escape;
@@ -1261,6 +1295,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @AbilityThree.started += instance.OnAbilityThree;
             @AbilityThree.performed += instance.OnAbilityThree;
             @AbilityThree.canceled += instance.OnAbilityThree;
+            @AbilityFour.started += instance.OnAbilityFour;
+            @AbilityFour.performed += instance.OnAbilityFour;
+            @AbilityFour.canceled += instance.OnAbilityFour;
             @ToggleAbilities.started += instance.OnToggleAbilities;
             @ToggleAbilities.performed += instance.OnToggleAbilities;
             @ToggleAbilities.canceled += instance.OnToggleAbilities;
@@ -1304,6 +1341,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @AbilityThree.started -= instance.OnAbilityThree;
             @AbilityThree.performed -= instance.OnAbilityThree;
             @AbilityThree.canceled -= instance.OnAbilityThree;
+            @AbilityFour.started -= instance.OnAbilityFour;
+            @AbilityFour.performed -= instance.OnAbilityFour;
+            @AbilityFour.canceled -= instance.OnAbilityFour;
             @ToggleAbilities.started -= instance.OnToggleAbilities;
             @ToggleAbilities.performed -= instance.OnToggleAbilities;
             @ToggleAbilities.canceled -= instance.OnToggleAbilities;
@@ -1528,6 +1568,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnAbilityOne(InputAction.CallbackContext context);
         void OnAbilityTwo(InputAction.CallbackContext context);
         void OnAbilityThree(InputAction.CallbackContext context);
+        void OnAbilityFour(InputAction.CallbackContext context);
         void OnToggleAbilities(InputAction.CallbackContext context);
         void OnConsume(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);

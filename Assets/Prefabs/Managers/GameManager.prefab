@@ -280,15 +280,15 @@ MonoBehaviour:
     - Key: 5
       Value: {fileID: 11400000, guid: 8b6dee5ed27141e42885fb2959fb6267, type: 2}
     - Key: 6
-      Value: {fileID: 11400000, guid: e4baf384e4b936d4abd5a892aec038e2, type: 2}
+      Value: {fileID: 11400000, guid: db84c510484187140b380d9f59d84c34, type: 2}
     - Key: 9
       Value: {fileID: 11400000, guid: 009c55a77b176cd4cacfd0bacaac0f21, type: 2}
-    - Key: 24
+    - Key: 3
       Value: {fileID: 11400000, guid: 0917a02050cd8144d9107b66857d390f, type: 2}
-    - Key: 34
+    - Key: 10
       Value: {fileID: 11400000, guid: cd6fdd3dba2d68b4b9921b0338a25171, type: 2}
-    - Key: 48
-      Value: {fileID: 11400000, guid: e9ff1b6f07159e5439898444e5c554ed, type: 2}
+    - Key: 12
+      Value: {fileID: 11400000, guid: 07e389b6ecc32874ea7f6a77060cec8d, type: 2}
   fireTornado: {fileID: 1738026846096653105, guid: 9f33fc0c141baed4eb5e32ada52c8de7, type: 3}
   bramble: {fileID: 1419865250949850070, guid: 6c661694b4d9bad43baef8d9fe0b6843, type: 3}
 --- !u!1 &164276942
@@ -5470,10 +5470,10 @@ MonoBehaviour:
   <debugSpawnAll>k__BackingField: 0
   <debugShowNumberStats>k__BackingField: 0
   <debugShowElementStats>k__BackingField: 0
-  <RhinoSpawnChance>k__BackingField: 25
-  <SnakeSpawnChance>k__BackingField: 25
-  <CheetahSpawnChance>k__BackingField: 25
-  <LizardSpawnChance>k__BackingField: 25
+  <RhinoSpawnChance>k__BackingField: 100
+  <SnakeSpawnChance>k__BackingField: 0
+  <CheetahSpawnChance>k__BackingField: 0
+  <LizardSpawnChance>k__BackingField: 0
   <Tier1SpawnChance>k__BackingField: 100
   <Tier2SpawnChance>k__BackingField: 0
   <Tier3SpawnChance>k__BackingField: 0
