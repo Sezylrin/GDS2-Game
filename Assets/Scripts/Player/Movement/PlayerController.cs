@@ -162,6 +162,7 @@ public class PlayerController : MonoBehaviour
     #region Unity Function
     void Awake()
     {
+        lastDirection = Vector2.up;
         QualitySettings.vSyncCount = 0;  // VSync must be disabled
         Application.targetFrameRate = 120;
     }
@@ -502,14 +503,19 @@ public class PlayerController : MonoBehaviour
     {
         isMoving = false;
         rb.drag = drag;
-        playerState[] allowed = { playerState.idle, playerState.moving };
+        playerState[] allowed = { playerState.idle, playerState.moving, playerState.abilityStart, playerState.abilityLag };
 
         if (!CheckStates(allowed))
         {
-            rb.velocity = Vector2.zero;
+            //rb.velocity = Vector2.zero;
             return;
         }
-        if (rb.velocity.magnitude <= currentMaxSpeed && !direction.Equals(Vector2.zero))
+        float tempMaxSpeed = currentMaxSpeed;
+        if (CurrentState == playerState.abilityStart)
+        {
+            tempMaxSpeed *= 0.5f;
+        }
+        if (rb.velocity.magnitude <= tempMaxSpeed && !direction.Equals(Vector2.zero))
         {
             rb.drag = 0;
             isMoving = true;

@@ -215,7 +215,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1386738844
 Transform:
   m_ObjectHideFlags: 0
@@ -1147,7 +1147,7 @@ Transform:
   - {fileID: 1220229054}
   - {fileID: 7776298551693399208}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &9185797213798890991
 CircleCollider2D:
@@ -1225,6 +1225,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Type>k__BackingField: 1
   <Element>k__BackingField: 0
+  <Tier>k__BackingField: 1
   <Hitpoints>k__BackingField: 0
   <ActiveElementEffect>k__BackingField: 0
   <ElementTier>k__BackingField: 0
@@ -1321,7 +1322,7 @@ MonoBehaviour:
   IdleMoveRateMax: 4
   RepositionRateMin: 0
   RepositionRateMax: 2
-  AttackEndAiCD: 0.5
+  AttackEndAiCD: 1.5
   MinimumAttackRange: 1
   currentState: 0
   hasDestination: 0

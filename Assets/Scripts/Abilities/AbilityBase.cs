@@ -123,7 +123,7 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
         }
     }
 
-    public void PoolSelf()
+    public virtual void PoolSelf()
     {
         ResetAbility();
         Pool.PoolObj(this);

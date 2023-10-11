@@ -32,7 +32,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         attackCooldownTimer,
         windupDurationTimer,
         attackDurationTimer,
-        aiActionTimer
+        aiActionTimer,
+        attackCD
     }
     #endregion
 
@@ -419,17 +420,15 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     private Coroutine flash;
     private void PlayFlash()
     {
-        if (flash == null)
+        block.SetColor("_FlashColour", Color.white);
+        if (flash != null)
         {
-            flash = StartCoroutine(DamageFlash());
-        }
-        else
-        {
-            StopCoroutine(DamageFlash());
+            StopCoroutine(flash);
             block.SetFloat("_FlashAmount", 0);
             rend.SetPropertyBlock(block);
             flash = StartCoroutine(DamageFlash());
         }
+        flash = StartCoroutine(DamageFlash());
     }
     private IEnumerator DamageFlash()
     {
@@ -453,13 +452,30 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         block.SetFloat("_FlashAmount", 0);
         rend.SetPropertyBlock(block);
     }
+
+    private IEnumerator WindUpFlash()
+    {
+        while (WindingUp)
+        {
+            block.SetColor("_FlashColour", Color.red);
+            block.SetFloat("_FlashAmount", 1);
+            rend.SetPropertyBlock(block);
+            yield return new WaitForSeconds(0.1f);
+
+            block.SetFloat("_FlashAmount", 0);
+            rend.SetPropertyBlock(block);
+            yield return new WaitForSeconds(0.1f);
+        }
+        block.SetFloat("_FlashAmount", 0);
+        rend.SetPropertyBlock(block);
+    }
     #endregion
 
     #region Attacking Functions
 
     protected virtual int ChooseAttack()
-    {
-        return UnityEngine.Random.Range(1, 4);
+    {        
+        return Random.Range(1, Tier+1);
     }
 
     protected virtual void Attack()
@@ -494,6 +510,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     {
         EnemyTimers.SetTime((int)EnemyTimer.windupDurationTimer, windupDuration);
         WindingUp = true;
+        StartCoroutine(WindUpFlash());
     }
 
     protected virtual void EndWindup(object sender, EventArgs e)
@@ -527,21 +544,24 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     {
         //set state to stationary as enemy is done with an attack
         currentState = EnemyState.stationary;
-        EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, AttackEndAiCD);
+        EnemyTimers.SetTime((int)EnemyTimer.attackCD, AttackEndAiCD);
         Manager.DoneAttack();
         isAttacking = false;
+        hitTarget = false;
     }
 
     protected virtual void InterruptAttack()
     {
         EnemyTimers.ResetSpecificToZero((int)EnemyTimer.windupDurationTimer);
+        EnemyTimers.ResetSpecificToZero((int)EnemyTimer.attackDurationTimer);
         WindingUp = false;
         //interrupted enemy should stop current action
         currentState = EnemyState.stationary;
-        EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, AttackEndAiCD);
+        EnemyTimers.SetTime((int)EnemyTimer.attackCD, AttackEndAiCD);
         if (isAttacking)
             Manager.DoneAttack();
         isAttacking = false;
+        hitTarget = false;
     }
 
     protected virtual void Attack1()
@@ -785,18 +805,24 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     protected Transform targetTr;
     [SerializeField] protected bool debugDisableAI = false;
     protected bool isAttacking;
+    private Vector2 randDeviate;
     protected virtual void StateMachine()
     {
         if (debugDisableAI || Consume.BeingConsumed()) return;
         if (IsStunned || Staggered) return;
         if (!hasDestination && currentState.Equals(EnemyState.stationary) && EnemyTimers.IsTimeZero((int)EnemyTimer.aiActionTimer))
         {
-            if (Manager.CanAttack())
+            if (EnemyTimers.IsTimeZero((int)EnemyTimer.attackCD) && Manager.CanAttack())
             {
                 currentState = EnemyState.chasing;
+                CurrentAttack = ChooseAttack();
+                isAttacking = true;
             }
             else
             {
+                float x = Random.Range(-IdleRadius, IdleRadius);
+                float y = Random.Range(-IdleRadius, IdleRadius);
+                randDeviate = new Vector2(x, y);
                 currentState = EnemyState.repositioning;
                 repositionRange = Random.Range(3f, 6f);
             }
@@ -870,8 +896,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     protected virtual void IdlePathPicker()
     {
-        float x = UnityEngine.Random.Range(-IdleRadius, IdleRadius);
-        float y = UnityEngine.Random.Range(-IdleRadius, IdleRadius);
+        float x = Random.Range(-IdleRadius, IdleRadius);
+        float y = Random.Range(-IdleRadius, IdleRadius);
         SetDestination(new Vector3(x,y,0) + transform.position);
     }
 
@@ -886,6 +912,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         Vector3 minimumRange = transform.position - targetpoint;
         minimumRange = minimumRange.normalized * repositionRange;
         targetpoint += minimumRange;
+        targetpoint += (Vector3)randDeviate;
         SetDestination(targetpoint);
     }
 
@@ -928,8 +955,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
                 }
                 break;
             case (int)EnemyState.repositioning:
-                IdlePathPicker();
-                timeToAdd = Random.Range(1, 3f);
+                timeToAdd = Random.Range(1, 2f);
                 currentState = EnemyState.stationary;
                 break;
         }

@@ -138,18 +138,18 @@ public class Abilities : MonoBehaviour
             if (abilityToCast.type.Equals(AbilityType.AOE))
             {
                 ability.SetSelectedAbility(abilityToCast, transform.position);
-            }
-            else if (abilityToCast.type.Equals(AbilityType.dash))
-            {
-                Vector3 dir = PCM.control.lastDirection;
-                ability.SetSelectedAbility(abilityToCast, transform.position, dir, transform);
-            }
+            }            
             else
             {
-                Vector3 dir = abilitySpawnPoint.position - transform.position;
-                ability.SetSelectedAbility(abilityToCast, abilitySpawnPoint.position, dir);
+                Vector3 dir;
+                if (abilityToCast.type.Equals(AbilityType.dash))
+                    dir = PCM.control.lastDirection;
+                else
+                    dir = abilitySpawnPoint.position - transform.position;
+                if (abilityToCast.type.Equals(AbilityType.blast))
+                    PCM.system.AddForce(dir.normalized * 13);
+                ability.SetSelectedAbility(abilityToCast, abilitySpawnPoint.position, dir, transform);
             }
-
         }
     }
 

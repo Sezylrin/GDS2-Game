@@ -27,7 +27,7 @@ public class EnemyManager : MonoBehaviour
     [field: SerializeField, ReadOnly] private bool CanEnemyAttack { get; set; } = true;
     [field: SerializeField] private float AttackDelay { get; set; } = 0.5f;*/
     [field: SerializeField] public int CurrentAttackers { get; private set; } = 0;
-    [SerializeField, ReadOnly] private int maxAttackers;
+    [SerializeField] private int maxAttackers;
     [field: SerializeField] ElementType debugElementForAttacksList { get; set; }
     [field: SerializeField] bool debugUpdateAttacksList { get; set; }
     [field: SerializeField] bool debugEmptyAttacksList { get; set; }

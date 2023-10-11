@@ -9,7 +9,8 @@ public class StaggerBar : MonoBehaviour
 {
     protected enum StaggerTimer
     {
-        staggerDecayTimer
+        staggerDecayTimer,
+        delayBetweenStagger
     }
 
     [field: SerializeField] private Image image;
@@ -92,7 +93,11 @@ public class StaggerBar : MonoBehaviour
             {
                 Debug.Log("isStaggered and decaying " + Bar);
                 Bar -= (PointsToStagger / StaggerMinDuration) / StaggerDecayAmount;
-                if (Bar <= 0) EndStagger();
+                if (Bar <= 0)
+                {
+                    EndStagger();
+                    StaggerTimers.SetTime((int)StaggerTimer.delayBetweenStagger, 5);
+                }
             }
             else Bar -= StaggerDecayAmount;
 
@@ -103,7 +108,7 @@ public class StaggerBar : MonoBehaviour
 
     public void AddToStaggerBar(int staggerPoints)
     {
-        if (!Staggered)
+        if (!Staggered && StaggerTimers.IsTimeZero((int)StaggerTimer.delayBetweenStagger))
         {
             Bar = Mathf.Clamp(Bar + staggerPoints, 0, PointsToStagger);          UpdateFillPercent(Bar / PointsToStagger);
 
