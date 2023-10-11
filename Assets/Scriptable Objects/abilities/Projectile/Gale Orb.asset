@@ -10,12 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46349f5f1777d0742ae2d3e10071b0c4, type: 3}
-  m_Name: Toxic Orb
+  m_Name: Gale Orb
   m_EditorClassIdentifier: 
   color: {fileID: 2100000, guid: 145bd1f0f92379c4f8e54c7d20420a22, type: 2}
-  elementType: 16
+  elementType: 8
   type: 2
   castCost: 2
+  castStartSpeed: 0
+  castDuration: 0
   pierceAmount: 1
   damage: 140
   knockback: 0

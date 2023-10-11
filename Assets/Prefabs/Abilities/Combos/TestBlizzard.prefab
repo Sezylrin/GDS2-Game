@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 1419865250949850071}
   - component: {fileID: 840741398749092065}
   m_Layer: 0
-  m_Name: TestBramble
+  m_Name: TestBlizzard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -198,7 +198,6 @@ MonoBehaviour:
     <times>k__BackingField: []
     owner: {fileID: 0}
   spriteTR: {fileID: 1419865249768747742}
-  slowRatio:
-  - 0.8
-  - 0.65
-  - 0.5
+  hitTargets: []
+  slowRatio: 0.25
+  bonusDamage: 1.5

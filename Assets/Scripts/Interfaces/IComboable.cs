@@ -6,7 +6,7 @@ using UnityEngine;
 public interface IComboable
 {
     //public Transform SpawnPosition { get; set; }
-    public List<ElementCombos> ActiveCombos { get; set; }
+    //public List<ElementCombos> ActiveCombos { get; set; }
     public Timer ComboEffectTimer { get; set; }
     public LayerMask TargetLayer { get; set; }
     public float CurrentWitherBonus { get; set; }

@@ -3,14 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Brambles : ComboBase
+public class Blizzard : ComboBase
 {
     // Start is called before the first frame update
     [SerializeField][Range(0,1)]
-    private float[] slowRatio = new float[3];
+    private float slowRatio;
+    [SerializeField][Range(1,3)]
+    private float bonusDamage;
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
-        IDamageable foundTarget;
+        Enemy foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
         {
             if (hitTargets.Contains(foundTarget))
@@ -18,14 +20,15 @@ public class Brambles : ComboBase
                 return;
             }
             hitTargets.Add(foundTarget);
-            foundTarget.ModifySpeed(slowRatio[tier]);
+            foundTarget.ModifySpeed(slowRatio);
+            foundTarget.InBlizzard(bonusDamage);
         }
 
     }
 
     protected override void OnTriggerExit2D(Collider2D collision)
     {
-        IDamageable foundTarget;
+        Enemy foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
         {
             if (!hitTargets.Contains(foundTarget))
@@ -34,6 +37,7 @@ public class Brambles : ComboBase
             }
             hitTargets.Remove(foundTarget);
             foundTarget.ResetSpeed();
+            foundTarget.ExitBlizzard();
         }
     }
 }
