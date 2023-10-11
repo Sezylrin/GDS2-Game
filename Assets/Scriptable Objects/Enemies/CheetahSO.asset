@@ -34,10 +34,10 @@ MonoBehaviour:
   attack3Damage: 0f0000001400000019000000
   attack3Duration: 1.5
   windup3Duration: 1
-  consumableHealthPercentThreshold: 15
-  percentToHealOnConsume: 15
-  pointsToStagger: 300
-  staggerDuration: 3
+  basePointsToStagger: 300
+  staggerMinDuration: 1.5
+  staggerMaxDuration: 3
   staggerDelayDuration: 3
   staggerDecayAmount: 4
   staggerDecayRate: 0.25
+  damageToReachMaxDuration: 500
