@@ -21,7 +21,7 @@ public class StatsManager : MonoBehaviour
     public int bonusHealth = 0;
     public bool secondSkillsetUnlocked = false;
 
-    private void Awake()
+    private void Start()
     {
         if (savedAbilityPositions.Count == 0)
         {
@@ -32,9 +32,12 @@ public class StatsManager : MonoBehaviour
     public void ResetEquipForTutorial()
     {
         savedAbilityPositions.Clear();
-        for (int i = 0; i < startingEquippedAbilities.Length; i++)
+        ElementalSO[] abilities = GameManager.Instance.PCM.abilities.GetAbilities();
+        for (int i = 0; i < abilities.Length; i++)
         {
-            savedAbilityPositions.Add(i, startingEquippedAbilities[i]);
+            if (abilities[i]) {
+                savedAbilityPositions.Add(i, abilities[i]);
+            }
         }
     }
 

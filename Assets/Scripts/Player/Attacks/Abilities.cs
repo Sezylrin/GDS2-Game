@@ -153,6 +153,11 @@ public class Abilities : MonoBehaviour
         }
     }
 
+    public ElementalSO[] GetAbilities()
+    {
+        return abilities;
+    }
+
     #region debug
     [SerializeField]
     private ElementalSO test;
