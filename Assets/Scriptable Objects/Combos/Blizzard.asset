@@ -9,19 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6aba4e5dc7d7b04b94a0434ae70d49f, type: 3}
-  m_Name: Wither
+  m_Script: {fileID: 11500000, guid: f385951f658734e48a940e518e2e990e, type: 3}
+  m_Name: Blizzard
   m_EditorClassIdentifier: 
-  BaseDamage:
-  - 100
-  - 200
-  - 300
-  StaggerDamage: 14000000190000001e000000
-  Duration:
-  - 3
-  - 4
-  - 5
-  WitherStrength:
-  - 1.2
-  - 1.4
-  - 1.6
+  BaseDamage: 15
+  StaggerDamage: 4
+  duration: 3
+  radius: 4
+  typeOne: 2
+  typeTwo: 8
+  damageTickRate: 0.5

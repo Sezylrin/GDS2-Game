@@ -26,9 +26,11 @@ public class BaseEnemyScriptableObject : ScriptableObject
     public float attack3Duration;
     public float windup3Duration;
     [Space(20)]
-    public int pointsToStagger = 300;
-    public float staggerDuration = 3;
+    public int basePointsToStagger = 300;
+    public float staggerMinDuration = 1.5f;
+    public float staggerMaxDuration = 3;
     public float staggerDelayDuration = 3;
     public float staggerDecayAmount = 4;
     public float staggerDecayRate = 0.25f;
+    public int damageToReachMaxDuration;
 }

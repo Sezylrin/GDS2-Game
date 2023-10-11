@@ -10,14 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97c6395b40e7099449e38d31c81947d7, type: 3}
-  m_Name: AquaVolt
+  m_Name: Fire Surge
   m_EditorClassIdentifier: 
-  BaseDamage:
-  - 75
-  - 150
-  - 300
-  StaggerDamage: 280000003c00000050000000
-  Duration:
-  - 3
-  - 5
-  - 7
+  BaseDamage: 150
+  StaggerDamage: 10

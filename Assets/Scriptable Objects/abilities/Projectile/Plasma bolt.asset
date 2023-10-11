@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46349f5f1777d0742ae2d3e10071b0c4, type: 3}
-  m_Name: Hydro Sphere
+  m_Name: Plasma bolt
   m_EditorClassIdentifier: 
-  color: {fileID: 2100000, guid: ee2fc3b70dfe19045b4edfe0d5826c73, type: 2}
-  elementType: 2
+  color: {fileID: 2100000, guid: 145bd1f0f92379c4f8e54c7d20420a22, type: 2}
+  elementType: 4
   type: 2
-  castCost: 1
-  castStartSpeed: 0.2
+  castCost: 2
+  castStartSpeed: 0
   castDuration: 0
   pierceAmount: 1
-  damage: 90
-  knockback: 4
+  damage: 140
+  knockback: 0
   Stagger: 20
-  consumePoints: 4
-  lifeTime: 5
-  description: Hydro Sphere Description
-  icon: {fileID: 21300000, guid: 72f9f3f9827064547bf46c47f853901b, type: 3}
-  speed: 25
+  consumePoints: 7
+  lifeTime: 15
+  description: Toxic Orb Description
+  icon: {fileID: 21300000, guid: 4b748fc3c9f6baf48a20af024f3c0e44, type: 3}
+  speed: 15

@@ -215,7 +215,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1386738844
 Transform:
   m_ObjectHideFlags: 0
@@ -1147,7 +1147,7 @@ Transform:
   - {fileID: 1220229054}
   - {fileID: 7776298551693399208}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &9185797213798890991
 CircleCollider2D:
@@ -1225,6 +1225,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Type>k__BackingField: 1
   <Element>k__BackingField: 0
+  <Tier>k__BackingField: 1
   <Hitpoints>k__BackingField: 0
   <ActiveElementEffect>k__BackingField: 0
   <ElementTier>k__BackingField: 0
@@ -1272,8 +1273,7 @@ MonoBehaviour:
   <rb>k__BackingField: {fileID: 9185797213798890978}
   <col2D>k__BackingField: {fileID: 9185797213798890991}
   <path>k__BackingField: {fileID: 9185797213798890988}
-  collisionDisabledDur: 1
-  <ActiveCombos>k__BackingField: 
+  collisionDisabledDur: 4
   <ComboEffectTimer>k__BackingField:
     <times>k__BackingField: []
     owner: {fileID: 0}
@@ -1313,16 +1313,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   rend: {fileID: 9185797214111529790}
-  staggerBonusDamage: 2
-  elementResistAmount: 0
+  staggerBonusDamage: 3
+  elementResistAmount: 0.8
   baseArmour: 1
   IdleRadius: 3
   RepositionPoint: 5
   IdleMoveRateMin: 2
   IdleMoveRateMax: 4
-  RepositionRateMin: 1
+  RepositionRateMin: 0
   RepositionRateMax: 2
-  AttackEndAiCD: 0.5
+  AttackEndAiCD: 1.5
   MinimumAttackRange: 1
   currentState: 0
   hasDestination: 0
@@ -1834,7 +1834,8 @@ MonoBehaviour:
   image: {fileID: 9185797213359225124}
   <Bar>k__BackingField: 0
   <PointsToStagger>k__BackingField: 100
-  <StaggerDuration>k__BackingField: 3
+  <StaggerMinDuration>k__BackingField: 3
+  <StaggerMaxDuration>k__BackingField: 3
   <Staggered>k__BackingField: 0
   <StaggerDelayDuration>k__BackingField: 3
   <StaggerDecayAmount>k__BackingField: 4

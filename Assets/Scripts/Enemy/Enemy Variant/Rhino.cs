@@ -57,6 +57,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
 
     protected override void DetermineAttackPathing()
     {
+        
         switch (CurrentAttack)
         {
             case 1:
@@ -109,7 +110,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
 
     protected void EndCharge()
     {
-        EnemyTimers.ResetSpecificToZero((int)EnemyTimer.attackDurationTimer);
+        //EnemyTimers.ResetSpecificToZero((int)EnemyTimer.attackDurationTimer);
         ChargeHitbox.SetActive(false);
     }
     #endregion
@@ -195,8 +196,8 @@ public class Rhino : Enemy, IPoolable<Rhino>
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.isTrigger || !ChargeHitbox.activeSelf || !ShockwaveHitbox.activeSelf || hitTarget)
+    {        
+        if ((!ChargeHitbox.activeSelf && !ShockwaveHitbox.activeSelf) || hitTarget)
             return;
         IDamageable foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
@@ -204,6 +205,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
             if (foundTarget is PlayerSystem)
             {
                 PlayerSystem temp = foundTarget as PlayerSystem;
+                if (Charging) Charging = false;
                 if (temp.GetState() == playerState.perfectDodge)
                 {
                     InterruptAttack();
@@ -213,7 +215,6 @@ public class Rhino : Enemy, IPoolable<Rhino>
                 else
                 {
                     DoDamage(foundTarget);
-                    if (Charging) Charging = false;
                 }
             }
         }
