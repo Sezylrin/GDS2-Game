@@ -281,10 +281,10 @@ public class EnemyManager : MonoBehaviour
         switch (x)
         {
             case 0:
-                UpdateTierChances(90, 10, 0);
+                UpdateTierChances(100, 0, 0);
                 break;
             case 1:
-                UpdateTierChances(80, 20, 0);
+                UpdateTierChances(85, 15, 0);
                 break;
             case 2:
                 UpdateTierChances(65, 30, 5);
