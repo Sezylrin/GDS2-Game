@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: EnemyDamageFlash
-  m_Shader: {fileID: -6465566751694194690, guid: e0f6cba8230a9f74bb018534e8e16856, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 05e95583b50827c4ab42f05ea20b3cd8, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -55,6 +55,8 @@ Material:
     m_Ints: []
     m_Floats:
     - _FlashAmount: 0
+    - _Thickness: 1
     m_Colors:
     - _FlashColour: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColour: {r: 0, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []

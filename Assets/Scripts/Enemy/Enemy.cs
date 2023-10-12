@@ -406,6 +406,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     public virtual void OnDeath(bool overrideKill = false)
     {
+        SetOutline(Color.white, 0);
         comboText.text = "";
         if (DeathSoundPrefab) Instantiate(DeathSoundPrefab);
         if (!overrideKill)
@@ -429,6 +430,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable
             flash = StartCoroutine(DamageFlash());
         }
         flash = StartCoroutine(DamageFlash());
+    }
+    protected void SetOutline(Color colour, float thickness = 1)
+    {
+        block.SetColor("_OutlineColour", colour);
+        block.SetFloat("_Thickness", thickness);
+        rend.SetPropertyBlock(block);
     }
     private IEnumerator DamageFlash()
     {
