@@ -1265,22 +1265,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1602605067, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
-      propertyPath: <RhinoSpawnChance>k__BackingField
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 1602605067, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
-      propertyPath: <SnakeSpawnChance>k__BackingField
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1602605067, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
-      propertyPath: <LizardSpawnChance>k__BackingField
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1602605067, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
-      propertyPath: <CheetahSpawnChance>k__BackingField
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1602605067, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
       propertyPath: <SpawnLocations>k__BackingField.Array.data[0]
       value: 
       objectReference: {fileID: 2024364399}
@@ -1383,10 +1367,6 @@ PrefabInstance:
     - target: {fileID: 3761662248408365442, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
       propertyPath: m_Name
       value: GameManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 3761662248408365452, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
-      propertyPath: <HealthPerSegment>k__BackingField
-      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 3761662248408365455, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
       propertyPath: m_RootOrder
