@@ -12,25 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c19677e7e25c48458157dc951565335, type: 3}
   m_Name: RhinoSO
   m_EditorClassIdentifier: 
-  maxHealth: 5000
-  speed: 3
-  minSouls: 8
-  maxSouls: 16
+  maxHealth: 581b000010270000b0360000
+  speed:
+  - 3
+  - 4
+  - 5
+  minSouls: 090000000c0000000f000000
+  maxSouls: 0f0000001400000019000000
   effectDuration: 5
   attackKnockback: 8
-  attackCooldown: 10
-  attack1Damage: 20
+  attackCooldown:
+  - 5
+  - 4
+  - 3
+  attack1Damage: 19000000230000002d000000
   attack1Duration: 2
   windup1Duration: 1
-  attack2Damage: 10
+  attack2Damage: 140000001e00000028000000
   attack2Duration: 1
-  windup2Duration: 1
-  attack3Damage: 15
+  windup2Duration: 1.25
+  attack3Damage: 0f0000001400000019000000
   attack3Duration: 3
   windup3Duration: 1
-  consumableHealthPercentThreshold: 10
-  percentToHealOnConsume: 20
-  basePointsToStagger: 300
+  basePointsToStagger: 350
   staggerMinDuration: 1.5
   staggerMaxDuration: 5
   staggerDelayDuration: 3
