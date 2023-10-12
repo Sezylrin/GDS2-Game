@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c19677e7e25c48458157dc951565335, type: 3}
   m_Name: RhinoSO
   m_EditorClassIdentifier: 
-  maxHealth: 581b000010270000b0360000
+  maxHealth: a00f000070170000401f0000
   speed:
   - 3
   - 4
@@ -41,7 +41,7 @@ MonoBehaviour:
   staggerDecayAmount: 4
   staggerDecayRate: 0.25
   damageToReachMaxDuration: 700
-  chargeSpeedMultiplier: 2
+  ChargeSpeed: 15
   attack2Range: 3
   shockwaveStartRadius: 0.13
   shockwaveEndRadius: 0

@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 public enum Scene
 {
     //Start,
-    Tutorial,
-    Hub
+    Hub,
+    Tutorial
 }
 
 public class SceneLoader : MonoBehaviour

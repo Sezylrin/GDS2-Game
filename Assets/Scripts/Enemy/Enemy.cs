@@ -312,7 +312,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     #endregion
 
     #region Health Functions
-    public virtual void TakeDamage(float damage, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement)
+    public virtual void TakeDamage(int damage, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement)
     {
         if (Hitpoints <= 0) return;
         
@@ -358,7 +358,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         */
     }
 
-    public virtual void TakeDamage(float damage, int staggerPoints, ElementType type, ElementType typeTwo = ElementType.noElement)
+    public virtual void TakeDamage(int damage, int staggerPoints, ElementType type, ElementType typeTwo = ElementType.noElement)
     {
         TakeDamage(damage, staggerPoints, type, 0, typeTwo);
     }
@@ -651,7 +651,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     }
     #endregion
 
-    #region Combo Interface Functions
+    #region Combo Functions
 
     public void ComboAttack(ComboSO combo, ElementType typeOne, ElementType typeTwo, Color textColour)
     {
@@ -673,7 +673,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     {
         IsStunned = true;
         StopPathing();
-
+        InterruptAttack();
         yield return new WaitForSeconds(dur);
 
         IsStunned = false;

@@ -291,30 +291,46 @@ public class SkillSwitchManager : MonoBehaviour
 
     private void NavigateLeft()
     {
-        int newRow = currentlyHoveredIndex / 6;
-        int newColumn = (currentlyHoveredIndex % 6 + 5) % 6;
-        UpdateHoveredAbility(newRow * 6 + newColumn);
+        int current = currentlyHoveredIndex + 1;
+        if ((current - 1) % 4 == 0)
+            current += 3;
+        else
+            current--;
+        current--;
+        UpdateHoveredAbility(current);
     }
 
     private void NavigateRight()
     {
-        int newRow = currentlyHoveredIndex / 6;
-        int newColumn = (currentlyHoveredIndex % 6 + 1) % 6;
-        UpdateHoveredAbility(newRow * 6 + newColumn);
+        int current = currentlyHoveredIndex + 1;
+        if ((current + 1) % 4 == 1)
+            current -= 3;
+        else
+            current++;
+        current--;
+        UpdateHoveredAbility(current);
     }
 
     private void NavigateUp()
     {
-        int newRow = (currentlyHoveredIndex / 6 + 1) % 2;
-        int newColumn = currentlyHoveredIndex % 6;
-        UpdateHoveredAbility(newRow * 6 + newColumn);
+        int current = currentlyHoveredIndex + 1;
+        if ((current - 4) < 1)
+            current += 12;
+        else
+            current -= 4;
+        current--;
+        UpdateHoveredAbility(current);
     }
 
     private void NavigateDown()
     {
-        int newRow = (currentlyHoveredIndex / 6 + 1) % 2;
-        int newColumn = currentlyHoveredIndex % 6;
-        UpdateHoveredAbility(newRow * 6 + newColumn);
+        int current = currentlyHoveredIndex + 1;
+        if ((current + 4) > 16)
+            current -= 12;
+        else
+            current += 4;
+        current--;
+        UpdateHoveredAbility(current);
     }
 
     private void NavigateLeftActive()
