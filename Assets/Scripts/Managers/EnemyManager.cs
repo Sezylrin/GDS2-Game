@@ -40,10 +40,11 @@ public class EnemyManager : MonoBehaviour
     [field: SerializeField] bool debugTestSpawn { get; set; }
     [field: SerializeField] bool debugSpawnAll { get; set; }
     [field: SerializeField] bool debugShowStats { get; set; }
-    [field: SerializeField] bool SimulateLevelsCleared { get; set; }
+    [field: SerializeField] bool SimulateFloorsCleared { get; set; }
+    [field: SerializeField] bool SimulateHardLevel { get; set; }
     [field: SerializeField] bool debugSetLevelsCleared { get; set; }
     [field: SerializeField] int debugLevelsCleared { get; set; }
-    [field: SerializeField, ReadOnly] int LevelsCleared { get; set; }
+    [field: SerializeField, ReadOnly] int FloorsCleared { get; set; }
     [field: SerializeField, ReadOnlyOnPlay] int RhinoSpawnChance { get; set; } = 25;
     [field: SerializeField, ReadOnlyOnPlay] int SnakeSpawnChance { get; set; } = 25;
     [field: SerializeField, ReadOnlyOnPlay] int CheetahSpawnChance { get; set; } = 25;
@@ -102,7 +103,7 @@ public class EnemyManager : MonoBehaviour
         if (debugSetLevelsCleared)
         {
             debugSetLevelsCleared = false;
-            LevelsCleared = debugLevelsCleared;
+            FloorsCleared = debugLevelsCleared;
             CalculateNewTierChances();
         }
         if (debugUpdateAttacksList)
@@ -259,12 +260,19 @@ public class EnemyManager : MonoBehaviour
         }
         int randomValue = Random.Range(1,101);
 
-        int fireChance = fireCount * 3; // Element Spawn chance = Amount of attacks of this element in the past 25 attacks multiplied by 3 (Max 75% spawn chance)
-        int waterChance = fireChance + waterCount * 3;
-        int shockChance = waterChance + shockCount * 3;
-        int windChance = shockChance + windCount * 3;
+        int chanceMultiplier = 1;
+        bool x = false;
+        // x = Level.Instance.isHard;
+        if (SimulateHardLevel) x = true;
+        if (x) chanceMultiplier = 4;
+
+        int fireChance = fireCount * chanceMultiplier; 
+        int waterChance = fireChance + waterCount * chanceMultiplier;
+        int shockChance = waterChance + shockCount * chanceMultiplier;
+        int windChance = shockChance + windCount * chanceMultiplier;
+
         int totalChance = windChance;
-        if (totalChance != 75) Debug.Log("Total Element Chance Does Not Equal 75%, totalChance = " + totalChance);
+        if (totalChance != 25 * chanceMultiplier) Debug.Log("Total Element Chance Does Not Equal 75%, totalChance = " + totalChance);
 
         if (randomValue <= fireChance) return ElementType.fire; // Attempt to select an element
         else if (fireChance < randomValue && randomValue <= waterChance) return ElementType.water;      
@@ -275,8 +283,8 @@ public class EnemyManager : MonoBehaviour
 
     private void CalculateNewTierChances()
     {
-        int x = LevelGenerator.Instance.levelsCleared;
-        if (SimulateLevelsCleared) x = LevelsCleared;
+        int x = LevelGenerator.Instance.floorsCleared;
+        if (SimulateFloorsCleared) x = FloorsCleared;
 
         switch (x)
         {
@@ -511,10 +519,6 @@ public class EnemyManager : MonoBehaviour
                 case 3: tier3Count++; break;
             }
         }
-        Debug.Log("Number of Enemies = " + enemyList.Count() + 
-            ". tier1Count = " + tier1Count + ", tier2Count = " 
-            + tier2Count + ", tier3Count = " + tier3Count);
-
-
+        Debug.Log("Number of Enemies = " + enemyList.Count() + ". tier1Count = " + tier1Count + ", tier2Count = " + tier2Count + ", tier3Count = " + tier3Count);
     }
 }

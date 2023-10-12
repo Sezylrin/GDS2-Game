@@ -1265,6 +1265,42 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1602605067, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: <SimulateHardLevel>k__BackingField
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602605067, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: <debugEmptyAttacksList>k__BackingField
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602605067, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: <AttacksList>k__BackingField.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602605067, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: <debugUpdateAttacksList>k__BackingField
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602605067, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: <AttacksList>k__BackingField.Array.data[0]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602605067, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: <AttacksList>k__BackingField.Array.data[1]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602605067, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: <AttacksList>k__BackingField.Array.data[2]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602605067, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: <AttacksList>k__BackingField.Array.data[3]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602605067, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: <debugElementForAttacksList>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602605067, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
       propertyPath: <SpawnLocations>k__BackingField.Array.data[0]
       value: 
       objectReference: {fileID: 2024364399}
