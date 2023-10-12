@@ -5468,8 +5468,11 @@ MonoBehaviour:
   <SpawnLocationsCopy>k__BackingField: []
   <debugTestSpawn>k__BackingField: 0
   <debugSpawnAll>k__BackingField: 0
-  <debugShowNumberStats>k__BackingField: 0
-  <debugShowElementStats>k__BackingField: 0
+  <debugShowStats>k__BackingField: 0
+  <SimulateLevelsCleared>k__BackingField: 0
+  <debugSetLevelsCleared>k__BackingField: 0
+  <debugLevelsCleared>k__BackingField: 0
+  <LevelsCleared>k__BackingField: 0
   <RhinoSpawnChance>k__BackingField: 100
   <SnakeSpawnChance>k__BackingField: 0
   <CheetahSpawnChance>k__BackingField: 0
@@ -8767,7 +8770,7 @@ Transform:
   - {fileID: 598326448}
   - {fileID: 3296080151572235050}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3761662248408365452
 MonoBehaviour:
@@ -8794,7 +8797,7 @@ MonoBehaviour:
   <StatsManager>k__BackingField: {fileID: 707390839}
   <PCM>k__BackingField: {fileID: 0}
   AudioComponent: {fileID: 0}
-  <HealthPerSegment>k__BackingField: 100
+  <HealthPerSegment>k__BackingField: 1000
   <controllerCursosrTR>k__BackingField: {fileID: 433756523}
   <controllerCursorRend>k__BackingField: {fileID: 433756522}
   <LostSouls>k__BackingField: 0

@@ -39,15 +39,18 @@ public class EnemyManager : MonoBehaviour
     [field: SerializeField] private List<Transform> SpawnLocationsCopy { get; set; }
     [field: SerializeField] bool debugTestSpawn { get; set; }
     [field: SerializeField] bool debugSpawnAll { get; set; }
-    [field: SerializeField] bool debugShowNumberStats { get; set; }
-    [field: SerializeField] bool debugShowElementStats { get; set; }
-    [field: SerializeField] int RhinoSpawnChance { get; set; } = 25;
-    [field: SerializeField] int SnakeSpawnChance { get; set; } = 25;
-    [field: SerializeField] int CheetahSpawnChance { get; set; } = 25;
-    [field: SerializeField] int LizardSpawnChance { get; set; } = 25;
-    [field: SerializeField] int Tier1SpawnChance { get; set; } = 100;
-    [field: SerializeField] int Tier2SpawnChance { get; set; } = 0;
-    [field: SerializeField] int Tier3SpawnChance { get; set; } = 0;
+    [field: SerializeField] bool debugShowStats { get; set; }
+    [field: SerializeField] bool SimulateLevelsCleared { get; set; }
+    [field: SerializeField] bool debugSetLevelsCleared { get; set; }
+    [field: SerializeField] int debugLevelsCleared { get; set; }
+    [field: SerializeField, ReadOnly] int LevelsCleared { get; set; }
+    [field: SerializeField, ReadOnlyOnPlay] int RhinoSpawnChance { get; set; } = 25;
+    [field: SerializeField, ReadOnlyOnPlay] int SnakeSpawnChance { get; set; } = 25;
+    [field: SerializeField, ReadOnlyOnPlay] int CheetahSpawnChance { get; set; } = 25;
+    [field: SerializeField, ReadOnlyOnPlay] int LizardSpawnChance { get; set; } = 25;
+    [field: SerializeField, ReadOnlyOnPlay] int Tier1SpawnChance { get; set; } = 100;
+    [field: SerializeField, ReadOnlyOnPlay] int Tier2SpawnChance { get; set; } = 0;
+    [field: SerializeField, ReadOnlyOnPlay] int Tier3SpawnChance { get; set; } = 0;
 
     private Pool<Rhino> rhinoPool;
     private Pool<Snake> snakePool;
@@ -87,16 +90,20 @@ public class EnemyManager : MonoBehaviour
             StartEnemySpawning(SpawnLocations);
             DisplayEnemyNumberStats();
             DisplayEnemyElementStats();
+            DisplayEnemyTierStats();
         }
-        if (debugShowNumberStats)
+        if (debugShowStats)
         {
-            debugShowNumberStats = false;
+            debugShowStats = false;
             DisplayEnemyNumberStats();
-        }
-        if (debugShowElementStats)
-        {
-            debugShowElementStats = false;
             DisplayEnemyElementStats();
+            DisplayEnemyTierStats();
+        }
+        if (debugSetLevelsCleared)
+        {
+            debugSetLevelsCleared = false;
+            LevelsCleared = debugLevelsCleared;
+            CalculateNewTierChances();
         }
         if (debugUpdateAttacksList)
         {
@@ -187,6 +194,7 @@ public class EnemyManager : MonoBehaviour
     #region Spawning
     public void StartEnemySpawning(List<Transform> spawnPoints)
     {
+        CalculateNewTierChances();
         SetSpawnLocations(spawnPoints);
         NumberOfEnemiesToSpawn = SelectNumberOfEnemiesToSpawnw();
         int temp = NumberOfEnemiesToSpawn;
@@ -216,6 +224,8 @@ public class EnemyManager : MonoBehaviour
         int snakeChance = rhinoChance + SnakeSpawnChance;
         int cheetahChance = snakeChance + CheetahSpawnChance;
         int lizardChance = cheetahChance + LizardSpawnChance;
+        int totalChance = RhinoSpawnChance + SnakeSpawnChance + CheetahSpawnChance + LizardSpawnChance;
+        if (totalChance != 100) Debug.Log("Total Type Chance Does Not Equal 100%, totalChance = " + totalChance);
 
         if (randomValue <= rhinoChance) return EnemyType.Rhino; // Attempt to select an Enemy Type
         else if (rhinoChance < randomValue && randomValue <= snakeChance) return EnemyType.Snake;
@@ -223,7 +233,6 @@ public class EnemyManager : MonoBehaviour
         else if (cheetahChance < randomValue && randomValue <= lizardChance) return EnemyType.Lizard;
         else
         {
-            int totalChance = RhinoSpawnChance + SnakeSpawnChance + CheetahSpawnChance + LizardSpawnChance;
             Debug.LogWarning("Failed to Select Enemy Type. randomValue = " + randomValue + ", totalChance = " + totalChance);
             return EnemyType.TypeError;
         }
@@ -254,12 +263,52 @@ public class EnemyManager : MonoBehaviour
         int waterChance = fireChance + waterCount * 3;
         int shockChance = waterChance + shockCount * 3;
         int windChance = shockChance + windCount * 3;
+        int totalChance = windChance;
+        if (totalChance != 75) Debug.Log("Total Element Chance Does Not Equal 75%, totalChance = " + totalChance);
 
         if (randomValue <= fireChance) return ElementType.fire; // Attempt to select an element
         else if (fireChance < randomValue && randomValue <= waterChance) return ElementType.water;      
         else if (waterChance < randomValue && randomValue <= shockChance) return ElementType.electric;
         else if (shockChance < randomValue && randomValue <= windChance) return ElementType.wind;
         else return ElementType.noElement; //If failed, return no element
+    }
+
+    private void CalculateNewTierChances()
+    {
+        int x = LevelGenerator.Instance.levelsCleared;
+        if (SimulateLevelsCleared) x = LevelsCleared;
+
+        switch (x)
+        {
+            case 0:
+                UpdateTierChances(90, 10, 0);
+                break;
+            case 1:
+                UpdateTierChances(80, 20, 0);
+                break;
+            case 2:
+                UpdateTierChances(65, 30, 5);
+                break;
+            case 3:
+                UpdateTierChances(35, 50, 15);
+                break;
+            case 4:
+                UpdateTierChances(10, 65, 25);
+                break;
+            case 5:
+                UpdateTierChances(0, 50, 50);
+                break;
+            case 6:
+                UpdateTierChances(0, 25, 75);
+                break;
+        }
+    }
+
+    private void UpdateTierChances(int tier1Chance, int tier2Chance, int tier3Chance)
+    {
+        Tier1SpawnChance = tier1Chance;
+        Tier2SpawnChance = tier2Chance;
+        Tier3SpawnChance = tier3Chance;
     }
 
     private int SelectEnemyTier()
@@ -269,13 +318,15 @@ public class EnemyManager : MonoBehaviour
         int tier1Chance = Tier1SpawnChance;
         int tier2Chance = tier1Chance + Tier2SpawnChance;
         int tier3Chance = tier2Chance + Tier3SpawnChance;
+        int totalChance = Tier1SpawnChance + Tier2SpawnChance + Tier3SpawnChance;
+        if (totalChance != 100) Debug.Log("Total Tier Chance Does Not Equal 100%, totalChance = " + totalChance);
 
         if (randomValue <= tier1Chance) return 1; // Attempt to select an Enemy Tier
         else if (tier1Chance < randomValue && randomValue <= tier2Chance) return 2;
         else if (tier2Chance < randomValue && randomValue <= tier3Chance) return 3;
         else
         {
-            int totalChance = Tier1SpawnChance + Tier2SpawnChance + Tier3SpawnChance;
+            
             Debug.LogWarning("Failed to Select Enemy Tier. randomValue = " + randomValue + ", totalChance = " + totalChance);
             return 0;
         }
@@ -422,6 +473,7 @@ public class EnemyManager : MonoBehaviour
         }
         Debug.Log("Number of Enemies = " + enemyList.Count() + ". rhinoCount = " + rhinoCount + ", snakeCount = " + snakeCount + ", cheeetahCount = " + cheetahCount + ", lizardCount = " + lizardCount);
     }
+
     public void DisplayEnemyElementStats()
     {
         int noElementCount = 0;
@@ -442,5 +494,27 @@ public class EnemyManager : MonoBehaviour
             }
         }
         Debug.Log("Number of Enemies = " + enemyList.Count() + ". noElementCount = " + noElementCount + ", fireCount = " + fireCount + ", waterCount = " + waterCount + ", shockCount = " + shockCount + ", windCount = " + windCount);
+    }
+
+    public void DisplayEnemyTierStats()
+    {
+        int tier1Count = 0;
+        int tier2Count = 0;
+        int tier3Count = 0;
+
+        foreach (Enemy enemy in enemyList)
+        {
+            switch (enemy.Tier) //Count the elements of the previous 25 attacks
+            {
+                case 1: tier1Count++; break;
+                case 2: tier2Count++; break;
+                case 3: tier3Count++; break;
+            }
+        }
+        Debug.Log("Number of Enemies = " + enemyList.Count() + 
+            ". tier1Count = " + tier1Count + ", tier2Count = " 
+            + tier2Count + ", tier3Count = " + tier3Count);
+
+
     }
 }

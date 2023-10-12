@@ -221,20 +221,20 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     public virtual void SetStatsFromScriptableObject()
     {
-        MaxHealth = SO.maxHealth[Tier];
-        Speed = SO.speed[Tier];
+        MaxHealth = SO.maxHealth[Tier - 1];
+        Speed = SO.speed[Tier - 1];
         ResetSpeed();
-        Souls = UnityEngine.Random.Range(SO.minSouls[Tier], SO.maxSouls[Tier] + 1);
-        AttackCooldownDuration = SO.attackCooldown[Tier];
+        Souls = UnityEngine.Random.Range(SO.minSouls[Tier - 1], SO.maxSouls[Tier - 1] + 1);
+        AttackCooldownDuration = SO.attackCooldown[Tier - 1];
         EffectDuration = SO.effectDuration;
 
-        Attack1Damage = SO.attack1Damage[Tier];
+        Attack1Damage = SO.attack1Damage[Tier - 1];
         Attack1Duration = SO.attack1Duration;
         Attack1Windup = SO.windup1Duration;
-        Attack2Damage = SO.attack2Damage[Tier];
+        Attack2Damage = SO.attack2Damage[Tier - 1];
         Attack2Duration = SO.attack2Duration;
         Attack2Windup = SO.windup2Duration;
-        Attack3Damage = SO.attack3Damage[Tier];
+        Attack3Damage = SO.attack3Damage[Tier - 1];
         Attack3Duration = SO.attack3Duration;
         Attack3Windup = SO.windup3Duration;
 
