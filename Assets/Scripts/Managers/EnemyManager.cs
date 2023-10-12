@@ -272,7 +272,8 @@ public class EnemyManager : MonoBehaviour
         int windChance = shockChance + windCount * chanceMultiplier;
 
         int totalChance = windChance;
-        if (totalChance != 25 * chanceMultiplier) Debug.Log("Total Element Chance Does Not Equal 75%, totalChance = " + totalChance);
+        int correctChance = 25 * chanceMultiplier;
+        if (totalChance != correctChance) Debug.Log("Total Element Chance Does Not Equal " + correctChance + "%, totalChance = " + totalChance);
 
         if (randomValue <= fireChance) return ElementType.fire; // Attempt to select an element
         else if (fireChance < randomValue && randomValue <= waterChance) return ElementType.water;      

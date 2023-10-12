@@ -44,7 +44,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     [field: SerializeField] public ElementType Element { get; set; } = ElementType.noElement;
     [field: SerializeField] public int Tier { get; set; } = 1;
     [field: SerializeField, ReadOnly] public int Hitpoints { get; set; }
-    [field: SerializeField, ReadOnly] protected ElementType ActiveElementEffect { get; set; }
+    [field: SerializeField, ReadOnly] protected ElementType ActiveElementEffect { get; set; } = ElementType.noElement;
     [field: SerializeField, ReadOnly] protected int ElementTier { get; set; }
     [field: SerializeField, ReadOnly] protected int CurrentAttack { get; set; }
     [field: SerializeField, ReadOnly] protected bool WindingUp { get; set; }
@@ -155,10 +155,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     #region Object Initialization Functions
     public virtual void Init()
     {
+        if (block == null)
+            block = new MaterialPropertyBlock();
         SetInheritanceSO();
         SetDefaultState();
-        if(block == null)
-            block = new MaterialPropertyBlock();
         if (debugDisableAI) Debug.LogWarning(this + "'s AI is Disabled");
         CancelFlash();
     }
@@ -170,6 +170,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         Tier = tier;
         Init();
     }
+
     private void Awake()
     {
     }
@@ -185,6 +186,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         path.OnDestinationReached += SetOnDestination;
         Speed = path.maxSpeed;
 
+        ActiveElementEffect = ElementType.noElement;
+
         Init();
 
         defaultLayer = col2D.excludeLayers;
@@ -199,7 +202,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     {
         SetStatsFromScriptableObject();
         SetHitPoints();
-        SetElementImage();
+        SetElementOutline();
 
         WindingUp = false;
         Staggered = false;
@@ -208,7 +211,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         ElementTier = 1;
         currentState = EnemyState.idle;
 
-        ActiveElementEffect = Element;
         targetTr = GameManager.Instance.PlayerTransform;
         TargetLayer = PlayerLayer;
 
@@ -608,33 +610,28 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     {
         EnemyTimers.SetTime((int)EnemyTimer.effectedTimer, EffectDuration);
         ActiveElementEffect = type;
-        SetElementImage();
     }
 
     protected virtual void RemoveElementEffect(object sender, EventArgs e)
     {
-        ActiveElementEffect = Element;
-        SetElementImage();
+        ActiveElementEffect = ElementType.noElement;
     }
 
-    protected virtual void SetElementImage()
+    protected virtual void SetElementOutline()
     {
-        switch (ActiveElementEffect)
+        switch (Element)
         {
-            case ElementType.noElement:
-                ElementEffectImage.color = Color.grey;
-                break;
             case ElementType.fire:
-                ElementEffectImage.color = Color.red;
+                SetOutline(Color.red);
                 break;
             case ElementType.water:
-                ElementEffectImage.color = Color.blue;
+                SetOutline(Color.blue);
                 break;
             case ElementType.electric:
-                ElementEffectImage.color = Color.yellow;
+                SetOutline(new Color(0.6950685f, 0.1756853f, 0.7924528f));
                 break;
             case ElementType.wind:
-                ElementEffectImage.color = Color.white;
+                SetOutline(Color.white);
                 break;
         }
     }
