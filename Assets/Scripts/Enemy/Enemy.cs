@@ -406,6 +406,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     public virtual void OnDeath(bool overrideKill = false)
     {
+        SetOutline(Color.white, 0);
+        comboText.text = "";
         if (DeathSoundPrefab) Instantiate(DeathSoundPrefab);
         if (!overrideKill)
         {
@@ -428,6 +430,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable
             flash = StartCoroutine(DamageFlash());
         }
         flash = StartCoroutine(DamageFlash());
+    }
+    protected void SetOutline(Color colour, float thickness = 1)
+    {
+        block.SetColor("_OutlineColour", colour);
+        block.SetFloat("_Thickness", thickness);
+        rend.SetPropertyBlock(block);
     }
     private IEnumerator DamageFlash()
     {
@@ -653,12 +661,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         TakeDamage(combo.BaseDamage, combo.StaggerDamage, typeOne, typeTwo);
         comboText.text = combo.name;
         comboText.color = textColour;
-        StartCoroutine(RemoveText(combo.name));
+        if (gameObject.activeInHierarchy)
+            StartCoroutine(RemoveText(combo.name));
     }
 
     private IEnumerator RemoveText(string textToRemove)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2.5f);
         if (comboText.text.Equals(textToRemove))
             comboText.text = "";
     }

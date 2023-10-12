@@ -9,6 +9,8 @@ public class TrailObj : MonoBehaviour
     private PlayerTrailEffect owner;
 
     public SpriteRenderer render;
+
+    private MaterialPropertyBlock block;
     void Start()
     {
         DontDestroyOnLoad(gameObject);
@@ -62,6 +64,14 @@ public class TrailObj : MonoBehaviour
         render.sprite = sprite;
     }
 
+    public void SetColourAndBlend(float blend, Color color)
+    {
+        block.SetTexture("_MainTex", render.sprite.texture);
+        block.SetColor("_FlashColour", color);
+        block.SetFloat("_FlashAmount", blend);
+        render.SetPropertyBlock(block);
+    }
+
     public void SetXScale(Vector3 xScale)
     {
         transform.localScale = xScale;
@@ -86,5 +96,6 @@ public class TrailObj : MonoBehaviour
     public void SetOwner(PlayerTrailEffect owner)
     {
         this.owner = owner;
+        block = new MaterialPropertyBlock();
     }
 }

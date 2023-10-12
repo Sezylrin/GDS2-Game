@@ -16,7 +16,7 @@ public class Abilities : MonoBehaviour
 
     [Header("abilities")]
     [SerializeField]
-    private ElementalSO[] abilities = new ElementalSO[6];
+    private ElementalSO[] abilities = new ElementalSO[8];
     [SerializeField][ReadOnly]
     private bool AbilitySetOne;
 
@@ -113,9 +113,8 @@ public class Abilities : MonoBehaviour
     private ElementalSO abilityToCast;
     private void StartCast(ElementalSO selected)
     {
+        Debug.Log(selected.name);
         if (!selected)
-            return;
-        if (selected == lastUsed && !PCM.control.GetAbilityLag())
             return;
         abilityToCast = selected;
         PCM.control.RemoveBufferInput();

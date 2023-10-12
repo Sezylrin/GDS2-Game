@@ -309,6 +309,21 @@ public class PlayerController : MonoBehaviour
             
         }
     }
+    public void BufferAbilityFour(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            AimLine(3);
+        if (context.canceled)
+        {
+            BufferInput(actionState.abilityFour);
+            if (isAim)
+            {
+                isAim = false;
+                StartLerp(0);
+            }
+
+        }
+    }
     private bool isAim;
     private int slot;
     private void AimLine(int slot)
@@ -451,7 +466,7 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Input Buffering
-    private playerState[] castState = { playerState.idle, playerState.moving, playerState.abilityLag };
+    private playerState[] castState = { playerState.idle, playerState.moving };
     private void ExecuteInput()
     {
         switch ((int)bufferedState)
@@ -461,10 +476,6 @@ public class PlayerController : MonoBehaviour
                     PerfectDodge();
                 else
                     Dash();
-                break;
-            case (int)actionState.attack:
-                if (CheckStates(castState))
-                    PCM.abilities.CastSlotFour();
                 break;
             case (int)actionState.abilityOne:
                 if(CheckStates(castState))
@@ -477,6 +488,10 @@ public class PlayerController : MonoBehaviour
             case (int)actionState.abilityThree:
                 if (CheckStates(castState))
                     PCM.abilities.CastSlotThree();
+                break;
+            case (int)actionState.abilityFour:
+                if (CheckStates(castState))
+                    PCM.abilities.CastSlotFour();
                 break;
 
         }
@@ -503,7 +518,9 @@ public class PlayerController : MonoBehaviour
     {
         isMoving = false;
         rb.drag = drag;
-        playerState[] allowed = { playerState.idle, playerState.moving, playerState.abilityStart, playerState.abilityLag };
+        if (CurrentState == playerState.abilityStart)
+            rb.drag = drag * 0.5f;
+        playerState[] allowed = { playerState.idle, playerState.moving,  playerState.abilityLag };
 
         if (!CheckStates(allowed))
         {
@@ -544,17 +561,17 @@ public class PlayerController : MonoBehaviour
         BeginDash(dashDistance, dashDuration, direction);
     }
 
-    public void Dash(float distance, float dur, Vector2 dir)
+    public void Dash(float distance, float dur, Vector2 dir, Color color, float blend)
     {
         dashCoroutine = StartCoroutine(StartDashing(distance, dur, dir));
-        PCM.Trail.DashAfterImage(dur, 5);
+        PCM.Trail.DashAfterImage(dur, 5, color, blend);
     }
 
     private void BeginDash(float distance, float dur, Vector2 dir)
     {
         col2D.excludeLayers += enemyLayer;
         dashCoroutine = StartCoroutine(StartDashing(distance, dur, dir));
-        PCM.Trail.DashAfterImage(dur, 5);
+        PCM.Trail.DashAfterImage(dur, 5, Color.white, 0);
     }
 
     private IEnumerator StartDashing(float distance, float dur, Vector2 dir)

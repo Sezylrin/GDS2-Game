@@ -12,18 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46349f5f1777d0742ae2d3e10071b0c4, type: 3}
   m_Name: Gale Orb
   m_EditorClassIdentifier: 
-  color: {fileID: 2100000, guid: 145bd1f0f92379c4f8e54c7d20420a22, type: 2}
+  color: {fileID: 2100000, guid: 7640495e2d1446442ba1f5ecbd1aab0b, type: 2}
   elementType: 8
   type: 2
   castCost: 2
-  castStartSpeed: 0
-  castDuration: 0
+  castStartSpeed: 0.22
+  castDuration: 0.05
   pierceAmount: 1
-  damage: 140
-  knockback: 0
-  Stagger: 20
+  damage: 23
+  knockback: 40
+  Stagger: 14
   consumePoints: 7
   lifeTime: 15
   description: Toxic Orb Description
   icon: {fileID: 21300000, guid: 4b748fc3c9f6baf48a20af024f3c0e44, type: 3}
-  speed: 15
+  speed: 38

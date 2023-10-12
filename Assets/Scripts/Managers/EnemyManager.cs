@@ -394,7 +394,13 @@ public class EnemyManager : MonoBehaviour
                 temp.Init(spawnLocation, enemyElement, tier);
                 enemyList.Add(temp);
                 break;
+            default:
+                temp = rhinoPool.GetPooledObj();
+                temp.Init(spawnLocation, enemyElement, tier);
+                enemyList.Add(temp);
+                break;
         }
+        temp.ChangeState();
         ActiveEnemiesCount++;
         RecalculateMaxAttackers();
     }

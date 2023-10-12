@@ -12,19 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b6ff2c29812a9d449d5e29256c6e387, type: 3}
   m_Name: Wave Surge
   m_EditorClassIdentifier: 
-  color: {fileID: 2100000, guid: b6b1f8e9ff3150e4ba23179c757e8ab6, type: 2}
+  color: {fileID: 2100000, guid: ee2fc3b70dfe19045b4edfe0d5826c73, type: 2}
   elementType: 2
   type: 3
   castCost: 0
-  castStartSpeed: 0.3
-  castDuration: 0.4
+  castStartSpeed: 0.35
+  castDuration: 0.6
   pierceAmount: 99
-  damage: 30
-  knockback: 5
-  Stagger: 0
+  damage: 18
+  knockback: 12
+  Stagger: 18
   consumePoints: 0
   lifeTime: 0.4
   description: 
   icon: {fileID: 0}
-  distance: 6
+  distance: 7
   hitboxSize: {x: 1.25, y: 2.5}

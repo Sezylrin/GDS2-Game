@@ -16,7 +16,7 @@ public class DashAbility : AbilityBase
     {
         selected = selectedAbility as DashVariantSO;
         col2D.size = selected.hitboxSize;
-        GameManager.Instance.PCM.control.Dash(selected.distance, selected.lifeTime, direction);
+        GameManager.Instance.PCM.control.Dash(selected.distance, selected.lifeTime, direction, selected.color.color, 0.5f);
     }
 
     private void Update()

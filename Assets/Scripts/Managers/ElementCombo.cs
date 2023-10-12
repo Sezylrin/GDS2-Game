@@ -67,7 +67,7 @@ public class ElementCombo : MonoBehaviour
                 enemy.ComboAttack(combo, elementOne, elementTwo, Color.red);
                 break;
             case (int)Combos.steamExplosion:
-                enemy.ComboAttack(combo, elementOne, elementTwo, Color.grey);
+                enemy.ComboAttack(combo, elementOne, elementTwo, Color.white);
                 break;
             case (int)Combos.zap:
                 enemy.ComboAttack(combo, elementOne, elementTwo, Color.magenta);

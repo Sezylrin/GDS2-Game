@@ -12,18 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46349f5f1777d0742ae2d3e10071b0c4, type: 3}
   m_Name: Plasma bolt
   m_EditorClassIdentifier: 
-  color: {fileID: 2100000, guid: 145bd1f0f92379c4f8e54c7d20420a22, type: 2}
+  color: {fileID: 2100000, guid: 7c4faa0fd6a98c343899f82f2da05ea7, type: 2}
   elementType: 4
   type: 2
   castCost: 2
-  castStartSpeed: 0
-  castDuration: 0
+  castStartSpeed: 0.15
+  castDuration: 0.05
   pierceAmount: 1
-  damage: 140
-  knockback: 0
+  damage: 34
+  knockback: 5
   Stagger: 20
   consumePoints: 7
   lifeTime: 15
   description: Toxic Orb Description
   icon: {fileID: 21300000, guid: 4b748fc3c9f6baf48a20af024f3c0e44, type: 3}
-  speed: 15
+  speed: 20
