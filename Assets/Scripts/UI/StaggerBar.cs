@@ -141,5 +141,6 @@ public class StaggerBar : MonoBehaviour
         Bar = 0;
         StaggerTimers.ResetToZero();
         SetToOrange();
+        UpdateFillPercent(0);
     }
 }

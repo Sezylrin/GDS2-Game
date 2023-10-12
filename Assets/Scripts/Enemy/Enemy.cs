@@ -407,6 +407,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     public virtual void OnDeath(bool overrideKill = false)
     {
+        comboText.text = "";
         if (DeathSoundPrefab) Instantiate(DeathSoundPrefab);
         if (!overrideKill)
         {
@@ -654,12 +655,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         TakeDamage(combo.BaseDamage, combo.StaggerDamage, typeOne, typeTwo);
         comboText.text = combo.name;
         comboText.color = textColour;
-        StartCoroutine(RemoveText(combo.name));
+        if (gameObject.activeInHierarchy)
+            StartCoroutine(RemoveText(combo.name));
     }
 
     private IEnumerator RemoveText(string textToRemove)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2.5f);
         if (comboText.text.Equals(textToRemove))
             comboText.text = "";
     }

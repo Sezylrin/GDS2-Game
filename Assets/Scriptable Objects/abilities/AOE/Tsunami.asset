@@ -12,19 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76d5bbfd3d5dd9746bcfe99438c2b0ec, type: 3}
   m_Name: Tsunami
   m_EditorClassIdentifier: 
-  color: {fileID: 2100000, guid: 1019f58b21679da48a048180c1633774, type: 2}
+  color: {fileID: 2100000, guid: ee2fc3b70dfe19045b4edfe0d5826c73, type: 2}
   elementType: 2
   type: 1
   castCost: 2
-  castStartSpeed: 0
-  castDuration: 0
+  castStartSpeed: 0.25
+  castDuration: 0.5
   pierceAmount: 99
-  damage: 70
-  knockback: 10
-  Stagger: 20
+  damage: 36
+  knockback: 30
+  Stagger: 28
   consumePoints: 3
-  lifeTime: 1
+  lifeTime: 0.6
   description: Verdant Growth Description
   icon: {fileID: 21300000, guid: 5e7a7f97072f64744b5707c7ff040d90, type: 3}
   radius: 4
-  growthSpeed: 0
+  growthSpeed: 0.5

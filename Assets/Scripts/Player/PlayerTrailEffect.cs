@@ -32,7 +32,7 @@ public class PlayerTrailEffect : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             TrailObj objOne = GetObj();
-            SetSprite(objOne);
+            SetSprite(objOne,0,Color.white);
             objOne.PerfectDodge(duration, removeSelf);
         }
     }
@@ -47,17 +47,17 @@ public class PlayerTrailEffect : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             TrailObj obj = GetObj();
-            SetSprite(obj);
+            SetSprite(obj,0,Color.white);
             obj.CounterEffect(dirs[i].normalized * 1.4f, duration, removeSelf);
         }
     }
 
-    public void DashAfterImage(float dashDuration, int afterImageAmount)
+    public void DashAfterImage(float dashDuration, int afterImageAmount, Color color, float blend)
     {
-        StartCoroutine(SpawnAfterImage(dashDuration, afterImageAmount));
+        StartCoroutine(SpawnAfterImage(dashDuration, afterImageAmount, color, blend));
     }
 
-    private IEnumerator SpawnAfterImage(float dashDuration, int imageAmount)
+    private IEnumerator SpawnAfterImage(float dashDuration, int imageAmount, Color color, float blend)
     {
         float time = 0;
         float interval = dashDuration / imageAmount;
@@ -67,7 +67,7 @@ public class PlayerTrailEffect : MonoBehaviour
             if (time >= interval * imageSpawned && imageSpawned < imageAmount)
             {
                 TrailObj temp = GetObj();
-                SetSprite(temp);
+                SetSprite(temp,blend,color);
                 temp.SetAlpha(0f, 0.6f, true);
                 imageSpawned++;
             }
@@ -91,12 +91,13 @@ public class PlayerTrailEffect : MonoBehaviour
         }
     }
 
-    private void SetSprite(TrailObj obj, float alpha = 1)
-    {
+    private void SetSprite(TrailObj obj, float flashAmount, Color color, float alpha = 1)
+    {        
         obj.transform.position = transform.position;
         obj.SetAlpha(alpha);
         obj.SetSprite(rend.sprite);
         obj.SetXScale(sprite.localScale);
+        obj.SetColourAndBlend(flashAmount, color);
     }
 
     public void AddTrailObj(TrailObj obj)
