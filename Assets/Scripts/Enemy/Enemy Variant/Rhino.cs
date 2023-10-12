@@ -8,7 +8,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
 {
     [field: Header("Rhino")]
     [field: SerializeField] protected GameObject ChargeHitbox { get; set; }
-    [field: SerializeField] protected float ChargeSpeedMultiplier { get; set; } = 1.5f;
+    [field: SerializeField] protected float ChargeSpeed { get; set; } = 1.5f;
     [field: SerializeField] public bool Charging { get; set; } = false;
     [field: SerializeField] protected GameObject ShockwaveHitbox { get; set; }
     [field: SerializeField] protected GameObject StompPrefab { get; set; }
@@ -21,6 +21,8 @@ public class Rhino : Enemy, IPoolable<Rhino>
     [field: SerializeField] protected float ShockwaveGrowthSpeed { get; set; } = 1;
     private RhinoScriptableObject RhinoSO;
     private Coroutine shockwaveCoroutine;
+    [SerializeField]
+    private LayerMask TerrainLayers;
 
     #region Tutorial
     public ModifyBoundary boundary;
@@ -47,7 +49,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
     public override void SetStatsFromScriptableObject()
     {
         base.SetStatsFromScriptableObject();
-        ChargeSpeedMultiplier = RhinoSO.chargeSpeedMultiplier;
+        ChargeSpeed = RhinoSO.ChargeSpeed;
         Attack2Range = RhinoSO.attack2Range;
         ShockwaveStartRadius = RhinoSO.shockwaveStartRadius;
         ShockwaveEndRadius = RhinoSO.shockwaveEndRadius;
@@ -97,7 +99,16 @@ public class Rhino : Enemy, IPoolable<Rhino>
         while (Charging)
         {
             yield return null;
-            transform.Translate(dir * Time.deltaTime * Speed * ChargeSpeedMultiplier);
+            RaycastHit2D hit = Physics2D.CircleCast(transform.position, 1, dir, (dir * Time.deltaTime * ChargeSpeed).magnitude,TerrainLayers);
+            if (hit.collider)
+            {
+                Debug.Log("hit terrain");
+                Charging = false;
+                EnemyTimers.SetTime((int)EnemyTimer.attackDurationTimer, 0);
+                break;
+            }
+            else
+                transform.Translate(dir * Time.deltaTime * ChargeSpeed);
         }
         EndCharge();
     }

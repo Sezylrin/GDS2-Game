@@ -25,10 +25,12 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     [SerializeField]
     private float flashDuration;
     [SerializeField]
-    private Material damageFlash;
+    private SpriteRenderer rend;
+    private MaterialPropertyBlock block;
 
     private void Start()
     {
+        block = new MaterialPropertyBlock();
         SetHitPoints();
         consumeBar = 0;
         canConsume = false;
@@ -171,18 +173,21 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     [SerializeField]
     private int startingHitPoint;
     private int actualMaxHealth;
-    private void CalculateDamage(float damage)
+    private void CalculateDamage(int damage)
     {
         if (!timer.IsTimeZero((int)SystemCD.iFrames) || PCM.control.CurrentState == playerState.consuming)
             return;
         StartCoroutine(DamageFlash());
-        if (Hitpoints - damage < 0)
+
+        if (Hitpoints - damage <= 0)
         {
+            Hitpoints = 0;
+
             OnDeath();
         }
         else
         {
-            Hitpoints -= (int)Mathf.Ceil(damage);
+            Hitpoints -= damage;
             timer.SetTime((int)SystemCD.iFrames, iframes);
             PCM.control.SetHitStun(iframes);
         }
@@ -256,12 +261,12 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         Hitpoints = actualMaxHealth;
     }
 
-    public void TakeDamage(float amount, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement)
+    public void TakeDamage(int amount, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement)
     {
         CalculateDamage(amount);
     }
 
-    public void TakeDamage(float amount, int staggerPoints, ElementType type, ElementType typeTwo = ElementType.noElement)
+    public void TakeDamage(int amount, int staggerPoints, ElementType type, ElementType typeTwo = ElementType.noElement)
     {
         CalculateDamage(amount);
     }
@@ -293,10 +298,14 @@ public class PlayerSystem : MonoBehaviour, IDamageable
             elapsedTime += Time.deltaTime;
 
             currentFlashAmount = Mathf.Lerp(1f, 0f, (elapsedTime / flashDuration));
-            damageFlash.SetFloat("_FlashAmount", currentFlashAmount);
+            block.SetFloat("_FlashAmount", currentFlashAmount);
+            block.SetTexture("_MainTex", rend.sprite.texture);
+            rend.SetPropertyBlock(block);
             yield return null;
         }
-        damageFlash.SetFloat("_FlashAmount", 0);
+        block.SetTexture("_MainTex", rend.sprite.texture);
+        block.SetFloat("_FlashAmount", 0);
+        rend.SetPropertyBlock(block);
     }
     #endregion
 

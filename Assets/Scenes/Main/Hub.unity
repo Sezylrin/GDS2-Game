@@ -147,6 +147,10 @@ PrefabInstance:
       propertyPath: abilities.Array.data[3]
       value: 
       objectReference: {fileID: 11400000, guid: b171dd3449f27d24b853ff66dc8d7750, type: 2}
+    - target: {fileID: 3543791457672997724, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: eb420e1f46afeeb45a5aabfcc79892ed, type: 2}
     - target: {fileID: 3543791458973239697, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
       propertyPath: abilityLag
       value: 0.15
@@ -418,6 +422,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StartTutorial
       objectReference: {fileID: 0}
+    - target: {fileID: 13914054318245810, guid: f6ca0067759071b45a78d26bf7e01463, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -528,7 +536,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &725727125
 Transform:
   m_ObjectHideFlags: 0
@@ -2813,6 +2821,10 @@ PrefabInstance:
     - target: {fileID: 9185797213798890984, guid: 07edf47e31410f949aeef7826ecf0481, type: 3}
       propertyPath: m_Name
       value: Rhino (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9185797213798890984, guid: 07edf47e31410f949aeef7826ecf0481, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9185797213798890989, guid: 07edf47e31410f949aeef7826ecf0481, type: 3}
       propertyPath: m_RootOrder
@@ -39813,10 +39825,6 @@ PrefabInstance:
       propertyPath: debugDisableAI
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 9185797214111529790, guid: 07edf47e31410f949aeef7826ecf0481, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: d76702d167233af4d8100ace27ec9fc0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -39833,10 +39841,6 @@ PrefabInstance:
     - target: {fileID: 1602605067, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
       propertyPath: maxAttackers
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1602605067, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
-      propertyPath: <MaxAttackPoints>k__BackingField
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3761662248408365442, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
       propertyPath: m_Name
