@@ -9,7 +9,6 @@ public abstract class MeleeEnemy : Enemy
     [field: SerializeField] protected Transform hitboxCentre { get; set; }
     [field: SerializeField] protected GameObject WarningBox { get; set; }
     [field: SerializeField] protected GameObject AttackHitbox { get; set; }
-    [field: SerializeField] protected BoxCollider2D col2D { get; set; }
 
     protected override void Start()
     {
@@ -86,7 +85,7 @@ public abstract class MeleeEnemy : Enemy
                 {
                     InterruptAttack();
                     temp.InstantRegenPoint();
-                    temp.CounterSuccesful(this);
+                    //temp.CounterSuccesful(this);
                 }
                 else
                 {

@@ -16,6 +16,8 @@ public class BlastAbility : AbilityBase
     private Coroutine blastCoroutine;
 
     private Vector2[] corners = new Vector2[4];
+
+    private Vector3 offset;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,13 +27,14 @@ public class BlastAbility : AbilityBase
     // Update is called once per frame
     void Update()
     {
-        
+        transform.position = followTR.position + offset;
     }
     protected override void CastAbility()
     {
         selected = selectedAbility as BlastVariantSO;
         blastMesh.SetMaterial(selected.color);
         transform.position = initialPos;
+        offset = transform.position - followTR.position;
         RotateSelf();
         col2D.SetPath(0, selected.initialShape);
         Array.Copy(selected.initialShape, corners,4);
@@ -81,14 +84,14 @@ public class BlastAbility : AbilityBase
         }
     }
 
-    protected override void InvokePoolSelf(object sender, EventArgs e)
-    {
-        PoolSelf();
-        base.InvokePoolSelf(sender, e);
-    }
-
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
         base.OnTriggerEnter2D(collision);
+    }
+
+    public override void PoolSelf()
+    {
+        offset = Vector3.zero;
+        base.PoolSelf();
     }
 }

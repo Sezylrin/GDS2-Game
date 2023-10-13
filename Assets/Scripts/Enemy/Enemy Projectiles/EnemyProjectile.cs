@@ -85,40 +85,20 @@ public abstract class EnemyProjectile : MonoBehaviour
     {
         if (collision.transform == shooter)
             return;
-        IDamageable foundTarget;
+        PlayerSystem foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
-        {
-            if (foundTarget is PlayerSystem)
+        {                       
+            if (foundTarget.GetState() == playerState.perfectDodge)
             {
-                PlayerSystem temp = foundTarget as PlayerSystem;
-                if (GameManager.Instance.IsTutorial && temp.GetState() == playerState.perfectDodge)
-                {
-                    temp.InstantRegenPoint();
-                    temp.CounterSuccesfulTutorial(target, this);
-                    gameObject.SetActive(false);
-                }
-                else if (temp.GetState() == playerState.perfectDodge)
-                {
-                    temp.InstantRegenPoint();
-                    temp.CounterSuccesful(owner, this);
-                    gameObject.SetActive(false);
-                }
-                else
-                {
-                    DoDamage(foundTarget);
-                    PoolSelf();
-                }
+                foundTarget.InstantRegenPoint();
+                foundTarget.Counter();
             }
             else
             {
                 DoDamage(foundTarget);
-                PoolSelf();
-            }   
+            }
         }
-        else
-        {
-            PoolSelf();
-        }
+        PoolSelf();
     }
 
     private void DoDamage(IDamageable target)

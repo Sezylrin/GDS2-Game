@@ -5,9 +5,7 @@ using UnityEngine;
 public class ComboSO : ScriptableObject
 {
 
-    public float[] BaseDamage;
+    public int BaseDamage;
 
-    public int[] StaggerDamage;
-
-    public float[] Duration;
+    public int StaggerDamage;
 }

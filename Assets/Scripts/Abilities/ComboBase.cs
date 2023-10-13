@@ -19,22 +19,22 @@ public class ComboBase : MonoBehaviour, IPoolable<ComboBase>
     protected Timer timer;
 
     protected LayerMask targetLayer;
-
     [SerializeField]
-    protected List<IDamageable> hitTargets = new List<IDamageable>();
+    protected Transform spriteTR;
+    [SerializeField]
+    protected List<Enemy> hitTargets = new List<Enemy>();
 
     protected AreaComboSO areaComboSO;
-
-    protected int tier;
-    public virtual void Init(AreaComboSO SO, int tier, Vector3 pos, LayerMask target)
+    public virtual void Init(AreaComboSO SO, Vector3 pos, LayerMask target)
     {
-        this.tier = tier;
         transform.position = pos;
         areaComboSO = SO;
-        col2D.radius = SO.radius[tier];
+        col2D.radius = SO.radius;
         col2D.includeLayers = target;
+        col2D.excludeLayers = ~target;
+        spriteTR.localScale = (new Vector3(SO.radius, SO.radius, SO.radius)) * 2;
         
-        timer.SetTime((int)ComboTimers.lifetime, areaComboSO.Duration[tier]);
+        timer.SetTime((int)ComboTimers.lifetime, areaComboSO.duration);
         timer.SetTime((int)ComboTimers.damageTick, 0.1f);
     }
     public void InitSpawn()
@@ -49,13 +49,13 @@ public class ComboBase : MonoBehaviour, IPoolable<ComboBase>
         timer.SetTime((int)ComboTimers.damageTick, areaComboSO.damageTickRate);
         for (int i = 0; i < hitTargets.Count; i++)
         {
-            hitTargets[i].TakeDamage(areaComboSO.BaseDamage[tier], areaComboSO.StaggerDamage[tier], areaComboSO.typeOne, areaComboSO.typeTwo);
+            hitTargets[i].TakeDamage(areaComboSO.BaseDamage, areaComboSO.StaggerDamage, areaComboSO.typeOne, areaComboSO.typeTwo);
         }
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        IDamageable foundTarget;
+        Enemy foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
         {
             if (hitTargets.Contains(foundTarget))
@@ -69,7 +69,7 @@ public class ComboBase : MonoBehaviour, IPoolable<ComboBase>
 
     protected virtual void OnTriggerExit2D(Collider2D collision)
     {
-        IDamageable foundTarget;
+        Enemy foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
         {
             if (!hitTargets.Contains(foundTarget))
@@ -92,6 +92,7 @@ public class ComboBase : MonoBehaviour, IPoolable<ComboBase>
     {
         timer.ResetToZero();
         col2D.includeLayers = 0;
+        col2D.excludeLayers = 0;
         Pool.PoolObj(this);
     }
     #endregion

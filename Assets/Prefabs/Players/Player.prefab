@@ -2188,7 +2188,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 043395dceb0488c4380618bf735c876a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2455,13 +2455,11 @@ GameObject:
   - component: {fileID: 5754933048486312608}
   - component: {fileID: 3543791458973239697}
   - component: {fileID: 796045613}
-  - component: {fileID: 3543791458973239696}
   - component: {fileID: 864687015}
   - component: {fileID: 1811655617}
   - component: {fileID: 1114287056888059202}
   - component: {fileID: 3274319934512244340}
   - component: {fileID: 1434561470}
-  - component: {fileID: 1969045132}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -2487,7 +2485,7 @@ Transform:
   - {fileID: 490763409}
   - {fileID: 247273588}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &3543791458973239727
 Rigidbody2D:
@@ -2531,11 +2529,9 @@ MonoBehaviour:
   <input>k__BackingField: {fileID: 3543791458973239726}
   <control>k__BackingField: {fileID: 3543791458973239697}
   <system>k__BackingField: {fileID: 5754933048486312608}
-  <attack>k__BackingField: {fileID: 3543791458973239696}
   <abilities>k__BackingField: {fileID: 864687015}
   <UI>k__BackingField: {fileID: 1114287056888059202}
   <Trail>k__BackingField: {fileID: 247572587}
-  <Audio>k__BackingField: {fileID: 1969045132}
 --- !u!114 &3543791458973239726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2566,6 +2562,8 @@ MonoBehaviour:
     owner: {fileID: 0}
   PCM: {fileID: 864687022}
   iframes: 0.7
+  flashDuration: 0.1
+  rend: {fileID: 3543791457672997724}
   MaxCastPoints: 3
   currentCastPoints: 0
   pointRegenRate: 3
@@ -2575,12 +2573,12 @@ MonoBehaviour:
   debugCost: 1
   startingHitPoint: 100
   <Hitpoints>k__BackingField: 0
-  counterQTEDuration: 0.4
-  counterDamage: 40
-  counterStagger: 40
-  enemy:
-    serializedVersion: 2
-    m_Bits: 64
+  <isCountered>k__BackingField: 0
+  multiplicative: 0
+  bonusDamage: 0
+  bonusStagger: 0
+  damageMultiplier: 0
+  staggerMultiplier: 0
   consumeBar: 0
   consumeBarMax: 100
   canConsume: 0
@@ -2609,10 +2607,10 @@ MonoBehaviour:
   dashRechargeRate: 1
   currentDashCharges: 0
   perfectDodgeDuration: 0.5
-  abilityLag: 0.2
-  abilityCast: 0.1
+  abilityLag: 0.4
+  abilityCast: 0.3
   <AbilityCentre>k__BackingField: {fileID: 1874316682}
-  bufferDuration: 3
+  bufferDuration: 14
   cameraMouseMin: 2
   cameraMouseMax: 5
   cameraMaxOffset: 3
@@ -2634,9 +2632,9 @@ MonoBehaviour:
   bufferedState: 0
   isDashing: 0
   isMoving: 0
-  isAttacking: 0
-  isAttackEnd: 0
+  isStartingAbility: 0
   isUsingAbility: 0
+  isAbilityLag: 0
   isPerfectDodge: 0
 --- !u!114 &796045613
 MonoBehaviour:
@@ -2654,44 +2652,6 @@ MonoBehaviour:
   anim: {fileID: 980143085}
   Sprite: {fileID: 3543791457672997727}
   footstepSoundSpeed: 0.166
---- !u!114 &3543791458973239696
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3543791458973239701}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c1715f659e406e4c8579fc4a762599c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lightAttackDuration: 0.2
-  lightAttackEndLag: 0.4
-  lightAttackPullDist: 5
-  lightAttackDamage: 1e0000002800000032000000
-  lightAttackStagger: 0a0000000f00000014000000
-  lightAttackKnockBack:
-  - 6
-  - 8
-  - 10
-  maxCombo: 0
-  currentCombo: 0
-  comboEndLag: 0.4
-  PCM: {fileID: 864687022}
-  centre: {fileID: 3543791459337211974}
-  timers:
-    <times>k__BackingField: []
-    owner: {fileID: 0}
-  lightHitboxes:
-  - {fileID: 3543791458473558711}
-  - {fileID: 3543791458936431154}
-  - {fileID: 3543791457572395628}
-  reduceDelay: 0.66
-  hitboxSprite:
-  - {fileID: 543510121}
-  - {fileID: 55193396}
-  - {fileID: 776517322}
 --- !u!114 &864687015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2708,6 +2668,8 @@ MonoBehaviour:
   abilitySpawnPoint: {fileID: 1699224757}
   abilities:
   - {fileID: 11400000, guid: 418ea2c3934df71459d836d5d9631746, type: 2}
+  - {fileID: 11400000, guid: 10ba623a21e2d014fa77d3bbb2d7b5b8, type: 2}
+  - {fileID: 11400000, guid: bfa1d90d7346b0d478313eedc9d02ef0, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -2722,6 +2684,8 @@ MonoBehaviour:
       Value: {fileID: 870314205402033686, guid: 6499491490cfd8744aebab9913aabc34, type: 3}
     - Key: 2
       Value: {fileID: 1081047491358455854, guid: a11b5b43fd902074fb6401f38dc4e41a, type: 3}
+    - Key: 3
+      Value: {fileID: 915536880095674632, guid: 11750c1b32020854bbacd4167b1d7667, type: 3}
   test: {fileID: 11400000, guid: a4e9bcf0124e59c4f9c65c1f148a8426, type: 2}
 --- !u!70 &1811655617
 CapsuleCollider2D:
@@ -2896,29 +2860,6 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
---- !u!114 &1969045132
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3543791458973239701}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a6e58df1cb19254fa063bd5efe715da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sounds:
-    _serializedList:
-    - Key: 15
-      Value:
-      - {fileID: 8300000, guid: 5ad41acd89fb32d4588ee465d50dfccb, type: 3}
-    - Key: 18
-      Value:
-      - {fileID: 8300000, guid: 5caf910521ec59442b0ad98de874474e, type: 3}
-    - Key: 19
-      Value:
-      - {fileID: 8300000, guid: 70c68b86be9b4f644bc253a35aa622fd, type: 3}
 --- !u!1 &3543791459337211977
 GameObject:
   m_ObjectHideFlags: 0

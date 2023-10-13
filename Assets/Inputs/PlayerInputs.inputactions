@@ -33,15 +33,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Attack",
-                    "type": "Button",
-                    "id": "8ac14cd8-bd06-43a3-8fec-be1b189af3eb",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Dash",
                     "type": "Button",
                     "id": "bddabf5a-04f8-43fd-b032-9d5c146901df",
@@ -84,6 +75,15 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Hold(duration=0.2)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "AbilityFour",
+                    "type": "Button",
+                    "id": "b7feb0e7-946a-4a62-b858-26cbecdc1ec6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
                     "initialStateCheck": false
                 },
                 {
@@ -247,28 +247,6 @@
                 },
                 {
                     "name": "",
-                    "id": "143bb1cd-cc10-4eca-a2f0-a3664166fe91",
-                    "path": "<Gamepad>/rightTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Controller",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "05f6913d-c316-48b2-a6bb-e225f14c7960",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "87bbf521-53e1-47ec-b5ce-06af94c71f18",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -314,7 +292,7 @@
                 {
                     "name": "",
                     "id": "f30228cf-4f9a-4e32-941f-c46ac376772f",
-                    "path": "<Keyboard>/q",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "Hold(duration=0.2)",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -325,7 +303,7 @@
                 {
                     "name": "",
                     "id": "79870e04-b77f-4013-bab9-c95598f25fed",
-                    "path": "<Gamepad>/leftTrigger",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "Hold(duration=0.2)",
                     "processors": "",
                     "groups": "Controller",
@@ -336,7 +314,7 @@
                 {
                     "name": "",
                     "id": "7b2d6b34-000d-4b24-932d-408323c3342c",
-                    "path": "<Keyboard>/e",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -358,7 +336,7 @@
                 {
                     "name": "",
                     "id": "05bc4d93-1b31-46dc-85ea-15bc84544e55",
-                    "path": "<Keyboard>/shift",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -369,8 +347,8 @@
                 {
                     "name": "",
                     "id": "401788a3-cbcb-4c26-9549-b58341674121",
-                    "path": "<Gamepad>/rightShoulder",
-                    "interactions": "",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "Hold(duration=0.2)",
                     "processors": "",
                     "groups": "Controller",
                     "action": "AbilityThree",
@@ -473,6 +451,28 @@
                     "processors": "",
                     "groups": "Controller",
                     "action": "Open Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2d693827-1f87-41e8-b681-77f0474a445c",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "AbilityFour",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1a217e4d-ed7e-4219-aa0b-c952a57e718a",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "Hold(duration=0.2)",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "AbilityFour",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -102,7 +102,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -215,7 +215,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1386738844
 Transform:
   m_ObjectHideFlags: 0
@@ -562,8 +562,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.000000037252903}
-  m_SizeDelta: {x: -0.10000004, y: 0.1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -0.09999998, y: 0.18670002}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9185797212688052826
 CanvasRenderer:
@@ -638,18 +638,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9185797213359225126}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 9185797214422095880}
+  m_Father: {fileID: 9185797213553761389}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -0.100000024, y: 0.045}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0.00000011920929, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9185797213359225147
 CanvasRenderer:
@@ -821,15 +821,16 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 9185797213359225125}
   m_Father: {fileID: 9185797214422095880}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -0.10000004, y: 0.045}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.005800009, y: 0.0034999996}
+  m_SizeDelta: {x: -0.0884, y: 0.2811}
+  m_Pivot: {x: 0.49999988, y: 0.5}
 --- !u!222 &9185797213553761379
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1042,8 +1043,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.1214, y: 1.67}
-  m_SizeDelta: {x: 2.5869, y: 0.5167}
+  m_AnchoredPosition: {x: 0.1214, y: 1.8208}
+  m_SizeDelta: {x: 2.5869, y: 1.0924}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &9185797213722193745
 Canvas:
@@ -1147,7 +1148,7 @@ Transform:
   - {fileID: 1220229054}
   - {fileID: 7776298551693399208}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &9185797213798890991
 CircleCollider2D:
@@ -1164,7 +1165,7 @@ CircleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 384
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -1181,7 +1182,7 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.06, y: -0.09}
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1
 --- !u!50 &9185797213798890978
@@ -1223,8 +1224,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8a92ebf75e99384bbcb57a406f8ee58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Type>k__BackingField: 3
+  <Type>k__BackingField: 1
   <Element>k__BackingField: 0
+  <Tier>k__BackingField: 1
   <Hitpoints>k__BackingField: 0
   <ActiveElementEffect>k__BackingField: 0
   <ElementTier>k__BackingField: 0
@@ -1270,8 +1272,9 @@ MonoBehaviour:
   <ConsumableHitbox>k__BackingField: {fileID: 9185797214022210930}
   <ElementEffectImage>k__BackingField: {fileID: 9185797214043638601}
   <rb>k__BackingField: {fileID: 9185797213798890978}
+  <col2D>k__BackingField: {fileID: 9185797213798890991}
   <path>k__BackingField: {fileID: 9185797213798890988}
-  <ActiveCombos>k__BackingField: 
+  collisionDisabledDur: 4
   <ComboEffectTimer>k__BackingField:
     <times>k__BackingField: []
     owner: {fileID: 0}
@@ -1285,34 +1288,62 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   comboText: {fileID: 6904817272868814758}
-  staggerBonusDamage: 2
-  elementResistAmount: 0
+  flashDuration: 0.3
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  rend: {fileID: 9185797214111529790}
+  staggerBonusDamage: 3
+  elementResistAmount: 0.8
   baseArmour: 1
   IdleRadius: 3
   RepositionPoint: 5
   IdleMoveRateMin: 2
   IdleMoveRateMax: 4
-  RepositionRateMin: 1
+  RepositionRateMin: 0
   RepositionRateMax: 2
-  AttackEndAiCD: 0.5
+  AttackEndAiCD: 1.5
   MinimumAttackRange: 1
   currentState: 0
   hasDestination: 0
   targetTr: {fileID: 0}
   debugDisableAI: 0
   <ChargeHitbox>k__BackingField: {fileID: 1386738843}
-  <ChargeSpeedMultiplier>k__BackingField: 0
+  <ChargeSpeed>k__BackingField: 1.5
   <Charging>k__BackingField: 0
   <ShockwaveHitbox>k__BackingField: {fileID: 21723366}
   <StompPrefab>k__BackingField: {fileID: 3524762612804635211, guid: d90f785141a0696499e5b0cf9e8617ab, type: 3}
   <StompSpawnPoint>k__BackingField: {fileID: 266498436}
   <StompMoveSpeed>k__BackingField: 0
   <Attack2Range>k__BackingField: 0
-  <col2D>k__BackingField: {fileID: 9185797213798890991}
   <shockwaveCol2D>k__BackingField: {fileID: 21723369}
   <ShockwaveStartRadius>k__BackingField: 0
   <ShockwaveEndRadius>k__BackingField: 0
   <ShockwaveGrowthSpeed>k__BackingField: 0
+  TerrainLayers:
+    serializedVersion: 2
+    m_Bits: 384
   boundary: {fileID: 0}
 --- !u!114 &9185797213798890979
 MonoBehaviour:
@@ -1588,7 +1619,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0.171}
   m_SizeDelta: {x: 1, y: 0.1869}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &9185797214043638600
@@ -1681,7 +1712,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: d76702d167233af4d8100ace27ec9fc0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1745,14 +1776,13 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9185797213553761389}
-  - {fileID: 9185797213359225125}
   m_Father: {fileID: 9185797213722193756}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0.1102}
+  m_AnchoredPosition: {x: 0, y: -0.001999855}
+  m_SizeDelta: {x: 0, y: 0.3522}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &9185797214422095885
 CanvasRenderer:
@@ -1807,7 +1837,8 @@ MonoBehaviour:
   image: {fileID: 9185797213359225124}
   <Bar>k__BackingField: 0
   <PointsToStagger>k__BackingField: 100
-  <StaggerDuration>k__BackingField: 3
+  <StaggerMinDuration>k__BackingField: 3
+  <StaggerMaxDuration>k__BackingField: 3
   <Staggered>k__BackingField: 0
   <StaggerDelayDuration>k__BackingField: 3
   <StaggerDecayAmount>k__BackingField: 4
@@ -1852,8 +1883,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.137}
-  m_SizeDelta: {x: 0, y: 0.1659}
+  m_AnchoredPosition: {x: 0, y: 0.425}
+  m_SizeDelta: {x: 0, y: 0.2867}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &9185797214751762033
 CanvasRenderer:

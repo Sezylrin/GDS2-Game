@@ -25,6 +25,11 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
 
     protected Vector3 initialPos;
     protected Vector3 direction;
+
+    protected int finalDamage;
+    protected int finalStagger;
+
+    protected Transform followTR;
     private void ResetAbility()
     {
         initialPos = Vector3.zero;
@@ -34,26 +39,34 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
         hitEnemy.Clear();
     }
 
-    private void init()
+    public void init()
     {
-        if (timer == null)
-        {
+        if(timer == null)
             timer = GameManager.Instance.TimerManager.GenerateTimers(typeof(AbilityTimer), gameObject);
-        }
-        timer.SetTime((int)AbilityTimer.lifeTime, selectedAbility.lifeTime);
         timer.times[(int)AbilityTimer.lifeTime].OnTimeIsZero += InvokePoolSelf;
     }
 
-    protected virtual void InvokePoolSelf(object sender, EventArgs e)
+    private void InvokePoolSelf(object sender, EventArgs e)
     {
-        timer.times[0].OnTimeIsZero -= InvokePoolSelf;
+        PoolSelf();
     }
 
     private void SetSelectedAbility(ElementalSO selected)
     {
         selectedAbility = selected;
         CurrentPierce = selectedAbility.pierceAmount;
-        init();
+        timer.SetTime((int)AbilityTimer.lifeTime, selectedAbility.lifeTime);
+        if (GameManager.Instance.PCM.system.isCountered)
+        {
+            finalDamage = GameManager.Instance.PCM.system.ModifyDamage(selected.damage);
+            finalStagger = GameManager.Instance.PCM.system.ModifyStagger(selected.Stagger);
+            GameManager.Instance.PCM.system.CounterUsed();
+        }
+        else
+        {
+            finalDamage = selected.damage;
+            finalStagger = selected.Stagger;
+        }    
         CastAbility();
     }
 
@@ -63,11 +76,13 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
         SetSelectedAbility(selected);
     }
 
-    public void SetSelectedAbility(ElementalSO selected, Vector3 initialPos, Vector3 dir)
+    public void SetSelectedAbility(ElementalSO selected, Vector3 initialPos, Vector3 dir, Transform follow = null)
     {
+        followTR = follow;
         direction = dir;
         SetSelectedAbility(selected, initialPos);
     }
+
 
     protected virtual void CastAbility()
     {
@@ -78,20 +93,18 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
     {
         if (CurrentPierce <= 0)
             return;
-        IDamageable foundEnemy;
+        Enemy foundEnemy;
         if (UtilityFunction.FindComponent(collision.transform,out foundEnemy))
         {
             
-            if(!(foundEnemy as Enemy))
+            
+            if (hitEnemy.Contains(foundEnemy))
             {
                 return;
             }
-            if (hitEnemy.Contains(foundEnemy as Enemy))
-            {
-                return;
-            }
-            hitEnemy.Add(foundEnemy as Enemy);
-            foundEnemy.TakeDamage(selectedAbility.damage + GameManager.Instance.StatsManager.abilityModifier, selectedAbility.Stagger, selectedAbility.elementType, selectedAbility.castCost);
+            hitEnemy.Add(foundEnemy);
+ 
+            foundEnemy.TakeDamage(finalDamage, finalStagger, selectedAbility.elementType, selectedAbility.castCost);
             GameManager.Instance.PCM.system.AddToConsumeBar(selectedAbility.consumePoints);
             Vector3 dir;
             if (direction.Equals(Vector3.zero))
@@ -110,7 +123,7 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
         }
     }
 
-    public void PoolSelf()
+    public virtual void PoolSelf()
     {
         ResetAbility();
         Pool.PoolObj(this);

@@ -31,7 +31,7 @@ public class AudioComponentEditor : Editor
                 {
                     Debug.LogWarning("There is a duplicate AudioClipSO reference name " + clips[i].ReferenceName + " in the file located at " + AssetDatabase.GUIDToAssetPath(guids[i]));
                     Selection.activeObject = clips[i];
-                    OverrideAudioRefWithDefault();
+                    //OverrideAudioRefWithDefault();
                     return;
                 }
                 names.Add(clips[i].ReferenceName);
@@ -42,10 +42,11 @@ public class AudioComponentEditor : Editor
                 streamWriter.WriteLine("public enum " + enumName);
                 streamWriter.WriteLine("{");
                 
-                for (int i = 0; i < names.Count; i++)
+                for (int i = 0; i < names.Count - 1; i++)
                 {
                     streamWriter.WriteLine("	" + clips[i].ReferenceName + ",");
                 }
+                streamWriter.WriteLine("	" + clips[names.Count - 1].ReferenceName);
                 streamWriter.WriteLine("}");
                 manager.LoadSounds(clips);
             }

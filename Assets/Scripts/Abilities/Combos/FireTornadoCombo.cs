@@ -7,14 +7,14 @@ public class FireTornadoCombo : ComboBase
 {
     // Start is called before the first frame update
     [SerializeField]
-    private float[] pullForce = new float[3];
+    private float pullForce;
 
     protected override void DoDamage(object sender, EventArgs e)
     {
         base.DoDamage(sender, e);
-        foreach (IDamageable damaged in hitTargets)
+        foreach (Enemy damaged in hitTargets)
         {
-            damaged.AddForce(((Vector2)transform.position - damaged.rb.position).normalized * pullForce[tier]);
+            damaged.AddForce(((Vector2)transform.position - damaged.rb.position).normalized * pullForce);
         }
     }
 }
