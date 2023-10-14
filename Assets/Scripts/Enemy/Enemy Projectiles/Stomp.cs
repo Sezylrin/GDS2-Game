@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stomp : EnemyProjectile, IPoolable<Stomp>
+public class Stomp : EnemyProjectile
 {
 
     protected override void OnTriggerEnter2D(Collider2D collision)
@@ -10,7 +10,7 @@ public class Stomp : EnemyProjectile, IPoolable<Stomp>
         base.OnTriggerEnter2D(collision);
     }
 
-    #region Pooling
+   /* #region Pooling
     public Pool<Stomp> Pool { get; set; }
     public bool IsPooled { get; set; }
 
@@ -23,5 +23,5 @@ public class Stomp : EnemyProjectile, IPoolable<Stomp>
         if (!IsPooled)
             Pool.PoolObj(this);
     }
-    #endregion
+    #endregion*/
 }

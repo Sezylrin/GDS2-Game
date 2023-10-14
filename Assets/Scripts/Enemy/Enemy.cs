@@ -22,7 +22,7 @@ public enum EnemyType
 }
 #endregion
 
-public abstract class Enemy : MonoBehaviour, IDamageable
+public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
 {
     // Enums
     #region EnemyTimer Enum
@@ -102,6 +102,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     [field: SerializeField] public Rigidbody2D rb { get; private set; }
     [field: SerializeField] protected Collider2D col2D { get; private set; }
     [field: SerializeField] protected AIPath path { get; set; }
+    [SerializeField]
+    protected LayerMask TerrainLayers;
     protected AudioSource WalkingSound { get; set; }
     protected GameObject DeathSoundPrefab { get; set; }
     protected EnemyManager Manager { get; set; }
@@ -114,13 +116,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     #region Combo Interface Variables
     [field: Header("Combo Interface")]
-    [field: SerializeField] public Timer ComboEffectTimer { get; set; }
     [field: SerializeField, ReadOnly] public LayerMask TargetLayer { get; set; }
     [field: SerializeField] protected LayerMask PlayerLayer { get; set; }
     [field: SerializeField] protected LayerMask EnemyLayer { get; set; }
-    public bool IsNoxious { get; set; }
-    public bool IsWither { get; set; }
-    public bool IsBrambled { get; set; }
     public bool IsStunned { get; set; }
     [SerializeField]
     protected TMP_Text comboText;
@@ -193,7 +191,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         defaultLayer = col2D.excludeLayers;
     }
 
-    public virtual void SetInheritanceSO()
+    protected virtual void SetInheritanceSO()
     {
 
     }
@@ -416,6 +414,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
             Manager.DecrementActiveEnemyCounter();
             GameManager.Instance.AddSouls(Souls);
         }
+        PoolSelf();
     }
     #endregion
 
@@ -467,7 +466,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         while (WindingUp)
         {
             block.SetColor("_FlashColour", Color.red);
-            block.SetFloat("_FlashAmount", 1);
+            block.SetFloat("_FlashAmount", 0.65f);
             rend.SetPropertyBlock(block);
             yield return new WaitForSeconds(0.1f);
 
@@ -501,13 +500,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable
                 BeginWindup(Attack3Windup);
                 break;
         }
-        BeginAttackCooldown();
+        AbleToAttack = false;
     }
 
     protected virtual void BeginAttackCooldown()
     {
         EnemyTimers.SetTime((int)EnemyTimer.attackCooldownTimer, AttackCooldownDuration);
-        AbleToAttack = false;
+        
     }
 
     protected virtual void EndAttackCooldown(object sender, EventArgs e)
@@ -553,7 +552,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     {
         //set state to stationary as enemy is done with an attack
         currentState = EnemyState.stationary;
-        EnemyTimers.SetTime((int)EnemyTimer.attackCD, AttackEndAiCD);
+        BeginAttackCooldown();
         Manager.DoneAttack();
         isAttacking = false;
         hitTarget = false;
@@ -566,7 +565,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         WindingUp = false;
         //interrupted enemy should stop current action
         currentState = EnemyState.stationary;
-        EnemyTimers.SetTime((int)EnemyTimer.attackCD, AttackEndAiCD);
         if (isAttacking)
             Manager.DoneAttack();
         isAttacking = false;
@@ -795,13 +793,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     [Header("AI")]
     [SerializeField, Range(1,10)] protected int IdleRadius;
-    [SerializeField, Range(1,10)] protected int RepositionPoint;
+    [SerializeField, Range(1,10)] protected float RepositionPointMin;
+    [SerializeField, Range(1,10)] protected float RepositionPointMax;
     [SerializeField] protected float IdleMoveRateMin;
     [SerializeField] protected float IdleMoveRateMax;
-    [SerializeField] protected float RepositionRateMin;
-    [SerializeField] protected float RepositionRateMax;
-    [SerializeField] protected float AttackEndAiCD;
-    [SerializeField] protected float MinimumAttackRange = 1; 
     [SerializeField][ReadOnly]
     protected EnemyState currentState;
     [SerializeField][ReadOnly]
@@ -817,7 +812,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         if (IsStunned || Staggered) return;
         if (!hasDestination && currentState.Equals(EnemyState.stationary) && EnemyTimers.IsTimeZero((int)EnemyTimer.aiActionTimer))
         {
-            if (EnemyTimers.IsTimeZero((int)EnemyTimer.attackCD) && Manager.CanAttack())
+            if (AbleToAttack && Manager.CanAttack())
             {
                 currentState = EnemyState.chasing;
                 CurrentAttack = ChooseAttack();
@@ -829,7 +824,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
                 float y = Random.Range(-IdleRadius, IdleRadius);
                 randDeviate = new Vector2(x, y);
                 currentState = EnemyState.repositioning;
-                repositionRange = Random.Range(3f, 6f);
+                repositionRange = Random.Range(RepositionPointMin, RepositionPointMax);
             }
         }
     }
@@ -941,7 +936,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         switch ((int)currentState)
         {
             case (int)EnemyState.idle:
-                timeToAdd = UnityEngine.Random.Range(IdleMoveRateMin, IdleMoveRateMax);
+                timeToAdd = Random.Range(IdleMoveRateMin, IdleMoveRateMax);
                 break;
             case (int)EnemyState.chasing:
                 Attack();
@@ -1025,13 +1020,22 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     //Obsolete
     #region Pooling Functions (Unused)
-    /*
+
     public Pool<Enemy> Pool { get; set; }
     public bool IsPooled { get; set; }
-    public void PoolSelf()
+    public virtual void PoolSelf(object sender, EventArgs e)
     {
-        Pool.PoolObj(this);
+        PoolSelf();
     }
-    */
+
+    public virtual void PoolSelf()
+    {
+        if (Pool != null)
+            Pool.PoolObj(this);
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     #endregion
 }

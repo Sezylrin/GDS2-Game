@@ -66,7 +66,7 @@ public abstract class MeleeEnemy : Enemy
     {
         Vector3 targetpoint = targetTr.position;
         Vector3 minimumRange = transform.position - targetpoint;
-        minimumRange = minimumRange.normalized * MinimumAttackRange;
+        //minimumRange = minimumRange.normalized * MinimumAttackRange;
         targetpoint += minimumRange;
         SetDestination(targetpoint);
     }

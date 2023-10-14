@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cheetah : Enemy, IPoolable<Cheetah>
+public class Cheetah : Enemy
 {
     [field: Header("Cheetah")]
     [field: SerializeField] protected GameObject SwipeHitbox { get; set; }
@@ -14,10 +14,8 @@ public class Cheetah : Enemy, IPoolable<Cheetah>
 
 
     #region PoolingVariables
-    public Pool<Cheetah> Pool { get; set; }
-    public bool IsPooled { get; set; }
 
-    protected Pool<Dagger> pool;
+    protected Pool<EnemyProjectile> pool;
     #endregion
 
 
@@ -38,12 +36,12 @@ public class Cheetah : Enemy, IPoolable<Cheetah>
         PivotPoint.eulerAngles = new Vector3(0, 0, CustomMath.ClampedDirection(Vector2.right, dir));
         col2D.includeLayers = TargetLayer;
         bool initial;
-        Dagger temp = pool.GetPooledObj(out initial);
+        EnemyProjectile temp = pool.GetPooledObj(out initial);
         if (initial)
         {
             temp.NewInstance();
         }
-        temp.Init(targetTr.position - transform.position, DaggerSpawnPoint.position, TargetLayer, Attack2Damage, Attack2Duration, DaggerMoveSpeed, AttackKnockback, this);
+        temp.Init(targetTr.position - transform.position, DaggerSpawnPoint.position, TargetLayer, Attack2Damage, Attack2Duration, DaggerMoveSpeed, AttackKnockback, transform);
     }
     #endregion
 
@@ -68,7 +66,7 @@ public class Cheetah : Enemy, IPoolable<Cheetah>
     {
         Vector3 targetpoint = targetTr.position;
         Vector3 minimumRange = transform.position - targetpoint;
-        minimumRange = minimumRange.normalized * MinimumAttackRange;
+        minimumRange = minimumRange.normalized * 2;
         targetpoint += minimumRange;
         SetDestination(targetpoint);
     }
@@ -100,16 +98,6 @@ public class Cheetah : Enemy, IPoolable<Cheetah>
         }
     }
 
-    public override void OnDeath(bool overrideKill = false)
-    {
-        base.OnDeath(overrideKill);
-        PoolSelf();
-    }
 
-    #region PoolingFunctions
-    public void PoolSelf()
-    {
-        Pool.PoolObj(this);
-    }
-    #endregion 
+
 }

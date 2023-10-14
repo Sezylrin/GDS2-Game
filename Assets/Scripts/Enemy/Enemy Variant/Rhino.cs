@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rhino : Enemy, IPoolable<Rhino>
+public class Rhino : Enemy
 {
     [field: Header("Rhino")]
     [field: SerializeField] protected GameObject ChargeHitbox { get; set; }
@@ -21,19 +21,12 @@ public class Rhino : Enemy, IPoolable<Rhino>
     [field: SerializeField] protected float ShockwaveGrowthSpeed { get; set; } = 1;
     private RhinoScriptableObject RhinoSO;
     private Coroutine shockwaveCoroutine;
-    [SerializeField]
-    private LayerMask TerrainLayers;
+    private Pool<EnemyProjectile> pool;
 
     #region Tutorial
     public ModifyBoundary boundary;
     #endregion
 
-    #region PoolingVariables
-    public Pool<Rhino> Pool { get; set; }
-    public bool IsPooled { get; set; }
-
-    protected Pool<Stomp> pool;
-    #endregion
 
     protected override void Start()
     {
@@ -41,7 +34,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
         GameManager.Instance.PoolingManager.FindPool(StompPrefab, out pool);
     }
 
-    public override void SetInheritanceSO()
+    protected override void SetInheritanceSO()
     {
         RhinoSO = SO as RhinoScriptableObject;
     }
@@ -85,6 +78,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
     protected override void Attack1()
     {
         dir = (targetTr.position - transform.position).normalized;
+        PivotPoint.eulerAngles = CustomMath.GetEularAngleToDir(Vector2.right, dir);
         col2D.includeLayers = TargetLayer;
         ChargeHitbox.SetActive(true);
         StartCoroutine(StartCharge());
@@ -178,15 +172,15 @@ public class Rhino : Enemy, IPoolable<Rhino>
     protected override void Attack3()
     {
         dir = (targetTr.position - transform.position).normalized;
-        PivotPoint.eulerAngles = new Vector3(0, 0, CustomMath.ClampedDirection(Vector2.right, dir));
+        PivotPoint.eulerAngles = CustomMath.GetEularAngleToDir(Vector2.right, dir);
         col2D.includeLayers = TargetLayer;
         bool initial;
-        Stomp temp = pool.GetPooledObj(out initial);
+        EnemyProjectile temp = pool.GetPooledObj(out initial);
         if (initial)
         {
             temp.NewInstance();
         }
-        temp.Init(targetTr.position - transform.position, StompSpawnPoint.position, TargetLayer, Attack3Damage, Attack3Duration, StompMoveSpeed, AttackKnockback, this);
+        temp.Init(targetTr.position - transform.position, StompSpawnPoint.position, TargetLayer, Attack3Damage, Attack3Duration, StompMoveSpeed, AttackKnockback, transform);
         Debug.Log("Using Stomp");
     }
     #endregion
@@ -198,12 +192,6 @@ public class Rhino : Enemy, IPoolable<Rhino>
         ShockwaveHitbox.SetActive(false);
         StopCoroutine(StartCharge());
         Charging = false;
-    }
-
-    public override void OnDeath(bool overrideKill = false)
-    {
-        base.OnDeath(overrideKill);
-        PoolSelf();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -232,23 +220,5 @@ public class Rhino : Enemy, IPoolable<Rhino>
     }
 
     #region AI
-    protected override void RepositionPicker()
-    {
-        base.RepositionPicker();
-    }
     #endregion
-
-    #region PoolingFunctions
-    public void PoolSelf()
-    {
-        if(Pool != null)
-            Pool.PoolObj(this);
-        else
-        {
-            Destroy(gameObject);
-            if (boundary)
-                boundary.DisableBoundary();
-        }
-    }
-    #endregion 
 }

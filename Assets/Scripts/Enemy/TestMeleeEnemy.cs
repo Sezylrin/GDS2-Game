@@ -2,13 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestMeleeEnemy : MeleeEnemy, IPoolable<TestMeleeEnemy>
+public class TestMeleeEnemy : MeleeEnemy
 {
-    #region PoolingVariables
-    public Pool<TestMeleeEnemy> Pool { get; set; }
-    public bool IsPooled { get; set; }
 
-    #endregion
 
     public override void OnDeath(bool overrideKill = false)
     {
@@ -16,10 +12,4 @@ public class TestMeleeEnemy : MeleeEnemy, IPoolable<TestMeleeEnemy>
         PoolSelf();
     }
 
-    #region PoolingFunctions
-    public void PoolSelf()
-    {
-        Pool.PoolObj(this);
-    }
-    #endregion 
 }

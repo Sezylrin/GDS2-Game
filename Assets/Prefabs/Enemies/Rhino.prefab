@@ -263,7 +263,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.14284837, y: -0.03549391}
+  m_Offset: {x: 0.7, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -274,7 +274,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.0120118, y: 2.9266243}
+  m_Size: {x: 1, y: 2.5}
   m_EdgeRadius: 0
 --- !u!114 &6290309395383883118
 MonoBehaviour:
@@ -1148,7 +1148,7 @@ Transform:
   - {fileID: 1220229054}
   - {fileID: 7776298551693399208}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &9185797213798890991
 CircleCollider2D:
@@ -1274,10 +1274,10 @@ MonoBehaviour:
   <rb>k__BackingField: {fileID: 9185797213798890978}
   <col2D>k__BackingField: {fileID: 9185797213798890991}
   <path>k__BackingField: {fileID: 9185797213798890988}
+  TerrainLayers:
+    serializedVersion: 2
+    m_Bits: 384
   collisionDisabledDur: 4
-  <ComboEffectTimer>k__BackingField:
-    <times>k__BackingField: []
-    owner: {fileID: 0}
   <TargetLayer>k__BackingField:
     serializedVersion: 2
     m_Bits: 0
@@ -1318,13 +1318,10 @@ MonoBehaviour:
   elementResistAmount: 0.8
   baseArmour: 1
   IdleRadius: 3
-  RepositionPoint: 5
+  RepositionPointMin: 3
+  RepositionPointMax: 6
   IdleMoveRateMin: 2
   IdleMoveRateMax: 4
-  RepositionRateMin: 0
-  RepositionRateMax: 2
-  AttackEndAiCD: 1.5
-  MinimumAttackRange: 1
   currentState: 0
   hasDestination: 0
   targetTr: {fileID: 0}
@@ -1341,9 +1338,6 @@ MonoBehaviour:
   <ShockwaveStartRadius>k__BackingField: 0
   <ShockwaveEndRadius>k__BackingField: 0
   <ShockwaveGrowthSpeed>k__BackingField: 0
-  TerrainLayers:
-    serializedVersion: 2
-    m_Bits: 384
   boundary: {fileID: 0}
 --- !u!114 &9185797213798890979
 MonoBehaviour:
@@ -1369,7 +1363,7 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 4294967295
     useGraphRaycasting: 0
-  traversableTags: -1
+  traversableTags: -3
   tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   graphMask:
     value: -1
