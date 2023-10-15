@@ -46,9 +46,9 @@ public abstract class MeleeEnemy : Enemy
     }
     */
 
-    protected override void EndAttack(object sender, EventArgs e)
+    protected override void EndAttack()
     {
-        base.EndAttack(sender, e);
+        base.EndAttack();
         AttackHitbox.SetActive(false);
         col2D.includeLayers = 0;
         hitTarget = false;

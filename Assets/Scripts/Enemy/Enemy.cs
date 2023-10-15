@@ -65,14 +65,16 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     [field: SerializeField, ReadOnly] protected int Attack1Damage { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack1Duration { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack1Windup { get; set; }
+    [field: SerializeField, ReadOnly] protected float AttackKnockback1 { get; set; }
     [field: SerializeField, ReadOnly] protected int Attack2Damage { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack2Duration { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack2Windup { get; set; }
+    [field: SerializeField, ReadOnly] protected float AttackKnockback2 { get; set; }
     [field: SerializeField, ReadOnly] protected int Attack3Damage { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack3Duration { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack3Windup { get; set; }
+    [field: SerializeField, ReadOnly] protected float AttackKnockback3 { get; set; }
 
-    [field: SerializeField, ReadOnly] protected float AttackKnockback { get; set; }
     [field: SerializeField, ReadOnly, Range(0, 100)] protected int ConsumableHealthPercentThreshold { get; set; }
     [field: SerializeField, ReadOnly, Range(0, 100)] protected int HealthPercentReceivedOnConsume { get; set; }
     #endregion
@@ -207,7 +209,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         AbleToAttack = true;
         Consumable = false;
         ElementTier = 1;
-        currentState = EnemyState.idle;
+        currentState = EnemyState.stationary;
 
         targetTr = GameManager.Instance.PlayerTransform;
         TargetLayer = PlayerLayer;
@@ -231,12 +233,15 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         Attack1Damage = SO.attack1Damage[Tier - 1];
         Attack1Duration = SO.attack1Duration;
         Attack1Windup = SO.windup1Duration;
+        AttackKnockback1 = SO.attackKnockback1;
         Attack2Damage = SO.attack2Damage[Tier - 1];
         Attack2Duration = SO.attack2Duration;
         Attack2Windup = SO.windup2Duration;
+        AttackKnockback2 = SO.attackKnockback2;
         Attack3Damage = SO.attack3Damage[Tier - 1];
         Attack3Duration = SO.attack3Duration;
         Attack3Windup = SO.windup3Duration;
+        AttackKnockback3 = SO.attackKnockback3;
 
         StaggerBar.SetStats(SO.basePointsToStagger, SO.staggerMinDuration, SO.staggerMaxDuration, SO.staggerDelayDuration, SO.staggerDecayAmount, SO.staggerDecayRate, SO.damageToReachMaxDuration);
         HealthBarController.SetStats(MaxHealth, ConsumableHealthPercentThreshold);
@@ -548,9 +553,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         EnemyTimers.SetTime((int)EnemyTimer.attackDurationTimer, duration);
     }
 
-    protected virtual void EndAttack(object sender, EventArgs e)
+    protected void EndAttack(object sender, EventArgs e)
     {
         //set state to stationary as enemy is done with an attack
+        EndAttack();
+    }
+
+    protected virtual void EndAttack()
+    {
         currentState = EnemyState.stationary;
         BeginAttackCooldown();
         Manager.DoneAttack();
@@ -563,6 +573,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         EnemyTimers.ResetSpecificToZero((int)EnemyTimer.windupDurationTimer);
         EnemyTimers.ResetSpecificToZero((int)EnemyTimer.attackDurationTimer);
         WindingUp = false;
+        EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, 1);
         //interrupted enemy should stop current action
         currentState = EnemyState.stationary;
         if (isAttacking)
@@ -590,15 +601,17 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         {
             case 1: 
                 target.TakeDamage(Attack1Damage, 0, Element);
+                target.AddForce(dir.normalized * AttackKnockback1);
                 break;
             case 2:
                 target.TakeDamage(Attack2Damage, 0, Element);
+                target.AddForce(dir.normalized * AttackKnockback2);
                 break;
             case 3:
                 target.TakeDamage(Attack3Damage, 0, Element);
+                target.AddForce(dir.normalized * AttackKnockback3);
                 break;
         }
-        target.AddForce(dir.normalized * AttackKnockback);
         hitTarget = true;
     }
     #endregion

@@ -21,7 +21,7 @@ public class Snake : Enemy
         base.Start();
         GameManager.Instance.PoolingManager.FindPool(ProjectileGlobPF, out globPool);
         GameManager.Instance.PoolingManager.FindPool(AcidGlobPF, out acidGlobPool);
-        InvokeRepeating("Attack3", 0, 3.5f);
+        //InvokeRepeating("Attack3", 0, 2.5f);
     }
     protected override void SetInheritanceSO()
     {
@@ -45,16 +45,15 @@ public class Snake : Enemy
     #region Attack1
     protected override void Attack1()
     {
-        dir = (targetTr.position - transform.position).normalized;
+        dir = (targetTr.position - transform.position);
         PivotPoint.eulerAngles = CustomMath.GetEularAngleToDir(Vector2.right, dir);
-        col2D.includeLayers = TargetLayer;
         bool initial;
         EnemyProjectile temp = globPool.GetPooledObj(out initial);
         if (initial)
         {
             temp.NewInstance();
         }
-        temp.Init(targetTr.position - transform.position, GlobSpawnPoint.position, TargetLayer, Attack3Damage, Attack3Duration, SingleShotSpeed, AttackKnockback, transform);
+        temp.Init(dir, GlobSpawnPoint.position, TargetLayer, Attack3Damage, Attack3Duration, SingleShotSpeed, AttackKnockback1, transform);
         Debug.Log("Using NormalAttack");
     }
     #endregion
@@ -71,16 +70,15 @@ public class Snake : Enemy
         float dur = Attack2Duration / RapidFireAmount;
         for (int i = 0; i < RapidFireAmount; i++)
         {
-            dir = (targetTr.position - transform.position).normalized;
+            dir = (targetTr.position - transform.position);
             PivotPoint.eulerAngles = CustomMath.GetEularAngleToDir(Vector2.right, dir);
-            col2D.includeLayers = TargetLayer;
             bool initial;
             EnemyProjectile temp = globPool.GetPooledObj(out initial);
             if (initial)
             {
                 temp.NewInstance();
             }
-            temp.Init(targetTr.position - transform.position, GlobSpawnPoint.position, TargetLayer, Attack2Damage, Attack2Duration * 4, RapidFireSpeed, AttackKnockback, transform);
+            temp.Init(dir, GlobSpawnPoint.position, TargetLayer, Attack2Damage, Attack2Duration * 4, RapidFireSpeed, AttackKnockback2, transform);
             yield return new WaitForSeconds(dur);
         }
     }
@@ -90,6 +88,8 @@ public class Snake : Enemy
     [ContextMenu("attack3")]
     protected override void Attack3()
     {
+        dir = (targetTr.position - transform.position).normalized;
+        PivotPoint.eulerAngles = CustomMath.GetEularAngleToDir(Vector2.right, dir);
         float randomDeviation = Random.Range(0f, 120f);
         Vector2[] positions = { 
             CustomMath.RotateByEularAngles(Vector2.right, randomDeviation),
@@ -108,8 +108,8 @@ public class Snake : Enemy
             {
                 temp.NewInstance();
             }
-            temp.Init(dir, GlobSpawnPoint.position, TargetLayer, Attack3Damage, Attack3Duration * 4, AcidBlobSpeed, AttackKnockback, transform);
-            (temp as ArchedProjectile).InitArch(Vector2.up * 2, positions[i] + (Vector2)targetTr.position, 9.8f, true);
+            temp.Init(dir, GlobSpawnPoint.position, TargetLayer, Attack3Damage, AcidBlobSpeed + SnakeSO.AcidPoolDuration, AcidBlobSpeed, AttackKnockback3, transform);
+            (temp as AcidPool).InitArch(Vector2.up * 2, positions[i] + (Vector2)targetTr.position, true);
             targetLocation[i].transform.position = positions[i] + (Vector2)targetTr.position;
         }
         

@@ -17,6 +17,7 @@ public class EnemyProjectile : MonoBehaviour, IPoolable<EnemyProjectile>
     [field: SerializeField] protected Collider2D col2d { get; set; }
     [field: SerializeField] protected Rigidbody2D rb { get; set; }
     [field: SerializeField] protected LayerMask terrainMask { get; set; }
+    [field: SerializeField] protected bool poolOnContact { get; private set; } = true;
     protected Vector2 dir;
     protected int damage;
     protected float knockbackForce;
@@ -28,7 +29,6 @@ public class EnemyProjectile : MonoBehaviour, IPoolable<EnemyProjectile>
     {
         ProjectileTimers = GameManager.Instance.TimerManager.GenerateTimers(typeof(ProjectileTimer), gameObject);
         ProjectileTimers.times[(int)ProjectileTimer.lifetimeTimer].OnTimeIsZero += PoolSelf;
-        Debug.Log("generated");
     }
 
     public virtual void Init(Vector2 dir, Vector3 spawnPos, LayerMask Target, int damage, float duration, float speed, float knockbackForce, Transform shooter)
@@ -74,7 +74,6 @@ public class EnemyProjectile : MonoBehaviour, IPoolable<EnemyProjectile>
     }
     protected virtual void StartLifetime()
     {
-        Debug.Log("setting duration " + Duration);
         ProjectileTimers.SetTime((int)ProjectileTimer.lifetimeTimer, Duration);
     }
 
@@ -95,10 +94,11 @@ public class EnemyProjectile : MonoBehaviour, IPoolable<EnemyProjectile>
                 DoDamage(foundTarget);
             }
         }
-        PoolSelf();
+        if (poolOnContact)
+            PoolSelf();
     }
 
-    private void DoDamage(IDamageable target)
+    protected virtual void DoDamage(IDamageable target)
     {
         target.TakeDamage(damage, 0, ElementType.noElement);
         target.AddForce(dir.normalized * knockbackForce);

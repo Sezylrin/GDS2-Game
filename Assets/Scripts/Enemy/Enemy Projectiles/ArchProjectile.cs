@@ -1,21 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 
-public class ArchedProjectile : EnemyProjectile
+public class ArchProjectile : EnemyProjectile
 {
-    // Start is called before the first frame update
     protected Vector2 targetPoint;
     protected Vector2 archDir;
-    protected bool continueArch;
     protected float archDuration;
-    private float initialV;
-    private float initialTime;
-    private float decay;
-    private void Start()
+    protected float initialV;
+    protected float decay;
+    protected Vector2 knockbackdir;
+    // Start is called before the first frame update
+    public virtual void InitArch(Vector2 archDir, Vector2 targetPoint, bool fixedArrival)
     {
-
+        this.archDir = archDir;
+        this.targetPoint = targetPoint;
+        if (fixedArrival)
+        {
+            archDuration = Speed * 0.5f;
+            Speed = ((targetPoint - (Vector2)transform.position).magnitude / Speed);
+        }
+        else
+            archDuration = ((targetPoint - (Vector2)transform.position).magnitude / Speed) * 0.5f;
+        initialV = (2 * archDir.magnitude) / archDuration;
+        decay = initialV / archDuration;
     }
     protected override void MoveProjectileByDir()
     {
@@ -24,6 +32,7 @@ public class ArchedProjectile : EnemyProjectile
         Vector2 modifiedArch = archDir.normalized * initialV * Time.deltaTime;
         newDir += modifiedArch;
         initialV -= decay * Time.deltaTime * 0.5f;
+        knockbackdir = newDir;
         gameObject.transform.Translate(newDir);
     }
     public override void Init(Vector2 dir, Vector3 spawnPos, LayerMask Target, int damage, float duration, float speed, float knockbackForce, Transform shooter)
@@ -37,7 +46,7 @@ public class ArchedProjectile : EnemyProjectile
             rb.includeLayers = terrainMask + Target;
             col2d.excludeLayers = ~col2d.includeLayers;
             rb.excludeLayers = ~rb.includeLayers;
-        }        
+        }
         this.damage = damage;
         this.knockbackForce = knockbackForce;
         Duration = duration;
@@ -45,36 +54,10 @@ public class ArchedProjectile : EnemyProjectile
         this.shooter = shooter;
         StartLifetime();
     }
-    public void InitArch(Vector2 archDir ,Vector2 targetPoint, float initialVelocty,bool fixedArrival, bool continueArch = false)
-    {
-        initialTime = Time.time;
-        this.archDir = archDir;
-        this.targetPoint = targetPoint;
-        this.continueArch = continueArch;
-        if (fixedArrival)
-        {
-            archDuration = Speed * 0.5f;
-            Speed = ((targetPoint - (Vector2)transform.position).magnitude / Speed);
-        }
-        else
-            archDuration = ((targetPoint - (Vector2)transform.position).magnitude / Speed) * 0.5f;
-        initialV = initialVelocty;
-        decay = initialV / archDuration;
-        Invoke("SpawnAcid", archDuration * 2);
-    }
 
-    public void SpawnAcid()
+    protected override void DoDamage(IDamageable target)
     {
-        Speed = 0;
-        initialV = 0;
-        decay = 0;
-        //PoolSelf();
+        target.TakeDamage(damage, 0, ElementType.noElement);
+        target.AddForce(knockbackdir.normalized * knockbackForce);
     }
-    public void Pause()
-    {
-        Debug.Log(initialV);    
-        Debug.Break();
-    }
-
-
 }

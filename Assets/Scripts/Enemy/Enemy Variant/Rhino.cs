@@ -171,7 +171,7 @@ public class Rhino : Enemy
     #region 3 - Stomp
     protected override void Attack3()
     {
-        dir = (targetTr.position - transform.position).normalized;
+        dir = (targetTr.position - transform.position);
         PivotPoint.eulerAngles = CustomMath.GetEularAngleToDir(Vector2.right, dir);
         col2D.includeLayers = TargetLayer;
         bool initial;
@@ -180,14 +180,14 @@ public class Rhino : Enemy
         {
             temp.NewInstance();
         }
-        temp.Init(targetTr.position - transform.position, StompSpawnPoint.position, TargetLayer, Attack3Damage, Attack3Duration, StompMoveSpeed, AttackKnockback, transform);
+        temp.Init(dir, StompSpawnPoint.position, TargetLayer, Attack3Damage, Attack3Duration, StompMoveSpeed, AttackKnockback3, transform);
         Debug.Log("Using Stomp");
     }
     #endregion
 
-    protected override void EndAttack(object sender, EventArgs e)
+    protected override void EndAttack()
     {
-        base.EndAttack(sender, e);
+        base.EndAttack();
         ChargeHitbox.SetActive(false);
         ShockwaveHitbox.SetActive(false);
         StopCoroutine(StartCharge());

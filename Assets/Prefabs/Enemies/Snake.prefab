@@ -986,7 +986,7 @@ Transform:
   - {fileID: 1752878505191741674}
   - {fileID: 1752878505782548790}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &1752878506409264273
 CircleCollider2D:
@@ -1114,17 +1114,17 @@ MonoBehaviour:
   <path>k__BackingField: {fileID: 1752878506409264277}
   TerrainLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   collisionDisabledDur: 3
   <TargetLayer>k__BackingField:
     serializedVersion: 2
     m_Bits: 0
   <PlayerLayer>k__BackingField:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   <EnemyLayer>k__BackingField:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   comboText: {fileID: 4878860922085041009}
   flashDuration: 0.3
   curve:
@@ -1155,20 +1155,22 @@ MonoBehaviour:
   staggerBonusDamage: 3
   elementResistAmount: 0.8
   baseArmour: 1
-  IdleRadius: 1
-  RepositionPoint: 0
+  IdleRadius: 3
+  RepositionPointMin: 5
+  RepositionPointMax: 8
   IdleMoveRateMin: 0
   IdleMoveRateMax: 2
-  RepositionRateMin: 0
-  RepositionRateMax: 2
-  AttackEndAiCD: 0.5
-  MinimumAttackRange: 1
   currentState: 0
   hasDestination: 0
   targetTr: {fileID: 0}
   debugDisableAI: 0
-  <ProjectileGlobPF>k__BackingField: {fileID: 0}
-  <GlobSpawnPoint>k__BackingField: {fileID: 0}
+  <ProjectileGlobPF>k__BackingField: {fileID: 6112958350056539535, guid: 800bfacfd8c2b8f44872271961ebb5dd, type: 3}
+  <AcidGlobPF>k__BackingField: {fileID: 7132035563446077344, guid: 33bfae2235ddfca4c8bb8e5f24404e48, type: 3}
+  <GlobSpawnPoint>k__BackingField: {fileID: 5289329356909360063}
+  targetLocation:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &1752878506409264274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1483,7 +1485,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.017950058, y: -0.18540013}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 3, y: 3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &3931732062897537107

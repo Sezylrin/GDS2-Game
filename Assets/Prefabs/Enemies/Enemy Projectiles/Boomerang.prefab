@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 683658288675410182}
-  - component: {fileID: 683658288675410183}
   - component: {fileID: 2738517571081443430}
+  - component: {fileID: -851164304443745343}
   m_Layer: 6
-  m_Name: Dagger
+  m_Name: Boomerang
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,33 +32,8 @@ Transform:
   m_Children:
   - {fileID: 4682539929917755286}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &683658288675410183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 683658288675410235}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3d6a083bd50da949bebff07f5877260, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Speed>k__BackingField: 5
-  <Duration>k__BackingField: 3
-  <ProjectileTimers>k__BackingField:
-    <times>k__BackingField: []
-    owner: {fileID: 0}
-  <SpriteObj>k__BackingField: {fileID: 4682539929917755286}
-  <col2d>k__BackingField: {fileID: 8245791643667941439}
-  <rb>k__BackingField: {fileID: 2738517571081443430}
-  <terrainMask>k__BackingField:
-    serializedVersion: 2
-    m_Bits: 128
-  <poolOnContact>k__BackingField: 1
-  overrideProjectile: 0
 --- !u!50 &2738517571081443430
 Rigidbody2D:
   serializedVersion: 4
@@ -86,6 +61,31 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &-851164304443745343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 683658288675410235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3417edcfa533ebd4fb3e38347e7b5a2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Speed>k__BackingField: 1
+  <Duration>k__BackingField: 3
+  <ProjectileTimers>k__BackingField:
+    <times>k__BackingField: []
+    owner: {fileID: 0}
+  <SpriteObj>k__BackingField: {fileID: 4682539929917755286}
+  <col2d>k__BackingField: {fileID: 8245791643667941439}
+  <rb>k__BackingField: {fileID: 2738517571081443430}
+  <terrainMask>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 128
+  <poolOnContact>k__BackingField: 1
+  overrideProjectile: 0
 --- !u!1 &1985493869887180735
 GameObject:
   m_ObjectHideFlags: 0

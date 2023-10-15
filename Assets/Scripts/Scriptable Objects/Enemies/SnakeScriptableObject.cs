@@ -11,4 +11,5 @@ public class SnakeScriptableObject : BaseEnemyScriptableObject
     public int RapidFireAmount;
     public float RapidFireSpeed;
     public float AcidBlobSpeed;
+    public float AcidPoolDuration;
 }
