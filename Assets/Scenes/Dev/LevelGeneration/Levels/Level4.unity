@@ -49553,14 +49553,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 8740009374881839184, guid: d874cba9114152c489bca98f653216b6, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8740009374881839191, guid: d874cba9114152c489bca98f653216b6, type: 3}
-      propertyPath: orthographic size
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 3976232692456254324, guid: 50f2c0e0b7cb92041a468042baf16c42, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].x
       value: -15.3949375
@@ -49596,6 +49588,10 @@ PrefabInstance:
     - target: {fileID: 5257679574246580382, guid: 50f2c0e0b7cb92041a468042baf16c42, type: 3}
       propertyPath: m_Name
       value: Camera
+      objectReference: {fileID: 0}
+    - target: {fileID: 6245186256803788585, guid: 50f2c0e0b7cb92041a468042baf16c42, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6310325432650285864, guid: 50f2c0e0b7cb92041a468042baf16c42, type: 3}
       propertyPath: m_Lens.OrthographicSize
@@ -49640,6 +49636,18 @@ PrefabInstance:
     - target: {fileID: 7970814410419470273, guid: 50f2c0e0b7cb92041a468042baf16c42, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8525863984138685045, guid: 50f2c0e0b7cb92041a468042baf16c42, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8740009374881839184, guid: d874cba9114152c489bca98f653216b6, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8740009374881839191, guid: d874cba9114152c489bca98f653216b6, type: 3}
+      propertyPath: orthographic size
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8740009374881839191, guid: 458a85ecc1955594c9239de76addfc07, type: 3}
       propertyPath: orthographic size
