@@ -170,10 +170,11 @@ public class Cheetah : Enemy
     #region trigger
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!collision.isTrigger || !swipeHitbox.enabled)
+            return;
         PlayerSystem foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
         {
-            Debug.Log("foundPlayer");
             if (foundTarget.GetState() == playerState.perfectDodge)
             {
                 Debug.Log("perfectDodge");
