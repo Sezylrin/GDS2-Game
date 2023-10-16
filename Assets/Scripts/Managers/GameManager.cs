@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     [field: SerializeField, HideOnPlay(true)] public Transform PlayerTransform { get; private set; }
     [field: SerializeField] public SkillSwitchManager SkillSwitchManager { get; private set; }
     [field: SerializeField] public StatsManager StatsManager { get; private set; }
+    [field: SerializeField] public TileSwapper TileSwapper { get; private set; }
     [field: SerializeField, HideOnPlay(true)]
     public PlayerComponentManager PCM { get; private set; }
     public Transform CameraTrackPoint { get; private set; }

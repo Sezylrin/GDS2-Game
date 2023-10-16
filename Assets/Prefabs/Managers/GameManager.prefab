@@ -8967,6 +8967,7 @@ Transform:
   - {fileID: 433756523}
   - {fileID: 598326448}
   - {fileID: 3296080151572235050}
+  - {fileID: 1994760043202882366}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8993,6 +8994,7 @@ MonoBehaviour:
   <PlayerTransform>k__BackingField: {fileID: 0}
   <SkillSwitchManager>k__BackingField: {fileID: 598326452}
   <StatsManager>k__BackingField: {fileID: 707390839}
+  <TileSwapper>k__BackingField: {fileID: 2952645797885296325}
   <PCM>k__BackingField: {fileID: 0}
   AudioComponent: {fileID: 0}
   <HealthPerSegment>k__BackingField: 1000
@@ -9418,6 +9420,64 @@ MonoBehaviour:
     - Key: 2
       Value:
       - {fileID: 8300000, guid: 208bc5aea7a20ad489c334ed62ef4140, type: 3}
+--- !u!1 &7791772077739235320
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1994760043202882366}
+  - component: {fileID: 2952645797885296325}
+  m_Layer: 0
+  m_Name: TileSwapper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1994760043202882366
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7791772077739235320}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3761662248408365455}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2952645797885296325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7791772077739235320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7979c3cb9fee95740a998be9645580ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  environmentTilesets:
+  - folder: '{"guid":"1c17b9ca4ed0e68429bba47e3ea8ce89","path":"Assets/Resources/Tilesets/EnvironmentTilesets/EnvironmentSet1"}'
+    tileset: []
+  - folder: '{"guid":"67e942529de016142baebfb432052455","path":"Assets/Resources/Tilesets/EnvironmentTilesets/EnvironmentSet2"}'
+    tileset: []
+  - folder: '{"guid":"61dce0562b40a904bb4d53678134244a","path":"Assets/Resources/Tilesets/EnvironmentTilesets/EnvironmentSet3"}'
+    tileset: []
+  holeTilesets:
+  - folder: '{"guid":"2222a0d78475dd8478b8fa73b1365c0d","path":"Assets/Resources/Tilesets/HoleTilesets/HoleSet1"}'
+    tileset: []
+  - folder: '{"guid":"8aff1a625726ca4408fd68047827cd3f","path":"Assets/Resources/Tilesets/HoleTilesets/HoleSet2"}'
+    tileset: []
+  - folder: '{"guid":"24ed9e2cced87404d8457ef2cb026a4b","path":"Assets/Resources/Tilesets/HoleTilesets/HoleSet3"}'
+    tileset: []
 --- !u!1 &8281509137487017787
 GameObject:
   m_ObjectHideFlags: 0

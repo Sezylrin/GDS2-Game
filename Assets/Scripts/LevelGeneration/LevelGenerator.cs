@@ -46,12 +46,15 @@ public class LevelGenerator : MonoBehaviour
     private List<SceneReference> levelList = new List<SceneReference>();
     [field: SerializeField, ReadOnly]
     public int activeLevelListIndex { get; private set; }
-    public int floorsCleared => Mathf.FloorToInt((float)(activeLevelListIndex + 1) / (fountainFrequency + 1));
+    // Calculates floorsCleared, replaced with floorsClearedOverride if debugMode is enabled
+    public int floorsCleared => !debugMode ? Mathf.FloorToInt((float)(activeLevelListIndex + 1) / (fountainFrequency + 1)) : floorsClearedOverride;
     [ReadOnly]
     public int lastFloorOnExit;
 
     [Header("Debug")]
+    public bool debugMode;
     public bool debugNextLevel;
+    public int floorsClearedOverride;
     
     private void Awake()
     {
@@ -108,9 +111,13 @@ public class LevelGenerator : MonoBehaviour
 
     private void OnValidate()
     {
-        if (!debugNextLevel) return;
-        debugNextLevel = false;
-        LoadNextLevel();
+        if (!debugMode) return;
+        if (debugNextLevel)
+        {
+            debugNextLevel = false;
+            GameManager.Instance.EnemyManager.KillEnemies();
+            LoadNextLevel();
+        }
     }
 
     //TODO: Change to AsyncLoading
@@ -122,7 +129,7 @@ public class LevelGenerator : MonoBehaviour
             return;
         }
         // If the next level is not in list
-        if (activeLevelListIndex + 1 >= levelList.Count)
+        while (activeLevelListIndex + 1 >= levelList.Count)
         {
             AddNewFloor();
         }
