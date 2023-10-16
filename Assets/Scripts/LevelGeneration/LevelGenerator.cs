@@ -33,7 +33,7 @@ public class LevelGenerator : MonoBehaviour
     [Tooltip("The amount that the difficulty will increase when moving through the right/harder room")]
     public int difficultyIncreaseRight = 2;
     [SerializeField]
-    private int floorsToWin = 7;
+    public int floorsToWin = 7;
     [SerializeField]
     private int startDifficulty = 5;
 

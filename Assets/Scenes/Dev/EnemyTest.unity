@@ -2937,6 +2937,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4165347194730273926, guid: d51d7b73a4c492843b5bbe22b38ecfa3, type: 3}
+      propertyPath: baseArmour
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5393515603401796057, guid: d51d7b73a4c492843b5bbe22b38ecfa3, type: 3}
       propertyPath: m_Name
       value: Lizard

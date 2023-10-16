@@ -99,9 +99,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     [field: SerializeField] protected Transform PivotPoint { get; set; }
     [field: SerializeField] protected HealthBarSegmentController HealthBarController { get; set; }
     [field: SerializeField] protected StaggerBar StaggerBar { get; set; }
-    [field: SerializeField] protected Consume Consume { get; set; }
-    [field: SerializeField] protected GameObject ConsumableHitbox { get; set; }
-    [field: SerializeField] protected Image ElementEffectImage { get; set; }
     [field: SerializeField] public Rigidbody2D rb { get; private set; }
     [field: SerializeField] protected Collider2D col2D { get; private set; }
     [field: SerializeField] protected AIPath path { get; set; }
@@ -217,8 +214,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
 
         EnemyTimers.ResetToZero();
 
-        ConsumableHitbox.SetActive(false);
-
         StaggerBar.ResetStagger();
     }
 
@@ -227,6 +222,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         MaxHealth = SO.maxHealth[Tier - 1];
         Speed = SO.speed[Tier - 1];
         ResetSpeed();
+        SetArmour();
         Souls = UnityEngine.Random.Range(SO.minSouls[Tier - 1], SO.maxSouls[Tier - 1] + 1);
         AttackCooldownDuration = SO.attackCooldown[Tier - 1];
         EffectDuration = SO.effectDuration;
@@ -246,7 +242,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
 
         StaggerBar.SetStats(SO.basePointsToStagger, SO.staggerMinDuration, SO.staggerMaxDuration, SO.staggerDelayDuration, SO.staggerDecayAmount, SO.staggerDecayRate, SO.damageToReachMaxDuration);
         HealthBarController.SetStats(MaxHealth, ConsumableHealthPercentThreshold);
-        Consume.SetStats(HealthPercentReceivedOnConsume);
     }
 
     public void SetHitPoints()
@@ -259,6 +254,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         MaxHealth = amount;
         SetHitPoints();
         HealthBarController.SetStats(MaxHealth, ConsumableHealthPercentThreshold);
+    }
+
+    public void SetArmour()
+    {
+        float floorsComplete = (float)LevelGenerator.Instance.floorsCleared;
+        float floorsToFinish = ((float)LevelGenerator.Instance.floorsToWin - 1f) * 2f;
+        baseArmour = 1 - (floorsComplete / floorsToFinish);
+        //Debug.Log("floorsComplete = " + floorsComplete + ", floorsToFinish = " + floorsToFinish + ", baseArmour = " + baseArmour);
     }
 
     public void SetTimers()
@@ -830,7 +833,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     private Vector2 randDeviate;
     protected virtual void StateMachine()
     {
-        if (debugDisableAI || Consume.BeingConsumed()) return;
+        if (debugDisableAI) return;
         if (IsStunned || Staggered) return;
         if (!hasDestination && currentState.Equals(EnemyState.stationary) && EnemyTimers.IsTimeZero((int)EnemyTimer.aiActionTimer))
         {
@@ -864,7 +867,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     }
     protected virtual void EnemyAi()
     {
-        if (debugDisableAI || Consume.BeingConsumed()) return;
+        if (debugDisableAI) return;
         if (IsStunned || Staggered) return;
         if (currentState == EnemyState.chasing)
         {
