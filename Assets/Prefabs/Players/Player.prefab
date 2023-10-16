@@ -2188,7 +2188,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 043395dceb0488c4380618bf735c876a, type: 2}
+  - {fileID: 2100000, guid: eb420e1f46afeeb45a5aabfcc79892ed, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2485,7 +2485,7 @@ Transform:
   - {fileID: 490763409}
   - {fileID: 247273588}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &3543791458973239727
 Rigidbody2D:
@@ -2562,6 +2562,7 @@ MonoBehaviour:
     owner: {fileID: 0}
   PCM: {fileID: 864687022}
   iframes: 0.7
+  hitStunnedDuration: 0.4
   flashDuration: 0.1
   rend: {fileID: 3543791457672997724}
   MaxCastPoints: 3
@@ -2607,7 +2608,7 @@ MonoBehaviour:
   dashRechargeRate: 1
   currentDashCharges: 0
   perfectDodgeDuration: 0.5
-  abilityLag: 0.4
+  abilityLag: 0.15
   abilityCast: 0.3
   <AbilityCentre>k__BackingField: {fileID: 1874316682}
   bufferDuration: 14
@@ -2667,10 +2668,10 @@ MonoBehaviour:
   PCM: {fileID: 864687022}
   abilitySpawnPoint: {fileID: 1699224757}
   abilities:
-  - {fileID: 11400000, guid: 418ea2c3934df71459d836d5d9631746, type: 2}
-  - {fileID: 11400000, guid: 10ba623a21e2d014fa77d3bbb2d7b5b8, type: 2}
+  - {fileID: 11400000, guid: 4a8a543bc9365db489c63ea275b0dde8, type: 2}
+  - {fileID: 11400000, guid: 8acf3bb673ec421489593b3f973c8036, type: 2}
   - {fileID: 11400000, guid: bfa1d90d7346b0d478313eedc9d02ef0, type: 2}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: b171dd3449f27d24b853ff66dc8d7750, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

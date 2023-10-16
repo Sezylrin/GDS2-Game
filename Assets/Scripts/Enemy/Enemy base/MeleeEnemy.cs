@@ -46,9 +46,9 @@ public abstract class MeleeEnemy : Enemy
     }
     */
 
-    protected override void EndAttack(object sender, EventArgs e)
+    protected override void EndAttack()
     {
-        base.EndAttack(sender, e);
+        base.EndAttack();
         AttackHitbox.SetActive(false);
         col2D.includeLayers = 0;
         hitTarget = false;
@@ -66,7 +66,7 @@ public abstract class MeleeEnemy : Enemy
     {
         Vector3 targetpoint = targetTr.position;
         Vector3 minimumRange = transform.position - targetpoint;
-        minimumRange = minimumRange.normalized * MinimumAttackRange;
+        //minimumRange = minimumRange.normalized * MinimumAttackRange;
         targetpoint += minimumRange;
         SetDestination(targetpoint);
     }

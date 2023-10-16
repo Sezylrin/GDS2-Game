@@ -113,7 +113,6 @@ public class Abilities : MonoBehaviour
     private ElementalSO abilityToCast;
     private void StartCast(ElementalSO selected)
     {
-        Debug.Log(selected.name);
         if (!selected)
             return;
         abilityToCast = selected;

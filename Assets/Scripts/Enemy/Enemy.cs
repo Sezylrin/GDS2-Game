@@ -22,7 +22,7 @@ public enum EnemyType
 }
 #endregion
 
-public abstract class Enemy : MonoBehaviour, IDamageable
+public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
 {
     // Enums
     #region EnemyTimer Enum
@@ -47,7 +47,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     [field: SerializeField, ReadOnly] protected ElementType ActiveElementEffect { get; set; } = ElementType.noElement;
     [field: SerializeField, ReadOnly] protected int ElementTier { get; set; }
     [field: SerializeField, ReadOnly] protected int CurrentAttack { get; set; }
-    [field: SerializeField, ReadOnly] protected bool WindingUp { get; set; }
+    [field: SerializeField, ReadOnly] public bool WindingUp { get; private set; }
+    [field: SerializeField, ReadOnly] public bool InAttack { get; private set; }
     [field: SerializeField, ReadOnly] protected bool Staggered { get; set; }
     [field: SerializeField, ReadOnly] protected bool AbleToAttack { get; set; }
     [field: SerializeField, ReadOnly] protected bool Consumable { get; set; }
@@ -65,14 +66,16 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     [field: SerializeField, ReadOnly] protected int Attack1Damage { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack1Duration { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack1Windup { get; set; }
+    [field: SerializeField, ReadOnly] protected float AttackKnockback1 { get; set; }
     [field: SerializeField, ReadOnly] protected int Attack2Damage { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack2Duration { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack2Windup { get; set; }
+    [field: SerializeField, ReadOnly] protected float AttackKnockback2 { get; set; }
     [field: SerializeField, ReadOnly] protected int Attack3Damage { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack3Duration { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack3Windup { get; set; }
+    [field: SerializeField, ReadOnly] protected float AttackKnockback3 { get; set; }
 
-    [field: SerializeField, ReadOnly] protected float AttackKnockback { get; set; }
     [field: SerializeField, ReadOnly, Range(0, 100)] protected int ConsumableHealthPercentThreshold { get; set; }
     [field: SerializeField, ReadOnly, Range(0, 100)] protected int HealthPercentReceivedOnConsume { get; set; }
     #endregion
@@ -102,6 +105,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     [field: SerializeField] public Rigidbody2D rb { get; private set; }
     [field: SerializeField] protected Collider2D col2D { get; private set; }
     [field: SerializeField] protected AIPath path { get; set; }
+    [SerializeField,Tooltip("What layers the enemy cant walk over or through")]
+    protected LayerMask TerrainLayers;
     protected AudioSource WalkingSound { get; set; }
     protected GameObject DeathSoundPrefab { get; set; }
     protected EnemyManager Manager { get; set; }
@@ -114,13 +119,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     #region Combo Interface Variables
     [field: Header("Combo Interface")]
-    [field: SerializeField] public Timer ComboEffectTimer { get; set; }
     [field: SerializeField, ReadOnly] public LayerMask TargetLayer { get; set; }
     [field: SerializeField] protected LayerMask PlayerLayer { get; set; }
     [field: SerializeField] protected LayerMask EnemyLayer { get; set; }
-    public bool IsNoxious { get; set; }
-    public bool IsWither { get; set; }
-    public bool IsBrambled { get; set; }
     public bool IsStunned { get; set; }
     [SerializeField]
     protected TMP_Text comboText;
@@ -193,7 +194,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         defaultLayer = col2D.excludeLayers;
     }
 
-    public virtual void SetInheritanceSO()
+    protected virtual void SetInheritanceSO()
     {
 
     }
@@ -209,7 +210,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         AbleToAttack = true;
         Consumable = false;
         ElementTier = 1;
-        currentState = EnemyState.idle;
+        currentState = EnemyState.stationary;
 
         targetTr = GameManager.Instance.PlayerTransform;
         TargetLayer = PlayerLayer;
@@ -233,12 +234,15 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         Attack1Damage = SO.attack1Damage[Tier - 1];
         Attack1Duration = SO.attack1Duration;
         Attack1Windup = SO.windup1Duration;
+        AttackKnockback1 = SO.attackKnockback1;
         Attack2Damage = SO.attack2Damage[Tier - 1];
         Attack2Duration = SO.attack2Duration;
         Attack2Windup = SO.windup2Duration;
+        AttackKnockback2 = SO.attackKnockback2;
         Attack3Damage = SO.attack3Damage[Tier - 1];
         Attack3Duration = SO.attack3Duration;
         Attack3Windup = SO.windup3Duration;
+        AttackKnockback3 = SO.attackKnockback3;
 
         StaggerBar.SetStats(SO.basePointsToStagger, SO.staggerMinDuration, SO.staggerMaxDuration, SO.staggerDelayDuration, SO.staggerDecayAmount, SO.staggerDecayRate, SO.damageToReachMaxDuration);
         HealthBarController.SetStats(MaxHealth, ConsumableHealthPercentThreshold);
@@ -301,6 +305,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
             debugInterruptAttack = false;
             InterruptAttack();
         }
+        SetMainTex();
         StateMachine();
         DeterminePathing();
         //EnemyAi();
@@ -416,6 +421,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
             Manager.DecrementActiveEnemyCounter();
             GameManager.Instance.AddSouls(Souls);
         }
+        PoolSelf();
     }
     #endregion
 
@@ -423,7 +429,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     private Coroutine flash;
     private void PlayFlash()
     {
-        block.SetColor("_FlashColour", Color.white);
+        /*block.SetColor("_FlashColour", Color.white);
         if (flash != null)
         {
             StopCoroutine(flash);
@@ -431,13 +437,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable
             rend.SetPropertyBlock(block);
             flash = StartCoroutine(DamageFlash());
         }
-        flash = StartCoroutine(DamageFlash());
+        flash = StartCoroutine(DamageFlash());*/
     }
     protected void SetOutline(Color colour, float thickness = 1)
     {
-        block.SetColor("_OutlineColour", colour);
+        /*block.SetColor("_OutlineColour", colour);
         block.SetFloat("_Thickness", thickness);
-        rend.SetPropertyBlock(block);
+        rend.SetPropertyBlock(block);*/
     }
     private IEnumerator DamageFlash()
     {
@@ -456,10 +462,15 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         rend.SetPropertyBlock(block);
     }
 
+    private void SetMainTex()
+    {
+        block.SetTexture("_MainTex", rend.sprite.texture);
+    }
+
     protected void CancelFlash()
     {
-        block.SetFloat("_FlashAmount", 0);
-        rend.SetPropertyBlock(block);
+        /*block.SetFloat("_FlashAmount", 0);
+        rend.SetPropertyBlock(block);*/
     }
 
     private IEnumerator WindUpFlash()
@@ -467,7 +478,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         while (WindingUp)
         {
             block.SetColor("_FlashColour", Color.red);
-            block.SetFloat("_FlashAmount", 1);
+            block.SetFloat("_FlashAmount", 0.65f);
             rend.SetPropertyBlock(block);
             yield return new WaitForSeconds(0.1f);
 
@@ -501,13 +512,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable
                 BeginWindup(Attack3Windup);
                 break;
         }
-        BeginAttackCooldown();
+        AbleToAttack = false;
     }
 
     protected virtual void BeginAttackCooldown()
     {
         EnemyTimers.SetTime((int)EnemyTimer.attackCooldownTimer, AttackCooldownDuration);
-        AbleToAttack = false;
+        
     }
 
     protected virtual void EndAttackCooldown(object sender, EventArgs e)
@@ -530,6 +541,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     protected virtual void BeginAttack()
     {
+        InAttack = true;
         float duration = 0;
         switch (CurrentAttack)
         {
@@ -549,11 +561,17 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         EnemyTimers.SetTime((int)EnemyTimer.attackDurationTimer, duration);
     }
 
-    protected virtual void EndAttack(object sender, EventArgs e)
+    protected void EndAttack(object sender, EventArgs e)
     {
         //set state to stationary as enemy is done with an attack
+        EndAttack();
+    }
+
+    protected virtual void EndAttack()
+    {
+        InAttack = false;
         currentState = EnemyState.stationary;
-        EnemyTimers.SetTime((int)EnemyTimer.attackCD, AttackEndAiCD);
+        BeginAttackCooldown();
         Manager.DoneAttack();
         isAttacking = false;
         hitTarget = false;
@@ -564,9 +582,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         EnemyTimers.ResetSpecificToZero((int)EnemyTimer.windupDurationTimer);
         EnemyTimers.ResetSpecificToZero((int)EnemyTimer.attackDurationTimer);
         WindingUp = false;
+        EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, 1);
         //interrupted enemy should stop current action
         currentState = EnemyState.stationary;
-        EnemyTimers.SetTime((int)EnemyTimer.attackCD, AttackEndAiCD);
         if (isAttacking)
             Manager.DoneAttack();
         isAttacking = false;
@@ -592,15 +610,17 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         {
             case 1: 
                 target.TakeDamage(Attack1Damage, 0, Element);
+                target.AddForce(dir.normalized * AttackKnockback1);
                 break;
             case 2:
                 target.TakeDamage(Attack2Damage, 0, Element);
+                target.AddForce(dir.normalized * AttackKnockback2);
                 break;
             case 3:
                 target.TakeDamage(Attack3Damage, 0, Element);
+                target.AddForce(dir.normalized * AttackKnockback3);
                 break;
         }
-        target.AddForce(dir.normalized * AttackKnockback);
         hitTarget = true;
     }
     #endregion
@@ -795,13 +815,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     [Header("AI")]
     [SerializeField, Range(1,10)] protected int IdleRadius;
-    [SerializeField, Range(1,10)] protected int RepositionPoint;
+    [SerializeField, Range(1,10)] protected float RepositionPointMin;
+    [SerializeField, Range(1,10)] protected float RepositionPointMax;
     [SerializeField] protected float IdleMoveRateMin;
     [SerializeField] protected float IdleMoveRateMax;
-    [SerializeField] protected float RepositionRateMin;
-    [SerializeField] protected float RepositionRateMax;
-    [SerializeField] protected float AttackEndAiCD;
-    [SerializeField] protected float MinimumAttackRange = 1; 
     [SerializeField][ReadOnly]
     protected EnemyState currentState;
     [SerializeField][ReadOnly]
@@ -817,7 +834,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         if (IsStunned || Staggered) return;
         if (!hasDestination && currentState.Equals(EnemyState.stationary) && EnemyTimers.IsTimeZero((int)EnemyTimer.aiActionTimer))
         {
-            if (EnemyTimers.IsTimeZero((int)EnemyTimer.attackCD) && Manager.CanAttack())
+            if (AbleToAttack && Manager.CanAttack())
             {
                 currentState = EnemyState.chasing;
                 CurrentAttack = ChooseAttack();
@@ -829,7 +846,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
                 float y = Random.Range(-IdleRadius, IdleRadius);
                 randDeviate = new Vector2(x, y);
                 currentState = EnemyState.repositioning;
-                repositionRange = Random.Range(3f, 6f);
+                repositionRange = Random.Range(RepositionPointMin, RepositionPointMax);
             }
         }
     }
@@ -941,7 +958,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         switch ((int)currentState)
         {
             case (int)EnemyState.idle:
-                timeToAdd = UnityEngine.Random.Range(IdleMoveRateMin, IdleMoveRateMax);
+                timeToAdd = Random.Range(IdleMoveRateMin, IdleMoveRateMax);
                 break;
             case (int)EnemyState.chasing:
                 Attack();
@@ -1023,15 +1040,35 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     }
     #endregion
 
-    //Obsolete
-    #region Pooling Functions (Unused)
-    /*
+    #region Pooling Functions 
+
     public Pool<Enemy> Pool { get; set; }
     public bool IsPooled { get; set; }
-    public void PoolSelf()
+    public virtual void PoolSelf(object sender, EventArgs e)
     {
-        Pool.PoolObj(this);
+        PoolSelf();
     }
-    */
+
+    public virtual void PoolSelf()
+    {
+        if (Pool != null)
+            Pool.PoolObj(this);
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    #endregion
+
+    #region Animation
+    public Vector2 AimAtPlayer()
+    {
+        return targetTr.position - transform.position;
+    }
+
+    public Vector2 NextPathPoint()
+    {
+        return path.desiredVelocity;
+    }
     #endregion
 }

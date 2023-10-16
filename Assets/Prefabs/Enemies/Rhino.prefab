@@ -263,7 +263,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.14284837, y: -0.03549391}
+  m_Offset: {x: 0.7, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -274,7 +274,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.0120118, y: 2.9266243}
+  m_Size: {x: 1, y: 2.5}
   m_EdgeRadius: 0
 --- !u!114 &6290309395383883118
 MonoBehaviour:
@@ -1148,7 +1148,7 @@ Transform:
   - {fileID: 1220229054}
   - {fileID: 7776298551693399208}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &9185797213798890991
 CircleCollider2D:
@@ -1232,6 +1232,7 @@ MonoBehaviour:
   <ElementTier>k__BackingField: 0
   <CurrentAttack>k__BackingField: 0
   <WindingUp>k__BackingField: 0
+  <InAttack>k__BackingField: 0
   <Staggered>k__BackingField: 0
   <AbleToAttack>k__BackingField: 0
   <Consumable>k__BackingField: 0
@@ -1246,13 +1247,15 @@ MonoBehaviour:
   <Attack1Damage>k__BackingField: 0
   <Attack1Duration>k__BackingField: 0
   <Attack1Windup>k__BackingField: 0
+  <AttackKnockback1>k__BackingField: 0
   <Attack2Damage>k__BackingField: 0
   <Attack2Duration>k__BackingField: 0
   <Attack2Windup>k__BackingField: 0
+  <AttackKnockback2>k__BackingField: 0
   <Attack3Damage>k__BackingField: 0
   <Attack3Duration>k__BackingField: 0
   <Attack3Windup>k__BackingField: 0
-  <AttackKnockback>k__BackingField: 5
+  <AttackKnockback3>k__BackingField: 0
   <ConsumableHealthPercentThreshold>k__BackingField: 25
   <HealthPercentReceivedOnConsume>k__BackingField: 10
   <debugElement>k__BackingField: 2
@@ -1274,10 +1277,10 @@ MonoBehaviour:
   <rb>k__BackingField: {fileID: 9185797213798890978}
   <col2D>k__BackingField: {fileID: 9185797213798890991}
   <path>k__BackingField: {fileID: 9185797213798890988}
+  TerrainLayers:
+    serializedVersion: 2
+    m_Bits: 384
   collisionDisabledDur: 4
-  <ComboEffectTimer>k__BackingField:
-    <times>k__BackingField: []
-    owner: {fileID: 0}
   <TargetLayer>k__BackingField:
     serializedVersion: 2
     m_Bits: 0
@@ -1318,13 +1321,10 @@ MonoBehaviour:
   elementResistAmount: 0.8
   baseArmour: 1
   IdleRadius: 3
-  RepositionPoint: 5
+  RepositionPointMin: 3
+  RepositionPointMax: 6
   IdleMoveRateMin: 2
   IdleMoveRateMax: 4
-  RepositionRateMin: 0
-  RepositionRateMax: 2
-  AttackEndAiCD: 1.5
-  MinimumAttackRange: 1
   currentState: 0
   hasDestination: 0
   targetTr: {fileID: 0}
@@ -1341,9 +1341,6 @@ MonoBehaviour:
   <ShockwaveStartRadius>k__BackingField: 0
   <ShockwaveEndRadius>k__BackingField: 0
   <ShockwaveGrowthSpeed>k__BackingField: 0
-  TerrainLayers:
-    serializedVersion: 2
-    m_Bits: 384
   boundary: {fileID: 0}
 --- !u!114 &9185797213798890979
 MonoBehaviour:
@@ -1369,7 +1366,7 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 4294967295
     useGraphRaycasting: 0
-  traversableTags: -1
+  traversableTags: -3
   tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   graphMask:
     value: -1
@@ -1670,6 +1667,8 @@ GameObject:
   m_Component:
   - component: {fileID: 9185797214111529791}
   - component: {fileID: 9185797214111529790}
+  - component: {fileID: 2038597601}
+  - component: {fileID: 2038597600}
   m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
@@ -1712,7 +1711,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d76702d167233af4d8100ace27ec9fc0, type: 2}
+  - {fileID: 2100000, guid: cf456cfb6cec8f8418849d87fe2cb958, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1733,7 +1732,7 @@ SpriteRenderer:
   m_SortingLayerID: 1725982173
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1777332289, guid: d21410b16107eb84091773d493803aec, type: 3}
+  m_Sprite: {fileID: 903879828, guid: 142f64324b231af4db2ad39e761ce0d7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1744,6 +1743,58 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &2038597601
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9185797214111529784}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 09fab93a02ea64a469f581ef6ad69b71, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &2038597600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9185797214111529784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12d2adcec9fe0234586ac695223fb2ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 2038597601}
+  enemy: {fileID: 9185797213798890990}
+  clips:
+    _serializedList:
+    - Key: 0
+      Value: IdleR
+    - Key: 1
+      Value: IdleL
+    - Key: 2
+      Value: IdleU
+    - Key: 3
+      Value: IdleD
+    - Key: 4
+      Value: WalkR
+    - Key: 5
+      Value: WalkL
+    - Key: 7
+      Value: WalkD
+    - Key: 6
+      Value: WalkU
 --- !u!1 &9185797214422095881
 GameObject:
   m_ObjectHideFlags: 0
