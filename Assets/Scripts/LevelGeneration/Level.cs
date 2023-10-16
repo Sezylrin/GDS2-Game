@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using KevinCastejon.MoreAttributes;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Level : MonoBehaviour
 {
@@ -10,27 +11,27 @@ public class Level : MonoBehaviour
     private static Level _instance;
     public static Level Instance { get { return _instance; } }
 
-    private enum LevelDifficulty
-    {
-        Normal,
-        Hard
-    }
-    private LevelDifficulty levelDifficulty;
     [SerializeField]
     private int baseEnemyPoints = 5;
     public int totalEnemyPoints { get; private set; }
     [SerializeField]
-    private float enemyPointMultiplier = 1.0f;
-    [SerializeField]
     private Transform playerSpawnPoint;
+    public float swarmSpawnChance;
+    public float miniBossSpawnChance;
     [SerializeField]
     private GameObject enemySpawnPointsContainer;
+    [SerializeField]
+    private GameObject swarmEnemySpawnPointsContainer;
+    [SerializeField]
+    private GameObject miniBossEnemySpawnPointsContainer;
     [SerializeField]
     private List<Transform> enemySpawnPoints;
     [SerializeField]
     private bool isFountain;
+    public bool isHard { get; private set; }
     [Header("Debug")]
     public bool debugClearLevel;
+
     [field: SerializeField, ReadOnly]
     public bool isCleared { get; private set; }
     public static event Action OnLevelClear;
@@ -71,15 +72,30 @@ public class Level : MonoBehaviour
     {
         if (!LevelGenerator.Instance.hardNextLevel) return;
         LevelGenerator.Instance.hardNextLevel = false;
-        levelDifficulty = LevelDifficulty.Hard;
+        isHard = true;
     }
 
     private void GetEnemySpawnPoints()
     {
-        Transform[] enemySpawnPointsArray = enemySpawnPointsContainer.GetComponentsInChildren<Transform>();
+        float rnd = Random.Range(0f, 100f);
+        GameObject parentObject = null;
+        if (rnd < swarmSpawnChance)
+        {
+            parentObject = swarmEnemySpawnPointsContainer;
+
+        }
+        else if (swarmSpawnChance < rnd && rnd < swarmSpawnChance + miniBossSpawnChance)
+        {
+            parentObject = miniBossEnemySpawnPointsContainer;
+        }
+        else
+        {
+            parentObject = enemySpawnPointsContainer;
+        }
+        Transform[] enemySpawnPointsArray = parentObject.GetComponentsInChildren<Transform>();
         foreach (var ESP in enemySpawnPointsArray)
         {
-            if (ESP.gameObject != enemySpawnPointsContainer)
+            if (ESP.gameObject != parentObject)
             {
                 enemySpawnPoints.Add(ESP);
             }
@@ -89,7 +105,6 @@ public class Level : MonoBehaviour
     public void ClearLevel()
     {
         isCleared = true;
-        if (!isFountain) LevelGenerator.Instance.IncrementLevelsCleared();
         OnLevelClear?.Invoke();
     }
 
@@ -102,12 +117,7 @@ public class Level : MonoBehaviour
 
     private void ValidateTotalEnemyPoints()
     {
-        totalEnemyPoints = Mathf.RoundToInt((baseEnemyPoints + LevelGenerator.Instance.difficulty) * enemyPointMultiplier);
-    }
-
-    public void OverrideTotalEnemyPoints(int newTotalEnemyPoints)
-    {
-        totalEnemyPoints = newTotalEnemyPoints;
+        totalEnemyPoints = Mathf.RoundToInt(baseEnemyPoints + LevelGenerator.Instance.difficulty);
     }
 
     private void SpawnPlayer()

@@ -8,7 +8,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
-//TODO: Async Loading+Transitions | Example Levels | Door Animations
 public class LevelGenerator : MonoBehaviour
 {
     private static LevelGenerator _instance;
@@ -50,18 +49,10 @@ public class LevelGenerator : MonoBehaviour
     public int floorsCleared => Mathf.FloorToInt((float)(activeLevelListIndex + 1) / (fountainFrequency + 1));
     [ReadOnly]
     public int lastFloorOnExit;
-    public int lastFloorOnExitIndex => lastFloorOnExit * (fountainFrequency+1) - 1;
-
-    [field: SerializeField, ReadOnly]
-    public int difficulty { get; private set; }
-    [SerializeField]
-    private int startDifficulty = 5;
-    public int levelsCleared { get; private set; }
 
     [Header("Debug")]
     public bool debugNextLevel;
-
-
+    
     private void Awake()
     {
         // Singleton pattern
@@ -86,7 +77,6 @@ public class LevelGenerator : MonoBehaviour
     {
         lastFloorOnExit = floorsCleared;
         difficulty = startDifficulty;
-        levelsCleared = 0;
         levelList = new List<SceneReference>();
         AddNewFloor();
         activeLevelListIndex = -1;
@@ -324,11 +314,6 @@ public class LevelGenerator : MonoBehaviour
                 break;
         }
         return levelList;
-    }
-
-    public void IncrementLevelsCleared()
-    {
-        levelsCleared++;
     }
 
     private void DebugRoomPool()
