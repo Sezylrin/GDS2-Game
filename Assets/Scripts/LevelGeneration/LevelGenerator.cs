@@ -8,7 +8,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
-//TODO: Async Loading+Transitions | Example Levels | Door Animations
 public class LevelGenerator : MonoBehaviour
 {
     private static LevelGenerator _instance;
@@ -33,25 +32,27 @@ public class LevelGenerator : MonoBehaviour
     public int difficultyIncreaseLeft = 1;
     [Tooltip("The amount that the difficulty will increase when moving through the right/harder room")]
     public int difficultyIncreaseRight = 2;
+    [SerializeField]
+    private int floorsToWin = 7;
+    [SerializeField]
+    private int startDifficulty = 5;
 
     [Header("ReadOnly")]
+    [ReadOnly]
+    public bool hardNextLevel;
+    [field: SerializeField, ReadOnly]
+    public int difficulty { get; private set; }
     private List<SceneReference> roomPool = new List<SceneReference>();
     private List<SceneReference> levelList = new List<SceneReference>();
     [field: SerializeField, ReadOnly]
     public int activeLevelListIndex { get; private set; }
     public int floorsCleared => Mathf.FloorToInt((float)(activeLevelListIndex + 1) / (fountainFrequency + 1));
+    [ReadOnly]
     public int lastFloorOnExit;
-    public int lastFloorOnExitIndex => lastFloorOnExit * (fountainFrequency+1) - 1;
-
-    [field: SerializeField, ReadOnly]
-    public int difficulty { get; private set; }
-    [SerializeField]
-    private int startDifficulty = 5;
-    public int levelsCleared { get; private set; }
 
     [Header("Debug")]
     public bool debugNextLevel;
-
+    
     private void Awake()
     {
         // Singleton pattern
@@ -76,7 +77,6 @@ public class LevelGenerator : MonoBehaviour
     {
         lastFloorOnExit = floorsCleared;
         difficulty = startDifficulty;
-        levelsCleared = 0;
         levelList = new List<SceneReference>();
         AddNewFloor();
         activeLevelListIndex = -1;
@@ -116,6 +116,11 @@ public class LevelGenerator : MonoBehaviour
     //TODO: Change to AsyncLoading
     private void LoadNextLevel()
     {
+        if (DungeonCleared())
+        {
+            //TODO: Win
+            return;
+        }
         // If the next level is not in list
         if (activeLevelListIndex + 1 >= levelList.Count)
         {
@@ -125,6 +130,8 @@ public class LevelGenerator : MonoBehaviour
         activeLevelListIndex++;
         StartCoroutine(LoadLevel(levelList[activeLevelListIndex]));
     }
+
+    private bool DungeonCleared() => Mathf.FloorToInt((float)(activeLevelListIndex + 2)/(fountainFrequency + 1)) >= floorsToWin;
 
     IEnumerator LoadLevel(string scenePath)
     {
@@ -154,6 +161,7 @@ public class LevelGenerator : MonoBehaviour
     public void EnterDoorRight()
     {
         difficulty += difficultyIncreaseRight;
+        hardNextLevel = true;
         LoadNextLevel();
     }
 
@@ -306,11 +314,6 @@ public class LevelGenerator : MonoBehaviour
                 break;
         }
         return levelList;
-    }
-
-    public void IncrementLevelsCleared()
-    {
-        levelsCleared++;
     }
 
     private void DebugRoomPool()
