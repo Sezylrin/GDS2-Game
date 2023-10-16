@@ -52,6 +52,12 @@ public class LevelGenerator : MonoBehaviour
     public int lastFloorOnExit;
     public int lastFloorOnExitIndex => lastFloorOnExit * (fountainFrequency+1) - 1;
 
+    [field: SerializeField, ReadOnly]
+    public int difficulty { get; private set; }
+    [SerializeField]
+    private int startDifficulty = 5;
+    public int levelsCleared { get; private set; }
+
     [Header("Debug")]
     public bool debugNextLevel;
 
@@ -80,6 +86,7 @@ public class LevelGenerator : MonoBehaviour
     {
         lastFloorOnExit = floorsCleared;
         difficulty = startDifficulty;
+        levelsCleared = 0;
         levelList = new List<SceneReference>();
         AddNewFloor();
         activeLevelListIndex = -1;
@@ -317,6 +324,11 @@ public class LevelGenerator : MonoBehaviour
                 break;
         }
         return levelList;
+    }
+
+    public void IncrementLevelsCleared()
+    {
+        levelsCleared++;
     }
 
     private void DebugRoomPool()

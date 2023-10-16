@@ -16,12 +16,13 @@ public class Abilities : MonoBehaviour
 
     [Header("abilities")]
     [SerializeField]
-    private ElementalSO[] abilities = new ElementalSO[6];
+    private ElementalSO[] abilities = new ElementalSO[8];
     [SerializeField][ReadOnly]
     private bool AbilitySetOne;
 
     private Dictionary<AbilityType, Pool<AbilityBase>> pools = new Dictionary<AbilityType, Pool<AbilityBase>>();
 
+    private ElementalSO lastUsed;
     [SerializeField][SerializedDictionary("Element Type", "Description")]
     private SerializedDictionary<AbilityType, GameObject> abilityShapePF;
     private void Start()
@@ -64,23 +65,24 @@ public class Abilities : MonoBehaviour
         }
         else
         {
-            return abilities[index].name;
+            return abilities[index].name + " " + abilities[index].castCost;
         }
     }
     public void CastSlotOne()
     {
-        PCM.control.RemoveBufferInput();
-        CastAbility(AbilitySetOne ? abilities[3] : abilities[0]);
+        StartCast(AbilitySetOne ? abilities[4] : abilities[0]);
     }
     public void CastSlotTwo()
     {
-        PCM.control.RemoveBufferInput();
-        CastAbility(AbilitySetOne ? abilities[4] : abilities[1]);
+        StartCast(AbilitySetOne ? abilities[5] : abilities[1]);
     }
     public void CastSlotThree()
     {
-        PCM.control.RemoveBufferInput();
-        CastAbility(AbilitySetOne ? abilities[5] : abilities[2]);
+        StartCast(AbilitySetOne ? abilities[6] : abilities[2]);
+    }
+    public void CastSlotFour()
+    {
+        StartCast(AbilitySetOne ? abilities[7] : abilities[3]);
     }
     public bool IsRanged(int slot)
     {
@@ -108,31 +110,51 @@ public class Abilities : MonoBehaviour
         abilities[slot] = abilityToUse;
         UpdateUI();
     }
-
-    private void CastAbility(ElementalSO selected)
+    private ElementalSO abilityToCast;
+    private void StartCast(ElementalSO selected)
     {
+        Debug.Log(selected.name);
         if (!selected)
             return;
-        if (!PCM.system.AttemptCast(selected.castCost))
-            return;
-        PCM.control.SetAbilityState();
+        abilityToCast = selected;
+        PCM.control.RemoveBufferInput();
+        PCM.control.StartAbility(selected.castStartSpeed);
+    }
+    public void CastAbility(out float castDur)
+    {
+        lastUsed = abilityToCast;
+        castDur = abilityToCast.castDuration;
         //play animation
         Pool<AbilityBase> temp;
-        if (pools.TryGetValue(selected.type, out temp))
+        if (pools.TryGetValue(abilityToCast.type, out temp))
         {
-
-            AbilityBase ability = temp.GetPooledObj();
-            if (selected.type.Equals(AbilityType.AOE))
+            
+            AbilityBase ability = temp.GetPooledObj(out bool initial);
+            if (initial)
             {
-                ability.SetSelectedAbility(selected, transform.position);
+                ability.init();
             }
+            if (abilityToCast.type.Equals(AbilityType.AOE))
+            {
+                ability.SetSelectedAbility(abilityToCast, transform.position);
+            }            
             else
             {
-                Vector3 dir = abilitySpawnPoint.position - transform.position;
-                ability.SetSelectedAbility(selected, abilitySpawnPoint.position, dir);
+                Vector3 dir;
+                if (abilityToCast.type.Equals(AbilityType.dash))
+                    dir = PCM.control.lastDirection;
+                else
+                    dir = abilitySpawnPoint.position - transform.position;
+                if (abilityToCast.type.Equals(AbilityType.blast))
+                    PCM.system.AddForce(dir.normalized * 13);
+                ability.SetSelectedAbility(abilityToCast, abilitySpawnPoint.position, dir, transform);
             }
-            
         }
+    }
+
+    public ElementalSO[] GetAbilities()
+    {
+        return abilities;
     }
 
     #region debug
@@ -142,7 +164,7 @@ public class Abilities : MonoBehaviour
     [ContextMenu("castAbility")]
     private void CastAbility()
     {
-        CastAbility(test);
+        CastAbility();
     }
 
     [ContextMenu("SetAbilitiesToDebug")]

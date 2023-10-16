@@ -33,12 +33,6 @@ public class ProjectileAbility : AbilityBase
         rend.color = selected.color.color;
     }
 
-    protected override void InvokePoolSelf(object sender, EventArgs e)
-    {
-        PoolSelf();
-        base.InvokePoolSelf(sender, e);
-    }
-
     private void LaunchTowardsTarget()
     {
         transform.position = initialPos;

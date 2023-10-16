@@ -55,15 +55,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Attack"",
-                    ""type"": ""Button"",
-                    ""id"": ""8ac14cd8-bd06-43a3-8fec-be1b189af3eb"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Dash"",
                     ""type"": ""Button"",
                     ""id"": ""bddabf5a-04f8-43fd-b032-9d5c146901df"",
@@ -106,6 +97,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Hold(duration=0.2)"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AbilityFour"",
+                    ""type"": ""Button"",
+                    ""id"": ""b7feb0e7-946a-4a62-b858-26cbecdc1ec6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
@@ -269,28 +269,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""143bb1cd-cc10-4eca-a2f0-a3664166fe91"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Controller"",
-                    ""action"": ""Attack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""05f6913d-c316-48b2-a6bb-e225f14c7960"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Attack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""87bbf521-53e1-47ec-b5ce-06af94c71f18"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
@@ -336,7 +314,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""f30228cf-4f9a-4e32-941f-c46ac376772f"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": ""Hold(duration=0.2)"",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -347,7 +325,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""79870e04-b77f-4013-bab9-c95598f25fed"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": ""Hold(duration=0.2)"",
                     ""processors"": """",
                     ""groups"": ""Controller"",
@@ -358,7 +336,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""7b2d6b34-000d-4b24-932d-408323c3342c"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -380,7 +358,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""05bc4d93-1b31-46dc-85ea-15bc84544e55"",
-                    ""path"": ""<Keyboard>/shift"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -391,8 +369,8 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""401788a3-cbcb-4c26-9549-b58341674121"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
-                    ""interactions"": """",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": ""Hold(duration=0.2)"",
                     ""processors"": """",
                     ""groups"": ""Controller"",
                     ""action"": ""AbilityThree"",
@@ -495,6 +473,28 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Controller"",
                     ""action"": ""Open Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2d693827-1f87-41e8-b681-77f0474a445c"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""AbilityFour"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1a217e4d-ed7e-4219-aa0b-c952a57e718a"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": ""Hold(duration=0.2)"",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""AbilityFour"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1106,12 +1106,12 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_LookMouse = m_Player.FindAction("LookMouse", throwIfNotFound: true);
-        m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_AbilityOne = m_Player.FindAction("AbilityOne", throwIfNotFound: true);
         m_Player_AbilityTwo = m_Player.FindAction("AbilityTwo", throwIfNotFound: true);
         m_Player_AbilityThree = m_Player.FindAction("AbilityThree", throwIfNotFound: true);
+        m_Player_AbilityFour = m_Player.FindAction("AbilityFour", throwIfNotFound: true);
         m_Player_ToggleAbilities = m_Player.FindAction("ToggleAbilities", throwIfNotFound: true);
         m_Player_Consume = m_Player.FindAction("Consume", throwIfNotFound: true);
         m_Player_Escape = m_Player.FindAction("Escape", throwIfNotFound: true);
@@ -1198,12 +1198,12 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_LookMouse;
-    private readonly InputAction m_Player_Attack;
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_AbilityOne;
     private readonly InputAction m_Player_AbilityTwo;
     private readonly InputAction m_Player_AbilityThree;
+    private readonly InputAction m_Player_AbilityFour;
     private readonly InputAction m_Player_ToggleAbilities;
     private readonly InputAction m_Player_Consume;
     private readonly InputAction m_Player_Escape;
@@ -1215,12 +1215,12 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @LookMouse => m_Wrapper.m_Player_LookMouse;
-        public InputAction @Attack => m_Wrapper.m_Player_Attack;
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @AbilityOne => m_Wrapper.m_Player_AbilityOne;
         public InputAction @AbilityTwo => m_Wrapper.m_Player_AbilityTwo;
         public InputAction @AbilityThree => m_Wrapper.m_Player_AbilityThree;
+        public InputAction @AbilityFour => m_Wrapper.m_Player_AbilityFour;
         public InputAction @ToggleAbilities => m_Wrapper.m_Player_ToggleAbilities;
         public InputAction @Consume => m_Wrapper.m_Player_Consume;
         public InputAction @Escape => m_Wrapper.m_Player_Escape;
@@ -1243,9 +1243,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @LookMouse.started += instance.OnLookMouse;
             @LookMouse.performed += instance.OnLookMouse;
             @LookMouse.canceled += instance.OnLookMouse;
-            @Attack.started += instance.OnAttack;
-            @Attack.performed += instance.OnAttack;
-            @Attack.canceled += instance.OnAttack;
             @Dash.started += instance.OnDash;
             @Dash.performed += instance.OnDash;
             @Dash.canceled += instance.OnDash;
@@ -1261,6 +1258,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @AbilityThree.started += instance.OnAbilityThree;
             @AbilityThree.performed += instance.OnAbilityThree;
             @AbilityThree.canceled += instance.OnAbilityThree;
+            @AbilityFour.started += instance.OnAbilityFour;
+            @AbilityFour.performed += instance.OnAbilityFour;
+            @AbilityFour.canceled += instance.OnAbilityFour;
             @ToggleAbilities.started += instance.OnToggleAbilities;
             @ToggleAbilities.performed += instance.OnToggleAbilities;
             @ToggleAbilities.canceled += instance.OnToggleAbilities;
@@ -1286,9 +1286,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @LookMouse.started -= instance.OnLookMouse;
             @LookMouse.performed -= instance.OnLookMouse;
             @LookMouse.canceled -= instance.OnLookMouse;
-            @Attack.started -= instance.OnAttack;
-            @Attack.performed -= instance.OnAttack;
-            @Attack.canceled -= instance.OnAttack;
             @Dash.started -= instance.OnDash;
             @Dash.performed -= instance.OnDash;
             @Dash.canceled -= instance.OnDash;
@@ -1304,6 +1301,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @AbilityThree.started -= instance.OnAbilityThree;
             @AbilityThree.performed -= instance.OnAbilityThree;
             @AbilityThree.canceled -= instance.OnAbilityThree;
+            @AbilityFour.started -= instance.OnAbilityFour;
+            @AbilityFour.performed -= instance.OnAbilityFour;
+            @AbilityFour.canceled -= instance.OnAbilityFour;
             @ToggleAbilities.started -= instance.OnToggleAbilities;
             @ToggleAbilities.performed -= instance.OnToggleAbilities;
             @ToggleAbilities.canceled -= instance.OnToggleAbilities;
@@ -1522,12 +1522,12 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnLookMouse(InputAction.CallbackContext context);
-        void OnAttack(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnAbilityOne(InputAction.CallbackContext context);
         void OnAbilityTwo(InputAction.CallbackContext context);
         void OnAbilityThree(InputAction.CallbackContext context);
+        void OnAbilityFour(InputAction.CallbackContext context);
         void OnToggleAbilities(InputAction.CallbackContext context);
         void OnConsume(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);

@@ -16,22 +16,24 @@ MonoBehaviour:
   elementType: 4
   type: 0
   castCost: 1
+  castStartSpeed: 0.1
+  castDuration: 0.28
   pierceAmount: 2
-  damage: 140
-  knockback: 2
-  Stagger: 40
+  damage: 49
+  knockback: 6
+  Stagger: 15
   consumePoints: 12
-  lifeTime: 0.25
-  description: Volt Strike Description
+  lifeTime: 0.3
+  description: Close range Electric based attack
   icon: {fileID: 21300000, guid: a8e011715b3856c48809609785722590, type: 3}
   initialShape:
-  - {x: 0.016333938, y: 0.18848282}
-  - {x: -0.282193, y: 0.1591092}
-  - {x: -0.28703678, y: -0.14057478}
-  - {x: -0.0139632225, y: -0.17913699}
+  - {x: 0.4, y: 0.4}
+  - {x: -0.4, y: 0.4}
+  - {x: -0.4, y: -0.4}
+  - {x: 0.4, y: -0.4}
   finalShape:
-  - {x: 2.3951154, y: 0.26571602}
-  - {x: -0.282193, y: 0.1591092}
-  - {x: -0.28703678, y: -0.14057478}
-  - {x: 2.387988, y: -0.1405204}
+  - {x: 0.7, y: 0.4}
+  - {x: -0.4, y: 0.4}
+  - {x: -0.4, y: -0.4}
+  - {x: 0.7, y: -0.4}
   speed: 0.1

@@ -8,20 +8,21 @@ public class Rhino : Enemy, IPoolable<Rhino>
 {
     [field: Header("Rhino")]
     [field: SerializeField] protected GameObject ChargeHitbox { get; set; }
-    [field: SerializeField] protected float ChargeSpeedMultiplier { get; set; } = 1.5f;
+    [field: SerializeField] protected float ChargeSpeed { get; set; } = 1.5f;
     [field: SerializeField] public bool Charging { get; set; } = false;
     [field: SerializeField] protected GameObject ShockwaveHitbox { get; set; }
     [field: SerializeField] protected GameObject StompPrefab { get; set; }
     [field: SerializeField] protected Transform StompSpawnPoint { get; set; }
     [field: SerializeField] protected float StompMoveSpeed { get; set; }
     [field: SerializeField] protected float Attack2Range { get; set; } = 3;
-    [field: SerializeField] protected Collider2D col2D { get; set; }
     [field: SerializeField] protected CircleCollider2D shockwaveCol2D { get; set; }
     [field: SerializeField] protected float ShockwaveStartRadius { get; set; } = 3;
     [field: SerializeField] protected float ShockwaveEndRadius { get; set; } = 8;
     [field: SerializeField] protected float ShockwaveGrowthSpeed { get; set; } = 1;
     private RhinoScriptableObject RhinoSO;
     private Coroutine shockwaveCoroutine;
+    [SerializeField]
+    private LayerMask TerrainLayers;
 
     #region Tutorial
     public ModifyBoundary boundary;
@@ -48,7 +49,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
     public override void SetStatsFromScriptableObject()
     {
         base.SetStatsFromScriptableObject();
-        ChargeSpeedMultiplier = RhinoSO.chargeSpeedMultiplier;
+        ChargeSpeed = RhinoSO.ChargeSpeed;
         Attack2Range = RhinoSO.attack2Range;
         ShockwaveStartRadius = RhinoSO.shockwaveStartRadius;
         ShockwaveEndRadius = RhinoSO.shockwaveEndRadius;
@@ -58,6 +59,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
 
     protected override void DetermineAttackPathing()
     {
+        
         switch (CurrentAttack)
         {
             case 1:
@@ -97,7 +99,16 @@ public class Rhino : Enemy, IPoolable<Rhino>
         while (Charging)
         {
             yield return null;
-            transform.Translate(dir * Time.deltaTime * Speed * ChargeSpeedMultiplier);
+            RaycastHit2D hit = Physics2D.CircleCast(transform.position, 1, dir, (dir * Time.deltaTime * ChargeSpeed).magnitude,TerrainLayers);
+            if (hit.collider)
+            {
+                Debug.Log("hit terrain");
+                Charging = false;
+                EnemyTimers.SetTime((int)EnemyTimer.attackDurationTimer, 0);
+                break;
+            }
+            else
+                transform.Translate(dir * Time.deltaTime * ChargeSpeed);
         }
         EndCharge();
     }
@@ -110,7 +121,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
 
     protected void EndCharge()
     {
-        EnemyTimers.ResetSpecificToZero((int)EnemyTimer.attackDurationTimer);
+        //EnemyTimers.ResetSpecificToZero((int)EnemyTimer.attackDurationTimer);
         ChargeHitbox.SetActive(false);
     }
     #endregion
@@ -196,8 +207,8 @@ public class Rhino : Enemy, IPoolable<Rhino>
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.isTrigger || !ChargeHitbox.activeSelf || !ShockwaveHitbox.activeSelf || hitTarget)
+    {        
+        if ((!ChargeHitbox.activeSelf && !ShockwaveHitbox.activeSelf) || hitTarget)
             return;
         IDamageable foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
@@ -205,22 +216,27 @@ public class Rhino : Enemy, IPoolable<Rhino>
             if (foundTarget is PlayerSystem)
             {
                 PlayerSystem temp = foundTarget as PlayerSystem;
+                if (Charging) Charging = false;
                 if (temp.GetState() == playerState.perfectDodge)
                 {
                     InterruptAttack();
                     temp.InstantRegenPoint();
-                    temp.CounterSuccesful(this);
+                    temp.Counter();
                 }
                 else
                 {
                     DoDamage(foundTarget);
-                    if (Charging) Charging = false;
                 }
             }
-            else
-                DoDamage(foundTarget);
         }
     }
+
+    #region AI
+    protected override void RepositionPicker()
+    {
+        base.RepositionPicker();
+    }
+    #endregion
 
     #region PoolingFunctions
     public void PoolSelf()

@@ -11,7 +11,6 @@ public class Cheetah : Enemy, IPoolable<Cheetah>
     [field: SerializeField] protected Transform DaggerSpawnPoint { get; set; }
     [field: SerializeField] protected float DaggerMoveSpeed { get; set; } = 3;
     [field: SerializeField] protected GameObject ChainHitbox { get; set; }
-    [field: SerializeField] protected BoxCollider2D col2D { get; set; }
 
 
     #region PoolingVariables
@@ -88,7 +87,7 @@ public class Cheetah : Enemy, IPoolable<Cheetah>
                 {
                     InterruptAttack();
                     temp.InstantRegenPoint();
-                    temp.CounterSuccesful(this);
+                    temp.Counter();
                 }
                 else
                 {

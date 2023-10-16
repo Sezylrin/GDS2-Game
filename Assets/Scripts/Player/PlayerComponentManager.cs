@@ -11,15 +11,11 @@ public class PlayerComponentManager : MonoBehaviour
     [field: SerializeField]
     public PlayerSystem system { get; private set; }
     [field: SerializeField]
-    public Attacks attack { get; private set; }
-    [field: SerializeField]
     public Abilities abilities { get; private set; }
     [field: SerializeField]
     public PlayerUI UI{ get; private set; }
     [field: SerializeField]
     public PlayerTrailEffect Trail { get; private set; }
-    [field:SerializeField]
-    public AudioComponent Audio { get; private set; }
 
     public static GameObject Instance { get; private set; }
 

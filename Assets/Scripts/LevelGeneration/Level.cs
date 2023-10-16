@@ -62,7 +62,7 @@ public class Level : MonoBehaviour
         GetEnemySpawnPoints();
         LevelGenerator.Instance.TriggerCrossFadeEnd();
         if (!isFountain)
-            GameManager.Instance.EnemyManager.StartEnemySpawning(enemySpawnPoints, totalEnemyPoints);
+            GameManager.Instance.EnemyManager.StartEnemySpawning(enemySpawnPoints);
         else
             ClearLevel();
     }
@@ -89,6 +89,7 @@ public class Level : MonoBehaviour
     public void ClearLevel()
     {
         isCleared = true;
+        if (!isFountain) LevelGenerator.Instance.IncrementLevelsCleared();
         OnLevelClear?.Invoke();
     }
 

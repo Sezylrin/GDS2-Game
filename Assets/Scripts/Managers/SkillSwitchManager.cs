@@ -99,9 +99,9 @@ public class SkillSwitchManager : MonoBehaviour
         {
             Transform childTransform = activeAbilitiesContainer.transform.GetChild(i).transform.GetChild(0);
             ActiveAbility activeAbility = childTransform.GetComponent<ActiveAbility>();
-            if (activeAbility != null && savedAbilityPositions.ContainsKey(i))
+            if (activeAbility != null && savedAbilityPositions.ContainsKey(activeAbility.abilityIndex))
             {
-                activeAbility.UpdateAbility(savedAbilityPositions[i]);
+                activeAbility.UpdateAbility(savedAbilityPositions[activeAbility.abilityIndex]);
                 childTransform.GetChild(0).GetComponent<Image>().sprite = activeAbility.abilityData.icon;
             }
             else
@@ -144,13 +144,13 @@ public class SkillSwitchManager : MonoBehaviour
         }
         else
         {
-            int offset = firstSkillsetSelected ? 0 : 3;
-            int hoveredIndex = currentlyHoveredIndex + offset;
+            int offset = firstSkillsetSelected ? 0 : 4;
+            ActiveAbility ability = (ActiveAbility)currentlyHoveredAbility;
+            int hoveredIndex = ability.abilityIndex + offset;
             statsManager.savedAbilityPositions[hoveredIndex] = selectedAbility.abilityData;
             GameManager.Instance.PCM.abilities.SetSlot(selectedAbility.abilityData, hoveredIndex);
             currentSkillMenu = CurrentSkillMenu.UnusedAbilities;
             currentlyHoveredAbility.DisableHover();
-            ActiveAbility ability = (ActiveAbility)currentlyHoveredAbility;
             ability.UpdateAbility(selectedAbility.abilityData);
             UIAbility newSelectedAbility = allAbilitiesContainer.transform.GetChild(0).GetComponent<UIAbility>();
             currentlyHoveredAbility = newSelectedAbility;
@@ -170,7 +170,7 @@ public class SkillSwitchManager : MonoBehaviour
 
             Dictionary<int, ElementalSO> savedAbilityPositions = statsManager.savedAbilityPositions;
 
-            int offset = firstSkillsetSelected ? 0 : 3;
+            int offset = firstSkillsetSelected ? 0 : 4;
 
             for (int i = 0; i < activeAbilitiesContainer.transform.childCount; i++)
             {
@@ -276,6 +276,14 @@ public class SkillSwitchManager : MonoBehaviour
                 {
                     NavigateLeftActive();
                 }
+                else if (navValue.y > 0)
+                {
+                    NavigateUpActive();
+                }
+                else if (navValue.y < 0)
+                {
+                    NavigateDownActive();
+                }
             }
             lastNavigationTime = Time.time;
         }
@@ -283,43 +291,127 @@ public class SkillSwitchManager : MonoBehaviour
 
     private void NavigateLeft()
     {
-        int newRow = currentlyHoveredIndex / 6;
-        int newColumn = (currentlyHoveredIndex % 6 + 5) % 6;
-        UpdateHoveredAbility(newRow * 6 + newColumn);
+        int current = currentlyHoveredIndex + 1;
+        if ((current - 1) % 4 == 0)
+            current += 3;
+        else
+            current--;
+        current--;
+        UpdateHoveredAbility(current);
     }
 
     private void NavigateRight()
     {
-        int newRow = currentlyHoveredIndex / 6;
-        int newColumn = (currentlyHoveredIndex % 6 + 1) % 6;
-        UpdateHoveredAbility(newRow * 6 + newColumn);
+        int current = currentlyHoveredIndex + 1;
+        if ((current + 1) % 4 == 1)
+            current -= 3;
+        else
+            current++;
+        current--;
+        UpdateHoveredAbility(current);
     }
 
     private void NavigateUp()
     {
-        int newRow = (currentlyHoveredIndex / 6 + 1) % 2;
-        int newColumn = currentlyHoveredIndex % 6;
-        UpdateHoveredAbility(newRow * 6 + newColumn);
+        int current = currentlyHoveredIndex + 1;
+        if ((current - 4) < 1)
+            current += 12;
+        else
+            current -= 4;
+        current--;
+        UpdateHoveredAbility(current);
     }
 
     private void NavigateDown()
     {
-        int newRow = (currentlyHoveredIndex / 6 + 1) % 2;
-        int newColumn = currentlyHoveredIndex % 6;
-        UpdateHoveredAbility(newRow * 6 + newColumn);
+        int current = currentlyHoveredIndex + 1;
+        if ((current + 4) > 16)
+            current -= 12;
+        else
+            current += 4;
+        current--;
+        UpdateHoveredAbility(current);
     }
 
     private void NavigateLeftActive()
     {
-        int newIndex = (currentlyHoveredIndex + 2) % 3;
-        UpdateActiveHoveredAbility(newIndex);
+        switch (currentlyHoveredIndex)
+        {
+            case 0:
+                UpdateActiveHoveredAbility(1);
+                break;
+            case 1:
+                UpdateActiveHoveredAbility(0);
+                break;
+            case 2:
+                UpdateActiveHoveredAbility(3);
+                break;
+            case 3:
+                UpdateActiveHoveredAbility(2);
+                break;
+        }
     }
 
     private void NavigateRightActive()
     {
-        int newIndex = (currentlyHoveredIndex + 1) % 3;
-        UpdateActiveHoveredAbility(newIndex);
+        switch (currentlyHoveredIndex)
+        {
+            case 0:
+                UpdateActiveHoveredAbility(1);
+                break;
+            case 1:
+                UpdateActiveHoveredAbility(1);
+                break;
+            case 2:
+                UpdateActiveHoveredAbility(3);
+                break;
+            case 3:
+                UpdateActiveHoveredAbility(3);
+                break;
+        }
     }
+
+
+    private void NavigateUpActive()
+    {
+        switch (currentlyHoveredIndex)
+        {
+            case 0:
+                UpdateActiveHoveredAbility(2);
+                break;
+            case 1:
+                UpdateActiveHoveredAbility(3);
+                break;
+            case 2:
+                UpdateActiveHoveredAbility(0);
+                break;
+            case 3:
+                UpdateActiveHoveredAbility(1);
+                break;
+        }
+    }
+
+
+    private void NavigateDownActive()
+    {
+        switch (currentlyHoveredIndex)
+        {
+            case 0:
+                UpdateActiveHoveredAbility(2);
+                break;
+            case 1:
+                UpdateActiveHoveredAbility(3);
+                break;
+            case 2:
+                UpdateActiveHoveredAbility(0);
+                break;
+            case 3:
+                UpdateActiveHoveredAbility(1);
+                break;
+        }
+    }
+
+
 
     private void UpdateHoveredAbility(int newIndex)
     {

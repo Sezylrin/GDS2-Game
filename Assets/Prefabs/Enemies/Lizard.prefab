@@ -262,7 +262,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1054,7 +1054,7 @@ MonoBehaviour:
   <StaggerTimers>k__BackingField:
     <times>k__BackingField: []
     owner: {fileID: 0}
-  <Parent>k__BackingField: {fileID: 0}
+  <Parent>k__BackingField: {fileID: -4165347194730273926}
 --- !u!1 &5393515603043086089
 GameObject:
   m_ObjectHideFlags: 0
@@ -1107,7 +1107,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1125,8 +1125,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1725982173
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: -700998111, guid: d21410b16107eb84091773d493803aec, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1230,7 +1230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c02c3ce0d42a09a46b96ae9407cf9984, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy: {fileID: 0}
+  enemy: {fileID: -4165347194730273926}
   UI: {fileID: 5393515601626107661}
 --- !u!1 &5393515603108765562
 GameObject:
@@ -1395,6 +1395,7 @@ GameObject:
   - component: {fileID: 5393515603401796060}
   - component: {fileID: 5393515603401796062}
   - component: {fileID: 5393515603401796051}
+  - component: {fileID: -4165347194730273926}
   - component: {fileID: 5393515603401796050}
   - component: {fileID: 5393515603401796061}
   m_Layer: 6
@@ -1421,7 +1422,7 @@ Transform:
   - {fileID: 5393515603088245056}
   - {fileID: 4719017367290837579}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &5393515603401796062
 CircleCollider2D:
@@ -1485,6 +1486,105 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &-4165347194730273926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5393515603401796057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09f1692baf4ec9a40bd4e8f16f467027, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Type>k__BackingField: 4
+  <Element>k__BackingField: 0
+  <Hitpoints>k__BackingField: 0
+  <ActiveElementEffect>k__BackingField: 0
+  <ElementTier>k__BackingField: 0
+  <CurrentAttack>k__BackingField: 0
+  <WindingUp>k__BackingField: 0
+  <Staggered>k__BackingField: 0
+  <AbleToAttack>k__BackingField: 0
+  <Consumable>k__BackingField: 0
+  <EnemyTimers>k__BackingField:
+    <times>k__BackingField: []
+    owner: {fileID: 0}
+  <MaxHealth>k__BackingField: 0
+  <Speed>k__BackingField: 0
+  <Souls>k__BackingField: 0
+  <EffectDuration>k__BackingField: 0
+  <AttackCooldownDuration>k__BackingField: 0
+  <Attack1Damage>k__BackingField: 0
+  <Attack1Duration>k__BackingField: 0
+  <Attack1Windup>k__BackingField: 0
+  <Attack2Damage>k__BackingField: 0
+  <Attack2Duration>k__BackingField: 0
+  <Attack2Windup>k__BackingField: 0
+  <Attack3Damage>k__BackingField: 0
+  <Attack3Duration>k__BackingField: 0
+  <Attack3Windup>k__BackingField: 0
+  <AttackKnockback>k__BackingField: 0
+  <ConsumableHealthPercentThreshold>k__BackingField: 0
+  <HealthPercentReceivedOnConsume>k__BackingField: 0
+  <debugElement>k__BackingField: 2
+  <debugDamage>k__BackingField: 20
+  <debugStaggerPoints>k__BackingField: 50
+  <debugTakeDamage>k__BackingField: 0
+  <debugApplyElement>k__BackingField: 0
+  <debugStartStagger>k__BackingField: 0
+  <debugAttemptAttack>k__BackingField: 0
+  <debugInterruptAttack>k__BackingField: 0
+  <debugEnemySpawn>k__BackingField: 0
+  <SO>k__BackingField: {fileID: 11400000, guid: c98995a0bfb12fd4fb885620cb0c24b1, type: 2}
+  <PivotPoint>k__BackingField: {fileID: 4719017367290837579}
+  <HealthBarController>k__BackingField: {fileID: 5393515602289649269}
+  <StaggerBar>k__BackingField: {fileID: 5393515602682694718}
+  <Consume>k__BackingField: {fileID: 5393515603088245057}
+  <ConsumableHitbox>k__BackingField: {fileID: 5393515603088245059}
+  <ElementEffectImage>k__BackingField: {fileID: 5393515603108765560}
+  <rb>k__BackingField: {fileID: 5393515603401796051}
+  <col2D>k__BackingField: {fileID: 5393515603401796062}
+  <path>k__BackingField: {fileID: 5393515603401796061}
+  collisionDisabledDur: 0
+  <ActiveCombos>k__BackingField: 
+  <ComboEffectTimer>k__BackingField:
+    <times>k__BackingField: []
+    owner: {fileID: 0}
+  <TargetLayer>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 0
+  <PlayerLayer>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 0
+  <EnemyLayer>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 0
+  comboText: {fileID: 0}
+  flashDuration: 0
+  curve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  rend: {fileID: 0}
+  staggerBonusDamage: 0
+  elementResistAmount: 0
+  baseArmour: 0.5
+  IdleRadius: 0
+  RepositionPoint: 0
+  IdleMoveRateMin: 0
+  IdleMoveRateMax: 0
+  RepositionRateMin: 0
+  RepositionRateMax: 0
+  AttackEndAiCD: 0
+  MinimumAttackRange: 1
+  currentState: 0
+  hasDestination: 0
+  targetTr: {fileID: 0}
+  debugDisableAI: 0
 --- !u!114 &5393515603401796050
 MonoBehaviour:
   m_ObjectHideFlags: 0
