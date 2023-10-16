@@ -20,6 +20,8 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     private PlayerComponentManager PCM;
     [SerializeField]
     private float iframes;
+    [SerializeField]
+    private float hitStunnedDuration;
 
     [Header("Damage Flash")]
     [SerializeField]
@@ -189,7 +191,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         {
             Hitpoints -= damage;
             timer.SetTime((int)SystemCD.iFrames, iframes);
-            PCM.control.SetHitStun(iframes);
+            PCM.control.SetHitStun(hitStunnedDuration);
         }
         SetHealthUI();
     }
@@ -270,9 +272,11 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     {
         CalculateDamage(amount);
     }
-
+    public Vector2 hitDir { get; private set; }
     public void AddForce(Vector2 force)
     {
+        hitDir = force;
+        PCM.control.rb.velocity = Vector2.zero;
         PCM.control.rb.velocity += force;
     }
 

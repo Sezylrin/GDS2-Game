@@ -53,10 +53,10 @@ public class EnemyManager : MonoBehaviour
     [field: SerializeField, ReadOnlyOnPlay] int Tier2SpawnChance { get; set; } = 0;
     [field: SerializeField, ReadOnlyOnPlay] int Tier3SpawnChance { get; set; } = 0;
 
-    private Pool<Rhino> rhinoPool;
-    private Pool<Snake> snakePool;
-    private Pool<Cheetah> cheetahPool;
-    private Pool<Lizard> lizardPool;
+    private Pool<Enemy> rhinoPool;
+    private Pool<Enemy> snakePool;
+    private Pool<Enemy> cheetahPool;
+    private Pool<Enemy> lizardPool;
 
     [SerializeField]
     private List<Enemy> enemyList = new List<Enemy>();

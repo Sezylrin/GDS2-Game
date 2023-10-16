@@ -11,20 +11,22 @@ public class BaseEnemyScriptableObject : ScriptableObject
     public int[] maxSouls;
     public float effectDuration;
     [Space(20)]
-    public float attackKnockback;
     public float[] attackCooldown;
     [Space(20)]
     public int[] attack1Damage;
     public float attack1Duration;
     public float windup1Duration;
+    public float attackKnockback1;
     [Space(20)]
     public int[] attack2Damage;
     public float attack2Duration;
     public float windup2Duration;
+    public float attackKnockback2;
     [Space(20)]
     public int[] attack3Damage;
     public float attack3Duration;
     public float windup3Duration;
+    public float attackKnockback3;
     [Space(20)]
     public int basePointsToStagger = 300;
     public float staggerMinDuration = 1.5f;

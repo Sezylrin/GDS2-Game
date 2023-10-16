@@ -5437,7 +5437,7 @@ MonoBehaviour:
     <times>k__BackingField: []
     owner: {fileID: 0}
   <CurrentAttackers>k__BackingField: 0
-  maxAttackers: 0
+  maxAttackers: 1
   <debugElementForAttacksList>k__BackingField: 0
   <debugUpdateAttacksList>k__BackingField: 0
   <debugEmptyAttacksList>k__BackingField: 0
@@ -5482,10 +5482,10 @@ MonoBehaviour:
   <debugSetLevelsCleared>k__BackingField: 0
   <debugLevelsCleared>k__BackingField: 0
   <FloorsCleared>k__BackingField: 0
-  <RhinoSpawnChance>k__BackingField: 100
-  <SnakeSpawnChance>k__BackingField: 0
-  <CheetahSpawnChance>k__BackingField: 0
-  <LizardSpawnChance>k__BackingField: 0
+  <RhinoSpawnChance>k__BackingField: 25
+  <SnakeSpawnChance>k__BackingField: 25
+  <CheetahSpawnChance>k__BackingField: 25
+  <LizardSpawnChance>k__BackingField: 25
   <Tier1SpawnChance>k__BackingField: 100
   <Tier2SpawnChance>k__BackingField: 0
   <Tier3SpawnChance>k__BackingField: 0
