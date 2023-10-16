@@ -47,7 +47,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     [field: SerializeField, ReadOnly] protected ElementType ActiveElementEffect { get; set; } = ElementType.noElement;
     [field: SerializeField, ReadOnly] protected int ElementTier { get; set; }
     [field: SerializeField, ReadOnly] protected int CurrentAttack { get; set; }
-    [field: SerializeField, ReadOnly] protected bool WindingUp { get; set; }
+    [field: SerializeField, ReadOnly] public bool WindingUp { get; private set; }
+    [field: SerializeField, ReadOnly] public bool InAttack { get; private set; }
     [field: SerializeField, ReadOnly] protected bool Staggered { get; set; }
     [field: SerializeField, ReadOnly] protected bool AbleToAttack { get; set; }
     [field: SerializeField, ReadOnly] protected bool Consumable { get; set; }
@@ -104,7 +105,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     [field: SerializeField] public Rigidbody2D rb { get; private set; }
     [field: SerializeField] protected Collider2D col2D { get; private set; }
     [field: SerializeField] protected AIPath path { get; set; }
-    [SerializeField]
+    [SerializeField,Tooltip("What layers the enemy cant walk over or through")]
     protected LayerMask TerrainLayers;
     protected AudioSource WalkingSound { get; set; }
     protected GameObject DeathSoundPrefab { get; set; }
@@ -304,6 +305,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
             debugInterruptAttack = false;
             InterruptAttack();
         }
+        SetMainTex();
         StateMachine();
         DeterminePathing();
         //EnemyAi();
@@ -427,7 +429,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     private Coroutine flash;
     private void PlayFlash()
     {
-        block.SetColor("_FlashColour", Color.white);
+        /*block.SetColor("_FlashColour", Color.white);
         if (flash != null)
         {
             StopCoroutine(flash);
@@ -435,13 +437,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
             rend.SetPropertyBlock(block);
             flash = StartCoroutine(DamageFlash());
         }
-        flash = StartCoroutine(DamageFlash());
+        flash = StartCoroutine(DamageFlash());*/
     }
     protected void SetOutline(Color colour, float thickness = 1)
     {
-        block.SetColor("_OutlineColour", colour);
+        /*block.SetColor("_OutlineColour", colour);
         block.SetFloat("_Thickness", thickness);
-        rend.SetPropertyBlock(block);
+        rend.SetPropertyBlock(block);*/
     }
     private IEnumerator DamageFlash()
     {
@@ -460,10 +462,15 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         rend.SetPropertyBlock(block);
     }
 
+    private void SetMainTex()
+    {
+        block.SetTexture("_MainTex", rend.sprite.texture);
+    }
+
     protected void CancelFlash()
     {
-        block.SetFloat("_FlashAmount", 0);
-        rend.SetPropertyBlock(block);
+        /*block.SetFloat("_FlashAmount", 0);
+        rend.SetPropertyBlock(block);*/
     }
 
     private IEnumerator WindUpFlash()
@@ -534,6 +541,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
 
     protected virtual void BeginAttack()
     {
+        InAttack = true;
         float duration = 0;
         switch (CurrentAttack)
         {
@@ -561,6 +569,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
 
     protected virtual void EndAttack()
     {
+        InAttack = false;
         currentState = EnemyState.stationary;
         BeginAttackCooldown();
         Manager.DoneAttack();
@@ -1031,8 +1040,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     }
     #endregion
 
-    //Obsolete
-    #region Pooling Functions (Unused)
+    #region Pooling Functions 
 
     public Pool<Enemy> Pool { get; set; }
     public bool IsPooled { get; set; }
@@ -1049,6 +1057,18 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         {
             Destroy(gameObject);
         }
+    }
+    #endregion
+
+    #region Animation
+    public Vector2 AimAtPlayer()
+    {
+        return targetTr.position - transform.position;
+    }
+
+    public Vector2 NextPathPoint()
+    {
+        return path.desiredVelocity;
     }
     #endregion
 }

@@ -54,7 +54,7 @@ public class Snake : Enemy
             temp.NewInstance();
         }
         temp.Init(dir, GlobSpawnPoint.position, TargetLayer, Attack3Damage, Attack3Duration, SingleShotSpeed, AttackKnockback1, transform);
-        Debug.Log("Using NormalAttack");
+        //Debug.Log("Using NormalAttack");
     }
     #endregion
 
@@ -62,7 +62,7 @@ public class Snake : Enemy
     protected override void Attack2()
     {
         StartCoroutine(ShootMultiple());
-        Debug.Log("Using NormalAttack");
+        //Debug.Log("Using NormalAttack");
     }
 
     private IEnumerator ShootMultiple()
@@ -110,7 +110,7 @@ public class Snake : Enemy
             }
             temp.Init(dir, GlobSpawnPoint.position, TargetLayer, Attack3Damage, AcidBlobSpeed + SnakeSO.AcidPoolDuration, AcidBlobSpeed, AttackKnockback3, transform);
             (temp as AcidPool).InitArch(Vector2.up * 2, positions[i] + (Vector2)targetTr.position, true);
-            targetLocation[i].transform.position = positions[i] + (Vector2)targetTr.position;
+            //targetLocation[i].transform.position = positions[i] + (Vector2)targetTr.position;
         }
         
     }

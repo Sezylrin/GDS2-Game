@@ -41,6 +41,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1752878504854859073}
   - component: {fileID: 1752878504854859086}
+  - component: {fileID: 899012392}
+  - component: {fileID: 899012391}
   m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
@@ -83,7 +85,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d76702d167233af4d8100ace27ec9fc0, type: 2}
+  - {fileID: 2100000, guid: c1c5965e5e665844fa2ff7bcea61d9dd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -115,6 +117,58 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &899012392
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752878504854859072}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f5be60daefa2bff45bfc1c23bfce192b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &899012391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752878504854859072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e28defc31dcfa84e9c85f027f6dd5a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 899012392}
+  enemy: {fileID: 6384816974836193804}
+  clips:
+    _serializedList:
+    - Key: 0
+      Value: IdleR
+    - Key: 1
+      Value: IdleL
+    - Key: 2
+      Value: IdleU
+    - Key: 3
+      Value: IdleD
+    - Key: 4
+      Value: WalkR
+    - Key: 5
+      Value: WalkL
+    - Key: 7
+      Value: WalkD
+    - Key: 6
+      Value: WalkU
 --- !u!1 &1752878504888296001
 GameObject:
   m_ObjectHideFlags: 0
@@ -986,7 +1040,7 @@ Transform:
   - {fileID: 1752878505191741674}
   - {fileID: 1752878505782548790}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &1752878506409264273
 CircleCollider2D:
@@ -1070,6 +1124,7 @@ MonoBehaviour:
   <ElementTier>k__BackingField: 0
   <CurrentAttack>k__BackingField: 0
   <WindingUp>k__BackingField: 0
+  <InAttack>k__BackingField: 0
   <Staggered>k__BackingField: 0
   <AbleToAttack>k__BackingField: 0
   <Consumable>k__BackingField: 0
@@ -1084,13 +1139,15 @@ MonoBehaviour:
   <Attack1Damage>k__BackingField: 0
   <Attack1Duration>k__BackingField: 0
   <Attack1Windup>k__BackingField: 0
+  <AttackKnockback1>k__BackingField: 0
   <Attack2Damage>k__BackingField: 0
   <Attack2Duration>k__BackingField: 0
   <Attack2Windup>k__BackingField: 0
+  <AttackKnockback2>k__BackingField: 0
   <Attack3Damage>k__BackingField: 0
   <Attack3Duration>k__BackingField: 0
   <Attack3Windup>k__BackingField: 0
-  <AttackKnockback>k__BackingField: 0
+  <AttackKnockback3>k__BackingField: 0
   <ConsumableHealthPercentThreshold>k__BackingField: 0
   <HealthPercentReceivedOnConsume>k__BackingField: 0
   <debugElement>k__BackingField: 2
@@ -1114,7 +1171,7 @@ MonoBehaviour:
   <path>k__BackingField: {fileID: 1752878506409264277}
   TerrainLayers:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 384
   collisionDisabledDur: 3
   <TargetLayer>k__BackingField:
     serializedVersion: 2
@@ -1155,7 +1212,7 @@ MonoBehaviour:
   staggerBonusDamage: 3
   elementResistAmount: 0.8
   baseArmour: 1
-  IdleRadius: 3
+  IdleRadius: 1
   RepositionPointMin: 5
   RepositionPointMax: 8
   IdleMoveRateMin: 0

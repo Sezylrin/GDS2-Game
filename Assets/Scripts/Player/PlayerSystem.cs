@@ -272,9 +272,11 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     {
         CalculateDamage(amount);
     }
-
+    public Vector2 hitDir { get; private set; }
     public void AddForce(Vector2 force)
     {
+        hitDir = force;
+        PCM.control.rb.velocity = Vector2.zero;
         PCM.control.rb.velocity += force;
     }
 

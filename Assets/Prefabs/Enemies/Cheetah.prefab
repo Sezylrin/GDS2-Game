@@ -829,7 +829,7 @@ Transform:
   - {fileID: 3200451849692041868}
   - {fileID: 3200451850082114949}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &3501907317032352873
 CapsuleCollider2D:
@@ -913,6 +913,7 @@ MonoBehaviour:
   <ElementTier>k__BackingField: 0
   <CurrentAttack>k__BackingField: 0
   <WindingUp>k__BackingField: 0
+  <InAttack>k__BackingField: 0
   <Staggered>k__BackingField: 0
   <AbleToAttack>k__BackingField: 0
   <Consumable>k__BackingField: 0
@@ -960,7 +961,7 @@ MonoBehaviour:
   TerrainLayers:
     serializedVersion: 2
     m_Bits: 384
-  collisionDisabledDur: 2
+  collisionDisabledDur: 1
   <TargetLayer>k__BackingField:
     serializedVersion: 2
     m_Bits: 0
@@ -1463,6 +1464,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3200451850185311737}
   - component: {fileID: 3200451850185311738}
+  - component: {fileID: 542129274}
+  - component: {fileID: 542129273}
   m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
@@ -1505,7 +1508,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d76702d167233af4d8100ace27ec9fc0, type: 2}
+  - {fileID: 2100000, guid: 96a4f284d8039904f84b62f712843bed, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1537,6 +1540,58 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &542129274
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3200451850185311736}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a68bee8a300560b43a87fe62dc1669f0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &542129273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3200451850185311736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e28defc31dcfa84e9c85f027f6dd5a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 542129274}
+  enemy: {fileID: 3200451849759215230}
+  clips:
+    _serializedList:
+    - Key: 0
+      Value: IdleR
+    - Key: 1
+      Value: IdleL
+    - Key: 2
+      Value: IdleU
+    - Key: 3
+      Value: IdleD
+    - Key: 4
+      Value: WalkR
+    - Key: 5
+      Value: WalkL
+    - Key: 7
+      Value: WalkD
+    - Key: 6
+      Value: WalkU
 --- !u!1 &3200451850595544280
 GameObject:
   m_ObjectHideFlags: 0

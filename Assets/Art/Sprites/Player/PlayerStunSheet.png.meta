@@ -103,6 +103,18 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -110,10 +122,10 @@ TextureImporter:
       name: PlayerStunSheet_0
       rect:
         serializedVersion: 2
-        x: 14
-        y: 6
-        width: 23
-        height: 37
+        x: 0
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -131,10 +143,10 @@ TextureImporter:
       name: PlayerStunSheet_1
       rect:
         serializedVersion: 2
-        x: 61
-        y: 9
-        width: 23
-        height: 34
+        x: 48
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -142,7 +154,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d9330472cba6dc24ab64f7f787e64ebc
+      spriteID: 46962d715c0eda24c937cd76f26fa228
       internalID: 1939023879
       vertices: []
       indices: 
@@ -152,10 +164,10 @@ TextureImporter:
       name: PlayerStunSheet_2
       rect:
         serializedVersion: 2
-        x: 110
-        y: 9
-        width: 19
-        height: 31
+        x: 96
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -163,7 +175,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 149393cb3e9565047870c90431a29922
+      spriteID: 6402793634d9b2b448d3e25663233a3c
       internalID: 1897119246
       vertices: []
       indices: 
@@ -173,10 +185,10 @@ TextureImporter:
       name: PlayerStunSheet_3
       rect:
         serializedVersion: 2
-        x: 161
-        y: 10
-        width: 17
-        height: 29
+        x: 144
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -184,7 +196,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6e39f00fbb346ea4385cb03408f2456f
+      spriteID: a67e9174208b8524980be73974f4c7a4
       internalID: -1005077654
       vertices: []
       indices: 
@@ -194,10 +206,10 @@ TextureImporter:
       name: PlayerStunSheet_4
       rect:
         serializedVersion: 2
-        x: 207
-        y: 9
-        width: 19
-        height: 32
+        x: 192
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -205,7 +217,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a0f88f912a20dd44088d151c91979adb
+      spriteID: 001c28c369e59e14c95951d87c2c0404
       internalID: -1960013895
       vertices: []
       indices: 

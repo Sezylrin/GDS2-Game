@@ -170,7 +170,6 @@ public class Cheetah : Enemy
     #region trigger
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log(collision.name);
         PlayerSystem foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
         {
