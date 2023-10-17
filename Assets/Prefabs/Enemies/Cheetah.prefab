@@ -90,7 +90,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 1725982173
+  m_SortingLayerID: -1141889249
   m_SortingOrder: 3
   m_TargetDisplay: 0
 --- !u!114 &6720588137104533950
@@ -497,7 +497,7 @@ Transform:
   - {fileID: 8858089967394045955}
   - {fileID: 3200451850082114949}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &3501907317032352873
 CapsuleCollider2D:
@@ -663,6 +663,10 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   rend: {fileID: 3200451850185311738}
+  hues:
+  - 0
+  - -180
+  - 320
   staggerBonusDamage: 3
   elementResistAmount: 0.8
   baseArmour: 1
@@ -1085,6 +1089,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 542129274}
+  rend: {fileID: 3200451850185311738}
   enemy: {fileID: 3200451849759215230}
   clips:
     _serializedList:

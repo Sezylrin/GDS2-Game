@@ -95,8 +95,7 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
             return;
         Enemy foundEnemy;
         if (UtilityFunction.FindComponent(collision.transform,out foundEnemy))
-        {
-            
+        {           
             
             if (hitEnemy.Contains(foundEnemy))
             {

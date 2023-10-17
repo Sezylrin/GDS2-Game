@@ -19,15 +19,30 @@ public class EnemyAnimation : MonoBehaviour
     [SerializeField]
     protected Animator anim;
     [SerializeField]
+    protected SpriteRenderer rend;
+    [SerializeField]
     protected Enemy enemy;
     [SerializeField, SerializedDictionary("Animation,String")]
     protected SerializedDictionary<AnimationMovements, string> clips;
-    private int lastDir = 0;
+    public int lastDir { get; private set; } = 0;
     // Start is called before the first frame update
     // Update is called once per frame
     protected virtual void Update()
     {
         DecideAnimation();
+        DetermineLayer();
+
+    }
+
+    private void DetermineLayer()
+    {
+        if (GameManager.Instance.PlayerTransform)
+        {
+            if (GameManager.Instance.PlayerTransform.position.y > transform.position.y)
+                rend.sortingOrder = 30;
+            else
+                rend.sortingOrder = 10;
+        }
     }
 
     protected virtual void DecideAnimation()

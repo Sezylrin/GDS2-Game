@@ -134,6 +134,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     private SpriteRenderer rend;
     [SerializeField]
     private MaterialPropertyBlock block;
+    [SerializeField]
+    private float[] hues = new float[3];
     #endregion
 
     #region Damage Modifier Variables
@@ -201,6 +203,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         SetStatsFromScriptableObject();
         SetHitPoints();
         SetElementOutline();
+        SetHue();
 
         WindingUp = false;
         Staggered = false;
@@ -432,7 +435,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     private Coroutine flash;
     private void PlayFlash()
     {
-        /*block.SetColor("_FlashColour", Color.white);
+        block.SetColor("_FlashColour", Color.white);
         if (flash != null)
         {
             StopCoroutine(flash);
@@ -440,13 +443,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
             rend.SetPropertyBlock(block);
             flash = StartCoroutine(DamageFlash());
         }
-        flash = StartCoroutine(DamageFlash());*/
+        flash = StartCoroutine(DamageFlash());
     }
     protected void SetOutline(Color colour, float thickness = 1)
     {
-        /*block.SetColor("_OutlineColour", colour);
+        block.SetColor("_OutlineColour", colour);
         block.SetFloat("_Thickness", thickness);
-        rend.SetPropertyBlock(block);*/
+        rend.SetPropertyBlock(block);
     }
     private IEnumerator DamageFlash()
     {
@@ -472,8 +475,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
 
     protected void CancelFlash()
     {
-        /*block.SetFloat("_FlashAmount", 0);
-        rend.SetPropertyBlock(block);*/
+        block.SetFloat("_FlashAmount", 0);
+        rend.SetPropertyBlock(block);
     }
 
     private IEnumerator WindUpFlash()
@@ -490,6 +493,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
             yield return new WaitForSeconds(0.1f);
         }
         block.SetFloat("_FlashAmount", 0);
+        rend.SetPropertyBlock(block);
+    }
+
+    private void SetHue()
+    {
+        block.SetFloat("_HueShift", hues[Tier - 1]);
         rend.SetPropertyBlock(block);
     }
     #endregion

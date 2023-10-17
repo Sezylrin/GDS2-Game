@@ -150,6 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 899012392}
+  rend: {fileID: 1752878504854859086}
   enemy: {fileID: 6384816974836193804}
   clips:
     _serializedList:
@@ -659,7 +660,7 @@ Transform:
   - {fileID: 1731773416687217357}
   - {fileID: 1752878505782548790}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &1752878506409264273
 CircleCollider2D:
@@ -825,6 +826,10 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   rend: {fileID: 1752878504854859086}
+  hues:
+  - 0
+  - 78
+  - 144
   staggerBonusDamage: 3
   elementResistAmount: 0.8
   baseArmour: 1
@@ -1076,7 +1081,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 1725982173
+  m_SortingLayerID: -1141889249
   m_SortingOrder: 3
   m_TargetDisplay: 0
 --- !u!114 &4225475181062324113

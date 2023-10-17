@@ -91,7 +91,6 @@ public class StaggerBar : MonoBehaviour
         {
             if (Staggered) 
             {
-                Debug.Log("isStaggered and decaying " + Bar);
                 Bar -= (PointsToStagger / StaggerMinDuration) / StaggerDecayAmount;
                 if (Bar <= 0)
                 {
@@ -123,15 +122,12 @@ public class StaggerBar : MonoBehaviour
 
     public void IncreaseStaggerDuration(int damage)
     {
-        Debug.Log("ran");
         float extraTime;
         if (DamageTakenSinceStaggered + damage > DamageToMaxDuration)
             damage = DamageToMaxDuration - DamageTakenSinceStaggered;
         DamageTakenSinceStaggered += damage;
         extraTime = Mathf.Clamp((float)damage / (float)DamageToMaxDuration,0,1) * (StaggerMaxDuration - StaggerMinDuration);
-        Debug.Log(Mathf.Clamp((float)damage / (float)DamageToMaxDuration, 0, 1));
         Bar += extraTime * (PointsToStagger / StaggerMinDuration);
-        Debug.Log("increasing stagger " + Bar + " " + extraTime * (PointsToStagger / StaggerMinDuration));
         UpdateFillPercent(Bar / PointsToStagger);
     }
 

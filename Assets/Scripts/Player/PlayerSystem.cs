@@ -39,6 +39,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         timer = GameManager.Instance.TimerManager.GenerateTimers(typeof(SystemCD), gameObject);
         //timer.times[(int)SystemCD.counterAttackQTE].OnTimeIsZero += RemoveCounterQTE;
         InitCastPoints();
+        CounterUsed();
     }
 
     #region Update
@@ -189,6 +190,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         }
         else
         {
+            Debug.Log("hit?");
             Hitpoints -= damage;
             timer.SetTime((int)SystemCD.iFrames, iframes);
             PCM.control.SetHitStun(hitStunnedDuration);
@@ -314,7 +316,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     #endregion
 
     #region Counter
-    [field: SerializeField, ReadOnly]
+    [field: SerializeField, ReadOnly, Header("Counter")]
     public bool isCountered { get; private set; }
     [SerializeField]
     private bool multiplicative;
@@ -329,11 +331,17 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     public void Counter()
     {
         isCountered = true;
+        block.SetTexture("_MainTex", rend.sprite.texture);
+        block.SetFloat("_Thickness", 1);
+        rend.SetPropertyBlock(block);
     }
 
     public void CounterUsed()
     {
         isCountered = false;
+        block.SetTexture("_MainTex", rend.sprite.texture);
+        block.SetFloat("_Thickness", 0);
+        rend.SetPropertyBlock(block);
     }
 
     public int ModifyDamage(int baseDamage)
