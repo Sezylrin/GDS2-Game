@@ -96,7 +96,7 @@ public class SkillSwitch : Menu
     #region Interactions
     public override void OpenMenu()
     {
-        GameManager.Instance.AudioComponent.PlaySound(SoundType.UIOpenMenu);
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.OpenMenu);
         currentlyHoveredIndex = 0;
         currentSkillMenu = CurrentSkillMenu.UnusedAbilities;
         firstSkillsetSelected = true;
@@ -181,7 +181,7 @@ public class SkillSwitch : Menu
     {
         if (currentSkillMenu == CurrentSkillMenu.UnusedAbilities)
         {
-            GameManager.Instance.AudioComponent.PlaySound(SoundType.UICloseMenu);
+            GameManager.Instance.AudioManager.PlaySound(AudioRef.CloseMenu);
             gameObject.SetActive(false);
             GameManager.Instance.PlayerTransform.gameObject.SetActive(true);
         }

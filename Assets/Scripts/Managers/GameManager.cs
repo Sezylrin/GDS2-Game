@@ -29,7 +29,6 @@ public class GameManager : MonoBehaviour
     public PlayerComponentManager PCM { get; private set; }
     public Transform CameraTrackPoint { get; private set; }
     private InteractionBase interaction;
-    public AudioComponent AudioComponent;
 
     public PlayerInputs playerInputs { get; private set; }
 
@@ -57,7 +56,6 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
         playerInputs = new PlayerInputs();
-        AudioComponent = gameObject.GetComponent<AudioComponent>();
         input.onControlsChanged += SetScheme;
         
         SwitchToMouseCursor();
@@ -86,12 +84,12 @@ public class GameManager : MonoBehaviour
     #region Sounds
     public void PlayOpenMenuSound()
     {
-        AudioComponent.PlaySound(SoundType.UIOpenMenu);
+        AudioManager.PlaySound(AudioRef.OpenMenu);
     }
 
     public void PlayCloseMenuSound()
     {
-        AudioComponent.PlaySound(SoundType.UICloseMenu);
+        AudioManager.PlaySound(AudioRef.CloseMenu);
     }
     #endregion
 
