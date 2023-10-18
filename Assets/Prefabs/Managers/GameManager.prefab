@@ -7103,7 +7103,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1213802183
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11058,8 +11058,8 @@ MonoBehaviour:
   bgmVolume: 100
   LoadedAudioClips:
     _serializedList: []
-  SFXMixerGroup: {fileID: 0}
-  BGMMixerGroup: {fileID: 0}
+  SFXMixerGroup: {fileID: -3833594322038420439, guid: 8ef6d8b737ad1934aa2b7fdd12d63b52, type: 2}
+  BGMMixerGroup: {fileID: 2784030454044810183, guid: 8ef6d8b737ad1934aa2b7fdd12d63b52, type: 2}
   MasterMixerGroup: {fileID: 0}
   audioObjPF: {fileID: 4554925132576604545, guid: 7938d901dcbec3a4aaf67d72d3c1b407, type: 3}
   loadedAudio: {fileID: 11400000, guid: affa53585a39f1744a2e1aed20025035, type: 2}
@@ -13130,8 +13130,8 @@ MonoBehaviour:
   <PlayerTransform>k__BackingField: {fileID: 0}
   <BookMenu>k__BackingField: {fileID: 1213802187}
   <StatsManager>k__BackingField: {fileID: 707390839}
-  BookMenuObj: {fileID: 0}
-  <TileSwapper>k__BackingField: {fileID: 0}
+  BookMenuObj: {fileID: 1213802182}
+  <TileSwapper>k__BackingField: {fileID: 1730852288}
   <PCM>k__BackingField: {fileID: 0}
   <HealthPerSegment>k__BackingField: 1000
   <controllerCursosrTR>k__BackingField: {fileID: 433756523}

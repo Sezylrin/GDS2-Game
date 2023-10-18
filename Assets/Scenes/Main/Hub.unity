@@ -4841,17 +4841,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1730852288 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1730852288, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
-  m_PrefabInstance: {fileID: 2078642918}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7979c3cb9fee95740a998be9645580ee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1833183269 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5393515603043086089, guid: d51d7b73a4c492843b5bbe22b38ecfa3, type: 3}
@@ -41714,14 +41703,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
-    - target: {fileID: 3761662248408365452, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
-      propertyPath: BookMenuObj
-      value: 
-      objectReference: {fileID: 2078642919}
-    - target: {fileID: 3761662248408365452, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
-      propertyPath: <TileSwapper>k__BackingField
-      value: 
-      objectReference: {fileID: 1730852288}
     - target: {fileID: 3761662248408365455, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -41771,11 +41752,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
---- !u!1 &2078642919 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1213802182, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
-  m_PrefabInstance: {fileID: 2078642918}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2118291912
 GameObject:
   m_ObjectHideFlags: 0
