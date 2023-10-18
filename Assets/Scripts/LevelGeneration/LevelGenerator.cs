@@ -32,8 +32,8 @@ public class LevelGenerator : MonoBehaviour
     // public int difficultyIncreaseLeft = 1;
     // [Tooltip("The amount that the difficulty will increase when moving through the right/harder room")]
     // public int difficultyIncreaseRight = 2;
-    [SerializeField]
-    private int floorsToWin = 7;
+    [field: SerializeField]
+    public int floorsToWin { get; private set; }
     // [SerializeField]
     // private int startDifficulty = 5;
     public bool hardNextLevel { get; private set; }
