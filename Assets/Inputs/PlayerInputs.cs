@@ -134,15 +134,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Open Menu"",
-                    ""type"": ""Button"",
-                    ""id"": ""79faa6a3-2cce-413a-b4f5-6bfa21258872"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -456,28 +447,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""cfc9847d-6ba5-4e2f-87e4-8da9f3153b35"",
-                    ""path"": ""<Keyboard>/tab"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Open Menu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""c51f3eda-13ce-4022-a3a4-1374453134e1"",
-                    ""path"": ""<Gamepad>/select"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Controller"",
-                    ""action"": ""Open Menu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""2d693827-1f87-41e8-b681-77f0474a445c"",
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
@@ -643,6 +612,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""name"": ""Return"",
                     ""type"": ""Button"",
                     ""id"": ""67c34b6c-51a7-49b7-b267-b29ce868abfd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Escape"",
+                    ""type"": ""Button"",
+                    ""id"": ""9fd2538e-1435-48ca-8292-f128ed85dd7e"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -1005,7 +983,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""5ca8b63f-f0c3-42d3-8fe8-2bf0bcab6b93"",
-                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1038,7 +1016,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""14c44245-1bd6-46c7-ba76-7ddb96a230fe"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1048,8 +1026,8 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""ac159ef9-f451-4594-8ff2-cd61928b2a98"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""id"": ""293cb28d-02cb-46d8-95d1-0ea0c210a72b"",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1059,12 +1037,34 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""5523a0b1-c38a-402e-8ea2-a4b568bc632b"",
-                    ""path"": ""<Keyboard>/escape"",
+                    ""id"": ""0f4e1b03-5b93-4ad7-ab4f-7c64ac39cd7f"",
+                    ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Return"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""28bcb890-ff1d-415e-b29b-e8a9252bbda3"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Escape"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d14b665c-d941-43a6-8135-a506ec55479c"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Escape"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1115,7 +1115,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Player_ToggleAbilities = m_Player.FindAction("ToggleAbilities", throwIfNotFound: true);
         m_Player_Consume = m_Player.FindAction("Consume", throwIfNotFound: true);
         m_Player_Escape = m_Player.FindAction("Escape", throwIfNotFound: true);
-        m_Player_OpenMenu = m_Player.FindAction("Open Menu", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1134,6 +1133,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_UI_ToggleSkill = m_UI.FindAction("ToggleSkill", throwIfNotFound: true);
         m_UI_Interact = m_UI.FindAction("Interact", throwIfNotFound: true);
         m_UI_Return = m_UI.FindAction("Return", throwIfNotFound: true);
+        m_UI_Escape = m_UI.FindAction("Escape", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1207,7 +1207,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ToggleAbilities;
     private readonly InputAction m_Player_Consume;
     private readonly InputAction m_Player_Escape;
-    private readonly InputAction m_Player_OpenMenu;
     public struct PlayerActions
     {
         private @PlayerInputs m_Wrapper;
@@ -1224,7 +1223,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @ToggleAbilities => m_Wrapper.m_Player_ToggleAbilities;
         public InputAction @Consume => m_Wrapper.m_Player_Consume;
         public InputAction @Escape => m_Wrapper.m_Player_Escape;
-        public InputAction @OpenMenu => m_Wrapper.m_Player_OpenMenu;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1270,9 +1268,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Escape.started += instance.OnEscape;
             @Escape.performed += instance.OnEscape;
             @Escape.canceled += instance.OnEscape;
-            @OpenMenu.started += instance.OnOpenMenu;
-            @OpenMenu.performed += instance.OnOpenMenu;
-            @OpenMenu.canceled += instance.OnOpenMenu;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1313,9 +1308,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Escape.started -= instance.OnEscape;
             @Escape.performed -= instance.OnEscape;
             @Escape.canceled -= instance.OnEscape;
-            @OpenMenu.started -= instance.OnOpenMenu;
-            @OpenMenu.performed -= instance.OnOpenMenu;
-            @OpenMenu.canceled -= instance.OnOpenMenu;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1353,6 +1345,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_ToggleSkill;
     private readonly InputAction m_UI_Interact;
     private readonly InputAction m_UI_Return;
+    private readonly InputAction m_UI_Escape;
     public struct UIActions
     {
         private @PlayerInputs m_Wrapper;
@@ -1373,6 +1366,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @ToggleSkill => m_Wrapper.m_UI_ToggleSkill;
         public InputAction @Interact => m_Wrapper.m_UI_Interact;
         public InputAction @Return => m_Wrapper.m_UI_Return;
+        public InputAction @Escape => m_Wrapper.m_UI_Escape;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1430,6 +1424,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Return.started += instance.OnReturn;
             @Return.performed += instance.OnReturn;
             @Return.canceled += instance.OnReturn;
+            @Escape.started += instance.OnEscape;
+            @Escape.performed += instance.OnEscape;
+            @Escape.canceled += instance.OnEscape;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -1482,6 +1479,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Return.started -= instance.OnReturn;
             @Return.performed -= instance.OnReturn;
             @Return.canceled -= instance.OnReturn;
+            @Escape.started -= instance.OnEscape;
+            @Escape.performed -= instance.OnEscape;
+            @Escape.canceled -= instance.OnEscape;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -1531,7 +1531,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnToggleAbilities(InputAction.CallbackContext context);
         void OnConsume(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);
-        void OnOpenMenu(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
@@ -1551,5 +1550,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnToggleSkill(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnReturn(InputAction.CallbackContext context);
+        void OnEscape(InputAction.CallbackContext context);
     }
 }
