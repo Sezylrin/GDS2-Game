@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public BookMenu BookMenu{ get; private set; }
     [field: SerializeField] public StatsManager StatsManager { get; private set; }
     [field: SerializeField] private GameObject BookMenuObj;
+    [field: SerializeField] public TileSwapper TileSwapper { get; private set; }
     [field: SerializeField, HideOnPlay(true)]
     public PlayerComponentManager PCM { get; private set; }
     public Transform CameraTrackPoint { get; private set; }

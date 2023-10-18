@@ -459,11 +459,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
---- !u!1 &126619859 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1213802182, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
-  m_PrefabInstance: {fileID: 312838783}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &228712773
 GameObject:
   m_ObjectHideFlags: 0
@@ -683,26 +678,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1213802182, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1843601983, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
-      propertyPath: BGMMixerGroup
-      value: 
-      objectReference: {fileID: 2784030454044810183, guid: 8ef6d8b737ad1934aa2b7fdd12d63b52, type: 2}
-    - target: {fileID: 1843601983, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
-      propertyPath: SFXMixerGroup
-      value: 
-      objectReference: {fileID: -3833594322038420439, guid: 8ef6d8b737ad1934aa2b7fdd12d63b52, type: 2}
     - target: {fileID: 3761662248408365442, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
-    - target: {fileID: 3761662248408365452, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
-      propertyPath: BookMenuObj
-      value: 
-      objectReference: {fileID: 126619859}
     - target: {fileID: 3761662248408365455, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
       propertyPath: m_RootOrder
       value: 0

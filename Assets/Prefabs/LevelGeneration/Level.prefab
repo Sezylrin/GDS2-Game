@@ -876,7 +876,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2035886004732619495
 Transform:
   m_ObjectHideFlags: 0
@@ -1144,14 +1144,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cabbcd907da866d45ab1984810b1f8f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseEnemyPoints: 0
-  enemyPointMultiplier: 1
   playerSpawnPoint: {fileID: 1617223566}
   swarmSpawnChance: 0
   miniBossSpawnChance: 0
   enemySpawnPointsContainer: {fileID: 179502969}
-  swarmEnemySpawnPointsContainer: {fileID: 0}
-  miniBossEnemySpawnPointsContainer: {fileID: 0}
+  swarmEnemySpawnPointsContainer: {fileID: 4962318909112928329}
+  miniBossEnemySpawnPointsContainer: {fileID: 6260250775350164018}
   enemySpawnPoints: []
   isFountain: 0
   debugClearLevel: 0
@@ -1268,7 +1266,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5989512541865408125
 Transform:
   m_ObjectHideFlags: 0
