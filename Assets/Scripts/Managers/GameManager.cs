@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     [field: SerializeField, HideOnPlay(true)] public Transform PlayerTransform { get; private set; }
     [field: SerializeField] public BookMenu BookMenu{ get; private set; }
     [field: SerializeField] public StatsManager StatsManager { get; private set; }
+    [field: SerializeField] private GameObject BookMenuObj;
     [field: SerializeField, HideOnPlay(true)]
     public PlayerComponentManager PCM { get; private set; }
     public Transform CameraTrackPoint { get; private set; }
@@ -90,6 +91,16 @@ public class GameManager : MonoBehaviour
     public void PlayCloseMenuSound()
     {
         AudioManager.PlaySound(AudioRef.CloseMenu);
+    }
+
+    public void ActivateBookMenu()
+    {
+        BookMenuObj.SetActive(true);
+    }
+
+    public void DeactivateBookMenu()
+    {
+        BookMenuObj.SetActive(false);
     }
     #endregion
 

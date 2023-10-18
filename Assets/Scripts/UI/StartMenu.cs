@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class StartMenu : MonoBehaviour
 {
-    [SerializeField] SceneLoader loader;
-
     public void StartGame()
     {
-        loader.Load(Scene.MainMenu);
+        GameManager.Instance.sceneLoader.Load(Scene.MainMenu);
+        GameManager.Instance.ActivateBookMenu();
     }
 
     public void QuitGame()
