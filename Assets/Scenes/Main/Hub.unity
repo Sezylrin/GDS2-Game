@@ -179,6 +179,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5754933048486312608, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
+      propertyPath: multiplicative
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5754933048486312608, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
+      propertyPath: damageMultiplier
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5754933048486312608, guid: 8898e8fbe9c71a44986f7ac9cd68f837, type: 3}
+      propertyPath: staggerMultiplier
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -344,6 +356,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &369594579 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1833183272, guid: d51d7b73a4c492843b5bbe22b38ecfa3, type: 3}
+  m_PrefabInstance: {fileID: 158799521}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e28defc31dcfa84e9c85f027f6dd5a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &562728655
 GameObject:
   m_ObjectHideFlags: 0
@@ -664,6 +687,7 @@ GameObject:
   m_Component:
   - component: {fileID: 653781079}
   - component: {fileID: 653781080}
+  - component: {fileID: 653781081}
   m_Layer: 6
   m_Name: Hitbox
   m_TagString: Untagged
@@ -698,6 +722,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a64e05df80c5e4abe1f3b4053f43c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitboxPos:
+  - {x: 0.15, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: -0.15, y: -0.09, z: 0}
+  - {x: 0, y: 0, z: 0}
+  hitboxRot:
+  - {x: 0, y: 0, z: -22.63}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 19.39}
+  - {x: 0, y: 0, z: 0}
+  anim: {fileID: 369594579}
+--- !u!70 &653781081
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653781078}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1, y: 2}
+  m_Direction: 0
 --- !u!1 &725727124
 GameObject:
   m_ObjectHideFlags: 0
@@ -40231,6 +40301,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 127852128, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
+      propertyPath: blizzard
+      value: 
+      objectReference: {fileID: 1419865250949850070, guid: 6c661694b4d9bad43baef8d9fe0b6843, type: 3}
     - target: {fileID: 3761662248408365442, guid: 66fa0539fb4778f49bd6997e03225f74, type: 3}
       propertyPath: m_Name
       value: GameManager
