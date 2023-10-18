@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public enum Scene
 {
-    //Start,
+    MainMenu,
     Hub,
     Tutorial
 }
@@ -55,7 +55,7 @@ public class SceneLoader : MonoBehaviour
     {
         CrossFadeAnimator.SetTrigger("Start");
 
-        yield return new WaitForSeconds(CrossFadeTime);
+        yield return new WaitForSecondsRealtime(CrossFadeTime);
         SceneManager.LoadSceneAsync((int)scene);
         if (scene == Scene.Hub)
             LoadedIntoHub();

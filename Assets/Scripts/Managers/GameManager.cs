@@ -23,14 +23,14 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public AudioManager AudioManager { get; private set; }
     [field: SerializeField] public SkillTreeManager SkillTreeManager { get; private set; }
     [field: SerializeField, HideOnPlay(true)] public Transform PlayerTransform { get; private set; }
-    [field: SerializeField] public SkillSwitchManager SkillSwitchManager { get; private set; }
+    [field: SerializeField] public BookMenu BookMenu{ get; private set; }
     [field: SerializeField] public StatsManager StatsManager { get; private set; }
+    [field: SerializeField] private GameObject BookMenuObj;
     [field: SerializeField] public TileSwapper TileSwapper { get; private set; }
     [field: SerializeField, HideOnPlay(true)]
     public PlayerComponentManager PCM { get; private set; }
     public Transform CameraTrackPoint { get; private set; }
     private InteractionBase interaction;
-    public AudioComponent AudioComponent;
 
     public PlayerInputs playerInputs { get; private set; }
 
@@ -58,7 +58,6 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
         playerInputs = new PlayerInputs();
-        AudioComponent = gameObject.GetComponent<AudioComponent>();
         input.onControlsChanged += SetScheme;
         
         SwitchToMouseCursor();
@@ -70,23 +69,9 @@ public class GameManager : MonoBehaviour
         ConsumeTimers.times[(int)ConsumeTimer.consumeDelay].OnTimeIsZero += EndConsumeDelay;
     }
 
-    public void OpenSkillSwitchManager(InputAction.CallbackContext context)
-    {
-        SkillSwitchManager.OpenMenu();
-
-        if(SkillSwitchManager.transform.gameObject.activeSelf)
-        {
-            PlayerTransform.gameObject.SetActive(false);
-        }
-    }
-
     //Temporary for now, remove when we have a proper way to open skillSwitchManager
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            SkillSwitchManager.OpenMenu();
-        }
         if (Input.GetKeyDown(KeyCode.L))
         {
             AddSouls(10000);
@@ -101,12 +86,22 @@ public class GameManager : MonoBehaviour
     #region Sounds
     public void PlayOpenMenuSound()
     {
-        AudioComponent.PlaySound(SoundType.UIOpenMenu);
+        AudioManager.PlaySound(AudioRef.OpenMenu);
     }
 
     public void PlayCloseMenuSound()
     {
-        AudioComponent.PlaySound(SoundType.UICloseMenu);
+        AudioManager.PlaySound(AudioRef.CloseMenu);
+    }
+
+    public void ActivateBookMenu()
+    {
+        BookMenuObj.SetActive(true);
+    }
+
+    public void DeactivateBookMenu()
+    {
+        BookMenuObj.SetActive(false);
     }
     #endregion
 

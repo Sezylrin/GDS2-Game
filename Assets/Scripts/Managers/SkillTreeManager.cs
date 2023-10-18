@@ -41,7 +41,7 @@ public class SkillTreeManager : MonoBehaviour
     public void ShowSkillTree()
     {
         gameObject.SetActive(true);
-        GameManager.Instance.AudioComponent.PlaySound(SoundType.UIOpenMenu);
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.OpenMenu);
         UpdateSoulsText();
     }
 

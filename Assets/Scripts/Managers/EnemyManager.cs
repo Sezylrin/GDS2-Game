@@ -214,7 +214,46 @@ public class EnemyManager : MonoBehaviour
     }
     private int SelectNumberOfEnemiesToSpawnw()
     {
-        return Random.Range(3, 6);
+        int minSpawns = 2;
+        int maxSpawns = 3;
+        switch (LevelGenerator.Instance.floorsCleared + 1)
+        {
+            case 1:
+                minSpawns = 2;
+                maxSpawns = 3;
+                break;
+            case 2:
+                minSpawns = 2;
+                maxSpawns = 4;
+                break;
+            case 3:
+                minSpawns = 3;
+                maxSpawns = 4;
+                break;
+            case 4:
+                minSpawns = 3;
+                maxSpawns = 5;
+                break;
+            case 5:
+                minSpawns = 4;
+                maxSpawns = 5;
+                break;
+            case 6:
+                minSpawns = 4;
+                maxSpawns = 6;
+                break;
+            case 7:
+                minSpawns = 5;
+                maxSpawns = 6;
+                break;
+        }
+
+        int numberToSpawn;
+
+        if (Level.Instance.isHard) numberToSpawn = maxSpawns;
+        else numberToSpawn = Random.Range(minSpawns, maxSpawns + 1);
+
+        return numberToSpawn;
     }
 
     private EnemyType SelectEnemyType()
