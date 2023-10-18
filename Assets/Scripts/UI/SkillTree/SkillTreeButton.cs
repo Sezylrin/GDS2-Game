@@ -162,6 +162,7 @@ public class SkillTreeButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
             .Append(rectTransform.DOScale(new Vector3(1.05f, 1.05f, 1f), 0.3f).SetEase(Ease.InOutSine))
             .Append(rectTransform.DOScale(new Vector3(1f, 1f, 1f), 0.3f).SetEase(Ease.InOutSine))
             .SetLoops(-1, LoopType.Yoyo)
+            .SetUpdate(UpdateType.Normal, true)
             .Play();
     }
 }

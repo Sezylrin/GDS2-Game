@@ -40,7 +40,6 @@ public class InputController : MonoBehaviour
         player.Look.performed += PCM.control.MousePosition;
         player.Look.canceled += PCM.control.MousePosition;
         player.LookMouse.performed += PCM.control.MousePosition;
-        player.OpenMenu.performed += GameManager.Instance.OpenSkillSwitchManager;
         GameManager.Instance.SetPlayerTransform(transform, PCM);
         PCM.control.SetControllerCursor(GameManager.Instance.controllerCursosrTR);
         GameManager.Instance.SetCameraTrack(PCM.control.CameraFollowPoint);
@@ -52,7 +51,6 @@ public class InputController : MonoBehaviour
     {
         //GameManager.Instance.SetPlayerTransform(null, null);
         PCM.control.SetControllerCursor(null);
-        player.OpenMenu.performed -= GameManager.Instance.OpenSkillSwitchManager;
         player.Move.performed -= PCM.control.SetDirection;
         player.Move.canceled -= PCM.control.SetDirection;
         player.Dash.performed -= PCM.control.BufferDash;

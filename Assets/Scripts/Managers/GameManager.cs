@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public AudioManager AudioManager { get; private set; }
     [field: SerializeField] public SkillTreeManager SkillTreeManager { get; private set; }
     [field: SerializeField, HideOnPlay(true)] public Transform PlayerTransform { get; private set; }
-    [field: SerializeField] public SkillSwitchManager SkillSwitchManager { get; private set; }
+    [field: SerializeField] public BookMenu BookMenu{ get; private set; }
     [field: SerializeField] public StatsManager StatsManager { get; private set; }
     [field: SerializeField, HideOnPlay(true)]
     public PlayerComponentManager PCM { get; private set; }
@@ -69,23 +69,9 @@ public class GameManager : MonoBehaviour
         ConsumeTimers.times[(int)ConsumeTimer.consumeDelay].OnTimeIsZero += EndConsumeDelay;
     }
 
-    public void OpenSkillSwitchManager(InputAction.CallbackContext context)
-    {
-        SkillSwitchManager.OpenMenu();
-
-        if(SkillSwitchManager.transform.gameObject.activeSelf)
-        {
-            PlayerTransform.gameObject.SetActive(false);
-        }
-    }
-
     //Temporary for now, remove when we have a proper way to open skillSwitchManager
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            SkillSwitchManager.OpenMenu();
-        }
         if (Input.GetKeyDown(KeyCode.L))
         {
             AddSouls(10000);

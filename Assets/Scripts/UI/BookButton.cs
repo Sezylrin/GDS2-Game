@@ -5,10 +5,17 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.EventSystems;
 using DG.Tweening.Core.Easing;
+using UnityEngine.UI;
 
 public class BookButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     private Tween hoverTween;
+    private Button button;
+
+    private void Awake()
+    {
+        button = GetComponent<Button>();
+    }
 
     public void ActivateHover(bool PlaySound = true)
     {
@@ -23,7 +30,9 @@ public class BookButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void HandleClick()
     {
-        Debug.Log("Handling click");
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.buttonPress);
+        StopHoverAnimation();
+        button.onClick.Invoke();
     }
     protected void StopHoverAnimation()
     {
@@ -40,8 +49,10 @@ public class BookButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             .Append(rectTransform.DOScale(new Vector3(1.05f, 1.05f, 1f), 0.3f).SetEase(Ease.InOutSine))
             .Append(rectTransform.DOScale(new Vector3(1f, 1f, 1f), 0.3f).SetEase(Ease.InOutSine))
             .SetLoops(-1, LoopType.Yoyo)
+            .SetUpdate(UpdateType.Normal, true)
             .Play();
     }
+
 
     public void OnPointerEnter(PointerEventData eventData)
     {

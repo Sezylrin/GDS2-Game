@@ -1,8 +1,11 @@
 public enum AudioRef
 {
-	buttonPress,
 	ButtonHover,
+	buttonPress,
+	ButtonPressFail,
+	CloseMenu,
 	FootStepGrassL,
 	FootStepGrassR,
+	OpenMenu,
 	Parry
 }

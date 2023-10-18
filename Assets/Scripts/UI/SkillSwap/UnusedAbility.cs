@@ -17,10 +17,10 @@ public class UnusedAbility : UIAbility
         {
             bgImage.sprite = hoveredDisabledBg;
         }
-        GameManager.Instance.SkillSwitchManager.UpdatePopup(abilityData);
+        GameManager.Instance.BookMenu.SkillSwitch.GetComponent<SkillSwitch>().UpdatePopup(abilityData);
         if (playSound)
         {
-            base.audioComponent.PlaySound(SoundType.UIHover);
+            GameManager.Instance.AudioManager.PlaySound(AudioRef.ButtonHover);
         }
         base.PlayHoverAnimation();
     }
