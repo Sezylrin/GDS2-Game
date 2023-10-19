@@ -198,23 +198,21 @@ public class Rhino : Enemy
     {        
         if ((!ChargeHitbox.activeSelf && !ShockwaveHitbox.activeSelf) || hitTarget)
             return;
-        IDamageable foundTarget;
+        if (!collision.isTrigger)
+            return;
+        PlayerSystem foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
         {
-            if (foundTarget is PlayerSystem)
+            if (Charging) Charging = false;
+            if (foundTarget.GetState() == playerState.perfectDodge)
             {
-                PlayerSystem temp = foundTarget as PlayerSystem;
-                if (Charging) Charging = false;
-                if (temp.GetState() == playerState.perfectDodge)
-                {
-                    InterruptAttack();
-                    temp.InstantRegenPoint();
-                    temp.Counter();
-                }
-                else
-                {
-                    DoDamage(foundTarget);
-                }
+                InterruptAttack();
+                foundTarget.InstantRegenPoint();
+                foundTarget.Counter();
+            }
+            else
+            {
+                DoDamage(foundTarget);
             }
         }
     }

@@ -123,6 +123,7 @@ public class Abilities : MonoBehaviour
     {
         lastUsed = abilityToCast;
         castDur = abilityToCast.castDuration;
+        GameManager.Instance.AudioManager.PlaySound(abilityToCast.audioCast);
         //play animation
         Pool<AbilityBase> temp;
         if (pools.TryGetValue(abilityToCast.type, out temp))

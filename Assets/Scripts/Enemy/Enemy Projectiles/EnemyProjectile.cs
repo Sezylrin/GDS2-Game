@@ -81,9 +81,10 @@ public class EnemyProjectile : MonoBehaviour, IPoolable<EnemyProjectile>
     {
         if (collision.transform == shooter)
             return;
+        if (!collision.isTrigger) return;
         PlayerSystem foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
-        {                       
+        {
             if (foundTarget.GetState() == playerState.perfectDodge)
             {
                 foundTarget.InstantRegenPoint();
