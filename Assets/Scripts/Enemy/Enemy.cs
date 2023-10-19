@@ -1022,15 +1022,19 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
 
     #region collisionPrevention
     private float collisionTime = 0;
+    private bool collisionOff = false;
     private LayerMask defaultLayer;
     
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (!collision.collider.CompareTag(Tags.T_Player))
         {
-            if (collisionTime > 1f)
+            if (collisionTime > 1f && !collisionOff)
             {
+                collisionOff = true;
+                Debug.Log((int)col2D.excludeLayers + " " + (int)EnemyLayer + " " + (int)col2D.excludeLayers + EnemyLayer);
                 col2D.excludeLayers += EnemyLayer;
+                Debug.Log((int)col2D.excludeLayers);
                 Invoke("ResumeCollision", collisionDisabledDur);
             }
             collisionTime += Time.deltaTime;
@@ -1041,6 +1045,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     {
         col2D.excludeLayers = defaultLayer;
         collisionTime = 0;
+        collisionOff = false;
     }
     #endregion
 

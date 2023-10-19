@@ -101,7 +101,7 @@ public class Cheetah : Enemy
             float ratio = (Time.time - startTime) / swipeDuration;
             //float cubic = Mathf.Sin((ratio * Mathf.PI) * 0.5f);
             Vector2 nextPosition = Vector2.Lerp(startPos, endPos, ratio);
-            if (Physics2D.CapsuleCast(transform.position, size, CapsuleDirection2D.Vertical, 0, dashDirection, Vector2.Distance(transform.position, nextPosition), TerrainLayers))
+            if (Physics2D.CircleCast(transform.position + (Vector3)col2D.offset, ((CircleCollider2D)col2D).radius, dashDirection, Vector2.Distance(transform.position, nextPosition), TerrainLayers))
             {
                 break;
             }

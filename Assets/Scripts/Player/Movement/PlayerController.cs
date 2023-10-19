@@ -606,6 +606,7 @@ public class PlayerController : MonoBehaviour
             }
             yield return null;
         }
+        Debug.Log("maybe?");
         StopDash();
     }
 
@@ -620,10 +621,10 @@ public class PlayerController : MonoBehaviour
         if (dashCoroutine != null)
         {
             dashCoroutine = null;
-            col2D.excludeLayers = 0;
-            circCol2D.excludeLayers = initialLayer;
-            isDashing = false;
         }
+        col2D.excludeLayers = 0;
+        circCol2D.excludeLayers = initialLayer;
+        isDashing = false;
     }
 
     private void StopDash(Coroutine coroutine)

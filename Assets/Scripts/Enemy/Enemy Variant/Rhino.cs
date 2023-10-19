@@ -93,7 +93,7 @@ public class Rhino : Enemy
         while (Charging)
         {
             yield return null;
-            RaycastHit2D hit = Physics2D.CircleCast(transform.position, 1, dir, (dir * Time.deltaTime * ChargeSpeed).magnitude,TerrainLayers);
+            RaycastHit2D hit = Physics2D.CircleCast(transform.position + (Vector3)col2D.offset, ((CircleCollider2D)col2D).radius, dir, (dir * Time.deltaTime * ChargeSpeed).magnitude,TerrainLayers);
             if (hit.collider)
             {
                 Debug.Log("hit terrain");
