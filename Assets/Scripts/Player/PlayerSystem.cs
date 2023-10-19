@@ -190,7 +190,6 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         }
         else
         {
-            Debug.Log("hit?");
             Hitpoints -= damage;
             timer.SetTime((int)SystemCD.iFrames, iframes);
             PCM.control.SetHitStun(hitStunnedDuration);

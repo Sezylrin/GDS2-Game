@@ -27,6 +27,8 @@ public class Cheetah : Enemy
     private Collider2D swipeHitbox;
     [SerializeField]
     private float multiSwipeDelay;
+    [SerializeField]
+    private Collider2D hitbox;
 
 
     protected override void Start()
@@ -92,7 +94,7 @@ public class Cheetah : Enemy
         Vector2 endPos = (Vector2)transform.position + (dir * swipeDistance);
         Vector2 startPos = transform.position;
         Vector2 dashDirection = endPos - startPos;
-        Vector2 size = ((CapsuleCollider2D)col2D).size;
+        Vector2 size = ((CapsuleCollider2D)hitbox).size;
         for (float timer = 0; timer < swipeDuration; timer += Time.deltaTime)
         {
 

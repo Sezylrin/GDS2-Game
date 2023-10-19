@@ -155,7 +155,6 @@ public class PlayerAnimation : MonoBehaviour
                 anim.Play("HitGoingS");
                 break;
             case 7:
-                Debug.Log("the one failing");
                 anim.Play("HitGoingSE");
                 break;
         }
