@@ -112,15 +112,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Open Menu",
-                    "type": "Button",
-                    "id": "79faa6a3-2cce-413a-b4f5-6bfa21258872",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -434,28 +425,6 @@
                 },
                 {
                     "name": "",
-                    "id": "cfc9847d-6ba5-4e2f-87e4-8da9f3153b35",
-                    "path": "<Keyboard>/tab",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Open Menu",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c51f3eda-13ce-4022-a3a4-1374453134e1",
-                    "path": "<Gamepad>/select",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Controller",
-                    "action": "Open Menu",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "2d693827-1f87-41e8-b681-77f0474a445c",
                     "path": "<Keyboard>/q",
                     "interactions": "",
@@ -621,6 +590,15 @@
                     "name": "Return",
                     "type": "Button",
                     "id": "67c34b6c-51a7-49b7-b267-b29ce868abfd",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Escape",
+                    "type": "Button",
+                    "id": "9fd2538e-1435-48ca-8292-f128ed85dd7e",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -983,7 +961,7 @@
                 {
                     "name": "",
                     "id": "5ca8b63f-f0c3-42d3-8fe8-2bf0bcab6b93",
-                    "path": "<Gamepad>/dpad/left",
+                    "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -1016,7 +994,7 @@
                 {
                     "name": "",
                     "id": "14c44245-1bd6-46c7-ba76-7ddb96a230fe",
-                    "path": "<Gamepad>/buttonSouth",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -1026,8 +1004,8 @@
                 },
                 {
                     "name": "",
-                    "id": "ac159ef9-f451-4594-8ff2-cd61928b2a98",
-                    "path": "<Gamepad>/buttonEast",
+                    "id": "293cb28d-02cb-46d8-95d1-0ea0c210a72b",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -1037,12 +1015,34 @@
                 },
                 {
                     "name": "",
-                    "id": "5523a0b1-c38a-402e-8ea2-a4b568bc632b",
-                    "path": "<Keyboard>/escape",
+                    "id": "0f4e1b03-5b93-4ad7-ab4f-7c64ac39cd7f",
+                    "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Return",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "28bcb890-ff1d-415e-b29b-e8a9252bbda3",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Escape",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d14b665c-d941-43a6-8135-a506ec55479c",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Escape",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

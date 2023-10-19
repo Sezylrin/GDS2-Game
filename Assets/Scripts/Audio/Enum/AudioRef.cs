@@ -1,5 +1,6 @@
 public enum AudioRef
 {
+	ButtonHover,
 	buttonPress,
 	ElectricCast,
 	ElectricHit,

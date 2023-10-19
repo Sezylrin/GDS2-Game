@@ -7,6 +7,7 @@ using System;
 #if UNITY_EDITOR
 using UnityEditor;
 using System.IO;
+using UnityEngine.Audio;
 #endif
 public class AudioManager : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class AudioManager : MonoBehaviour
     [SerializeField, Tooltip("Loaded Sounds, press Load sounds to load in sounds, do not edit the dictionary")]
     [SerializedDictionary("Reference", "AudioClipSO")]
     private SerializedDictionary<string, AudioClipSO> LoadedAudioClips;
+    [SerializeField] AudioMixerGroup SFXMixerGroup;
+    [SerializeField] AudioMixerGroup BGMMixerGroup;
+    [SerializeField] AudioMixerGroup MasterMixerGroup;
     [SerializeField]
     private Stack<AudioObj> availableSources = new Stack<AudioObj>();
     [SerializeField]
@@ -78,5 +82,9 @@ public class AudioManager : MonoBehaviour
         availableSources.Push(obj);
     }
 
+    public void ModifyBGMVolume(float volume)
+    {
+        
+    }
 
 }

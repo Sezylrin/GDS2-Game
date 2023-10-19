@@ -216,33 +216,33 @@ public class EnemyManager : MonoBehaviour
     {
         int minSpawns = 2;
         int maxSpawns = 3;
-        switch (LevelGenerator.Instance.floorsCleared)
+        switch (LevelGenerator.Instance.floorsCleared + 1)
         {
-            case 0:
+            case 1:
                 minSpawns = 2;
                 maxSpawns = 3;
                 break;
-            case 1:
-                minSpawns = 2;
-                maxSpawns = 4;
-                break;
             case 2:
-                minSpawns = 3;
+                minSpawns = 2;
                 maxSpawns = 4;
                 break;
             case 3:
                 minSpawns = 3;
-                maxSpawns = 5;
+                maxSpawns = 4;
                 break;
             case 4:
-                minSpawns = 4;
+                minSpawns = 3;
                 maxSpawns = 5;
                 break;
             case 5:
                 minSpawns = 4;
-                maxSpawns = 6;
+                maxSpawns = 5;
                 break;
             case 6:
+                minSpawns = 4;
+                maxSpawns = 6;
+                break;
+            case 7:
                 minSpawns = 5;
                 maxSpawns = 6;
                 break;

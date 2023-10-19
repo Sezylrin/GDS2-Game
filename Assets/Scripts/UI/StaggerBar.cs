@@ -13,7 +13,10 @@ public class StaggerBar : MonoBehaviour
         delayBetweenStagger
     }
 
+    [field: SerializeField] protected Enemy Parent { get; set; }
     [field: SerializeField] private Image image;
+    [field: SerializeField] protected Sprite fillingSprite { get; private set; }
+    [field: SerializeField] protected Sprite fullSprite { get; private set; }
     [field: SerializeField, ReadOnly] protected float Bar { get; set; }
     [field: SerializeField, ReadOnly] protected int PointsToStagger { get; set; } = 100;
     [field: SerializeField, ReadOnly] protected float StaggerMinDuration { get; set; } = 3;
@@ -23,7 +26,8 @@ public class StaggerBar : MonoBehaviour
     [field: SerializeField, ReadOnly] protected float StaggerDecayAmount { get; set; } = 4;
     [field: SerializeField, ReadOnly] protected float StaggerDecayRate { get; set; } = 0.25f;
     [field: SerializeField] protected Timer StaggerTimers { get; private set; }
-    [field: SerializeField] protected Enemy Parent { get; set; }
+    
+    
 
     protected int DamageToMaxDuration;
     protected int DamageTakenSinceStaggered = 0;
@@ -46,12 +50,12 @@ public class StaggerBar : MonoBehaviour
 
     public void SetToOrange()
     {
-        image.color = new Color(1, 0.633435f, 0);
+        image.sprite = fillingSprite;
     }
 
     public void SetToPink()
     {
-        image.color = new Color(1, 0, 1);
+        image.sprite = fullSprite;
     }
 
     public void UpdateFillPercent(float percent)
