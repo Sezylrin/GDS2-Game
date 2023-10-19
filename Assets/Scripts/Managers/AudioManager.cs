@@ -44,6 +44,7 @@ public class AudioManager : MonoBehaviour
             loadedSO.loadedSound.Add(clip.ReferenceName, clip);
         }
         UpdateDict(loadedSO);
+        EditorUtility.SetDirty(loadedSO);
     }
 #endif
     private void UpdateDict(LoadedSoundDict loadedSO)

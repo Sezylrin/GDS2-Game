@@ -372,7 +372,7 @@ GameObject:
   - component: {fileID: 3200451849759215230}
   - component: {fileID: 3200451849759215169}
   - component: {fileID: 3200451849759215168}
-  - component: {fileID: 2056569423407889316}
+  - component: {fileID: 5839000257537730261}
   m_Layer: 6
   m_Name: Cheetah
   m_TagString: Untagged
@@ -487,7 +487,7 @@ MonoBehaviour:
   <HealthBarController>k__BackingField: {fileID: 8697050604440704297}
   <StaggerBar>k__BackingField: {fileID: 2928751567514778706}
   <rb>k__BackingField: {fileID: 3200451849759215171}
-  <col2D>k__BackingField: {fileID: 2056569423407889316}
+  <col2D>k__BackingField: {fileID: 5839000257537730261}
   <path>k__BackingField: {fileID: 3200451849759215168}
   TerrainLayers:
     serializedVersion: 2
@@ -553,6 +553,7 @@ MonoBehaviour:
   swipeAmount: 3
   swipeHitbox: {fileID: 8172455979165912751}
   multiSwipeDelay: 0.5
+  hitbox: {fileID: 0}
 --- !u!114 &3200451849759215169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -623,6 +624,41 @@ MonoBehaviour:
   slowWhenNotFacingTarget: 1
   whenCloseToDestination: 0
   constrainInsideGraph: 0
+--- !u!58 &5839000257537730261
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3200451849759215175}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.72}
+  serializedVersion: 2
+  m_Radius: 0.4
 --- !u!1 &3200451850082114948
 GameObject:
   m_ObjectHideFlags: 0

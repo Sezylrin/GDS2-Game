@@ -2,6 +2,8 @@ public enum AudioRef
 {
 	ButtonHover,
 	buttonPress,
+	ButtonPressFail,
+	CloseMenu,
 	ElectricCast,
 	ElectricHit,
 	FireCast2,
@@ -10,6 +12,7 @@ public enum AudioRef
 	FootStepGrassL,
 	FootStepGrassR,
 	Healing,
+	OpenMenu,
 	Parry,
 	WaterCast2,
 	WaterCast1,

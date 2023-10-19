@@ -6,7 +6,7 @@ public class StartMenu : MonoBehaviour
 {
     public void StartGame()
     {
-        GameManager.Instance.sceneLoader.Load(Scene.MainMenu);
+        GameManager.Instance.sceneLoader.Load(Scene.Hub);
         GameManager.Instance.ActivateBookMenu();
     }
 
