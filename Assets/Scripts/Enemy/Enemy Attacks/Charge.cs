@@ -6,7 +6,7 @@ public class Charge : MonoBehaviour
 {
     [field: SerializeField] private Rhino Parent { get; set; }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    /*private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.isTrigger)
             return;
@@ -18,7 +18,6 @@ public class Charge : MonoBehaviour
                 PlayerSystem temp = foundTarget as PlayerSystem;
                 if (temp.GetState() == playerState.perfectDodge)
                 {
-                    temp.InstantRegenPoint();
                     temp.CounterSuccesful(Parent);
                 }
                 else
@@ -33,5 +32,5 @@ public class Charge : MonoBehaviour
                 if (Parent.Charging) Parent.Charging = false;
             }
         }
-    }
+    }*/
 }

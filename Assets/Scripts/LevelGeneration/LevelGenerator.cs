@@ -8,7 +8,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
-//TODO: Async Loading+Transitions | Example Levels | Door Animations
 public class LevelGenerator : MonoBehaviour
 {
     private static LevelGenerator _instance;
@@ -29,28 +28,32 @@ public class LevelGenerator : MonoBehaviour
     public int roomPoolSize = 3;
     [Tooltip("Levels between each fountain spawn, should be >= roomPoolSize")]
     public int fountainFrequency = 5;
-    [Tooltip("The amount that the difficulty will increase when moving through the left/easier room")]
-    public int difficultyIncreaseLeft = 1;
-    [Tooltip("The amount that the difficulty will increase when moving through the right/harder room")]
-    public int difficultyIncreaseRight = 2;
+    // [Tooltip("The amount that the difficulty will increase when moving through the left/easier room")]
+    // public int difficultyIncreaseLeft = 1;
+    // [Tooltip("The amount that the difficulty will increase when moving through the right/harder room")]
+    // public int difficultyIncreaseRight = 2;
+    [field: SerializeField]
+    public int floorsToWin { get; private set; }
+    // [SerializeField]
+    // private int startDifficulty = 5;
+    public bool hardNextLevel { get; private set; }
 
-    [Header("ReadOnly")]
+    // [field: SerializeField, ReadOnly]
+    // public int difficulty { get; private set; }
     private List<SceneReference> roomPool = new List<SceneReference>();
     private List<SceneReference> levelList = new List<SceneReference>();
-    [field: SerializeField, ReadOnly]
+    [field: SerializeField, ReadOnly, Header("ReadOnly")]
     public int activeLevelListIndex { get; private set; }
-    public int floorsCleared => Mathf.FloorToInt((float)(activeLevelListIndex + 1) / (fountainFrequency + 1));
+    // Calculates floorsCleared, replaced with floorsClearedOverride if debugMode is enabled
+    public int floorsCleared => !debugMode ? Mathf.FloorToInt((float)(activeLevelListIndex + 1) / (fountainFrequency + 1)) : floorsClearedOverride;
+    [ReadOnly]
     public int lastFloorOnExit;
-    public int lastFloorOnExitIndex => lastFloorOnExit * (fountainFrequency+1) - 1;
-
-    [field: SerializeField, ReadOnly]
-    public int difficulty { get; private set; }
-    [SerializeField]
-    private int startDifficulty = 5;
 
     [Header("Debug")]
+    public bool debugMode;
     public bool debugNextLevel;
-
+    public int floorsClearedOverride;
+    
     private void Awake()
     {
         // Singleton pattern
@@ -74,7 +77,7 @@ public class LevelGenerator : MonoBehaviour
     public void New()
     {
         lastFloorOnExit = floorsCleared;
-        difficulty = startDifficulty;
+        // difficulty = startDifficulty;
         levelList = new List<SceneReference>();
         AddNewFloor();
         activeLevelListIndex = -1;
@@ -106,16 +109,25 @@ public class LevelGenerator : MonoBehaviour
 
     private void OnValidate()
     {
-        if (!debugNextLevel) return;
-        debugNextLevel = false;
-        LoadNextLevel();
+        if (!debugMode) return;
+        if (debugNextLevel)
+        {
+            debugNextLevel = false;
+            GameManager.Instance.EnemyManager.KillEnemies();
+            LoadNextLevel();
+        }
     }
 
     //TODO: Change to AsyncLoading
     private void LoadNextLevel()
     {
+        if (DungeonCleared())
+        {
+            //TODO: Win
+            return;
+        }
         // If the next level is not in list
-        if (activeLevelListIndex + 1 >= levelList.Count)
+        while (activeLevelListIndex + 1 >= levelList.Count)
         {
             AddNewFloor();
         }
@@ -123,6 +135,8 @@ public class LevelGenerator : MonoBehaviour
         activeLevelListIndex++;
         StartCoroutine(LoadLevel(levelList[activeLevelListIndex]));
     }
+
+    private bool DungeonCleared() => Mathf.FloorToInt((float)(activeLevelListIndex + 2)/(fountainFrequency + 1)) >= floorsToWin;
 
     IEnumerator LoadLevel(string scenePath)
     {
@@ -145,13 +159,14 @@ public class LevelGenerator : MonoBehaviour
 
     public void EnterDoorLeft()
     {
-        difficulty += difficultyIncreaseLeft;
+        // difficulty += difficultyIncreaseLeft;
         LoadNextLevel();
     }
 
     public void EnterDoorRight()
     {
-        difficulty += difficultyIncreaseRight;
+        // difficulty += difficultyIncreaseRight;
+        hardNextLevel = true;
         LoadNextLevel();
     }
 
@@ -304,6 +319,11 @@ public class LevelGenerator : MonoBehaviour
                 break;
         }
         return levelList;
+    }
+
+    public void ResetHardNextLevel()
+    {
+        hardNextLevel = false;
     }
 
     private void DebugRoomPool()

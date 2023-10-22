@@ -7,21 +7,22 @@ using UnityEngine.UI;
 using Pathfinding;
 using System.Threading;
 using TMPro;
+using Random = UnityEngine.Random;
 
 #region EnemyType Enum
 public enum EnemyType
 {
     TypeError,
-    Cheetah,
-    Lizard, 
     Rhino, 
-    Snake, 
+    Snake,
+    Cheetah,
+    Lizard,
     Test1, 
     Test2
 }
 #endregion
 
-public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
+public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
 {
     // Enums
     #region EnemyTimer Enum
@@ -31,20 +32,23 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         attackCooldownTimer,
         windupDurationTimer,
         attackDurationTimer,
-        aiActionTimer
+        aiActionTimer,
+        attackCD
     }
     #endregion
 
     // Variables
     #region Enemy Info Variables
     [field: Header("Enemy Info")]
-    [field: SerializeField] protected EnemyType Type { get; set; }
-    [field: SerializeField] protected ElementType Element { get; set; } = ElementType.noElement;
+    [field: SerializeField] public EnemyType Type { get; set; }
+    [field: SerializeField] public ElementType Element { get; set; } = ElementType.noElement;
+    [field: SerializeField] public int Tier { get; set; } = 1;
     [field: SerializeField, ReadOnly] public int Hitpoints { get; set; }
-    [field: SerializeField, ReadOnly] protected ElementType ActiveElementEffect { get; set; }
+    [field: SerializeField, ReadOnly] protected ElementType ActiveElementEffect { get; set; } = ElementType.noElement;
     [field: SerializeField, ReadOnly] protected int ElementTier { get; set; }
     [field: SerializeField, ReadOnly] protected int CurrentAttack { get; set; }
-    [field: SerializeField, ReadOnly] protected bool WindingUp { get; set; }
+    [field: SerializeField, ReadOnly] public bool WindingUp { get; private set; }
+    [field: SerializeField, ReadOnly] public bool InAttack { get; private set; }
     [field: SerializeField, ReadOnly] protected bool Staggered { get; set; }
     [field: SerializeField, ReadOnly] protected bool AbleToAttack { get; set; }
     [field: SerializeField, ReadOnly] protected bool Consumable { get; set; }
@@ -62,14 +66,16 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: SerializeField, ReadOnly] protected int Attack1Damage { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack1Duration { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack1Windup { get; set; }
+    [field: SerializeField, ReadOnly] protected float AttackKnockback1 { get; set; }
     [field: SerializeField, ReadOnly] protected int Attack2Damage { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack2Duration { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack2Windup { get; set; }
+    [field: SerializeField, ReadOnly] protected float AttackKnockback2 { get; set; }
     [field: SerializeField, ReadOnly] protected int Attack3Damage { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack3Duration { get; set; }
     [field: SerializeField, ReadOnly] protected float Attack3Windup { get; set; }
+    [field: SerializeField, ReadOnly] protected float AttackKnockback3 { get; set; }
 
-    [field: SerializeField, ReadOnly] protected float AttackKnockback { get; set; }
     [field: SerializeField, ReadOnly, Range(0, 100)] protected int ConsumableHealthPercentThreshold { get; set; }
     [field: SerializeField, ReadOnly, Range(0, 100)] protected int HealthPercentReceivedOnConsume { get; set; }
     #endregion
@@ -93,34 +99,43 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     [field: SerializeField] protected Transform PivotPoint { get; set; }
     [field: SerializeField] protected HealthBarSegmentController HealthBarController { get; set; }
     [field: SerializeField] protected StaggerBar StaggerBar { get; set; }
-    [field: SerializeField] protected Consume Consume { get; set; }
-    [field: SerializeField] protected GameObject ConsumableHitbox { get; set; }
-    [field: SerializeField] protected Image ElementEffectImage { get; set; }
-    Rigidbody2D IDamageable.rb => rb;
-    [field: SerializeField] protected Rigidbody2D rb { get; private set; }
+    [field: SerializeField] public Rigidbody2D rb { get; private set; }
+    [field: SerializeField] protected Collider2D col2D { get; private set; }
     [field: SerializeField] protected AIPath path { get; set; }
+    [SerializeField,Tooltip("What layers the enemy cant walk over or through")]
+    protected LayerMask TerrainLayers;
     protected AudioSource WalkingSound { get; set; }
     protected GameObject DeathSoundPrefab { get; set; }
     protected EnemyManager Manager { get; set; }
     protected ElementCombo ComboManager { get; set; }
     protected Vector2 dir { get; set; }
     protected bool hitTarget = false;
+    [SerializeField]
+    protected float collisionDisabledDur;
     #endregion
 
     #region Combo Interface Variables
     [field: Header("Combo Interface")]
-    [field: SerializeField] public List<ElementCombos> ActiveCombos { get; set; }
-    [field: SerializeField] public Timer ComboEffectTimer { get; set; }
     [field: SerializeField, ReadOnly] public LayerMask TargetLayer { get; set; }
     [field: SerializeField] protected LayerMask PlayerLayer { get; set; }
     [field: SerializeField] protected LayerMask EnemyLayer { get; set; }
-    float IComboable.CurrentWitherBonus { get => currentWitherBonus; set => currentWitherBonus = value; }
-    public bool IsNoxious { get; set; }
-    public bool IsWither { get; set; }
-    public bool IsBrambled { get; set; }
     public bool IsStunned { get; set; }
     [SerializeField]
     protected TMP_Text comboText;
+    #endregion
+
+    #region Shader
+    [Header("Shaders")]
+    [SerializeField]
+    private float flashDuration;
+    [SerializeField]
+    private AnimationCurve curve;
+    [SerializeField]
+    private SpriteRenderer rend;
+    [SerializeField]
+    private MaterialPropertyBlock block;
+    [SerializeField]
+    private float[] hues = new float[3];
     #endregion
 
     #region Damage Modifier Variables
@@ -133,26 +148,32 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     private float currentElementResist = 1;
     [SerializeField, Range(0.5f, 1)]
     private float baseArmour = 0.5f;
-    private float currentWitherBonus = 1;
+    private float currentBlizzardBonus = 1;
     #endregion
 
     // Functions
     #region Object Initialization Functions
     public virtual void Init()
     {
+        if (block == null)
+            block = new MaterialPropertyBlock();
         SetInheritanceSO();
         SetDefaultState();
-
         if (debugDisableAI) Debug.LogWarning(this + "'s AI is Disabled");
+        CancelFlash();
     }
 
-    public virtual void Init(Vector2 spawnLocation, ElementType element)
+    public virtual void Init(Vector2 spawnLocation, ElementType element, int tier)
     {
         transform.position = spawnLocation;
         Element = element;
+        Tier = tier;
         Init();
     }
 
+    private void Awake()
+    {
+    }
     protected virtual void Start()
     {
         ComboManager = GameManager.Instance.ComboManager;
@@ -165,10 +186,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         path.OnDestinationReached += SetOnDestination;
         Speed = path.maxSpeed;
 
+        ActiveElementEffect = ElementType.noElement;
+
         Init();
+
+        defaultLayer = col2D.excludeLayers;
     }
 
-    public virtual void SetInheritanceSO()
+    protected virtual void SetInheritanceSO()
     {
 
     }
@@ -177,52 +202,49 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     {
         SetStatsFromScriptableObject();
         SetHitPoints();
-        SetElementImage();
+        SetElementOutline();
+        SetHue();
 
         WindingUp = false;
         Staggered = false;
         AbleToAttack = true;
         Consumable = false;
         ElementTier = 1;
-        currentState = EnemyState.idle;
+        currentState = EnemyState.stationary;
 
-        ActiveElementEffect = Element;
-        spawnPos = transform.position;
         targetTr = GameManager.Instance.PlayerTransform;
         TargetLayer = PlayerLayer;
 
         EnemyTimers.ResetToZero();
-
-        ConsumableHitbox.SetActive(false);
 
         StaggerBar.ResetStagger();
     }
 
     public virtual void SetStatsFromScriptableObject()
     {
-        MaxHealth = SO.maxHealth;
-        Speed = SO.speed;
+        MaxHealth = SO.maxHealth[Tier - 1];
+        Speed = SO.speed[Tier - 1];
         ResetSpeed();
-        Souls = UnityEngine.Random.Range(SO.minSouls, SO.maxSouls + 1);
-        ConsumableHealthPercentThreshold = SO.consumableHealthPercentThreshold;
-        HealthPercentReceivedOnConsume = SO.percentToHealOnConsume;
-        AttackCooldownDuration = SO.attackCooldown;
+        SetArmour();
+        Souls = UnityEngine.Random.Range(SO.minSouls[Tier - 1], SO.maxSouls[Tier - 1] + 1);
+        AttackCooldownDuration = SO.attackCooldown[Tier - 1];
         EffectDuration = SO.effectDuration;
 
-        Attack1Damage = SO.attack1Damage;
+        Attack1Damage = SO.attack1Damage[Tier - 1];
         Attack1Duration = SO.attack1Duration;
         Attack1Windup = SO.windup1Duration;
-        Attack2Damage = SO.attack2Damage;
+        AttackKnockback1 = SO.attackKnockback1;
+        Attack2Damage = SO.attack2Damage[Tier - 1];
         Attack2Duration = SO.attack2Duration;
         Attack2Windup = SO.windup2Duration;
-        Attack3Damage = SO.attack3Damage;
+        AttackKnockback2 = SO.attackKnockback2;
+        Attack3Damage = SO.attack3Damage[Tier - 1];
         Attack3Duration = SO.attack3Duration;
         Attack3Windup = SO.windup3Duration;
+        AttackKnockback3 = SO.attackKnockback3;
 
-        StaggerBar.SetStats(SO.pointsToStagger, SO.staggerDuration, SO.staggerDelayDuration, SO.staggerDecayAmount, SO.staggerDecayRate);
-        if (!debugDisableAI)
-            HealthBarController.SetStats(MaxHealth, ConsumableHealthPercentThreshold);
-        Consume.SetStats(HealthPercentReceivedOnConsume);
+        StaggerBar.SetStats(SO.basePointsToStagger, SO.staggerMinDuration, SO.staggerMaxDuration, SO.staggerDelayDuration, SO.staggerDecayAmount, SO.staggerDecayRate, SO.damageToReachMaxDuration);
+        HealthBarController.SetStats(MaxHealth, ConsumableHealthPercentThreshold);
     }
 
     public void SetHitPoints()
@@ -232,10 +254,17 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     public void SetOverRideHealth(int amount)
     {
-        
         MaxHealth = amount;
         SetHitPoints();
         HealthBarController.SetStats(MaxHealth, ConsumableHealthPercentThreshold);
+    }
+
+    public void SetArmour()
+    {
+        float floorsComplete = (float)LevelGenerator.Instance.floorsCleared;
+        float floorsToFinish = ((float)LevelGenerator.Instance.floorsToWin - 1f) * 2f;
+        baseArmour = 1 - (floorsComplete / floorsToFinish);
+        //Debug.Log("floorsComplete = " + floorsComplete + ", floorsToFinish = " + floorsToFinish + ", baseArmour = " + baseArmour);
     }
 
     public void SetTimers()
@@ -246,10 +275,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         EnemyTimers.times[(int)EnemyTimer.windupDurationTimer].OnTimeIsZero += EndWindup;
         EnemyTimers.times[(int)EnemyTimer.attackDurationTimer].OnTimeIsZero += EndAttack;
 
-        ComboEffectTimer = GameManager.Instance.TimerManager.GenerateTimers(typeof(ElementCombos), gameObject);
-        ComboEffectTimer.times[(int)ElementCombos.aquaVolt].OnTimeIsZero += RemoveStun;
+        //ComboEffectTimer = GameManager.Instance.TimerManager.GenerateTimers(typeof(ElementCombos), gameObject);
+        /*ComboEffectTimer.times[(int)ElementCombos.aquaVolt].OnTimeIsZero += RemoveStun;
         ComboEffectTimer.times[(int)ElementCombos.noxiousGas].OnTimeIsZero += RemoveNoxious;
-        ComboEffectTimer.times[(int)ElementCombos.wither].OnTimeIsZero += RemoveWither;
+        ComboEffectTimer.times[(int)ElementCombos.wither].OnTimeIsZero += RemoveWither;*/
     }
 
     #endregion
@@ -282,7 +311,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
             debugInterruptAttack = false;
             InterruptAttack();
         }
-        EnemyAi();
+        SetMainTex();
+        StateMachine();
+        DeterminePathing();
+        //EnemyAi();
     }
     private void FixedUpdate()
     {
@@ -291,36 +323,42 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     #endregion
 
     #region Health Functions
-    public virtual void TakeDamage(float damage, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement)
+    public virtual void TakeDamage(int damage, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement)
     {
         if (Hitpoints <= 0) return;
         
         if(currentState == EnemyState.idle) Manager.EnableAggro(); //Makes all enemies on screen aggro'd
-
+        PlayFlash();
         CalculateResist(type, typeTwo);
         float modifier = CalculateModifer();
         float modifiedDamage = damage * modifier;
         Hitpoints -= (int)Mathf.Ceil(modifiedDamage);
-        
+
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.Hit);
         if (Hitpoints <= 0) //Handles death
         {
             Hitpoints = 0;
+            InterruptAttack();
             OnDeath();
             return;
         }
 
-        if (typeTwo == ElementType.noElement) ComboManager.AttemptCombo(type, ActiveElementEffect, this, EnemyLayer, CalculateTier(tier, ElementTier), transform.position);
-
-        if (typeTwo.Equals(ElementType.noElement) && type != ElementType.noElement)
+        if (typeTwo == ElementType.noElement) 
+        {
+            ComboManager.AttemptCombo(type, ActiveElementEffect, this, EnemyLayer, CalculateTier(tier, ElementTier), transform.position);
+            ApplyElementEffect(type);
+        } 
+        if (Staggered)
         {
             ElementTier = tier;
-            ApplyElementEffect(type);
             InterruptAttack();
+            StaggerBar.IncreaseStaggerDuration((int)Mathf.Ceil(modifiedDamage));
         }
 
         StaggerBar.AddToStaggerBar(staggerPoints);
         HealthBarController.UpdateSegments(Hitpoints);
 
+        /*
         if (!Consumable)
         {
             if ((float)Hitpoints / (float)MaxHealth * 100 <= ConsumableHealthPercentThreshold)
@@ -329,9 +367,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
                 Consumable = true;
             }
         }
+        */
     }
 
-    public virtual void TakeDamage(float damage, int staggerPoints, ElementType type, ElementType typeTwo = ElementType.noElement)
+    public virtual void TakeDamage(int damage, int staggerPoints, ElementType type, ElementType typeTwo = ElementType.noElement)
     {
         TakeDamage(damage, staggerPoints, type, 0, typeTwo);
     }
@@ -352,12 +391,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     }
     protected float CalculateModifer()
     {
-        return currentStaggerDamage * currentElementResist * baseArmour * currentWitherBonus;
+        return currentStaggerDamage * currentElementResist * baseArmour * currentBlizzardBonus;
     } 
 
     public void AddForce(Vector2 force)
     {
         if (debugDisableAI)
+            return;
+        if (currentState == EnemyState.attacking || currentState == EnemyState.chasing || force.magnitude < 0.2f)
             return;
         rb.velocity = Vector2.zero;
         rb.velocity += force;
@@ -381,20 +422,95 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     public virtual void OnDeath(bool overrideKill = false)
     {
+        SetOutline(Color.white, 0);
+        comboText.text = "";
         if (DeathSoundPrefab) Instantiate(DeathSoundPrefab);
         if (!overrideKill)
         {
             Manager.DecrementActiveEnemyCounter();
             GameManager.Instance.AddSouls(Souls);
         }
+        PoolSelf();
+    }
+    #endregion
+
+    #region Shader
+    private Coroutine flash;
+    private void PlayFlash()
+    {
+        block.SetColor("_FlashColour", Color.white);
+        if (flash != null)
+        {
+            StopCoroutine(flash);
+            block.SetFloat("_FlashAmount", 0);
+            rend.SetPropertyBlock(block);
+            flash = StartCoroutine(DamageFlash());
+        }
+        flash = StartCoroutine(DamageFlash());
+    }
+    protected void SetOutline(Color colour, float thickness = 1)
+    {
+        block.SetColor("_OutlineColour", colour);
+        block.SetFloat("_Thickness", thickness);
+        rend.SetPropertyBlock(block);
+    }
+    private IEnumerator DamageFlash()
+    {
+        float currentFlashAmount = 0f;
+        float elapsedTime = 0f;
+        while (elapsedTime < flashDuration)
+        {
+            elapsedTime += Time.deltaTime;
+
+            currentFlashAmount = curve.Evaluate(elapsedTime / flashDuration);
+            block.SetFloat("_FlashAmount", currentFlashAmount);
+            rend.SetPropertyBlock(block);
+            yield return null;
+        }
+        block.SetFloat("_FlashAmount", 0);
+        rend.SetPropertyBlock(block);
+    }
+
+    private void SetMainTex()
+    {
+        block.SetTexture("_MainTex", rend.sprite.texture);
+    }
+
+    protected void CancelFlash()
+    {
+        block.SetFloat("_FlashAmount", 0);
+        rend.SetPropertyBlock(block);
+    }
+
+    private IEnumerator WindUpFlash()
+    {
+        while (WindingUp)
+        {
+            block.SetColor("_FlashColour", Color.red);
+            block.SetFloat("_FlashAmount", 0.65f);
+            rend.SetPropertyBlock(block);
+            yield return new WaitForSeconds(0.1f);
+
+            block.SetFloat("_FlashAmount", 0);
+            rend.SetPropertyBlock(block);
+            yield return new WaitForSeconds(0.1f);
+        }
+        block.SetFloat("_FlashAmount", 0);
+        rend.SetPropertyBlock(block);
+    }
+
+    private void SetHue()
+    {
+        block.SetFloat("_HueShift", hues[Tier - 1]);
+        rend.SetPropertyBlock(block);
     }
     #endregion
 
     #region Attacking Functions
 
     protected virtual int ChooseAttack()
-    {
-        return UnityEngine.Random.Range(1, 4);
+    {        
+        return Random.Range(1, Tier+1);
     }
 
     protected virtual void Attack()
@@ -411,13 +527,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
                 BeginWindup(Attack3Windup);
                 break;
         }
-        BeginAttackCooldown();
+        AbleToAttack = false;
     }
 
     protected virtual void BeginAttackCooldown()
     {
         EnemyTimers.SetTime((int)EnemyTimer.attackCooldownTimer, AttackCooldownDuration);
-        AbleToAttack = false;
+        
     }
 
     protected virtual void EndAttackCooldown(object sender, EventArgs e)
@@ -429,6 +545,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     {
         EnemyTimers.SetTime((int)EnemyTimer.windupDurationTimer, windupDuration);
         WindingUp = true;
+        StartCoroutine(WindUpFlash());
     }
 
     protected virtual void EndWindup(object sender, EventArgs e)
@@ -439,6 +556,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     protected virtual void BeginAttack()
     {
+        InAttack = true;
         float duration = 0;
         switch (CurrentAttack)
         {
@@ -458,20 +576,34 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         EnemyTimers.SetTime((int)EnemyTimer.attackDurationTimer, duration);
     }
 
-    protected virtual void EndAttack(object sender, EventArgs e)
+    protected void EndAttack(object sender, EventArgs e)
     {
         //set state to stationary as enemy is done with an attack
+        EndAttack();
+    }
+
+    protected virtual void EndAttack()
+    {
+        InAttack = false;
         currentState = EnemyState.stationary;
-        EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, AttackEndAiCD);
+        BeginAttackCooldown();
+        Manager.DoneAttack();
+        isAttacking = false;
+        hitTarget = false;
     }
 
     protected virtual void InterruptAttack()
     {
         EnemyTimers.ResetSpecificToZero((int)EnemyTimer.windupDurationTimer);
+        EnemyTimers.ResetSpecificToZero((int)EnemyTimer.attackDurationTimer);
         WindingUp = false;
+        EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, 1);
         //interrupted enemy should stop current action
         currentState = EnemyState.stationary;
-        EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, AttackEndAiCD);
+        if (isAttacking)
+            Manager.DoneAttack();
+        isAttacking = false;
+        hitTarget = false;
     }
 
     protected virtual void Attack1()
@@ -493,15 +625,17 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         {
             case 1: 
                 target.TakeDamage(Attack1Damage, 0, Element);
+                target.AddForce(dir.normalized * AttackKnockback1);
                 break;
             case 2:
                 target.TakeDamage(Attack2Damage, 0, Element);
+                target.AddForce(dir.normalized * AttackKnockback2);
                 break;
             case 3:
                 target.TakeDamage(Attack3Damage, 0, Element);
+                target.AddForce(dir.normalized * AttackKnockback3);
                 break;
         }
-        target.AddForce(dir.normalized * AttackKnockback);
         hitTarget = true;
     }
     #endregion
@@ -511,39 +645,28 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     {
         EnemyTimers.SetTime((int)EnemyTimer.effectedTimer, EffectDuration);
         ActiveElementEffect = type;
-        SetElementImage();
     }
 
     protected virtual void RemoveElementEffect(object sender, EventArgs e)
     {
-        ActiveElementEffect = Element;
-        SetElementImage();
+        ActiveElementEffect = ElementType.noElement;
     }
 
-    protected virtual void SetElementImage()
+    protected virtual void SetElementOutline()
     {
-        switch (ActiveElementEffect)
+        switch (Element)
         {
-            case ElementType.noElement:
-                ElementEffectImage.color = Color.grey;
-                break;
             case ElementType.fire:
-                ElementEffectImage.color = Color.red;
+                SetOutline(Color.red);
                 break;
             case ElementType.water:
-                ElementEffectImage.color = Color.blue;
+                SetOutline(Color.blue);
                 break;
             case ElementType.electric:
-                ElementEffectImage.color = Color.yellow;
+                SetOutline(new Color(0.6950685f, 0.1756853f, 0.7924528f));
                 break;
             case ElementType.wind:
-                ElementEffectImage.color = Color.white;
-                break;
-            case ElementType.poison:
-                ElementEffectImage.color = Color.magenta;
-                break;
-            case ElementType.nature:
-                ElementEffectImage.color = Color.green;
+                SetOutline(Color.white);
                 break;
         }
     }
@@ -563,8 +686,45 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     }
     #endregion
 
-    #region Combo Interface Functions
-    public void ApplyFireSurge(float damage, int Stagger)
+    #region Combo Functions
+
+    public void ComboAttack(ComboSO combo, ElementType typeOne, ElementType typeTwo, Color textColour)
+    {
+        TakeDamage(combo.BaseDamage, combo.StaggerDamage, typeOne, typeTwo);
+        comboText.text = combo.name;
+        comboText.color = textColour;
+        if (gameObject.activeInHierarchy)
+            StartCoroutine(RemoveText(combo.name));
+    }
+
+    private IEnumerator RemoveText(string textToRemove)
+    {
+        yield return new WaitForSeconds(2.5f);
+        if (comboText.text.Equals(textToRemove))
+            comboText.text = "";
+    }
+
+    public IEnumerator StunTarget(float dur)
+    {
+        IsStunned = true;
+        StopPathing();
+        InterruptAttack();
+        yield return new WaitForSeconds(dur);
+
+        IsStunned = false;
+    }
+
+    public void InBlizzard(float bonusDamage)
+    {
+        currentBlizzardBonus = bonusDamage;
+    }
+
+    public void ExitBlizzard()
+    {
+        currentBlizzardBonus = 1;
+    }
+    #region old
+    /*public void ApplyFireSurge(float damage, int Stagger)
     {
         TakeDamage(damage, Stagger, ElementType.fire, ElementType.electric);
         comboText.text = "FireSurge";
@@ -652,7 +812,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         IsWither = false;
         currentWitherBonus = 1;
         comboText.text = "";
-    }
+    }*/
+    #endregion
+
     #endregion
 
     //AI
@@ -668,25 +830,61 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     [Header("AI")]
     [SerializeField, Range(1,10)] protected int IdleRadius;
-    [SerializeField, Range(1,10)] protected int RepositionPoint;
+    [SerializeField, Range(1,10)] protected float RepositionPointMin;
+    [SerializeField, Range(1,10)] protected float RepositionPointMax;
     [SerializeField] protected float IdleMoveRateMin;
     [SerializeField] protected float IdleMoveRateMax;
-    [SerializeField] protected float RepositionRateMin;
-    [SerializeField] protected float RepositionRateMax;
-    [SerializeField] protected float AttackEndAiCD;
-    [SerializeField] protected float MinimumAttackRange = 1; 
     [SerializeField][ReadOnly]
     protected EnemyState currentState;
     [SerializeField][ReadOnly]
     protected bool hasDestination;
-    private Vector3 spawnPos;
     [SerializeField][ReadOnly]
     protected Transform targetTr;
     [SerializeField] protected bool debugDisableAI = false;
-
+    protected bool isAttacking;
+    private Vector2 randDeviate;
+    protected virtual void StateMachine()
+    {
+        if (debugDisableAI) return;
+        if (IsStunned || Staggered)
+        {
+            StopPathing();
+            Debug.Log(currentState);
+            return;
+        }
+        if (!hasDestination && currentState.Equals(EnemyState.stationary) && EnemyTimers.IsTimeZero((int)EnemyTimer.aiActionTimer))
+        {
+            if (AbleToAttack && Manager.CanAttack())
+            {
+                currentState = EnemyState.chasing;
+                CurrentAttack = ChooseAttack();
+                isAttacking = true;
+            }
+            else
+            {
+                float x = Random.Range(-IdleRadius, IdleRadius);
+                float y = Random.Range(-IdleRadius, IdleRadius);
+                randDeviate = new Vector2(x, y);
+                currentState = EnemyState.repositioning;
+                repositionRange = Random.Range(RepositionPointMin, RepositionPointMax);
+            }
+        }
+    }
+    protected virtual void DeterminePathing()
+    {
+        switch ((int)currentState)
+        {
+            case (int)EnemyState.chasing:
+                DetermineAttackPathing();
+                break;
+            case (int)EnemyState.repositioning:
+                RepositionPicker();
+                break;
+        }
+    }
     protected virtual void EnemyAi()
     {
-        if (debugDisableAI || Consume.BeingConsumed()) return;
+        if (debugDisableAI) return;
         if (IsStunned || Staggered) return;
         if (currentState == EnemyState.chasing)
         {
@@ -701,6 +899,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         {
             if (AbleToAttack && Manager.CanAttack())
             {
+                isAttacking = true;
                 CurrentAttack = ChooseAttack();
                 currentState = EnemyState.chasing;
             }
@@ -739,29 +938,24 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
 
     protected virtual void IdlePathPicker()
     {
-        float x = UnityEngine.Random.Range(-IdleRadius, IdleRadius);
-        float y = UnityEngine.Random.Range(-IdleRadius, IdleRadius);
-        SetDestination(new Vector3(x,y,0) + spawnPos);
+        float x = Random.Range(-IdleRadius, IdleRadius);
+        float y = Random.Range(-IdleRadius, IdleRadius);
+        SetDestination(new Vector3(x,y,0) + transform.position);
     }
 
     protected virtual void RepositionPicker()
     {
-        Vector3 destination = Vector3.zero;
-        Vector3 midPoint = targetTr.position - transform.position;
-        float distance = midPoint.magnitude - RepositionPoint;
-        midPoint = midPoint.normalized * distance;
-        while (destination == Vector3.zero)
-        {
-            float x = UnityEngine.Random.Range(-RepositionPoint * 2, RepositionPoint * 2);
-            float y = UnityEngine.Random.Range(-RepositionPoint * 2, RepositionPoint * 2);
-            Vector3 point = new Vector3(x, y, 0);
-            point += midPoint + transform.position;
-            if (!(Vector3.Distance(point, targetTr.position) < RepositionPoint))
-            {
-                destination = point;
-            }
-        }
-        SetDestination(destination);
+        BasicReposition();
+    }
+    private float repositionRange;
+    protected void BasicReposition()
+    {
+        Vector3 targetpoint = targetTr.position;
+        Vector3 minimumRange = transform.position - targetpoint;
+        minimumRange = minimumRange.normalized * repositionRange;
+        targetpoint += minimumRange;
+        targetpoint += (Vector3)randDeviate;
+        SetDestination(targetpoint);
     }
 
     public void SetTarget(Transform targetPos)
@@ -784,7 +978,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
         switch ((int)currentState)
         {
             case (int)EnemyState.idle:
-                timeToAdd = UnityEngine.Random.Range(IdleMoveRateMin, IdleMoveRateMax);
+                timeToAdd = Random.Range(IdleMoveRateMin, IdleMoveRateMax);
                 break;
             case (int)EnemyState.chasing:
                 Attack();
@@ -803,11 +997,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
                 }
                 break;
             case (int)EnemyState.repositioning:
-                timeToAdd = UnityEngine.Random.Range(RepositionRateMin, RepositionRateMax);
+                timeToAdd = Random.Range(1, 2f);
                 currentState = EnemyState.stationary;
                 break;
         }
-        EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, timeToAdd);
+        if (timeToAdd != 0)
+            EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, timeToAdd);
     }
     protected void SetDestination(Vector3 destination)
     {
@@ -833,6 +1028,33 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     }
     #endregion
 
+    #region collisionPrevention
+    private float collisionTime = 0;
+    private bool collisionOff = false;
+    private LayerMask defaultLayer;
+    
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (!(collision.collider.CompareTag(Tags.T_Player)|| collision.collider.CompareTag(Tags.T_Terrain)))
+        {
+            if (collisionTime > 1f && !collisionOff)
+            {
+                collisionOff = true;
+                col2D.excludeLayers += EnemyLayer;
+                Invoke("ResumeCollision", collisionDisabledDur);
+            }
+            collisionTime += Time.deltaTime;
+        }
+    }
+
+    private void ResumeCollision()
+    {
+        col2D.excludeLayers = defaultLayer;
+        collisionTime = 0;
+        collisionOff = false;
+    }
+    #endregion
+
     #region Debug
     [ContextMenu("Change State")]
     public void ChangeState()
@@ -841,15 +1063,35 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IComboable
     }
     #endregion
 
-    //Obsolete
-    #region Pooling Functions (Unused)
-    /*
+    #region Pooling Functions 
+
     public Pool<Enemy> Pool { get; set; }
     public bool IsPooled { get; set; }
-    public void PoolSelf()
+    public virtual void PoolSelf(object sender, EventArgs e)
     {
-        Pool.PoolObj(this);
+        PoolSelf();
     }
-    */
+
+    public virtual void PoolSelf()
+    {
+        if (Pool != null)
+            Pool.PoolObj(this);
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    #endregion
+
+    #region Animation
+    public Vector2 AimAtPlayer()
+    {
+        return targetTr.position - transform.position;
+    }
+
+    public Vector2 NextPathPoint()
+    {
+        return path.desiredVelocity;
+    }
     #endregion
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using KevinCastejon.MoreAttributes;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Level : MonoBehaviour
 {
@@ -10,24 +11,32 @@ public class Level : MonoBehaviour
     private static Level _instance;
     public static Level Instance { get { return _instance; } }
 
-    [SerializeField]
-    private int baseEnemyPoints = 5;
-    public int totalEnemyPoints { get; private set; }
-    [SerializeField]
-    private float enemyPointMultiplier = 1.0f;
+    // [SerializeField]
+    // private int baseEnemyPoints = 5;
+    // public int totalEnemyPoints { get; private set; }
     [SerializeField]
     private Transform playerSpawnPoint;
+    public float swarmSpawnChance;
+    public float miniBossSpawnChance;
     [SerializeField]
     private GameObject enemySpawnPointsContainer;
     [SerializeField]
+    private GameObject swarmEnemySpawnPointsContainer;
+    [SerializeField]
+    private GameObject miniBossEnemySpawnPointsContainer;
+    [SerializeField]
     private List<Transform> enemySpawnPoints;
     [SerializeField]
-    private bool isFountain = false;
+    private bool isFountain;
+    public bool isHard { get; private set; }
     [Header("Debug")]
     public bool debugClearLevel;
+
     [field: SerializeField, ReadOnly]
     public bool isCleared { get; private set; }
     public static event Action OnLevelClear;
+
+
     private void Awake()
     {
         // Singleton pattern
@@ -48,22 +57,46 @@ public class Level : MonoBehaviour
 
     private void Start()
     {
-        ValidateTotalEnemyPoints();
+        ValidateHardLevel();
+        // ValidateTotalEnemyPoints();
         SpawnPlayer();
         GetEnemySpawnPoints();
         LevelGenerator.Instance.TriggerCrossFadeEnd();
         if (!isFountain)
-            GameManager.Instance.EnemyManager.StartEnemySpawning(enemySpawnPoints, totalEnemyPoints);
+            GameManager.Instance.EnemyManager.StartEnemySpawning(enemySpawnPoints);
         else
             ClearLevel();
     }
 
+    private void ValidateHardLevel()
+    {
+        if (!LevelGenerator.Instance.hardNextLevel) return;
+        LevelGenerator.Instance.ResetHardNextLevel();
+        isHard = true;
+    }
+
     private void GetEnemySpawnPoints()
     {
-        Transform[] enemySpawnPointsArray = enemySpawnPointsContainer.GetComponentsInChildren<Transform>();
+        // float rnd = Random.Range(0f, 100f);
+        GameObject parentObject = null;
+        parentObject = enemySpawnPointsContainer;
+        // if (rnd < swarmSpawnChance)
+        // {
+        //     parentObject = swarmEnemySpawnPointsContainer;
+        //
+        // }
+        // else if (swarmSpawnChance < rnd && rnd < swarmSpawnChance + miniBossSpawnChance)
+        // {
+        //     parentObject = miniBossEnemySpawnPointsContainer;
+        // }
+        // else
+        // {
+        //     parentObject = enemySpawnPointsContainer;
+        // }
+        Transform[] enemySpawnPointsArray = parentObject.GetComponentsInChildren<Transform>();
         foreach (var ESP in enemySpawnPointsArray)
         {
-            if (ESP.gameObject != enemySpawnPointsContainer)
+            if (ESP.gameObject != parentObject)
             {
                 enemySpawnPoints.Add(ESP);
             }
@@ -83,15 +116,10 @@ public class Level : MonoBehaviour
         ClearLevel();
     }
 
-    private void ValidateTotalEnemyPoints()
-    {
-        totalEnemyPoints = Mathf.RoundToInt((baseEnemyPoints + LevelGenerator.Instance.difficulty) * enemyPointMultiplier);
-    }
-
-    public void OverrideTotalEnemyPoints(int newTotalEnemyPoints)
-    {
-        totalEnemyPoints = newTotalEnemyPoints;
-    }
+    // private void ValidateTotalEnemyPoints()
+    // {
+    //     totalEnemyPoints = Mathf.RoundToInt(baseEnemyPoints + LevelGenerator.Instance.difficulty);
+    // }
 
     private void SpawnPlayer()
     {

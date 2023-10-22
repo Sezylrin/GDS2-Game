@@ -17,12 +17,6 @@ public class UIAbility : MonoBehaviour
     public ElementalSO abilityData;
 
     private Tween hoverTween;
-    protected AudioComponent audioComponent;
-
-    private void Awake()
-    {
-        audioComponent = GetComponent<AudioComponent>();
-    }
 
     public void Start()
     {
@@ -46,10 +40,10 @@ public class UIAbility : MonoBehaviour
         {
             bgImage.sprite = hoveredDisabledBg;
         }
-        GameManager.Instance.SkillSwitchManager.UpdatePopup(abilityData);
+        GameManager.Instance.BookMenu.SkillSwitch.GetComponent<SkillSwitch>().UpdatePopup(abilityData);
         if (playSound)
         {
-            audioComponent.PlaySound(SoundType.UIHover);
+            GameManager.Instance.AudioManager.PlaySound(AudioRef.ButtonHover);
         }
         PlayHoverAnimation();
     }
@@ -84,7 +78,8 @@ public class UIAbility : MonoBehaviour
         hoverTween = DOTween.Sequence()
             .Append(rectTransform.DOScale(new Vector3(1.05f, 1.05f, 1f), 0.3f).SetEase(Ease.InOutSine))
             .Append(rectTransform.DOScale(new Vector3(1f, 1f, 1f), 0.3f).SetEase(Ease.InOutSine))
-            .SetLoops(-1, LoopType.Yoyo) 
+            .SetLoops(-1, LoopType.Yoyo)
+            .SetUpdate(UpdateType.Normal, true)
             .Play();
     }
 }

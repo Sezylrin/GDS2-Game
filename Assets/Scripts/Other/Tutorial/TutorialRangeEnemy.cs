@@ -34,12 +34,12 @@ public class TutorialRangeEnemy : MonoBehaviour, IDamageable
 
     }
 
-    public void TakeDamage(float amount, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement)
+    public void TakeDamage(int amount, int staggerPoints, ElementType type, int tier, ElementType typeTwo = ElementType.noElement)
     {
         Destroy(gameObject);
     }
 
-    public void TakeDamage(float amount, int staggerPoints, ElementType type, ElementType typeTwo = ElementType.noElement)
+    public void TakeDamage(int amount, int staggerPoints, ElementType type, ElementType typeTwo = ElementType.noElement)
     {
         Destroy(gameObject);
         boundary.DisableBoundary();

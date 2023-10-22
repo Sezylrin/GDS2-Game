@@ -8,7 +8,7 @@ public class UIInput : MonoBehaviour
     private PlayerInputs.UIActions ui;
 
     [SerializeField] 
-    private SkillSwitchManager skillSwitchManager;
+    private BookMenu bookMenu;
 
     private void Awake()
     {
@@ -16,22 +16,23 @@ public class UIInput : MonoBehaviour
         ui = input.UI;
     }
 
-
     private void OnEnable()
     {
         ui.Enable();
-        ui.ToggleSkill.performed += skillSwitchManager.ToggleSkills;
-        ui.Interact.performed += skillSwitchManager.Interact;
-        ui.Navigate.performed += skillSwitchManager.Navigate;
-        ui.Return.performed += skillSwitchManager.Return;
+        ui.ToggleSkill.performed += bookMenu.ToggleSkills;
+        ui.Interact.performed += bookMenu.Interact;
+        ui.Navigate.performed += bookMenu.Navigate;
+        ui.Return.performed += bookMenu.Return;
+        ui.Escape.performed += bookMenu.ToggleOpenMenu;
     }
 
     private void OnDisable()
     {
-        ui.ToggleSkill.performed -= skillSwitchManager.ToggleSkills;
-        ui.Interact.performed -= skillSwitchManager.Interact;
-        ui.Navigate.performed -= skillSwitchManager.Navigate;
-        ui.Return.performed -= skillSwitchManager.Return;
+        ui.ToggleSkill.performed -= bookMenu.ToggleSkills;
+        ui.Interact.performed -= bookMenu.Interact;
+        ui.Navigate.performed -= bookMenu.Navigate;
+        ui.Return.performed -= bookMenu.Return;
+        ui.Escape.performed -= bookMenu.ToggleOpenMenu;
         ui.Disable();
     }
 }

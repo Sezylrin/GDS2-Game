@@ -12,26 +12,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff4e45ad80ddcbb499ea1a635e9cbb92, type: 3}
   m_Name: SnakeSO
   m_EditorClassIdentifier: 
-  maxHealth: 300
-  speed: 5
-  minSouls: 5
-  maxSouls: 15
+  maxHealth: d0070000b80b0000a00f0000
+  speed:
+  - 4
+  - 5
+  - 6
+  minSouls: 0a000000140000002d000000
+  maxSouls: 140000001e00000046000000
   effectDuration: 5
-  attackKnockback: 10
-  attackCooldown: 10
-  attack1Damage: 15
+  attackCooldown:
+  - 4
+  - 3
+  - 2
+  attack1Damage: 140000001e00000028000000
   attack1Duration: 1
   windup1Duration: 1
-  attack2Damage: 20
-  attack2Duration: 3
+  attackKnockback1: 6
+  attack2Damage: 0f0000001400000019000000
+  attack2Duration: 1
   windup2Duration: 1
-  attack3Damage: 10
+  attackKnockback2: 6
+  attack3Damage: 0a000000140000001e000000
   attack3Duration: 8
   windup3Duration: 1
-  consumableHealthPercentThreshold: 25
-  percentToHealOnConsume: 10
-  pointsToStagger: 100
-  staggerDuration: 3
+  attackKnockback3: 0
+  basePointsToStagger: 300
+  staggerMinDuration: 1.5
+  staggerMaxDuration: 3
   staggerDelayDuration: 3
   staggerDecayAmount: 4
   staggerDecayRate: 0.25
+  damageToReachMaxDuration: 400
+  SingleShotSpeed: 18
+  RapidFireAmount: 5
+  RapidFireSpeed: 13
+  AcidBlobSpeed: 1
+  AcidPoolDuration: 0.25

@@ -12,7 +12,6 @@ public class PurchasableFunctions : MonoBehaviour
 
     public void IncreaseMaxSkillPoints(int AmountToIncrease)
     {
-        GameManager.Instance.PCM.system.AddCastPoint();
     }
 
     public void IncreaseElementalDamage(int AmountToIncrease)

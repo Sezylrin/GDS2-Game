@@ -9,7 +9,6 @@ public abstract class MeleeEnemy : Enemy
     [field: SerializeField] protected Transform hitboxCentre { get; set; }
     [field: SerializeField] protected GameObject WarningBox { get; set; }
     [field: SerializeField] protected GameObject AttackHitbox { get; set; }
-    [field: SerializeField] protected BoxCollider2D col2D { get; set; }
 
     protected override void Start()
     {
@@ -47,9 +46,9 @@ public abstract class MeleeEnemy : Enemy
     }
     */
 
-    protected override void EndAttack(object sender, EventArgs e)
+    protected override void EndAttack()
     {
-        base.EndAttack(sender, e);
+        base.EndAttack();
         AttackHitbox.SetActive(false);
         col2D.includeLayers = 0;
         hitTarget = false;
@@ -67,7 +66,7 @@ public abstract class MeleeEnemy : Enemy
     {
         Vector3 targetpoint = targetTr.position;
         Vector3 minimumRange = transform.position - targetpoint;
-        minimumRange = minimumRange.normalized * MinimumAttackRange;
+        //minimumRange = minimumRange.normalized * MinimumAttackRange;
         targetpoint += minimumRange;
         SetDestination(targetpoint);
     }
@@ -85,8 +84,8 @@ public abstract class MeleeEnemy : Enemy
                 if (temp.GetState() == playerState.perfectDodge)
                 {
                     InterruptAttack();
-                    temp.InstantRegenPoint();
-                    temp.CounterSuccesful(this);
+                    //temp.InstantRegenPoint();
+                    //temp.CounterSuccesful(this);
                 }
                 else
                 {

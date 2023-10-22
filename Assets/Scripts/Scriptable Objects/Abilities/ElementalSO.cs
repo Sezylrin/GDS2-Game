@@ -6,7 +6,8 @@ public enum AbilityType
 {
     blast,
     AOE,
-    Projectile
+    Projectile,
+    dash
 }
 public class ElementalSO : ScriptableObject
 {
@@ -18,9 +19,13 @@ public class ElementalSO : ScriptableObject
 
     public int castCost;
 
+    public float castStartSpeed;
+
+    public float castDuration;
+
     public int pierceAmount;
 
-    public float damage;
+    public int damage;
 
     public float knockback;
 
@@ -33,6 +38,8 @@ public class ElementalSO : ScriptableObject
 
     public Sprite icon;
 
+    public AudioRef audioCast;
+    public AudioRef audioHit;
 }
 
 

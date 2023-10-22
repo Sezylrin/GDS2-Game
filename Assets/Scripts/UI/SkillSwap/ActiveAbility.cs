@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class ActiveAbility : UIAbility
 {
+    public int abilityIndex;
+
     public void UpdateAbility(ElementalSO newAbilityData)
     {
         abilityData = newAbilityData;

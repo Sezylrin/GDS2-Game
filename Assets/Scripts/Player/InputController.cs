@@ -25,7 +25,6 @@ public class InputController : MonoBehaviour
         player.Enable();
         player.Move.performed += PCM.control.SetDirection;
         player.Move.canceled += PCM.control.SetDirection;
-        player.Attack.performed += PCM.control.BufferLightAttack;
         player.Dash.performed += PCM.control.BufferDash;
         player.AbilityOne.canceled += PCM.control.BufferAbilityOne;
         player.AbilityOne.performed += PCM.control.BufferAbilityOne;
@@ -33,14 +32,14 @@ public class InputController : MonoBehaviour
         player.AbilityTwo.performed += PCM.control.BufferAbilityTwo;
         player.AbilityThree.canceled += PCM.control.BufferAbilityThree;
         player.AbilityThree.performed += PCM.control.BufferAbilityThree;
+        player.AbilityFour.canceled += PCM.control.BufferAbilityFour;
+        player.AbilityFour.performed += PCM.control.BufferAbilityFour;
         player.ToggleAbilities.performed += PCM.abilities.ToggleActiveAbilitySet;
         player.Interact.performed += PCM.control.Interact;
         player.Consume.performed += PCM.control.Consume;
         player.Look.performed += PCM.control.MousePosition;
         player.Look.canceled += PCM.control.MousePosition;
         player.LookMouse.performed += PCM.control.MousePosition;
-        player.Attack.performed += PCM.system.AttemptCounter;
-        player.OpenMenu.performed += GameManager.Instance.OpenSkillSwitchManager;
         GameManager.Instance.SetPlayerTransform(transform, PCM);
         PCM.control.SetControllerCursor(GameManager.Instance.controllerCursosrTR);
         GameManager.Instance.SetCameraTrack(PCM.control.CameraFollowPoint);
@@ -52,10 +51,8 @@ public class InputController : MonoBehaviour
     {
         //GameManager.Instance.SetPlayerTransform(null, null);
         PCM.control.SetControllerCursor(null);
-        player.OpenMenu.performed -= GameManager.Instance.OpenSkillSwitchManager;
         player.Move.performed -= PCM.control.SetDirection;
         player.Move.canceled -= PCM.control.SetDirection;
-        player.Attack.performed -= PCM.control.BufferLightAttack;
         player.Dash.performed -= PCM.control.BufferDash;
         player.AbilityOne.canceled -= PCM.control.BufferAbilityOne;
         player.AbilityOne.performed -= PCM.control.BufferAbilityOne;
@@ -63,13 +60,14 @@ public class InputController : MonoBehaviour
         player.AbilityTwo.performed -= PCM.control.BufferAbilityTwo;
         player.AbilityThree.canceled -= PCM.control.BufferAbilityThree;
         player.AbilityThree.performed -= PCM.control.BufferAbilityThree;
+        player.AbilityFour.canceled -= PCM.control.BufferAbilityFour;
+        player.AbilityFour.performed -= PCM.control.BufferAbilityFour;
         player.ToggleAbilities.performed -= PCM.abilities.ToggleActiveAbilitySet;
         player.Interact.performed -= PCM.control.Interact;
         player.Consume.performed -= PCM.control.Consume;
         player.Look.performed -= PCM.control.MousePosition;
         player.Look.canceled -= PCM.control.MousePosition;
         player.LookMouse.performed -= PCM.control.MousePosition;
-        player.Attack.performed -= PCM.system.AttemptCounter;
         player.Disable();
     }
     // Update is called once per frame

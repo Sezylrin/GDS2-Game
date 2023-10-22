@@ -53,7 +53,6 @@ public class HealthBarSegmentController : MonoBehaviour
 
         foreach (HealthBarSegment segment in segments) // Set all the segments to full and to green
         {
-            segment.SetToGreen();
             segment.UpdateFillPercent(100);
         }
 
@@ -89,14 +88,6 @@ public class HealthBarSegmentController : MonoBehaviour
         if (leftoverHealthPercent != 0)
         {
             segments[(int)numberOfFullSegments].UpdateFillPercent(leftoverHealthPercent);
-        }
-
-        if (currentHealth <= MaxHealth * LowHealthThresholdPercent / 100)
-        {
-            foreach (HealthBarSegment segment in segments)
-            {
-                segment.SetToYellow();
-            }
         }
     }
 

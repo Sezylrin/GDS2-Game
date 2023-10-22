@@ -16,13 +16,15 @@ MonoBehaviour:
   elementType: 1
   type: 1
   castCost: 3
+  castStartSpeed: 0.3
+  castDuration: 0.4
   pierceAmount: 99
-  damage: 150
-  knockback: 5
-  Stagger: 10
+  damage: 40
+  knockback: 15
+  Stagger: 18
   consumePoints: 7
-  lifeTime: 1
-  description: Inferno Whirlwind Description
-  icon: {fileID: 21300000, guid: b1a8e1deb0d1ef3428ba581d0d4f7be8, type: 3}
-  radius: 5
-  growthSpeed: 0.25
+  lifeTime: 0.4
+  description: Fire based AOE attack
+  icon: {fileID: 21300000, guid: 05b99824441986b489fa74f58bd0be96, type: 3}
+  radius: 3
+  growthSpeed: 0.1

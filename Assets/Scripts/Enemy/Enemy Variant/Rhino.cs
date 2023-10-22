@@ -4,35 +4,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rhino : Enemy, IPoolable<Rhino>
+public class Rhino : Enemy
 {
     [field: Header("Rhino")]
     [field: SerializeField] protected GameObject ChargeHitbox { get; set; }
-    [field: SerializeField] protected float ChargeSpeedMultiplier { get; set; } = 1.5f;
+    [field: SerializeField] protected float ChargeSpeed { get; set; } = 1.5f;
     [field: SerializeField] public bool Charging { get; set; } = false;
     [field: SerializeField] protected GameObject ShockwaveHitbox { get; set; }
     [field: SerializeField] protected GameObject StompPrefab { get; set; }
     [field: SerializeField] protected Transform StompSpawnPoint { get; set; }
     [field: SerializeField] protected float StompMoveSpeed { get; set; }
     [field: SerializeField] protected float Attack2Range { get; set; } = 3;
-    [field: SerializeField] protected Collider2D col2D { get; set; }
     [field: SerializeField] protected CircleCollider2D shockwaveCol2D { get; set; }
     [field: SerializeField] protected float ShockwaveStartRadius { get; set; } = 3;
     [field: SerializeField] protected float ShockwaveEndRadius { get; set; } = 8;
     [field: SerializeField] protected float ShockwaveGrowthSpeed { get; set; } = 1;
     private RhinoScriptableObject RhinoSO;
     private Coroutine shockwaveCoroutine;
+    private Pool<EnemyProjectile> pool;
 
     #region Tutorial
     public ModifyBoundary boundary;
     #endregion
 
-    #region PoolingVariables
-    public Pool<Rhino> Pool { get; set; }
-    public bool IsPooled { get; set; }
-
-    protected Pool<Stomp> pool;
-    #endregion
 
     protected override void Start()
     {
@@ -40,7 +34,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
         GameManager.Instance.PoolingManager.FindPool(StompPrefab, out pool);
     }
 
-    public override void SetInheritanceSO()
+    protected override void SetInheritanceSO()
     {
         RhinoSO = SO as RhinoScriptableObject;
     }
@@ -48,7 +42,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
     public override void SetStatsFromScriptableObject()
     {
         base.SetStatsFromScriptableObject();
-        ChargeSpeedMultiplier = RhinoSO.chargeSpeedMultiplier;
+        ChargeSpeed = RhinoSO.ChargeSpeed;
         Attack2Range = RhinoSO.attack2Range;
         ShockwaveStartRadius = RhinoSO.shockwaveStartRadius;
         ShockwaveEndRadius = RhinoSO.shockwaveEndRadius;
@@ -58,6 +52,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
 
     protected override void DetermineAttackPathing()
     {
+        
         switch (CurrentAttack)
         {
             case 1:
@@ -83,6 +78,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
     protected override void Attack1()
     {
         dir = (targetTr.position - transform.position).normalized;
+        PivotPoint.eulerAngles = CustomMath.GetEularAngleToDir(Vector2.right, dir);
         col2D.includeLayers = TargetLayer;
         ChargeHitbox.SetActive(true);
         StartCoroutine(StartCharge());
@@ -97,7 +93,16 @@ public class Rhino : Enemy, IPoolable<Rhino>
         while (Charging)
         {
             yield return null;
-            transform.Translate(dir * Time.deltaTime * Speed * ChargeSpeedMultiplier);
+            RaycastHit2D hit = Physics2D.CircleCast(transform.position + (Vector3)col2D.offset, ((CircleCollider2D)col2D).radius, dir, (dir * Time.deltaTime * ChargeSpeed).magnitude,TerrainLayers);
+            if (hit.collider)
+            {
+                Debug.Log("hit terrain");
+                Charging = false;
+                EnemyTimers.SetTime((int)EnemyTimer.attackDurationTimer, 0);
+                break;
+            }
+            else
+                transform.Translate(dir * Time.deltaTime * ChargeSpeed);
         }
         EndCharge();
     }
@@ -110,7 +115,7 @@ public class Rhino : Enemy, IPoolable<Rhino>
 
     protected void EndCharge()
     {
-        EnemyTimers.ResetSpecificToZero((int)EnemyTimer.attackDurationTimer);
+        //EnemyTimers.ResetSpecificToZero((int)EnemyTimer.attackDurationTimer);
         ChargeHitbox.SetActive(false);
     }
     #endregion
@@ -166,73 +171,51 @@ public class Rhino : Enemy, IPoolable<Rhino>
     #region 3 - Stomp
     protected override void Attack3()
     {
-        dir = (targetTr.position - transform.position).normalized;
-        PivotPoint.eulerAngles = new Vector3(0, 0, CustomMath.ClampedDirection(Vector2.right, dir));
+        dir = (targetTr.position - transform.position);
+        PivotPoint.eulerAngles = CustomMath.GetEularAngleToDir(Vector2.right, dir);
         col2D.includeLayers = TargetLayer;
         bool initial;
-        Stomp temp = pool.GetPooledObj(out initial);
+        EnemyProjectile temp = pool.GetPooledObj(out initial);
         if (initial)
         {
             temp.NewInstance();
         }
-        temp.Init(targetTr.position - transform.position, StompSpawnPoint.position, TargetLayer, Attack3Damage, Attack3Duration, StompMoveSpeed, AttackKnockback, this);
+        temp.Init(dir, StompSpawnPoint.position, TargetLayer, Attack3Damage, Attack3Duration, StompMoveSpeed, AttackKnockback3, transform);
         Debug.Log("Using Stomp");
     }
     #endregion
 
-    protected override void EndAttack(object sender, EventArgs e)
+    protected override void EndAttack()
     {
-        base.EndAttack(sender, e);
+        base.EndAttack();
         ChargeHitbox.SetActive(false);
         ShockwaveHitbox.SetActive(false);
         StopCoroutine(StartCharge());
         Charging = false;
     }
 
-    public override void OnDeath(bool overrideKill = false)
-    {
-        base.OnDeath(overrideKill);
-        PoolSelf();
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.isTrigger || !ChargeHitbox.activeSelf || !ShockwaveHitbox.activeSelf || hitTarget)
+    {        
+        if ((!ChargeHitbox.activeSelf && !ShockwaveHitbox.activeSelf) || hitTarget)
             return;
-        IDamageable foundTarget;
+        if (!collision.isTrigger)
+            return;
+        PlayerSystem foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
         {
-            if (foundTarget is PlayerSystem)
+            if (Charging) Charging = false;
+            if (foundTarget.GetState() == playerState.perfectDodge)
             {
-                PlayerSystem temp = foundTarget as PlayerSystem;
-                if (temp.GetState() == playerState.perfectDodge)
-                {
-                    InterruptAttack();
-                    temp.InstantRegenPoint();
-                    temp.CounterSuccesful(this);
-                }
-                else
-                {
-                    DoDamage(foundTarget);
-                    if (Charging) Charging = false;
-                }
+                InterruptAttack();
+                foundTarget.Counter();
             }
             else
+            {
                 DoDamage(foundTarget);
+            }
         }
     }
 
-    #region PoolingFunctions
-    public void PoolSelf()
-    {
-        if(Pool != null)
-            Pool.PoolObj(this);
-        else
-        {
-            Destroy(gameObject);
-            if (boundary)
-                boundary.DisableBoundary();
-        }
-    }
-    #endregion 
+    #region AI
+    #endregion
 }

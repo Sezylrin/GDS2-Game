@@ -12,26 +12,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16be2fd2b85380842a475ac6cb89778a, type: 3}
   m_Name: LizardSO
   m_EditorClassIdentifier: 
-  maxHealth: 400
-  speed: 5
-  minSouls: 10
-  maxSouls: 20
+  maxHealth: b80b0000a00f000088130000
+  speed:
+  - 4
+  - 5
+  - 6
+  minSouls: 0a0000001e0000003c000000
+  maxSouls: 19000000280000004b000000
   effectDuration: 5
-  attackKnockback: 5
-  attackCooldown: 10
-  attack1Damage: 15
+  attackCooldown:
+  - 5
+  - 4
+  - 3
+  attack1Damage: 140000001e00000028000000
   attack1Duration: 1
   windup1Duration: 1
-  attack2Damage: 30
+  attackKnockback1: 8
+  attack2Damage: 190000002300000032000000
   attack2Duration: 2
-  windup2Duration: 0.5
-  attack3Damage: 15
+  windup2Duration: 0.25
+  attackKnockback2: 14
+  attack3Damage: 0f0000001400000019000000
   attack3Duration: 2
   windup3Duration: 1
-  consumableHealthPercentThreshold: 20
-  percentToHealOnConsume: 15
-  pointsToStagger: 100
-  staggerDuration: 3
+  attackKnockback3: 4
+  basePointsToStagger: 300
+  staggerMinDuration: 1.5
+  staggerMaxDuration: 3
   staggerDelayDuration: 3
   staggerDecayAmount: 4
   staggerDecayRate: 0.25
+  damageToReachMaxDuration: 400

@@ -134,7 +134,6 @@ public class Attacks : MonoBehaviour
             foundEnemy.AddForce((collision.transform.position - transform.position).normalized * lightAttackKnockBack[currentCombo - 1]);
 
             //enable quicker point regen rate
-            PCM.system.SpeedUpRegenDelay(reduceDelay);
         }
     }
 
