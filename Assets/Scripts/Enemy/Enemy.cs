@@ -846,7 +846,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     protected virtual void StateMachine()
     {
         if (debugDisableAI) return;
-        if (IsStunned || Staggered) return;
+        if (IsStunned || Staggered)
+        {
+            StopPathing();
+            Debug.Log(currentState);
+            return;
+        }
         if (!hasDestination && currentState.Equals(EnemyState.stationary) && EnemyTimers.IsTimeZero((int)EnemyTimer.aiActionTimer))
         {
             if (AbleToAttack && Manager.CanAttack())

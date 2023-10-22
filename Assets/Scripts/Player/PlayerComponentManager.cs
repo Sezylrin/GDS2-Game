@@ -21,10 +21,12 @@ public class PlayerComponentManager : MonoBehaviour
 
     private void Start()
     {
+        
         enabled = false;
         if (Instance != null)
         {
             DestroyImmediate(gameObject);
+            Instance.gameObject.SetActive(true);
         }
         else
         {
