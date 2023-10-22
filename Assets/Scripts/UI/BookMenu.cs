@@ -10,8 +10,11 @@ public class BookMenu : MonoBehaviour
     [SerializeField] public GameObject SkillSwitch;
     [SerializeField] private GameObject SkillTree;
 
+    [SerializeField] public StartMenu StartMenu;
+
     private GameObject activeMenu;
-    private bool IsOpen = false;
+    public bool IsOpen = false;
+    public bool IsSeparateMenu = false;
 
     #region Interactions
     public void ToggleOpenMenu(InputAction.CallbackContext context)
@@ -25,6 +28,12 @@ public class BookMenu : MonoBehaviour
         Settings.SetActive(false);
         SkillSwitch.SetActive(false);
         SkillTree.SetActive(false);
+    }
+
+    public void StartMenuInit()
+    {
+        StartMenu.Init();
+        IsSeparateMenu = true;
     }
 
     public void ToggleMenu()
@@ -42,6 +51,7 @@ public class BookMenu : MonoBehaviour
             IsOpen = true;
             MainMenu.SetActive(true);
             activeMenu = MainMenu;
+            MainMenu.GetComponent<Menu>().OpenMenu();
             GameManager.Instance.AudioManager.PlaySound(AudioRef.OpenMenu);
             Time.timeScale = 0;
         }
@@ -59,11 +69,16 @@ public class BookMenu : MonoBehaviour
     {
         if (activeMenu) activeMenu.SetActive(false);
         MainMenu.SetActive(true);
+        MainMenu.GetComponent<Menu>().OpenMenu();
         activeMenu = MainMenu;
     }
 
     public void Return(InputAction.CallbackContext context)
     {
+        if (IsSeparateMenu)
+        {
+            StartMenu.Return();
+        }
         if (!IsOpen) return;
 
         Menu menu = activeMenu.GetComponent<Menu>();
@@ -72,6 +87,10 @@ public class BookMenu : MonoBehaviour
 
     public void Interact(InputAction.CallbackContext context)
     {
+        if (IsSeparateMenu)
+        {
+            StartMenu.Interact();
+        }
         if (!IsOpen) return;
 
         Menu menu = activeMenu.GetComponent<Menu>();
@@ -80,8 +99,12 @@ public class BookMenu : MonoBehaviour
 
     public void Navigate(InputAction.CallbackContext context)
     {
+        if (IsSeparateMenu)
+        {
+            StartMenu.Navigate(context);
+        }
         if (!IsOpen) return;
-
+        
         Menu menu = activeMenu.GetComponent<Menu>();
         menu.Navigate(context);
     }
