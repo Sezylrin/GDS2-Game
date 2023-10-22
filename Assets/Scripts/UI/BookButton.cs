@@ -11,6 +11,9 @@ public class BookButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private Tween hoverTween;
     private Button button;
 
+    public delegate void ButtonHoveredHandler(BookButton hoveredButton);
+    public static event ButtonHoveredHandler OnButtonHovered;
+
     private void Awake()
     {
         button = GetComponent<Button>();
@@ -56,6 +59,8 @@ public class BookButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public void OnPointerEnter(PointerEventData eventData)
     {
         ActivateHover();
+
+        //OnButtonHovered?.Invoke(this);
     }
 
     public void OnPointerExit(PointerEventData eventData)

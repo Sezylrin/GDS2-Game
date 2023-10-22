@@ -97,6 +97,7 @@ public class GameManager : MonoBehaviour
     public void ActivateBookMenu()
     {
         BookMenuObj.SetActive(true);
+        BookMenu.IsSeparateMenu = false;
     }
 
     public void DeactivateBookMenu()
