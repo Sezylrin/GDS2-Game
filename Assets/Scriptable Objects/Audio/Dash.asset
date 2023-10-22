@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 82fbe25d3000e9a4bb778cbb1df9a38f, type: 3}
-  m_Name: testObj
+  m_Name: Dash
   m_EditorClassIdentifier: 
-  ReferenceName: 
-  clips: []
-  mixGroup: {fileID: 0}
+  ReferenceName: Dash
+  clips:
+  - {fileID: 8300000, guid: 7dc0e206e1606a144838344a58c4fcaf, type: 3}
+  mixGroup: {fileID: -3833594322038420439, guid: 8ef6d8b737ad1934aa2b7fdd12d63b52, type: 2}

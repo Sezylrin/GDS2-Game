@@ -562,7 +562,8 @@ public class PlayerController : MonoBehaviour
         isDashing = true;
         currentDashCharges--;
         timers.SetTime((int)coolDownTimers.dashCastCD, dashCDTimer + dashDuration);
-        
+
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.Dash, false, 0.65f);
         BeginDash(dashDistance, dashDuration, direction);
     }
 
@@ -651,12 +652,6 @@ public class PlayerController : MonoBehaviour
     private void StopPerfectDodge(object sender, EventArgs e)
     {
         isPerfectDodge = false;
-    }
-
-    public void CounteredAttack(float counterQTE)
-    {
-        PCM.Trail.Countered(counterQTE, true);
-        timers.SetTime((int)coolDownTimers.perfectDodge, counterQTE);
     }
     #endregion
 

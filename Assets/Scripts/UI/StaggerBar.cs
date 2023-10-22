@@ -119,6 +119,8 @@ public class StaggerBar : MonoBehaviour
 
             if (Bar == PointsToStagger)
             {
+
+                GameManager.Instance.AudioManager.PlaySound(AudioRef.Stagger);
                 BeginStagger();
             }
         }

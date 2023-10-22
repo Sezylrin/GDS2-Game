@@ -181,7 +181,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         if (!timer.IsTimeZero((int)SystemCD.iFrames) || PCM.control.CurrentState == playerState.consuming)
             return;
         StartCoroutine(DamageFlash());
-
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.Hit);
         if (Hitpoints - damage <= 0)
         {
             Hitpoints = 0;
@@ -333,6 +333,8 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         block.SetTexture("_MainTex", rend.sprite.texture);
         block.SetFloat("_Thickness", 1);
         rend.SetPropertyBlock(block);
+        PCM.Trail.Countered(0.3f, true);
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.Parry);
     }
 
     public void CounterUsed()

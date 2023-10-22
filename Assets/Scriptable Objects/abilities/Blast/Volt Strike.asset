@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6956b4cfa4fb0564cb1ac9f9f8012924, type: 3}
   m_Name: Volt Strike
   m_EditorClassIdentifier: 
-  color: {fileID: 2100000, guid: 2c95d496bfb258149a2ab5a003934846, type: 2}
+  color: {fileID: 2100000, guid: 7c4faa0fd6a98c343899f82f2da05ea7, type: 2}
   elementType: 4
   type: 0
   castCost: 1
@@ -26,6 +26,8 @@ MonoBehaviour:
   lifeTime: 0.3
   description: Close range Electric based attack
   icon: {fileID: 21300000, guid: 0371f50b092f5814bb6e164c12311d42, type: 3}
+  audioCast: 4
+  audioHit: 5
   initialShape:
   - {x: 0.4, y: 0.4}
   - {x: -0.4, y: 0.4}

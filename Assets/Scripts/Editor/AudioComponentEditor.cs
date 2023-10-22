@@ -50,7 +50,8 @@ public class AudioComponentEditor : Editor
                 streamWriter.WriteLine("}");
                 manager.LoadSounds(clips);
             }
-            AssetDatabase.Refresh();            
+            AssetDatabase.Refresh();
+            EditorApplication.ExecuteMenuItem("File/Save Project");
         }
     }
 
