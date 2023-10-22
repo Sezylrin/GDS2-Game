@@ -4,10 +4,10 @@ using UnityEngine;
 using KevinCastejon.MoreAttributes;
 using AYellowpaper.SerializedCollections;
 using System;
+using UnityEngine.Audio;
 #if UNITY_EDITOR
 using UnityEditor;
 using System.IO;
-using UnityEngine.Audio;
 #endif
 public class AudioManager : MonoBehaviour
 {
