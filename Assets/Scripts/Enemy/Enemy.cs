@@ -333,7 +333,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         float modifier = CalculateModifer();
         float modifiedDamage = damage * modifier;
         Hitpoints -= (int)Mathf.Ceil(modifiedDamage);
-        
+
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.Hit);
         if (Hitpoints <= 0) //Handles death
         {
             Hitpoints = 0;
@@ -396,6 +397,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     public void AddForce(Vector2 force)
     {
         if (debugDisableAI)
+            return;
+        if (currentState == EnemyState.attacking || currentState == EnemyState.chasing || force.magnitude < 0.2f)
             return;
         rb.velocity = Vector2.zero;
         rb.velocity += force;
@@ -1027,14 +1030,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (!collision.collider.CompareTag(Tags.T_Player))
+        if (!(collision.collider.CompareTag(Tags.T_Player)|| collision.collider.CompareTag(Tags.T_Terrain)))
         {
             if (collisionTime > 1f && !collisionOff)
             {
                 collisionOff = true;
-                Debug.Log((int)col2D.excludeLayers + " " + (int)EnemyLayer + " " + (int)col2D.excludeLayers + EnemyLayer);
                 col2D.excludeLayers += EnemyLayer;
-                Debug.Log((int)col2D.excludeLayers);
                 Invoke("ResumeCollision", collisionDisabledDur);
             }
             collisionTime += Time.deltaTime;

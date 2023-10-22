@@ -104,7 +104,7 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
             hitEnemy.Add(foundEnemy);
             GameManager.Instance.AudioManager.PlaySound(selectedAbility.audioHit);
             foundEnemy.TakeDamage(finalDamage, finalStagger, selectedAbility.elementType, selectedAbility.castCost);
-            GameManager.Instance.PCM.system.AddToConsumeBar(selectedAbility.consumePoints);
+            //GameManager.Instance.PCM.system.AddToConsumeBar(selectedAbility.consumePoints);
             Vector3 dir;
             if (direction.Equals(Vector3.zero))
             { 

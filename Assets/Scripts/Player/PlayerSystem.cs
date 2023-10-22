@@ -34,23 +34,23 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     {
         block = new MaterialPropertyBlock();
         SetHitPoints();
-        consumeBar = 0;
-        canConsume = false;
+        //consumeBar = 0;
+        //canConsume = false;
         timer = GameManager.Instance.TimerManager.GenerateTimers(typeof(SystemCD), gameObject);
         //timer.times[(int)SystemCD.counterAttackQTE].OnTimeIsZero += RemoveCounterQTE;
-        InitCastPoints();
+        //InitCastPoints();
         CounterUsed();
     }
 
     #region Update
     private void Update()
     {
-        RegeneratePoints();
+        //RegeneratePoints();
     }
     #endregion
 
     #region Ability
-    [Header("Ability Stats")]
+    /*[Header("Ability Stats")]
     [SerializeField]
     private int MaxCastPoints;
     [SerializeField]
@@ -75,7 +75,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
             if (CurrentCastPoints != value)
             {
                 currentCastPoints = value;
-                PCM.UI.UpdateSKillPointUI(value);
+                //PCM.UI.UpdateSKillPointUI(value);
             }
         }
     }
@@ -168,7 +168,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     public void SpeedUpRegenDelay(float amount)
     {
         timer.ReduceCoolDown((int)SystemCD.pointRegenDelay, amount);
-    }
+    }*/
     #endregion
 
     #region Health
@@ -181,7 +181,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         if (!timer.IsTimeZero((int)SystemCD.iFrames) || PCM.control.CurrentState == playerState.consuming)
             return;
         StartCoroutine(DamageFlash());
-
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.Hit);
         if (Hitpoints - damage <= 0)
         {
             Hitpoints = 0;
@@ -333,6 +333,8 @@ public class PlayerSystem : MonoBehaviour, IDamageable
         block.SetTexture("_MainTex", rend.sprite.texture);
         block.SetFloat("_Thickness", 1);
         rend.SetPropertyBlock(block);
+        PCM.Trail.Countered(0.3f, true);
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.Parry);
     }
 
     public void CounterUsed()
@@ -435,7 +437,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     #endregion
 
     #region Consume
-    [Header("Consume")]
+    /*[Header("Consume")]
     [SerializeField] private int consumeBar = 0;
     [SerializeField] private int consumeBarMax = 100;
     [SerializeField] private bool canConsume = false;
@@ -461,7 +463,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     public bool CanConsume()
     {
         return canConsume;
-    }
+    }*/
 
     #endregion
 

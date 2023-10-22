@@ -22,33 +22,35 @@ MonoBehaviour:
       Value: {fileID: 11400000, guid: 942d8baa52558864e9d9cbe4921f5cfd, type: 2}
     - Key: CloseMenu
       Value: {fileID: 11400000, guid: 5a289c375d48a014ab91d2549d0c831b, type: 2}
+    - Key: Dash
+      Value: {fileID: 11400000, guid: 2053259f9248abd4bb0a44775ebce76d, type: 2}
     - Key: ElectricCast
       Value: {fileID: 11400000, guid: ed592fa3d27310b41b7eaae73b2bea6a, type: 2}
     - Key: ElectricHit
       Value: {fileID: 11400000, guid: 06bb8c2364173c04faa5e37c4c63e956, type: 2}
-    - Key: FireCast2
-      Value: {fileID: 11400000, guid: 09a1503d50238154f8700abb0c81b8c3, type: 2}
     - Key: FireCast
       Value: {fileID: 11400000, guid: 805bc59c077943d42b2347f0239b74a4, type: 2}
     - Key: FireHit
       Value: {fileID: 11400000, guid: 0d626b7dc3254ce4585b819294f65f98, type: 2}
-    - Key: FootStepGrassL
-      Value: {fileID: 11400000, guid: ee304d4a7d6cab844bc18e2fe53124ee, type: 2}
-    - Key: FootStepGrassR
-      Value: {fileID: 11400000, guid: 33b205c0c054ea34c8b4eb6935cc81e5, type: 2}
-    - Key: Healing
-      Value: {fileID: 11400000, guid: b020652104065664785606b2244d74c1, type: 2}
-    - Key: OpenMenu
-      Value: {fileID: 11400000, guid: bf17193b3ec6b924bb54d06b313ec416, type: 2}
-    - Key: Parry
-      Value: {fileID: 11400000, guid: a2f357b5cde3515468cd08f6e69234de, type: 2}
-    - Key: WaterCast2
+    - Key: WaterCast
       Value: {fileID: 11400000, guid: bb9eeaf375398fe44bbbdde85cc98070, type: 2}
-    - Key: WaterCast1
-      Value: {fileID: 11400000, guid: ea69341d9bbfb474da5a68c965a43332, type: 2}
     - Key: WaterHit
       Value: {fileID: 11400000, guid: 2eaa340522f449a42a42e35397b56f32, type: 2}
     - Key: WindCast
       Value: {fileID: 11400000, guid: f92a258519e116b4aad024ca5e775865, type: 2}
     - Key: WindHit
       Value: {fileID: 11400000, guid: 73123778f6320da4eb1f3bb9c6096849, type: 2}
+    - Key: FootStepGrassL
+      Value: {fileID: 11400000, guid: ee304d4a7d6cab844bc18e2fe53124ee, type: 2}
+    - Key: FootStepGrassR
+      Value: {fileID: 11400000, guid: 33b205c0c054ea34c8b4eb6935cc81e5, type: 2}
+    - Key: Healing
+      Value: {fileID: 11400000, guid: b020652104065664785606b2244d74c1, type: 2}
+    - Key: Hit
+      Value: {fileID: 11400000, guid: 57048a30cfc44e242b528be8fe21204d, type: 2}
+    - Key: OpenMenu
+      Value: {fileID: 11400000, guid: bf17193b3ec6b924bb54d06b313ec416, type: 2}
+    - Key: Parry
+      Value: {fileID: 11400000, guid: a2f357b5cde3515468cd08f6e69234de, type: 2}
+    - Key: Stagger
+      Value: {fileID: 11400000, guid: 43e0c13428d8c4e4a97c467a63c20bd0, type: 2}

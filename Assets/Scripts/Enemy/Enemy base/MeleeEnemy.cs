@@ -84,7 +84,7 @@ public abstract class MeleeEnemy : Enemy
                 if (temp.GetState() == playerState.perfectDodge)
                 {
                     InterruptAttack();
-                    temp.InstantRegenPoint();
+                    //temp.InstantRegenPoint();
                     //temp.CounterSuccesful(this);
                 }
                 else
