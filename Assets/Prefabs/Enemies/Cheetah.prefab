@@ -716,7 +716,9 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8697050605565149470}
+  - {fileID: 2928751567514778709}
   m_Father: {fileID: 5272944645671773323}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1033,8 +1035,6 @@ Transform:
   m_Children:
   - {fileID: 3200451850185311737}
   - {fileID: 3200451850098001916}
-  - {fileID: 8697050605565149470}
-  - {fileID: 2928751567514778709}
   - {fileID: 8858089967394045955}
   - {fileID: 3200451850082114949}
   - {fileID: 172034624}
@@ -1049,8 +1049,12 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 5272944645671773323}
+    m_TransformParent: {fileID: 3200451850098001916}
     m_Modifications:
+    - target: {fileID: 309081290159878341, guid: 09b5f24353a2e1b4ca58f912b88adf52, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: f9e52334ee1499b409b8768f38b6d581, type: 2}
     - target: {fileID: 6857827138679336748, guid: 09b5f24353a2e1b4ca58f912b88adf52, type: 3}
       propertyPath: m_SizeDelta.x
       value: 2.2427
@@ -1062,6 +1066,18 @@ PrefabInstance:
     - target: {fileID: 7333207811936142886, guid: 09b5f24353a2e1b4ca58f912b88adf52, type: 3}
       propertyPath: m_Name
       value: Health Bar
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333207811936142888, guid: 09b5f24353a2e1b4ca58f912b88adf52, type: 3}
+      propertyPath: m_Color.b
+      value: 0.46226418
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333207811936142888, guid: 09b5f24353a2e1b4ca58f912b88adf52, type: 3}
+      propertyPath: m_Color.g
+      value: 0.46226418
+      objectReference: {fileID: 0}
+    - target: {fileID: 7333207811936142888, guid: 09b5f24353a2e1b4ca58f912b88adf52, type: 3}
+      propertyPath: m_Color.r
+      value: 0.46226418
       objectReference: {fileID: 0}
     - target: {fileID: 7333207811936142889, guid: 09b5f24353a2e1b4ca58f912b88adf52, type: 3}
       propertyPath: m_Pivot.x
@@ -1093,7 +1109,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7333207811936142889, guid: 09b5f24353a2e1b4ca58f912b88adf52, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 2.1461
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7333207811936142889, guid: 09b5f24353a2e1b4ca58f912b88adf52, type: 3}
       propertyPath: m_SizeDelta.y
@@ -1129,11 +1145,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7333207811936142889, guid: 09b5f24353a2e1b4ca58f912b88adf52, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.054399848
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7333207811936142889, guid: 09b5f24353a2e1b4ca58f912b88adf52, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1.7311001
+      value: -0.00000023841858
       objectReference: {fileID: 0}
     - target: {fileID: 7333207811936142889, guid: 09b5f24353a2e1b4ca58f912b88adf52, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1174,7 +1190,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 5272944645671773323}
+    m_TransformParent: {fileID: 3200451850098001916}
     m_Modifications:
     - target: {fileID: 89582216222627071, guid: 72245cc30d839734d98d515225c31589, type: 3}
       propertyPath: m_SizeDelta.x
@@ -1184,6 +1200,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: -0.0018
       objectReference: {fileID: 0}
+    - target: {fileID: 1493530621412628023, guid: 72245cc30d839734d98d515225c31589, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 641d32eafc8b55047b45ccb519433489, type: 2}
     - target: {fileID: 5863420622790131762, guid: 72245cc30d839734d98d515225c31589, type: 3}
       propertyPath: m_Name
       value: Stagger Bar
@@ -1218,7 +1238,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5863420622790131763, guid: 72245cc30d839734d98d515225c31589, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 2.1461
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5863420622790131763, guid: 72245cc30d839734d98d515225c31589, type: 3}
       propertyPath: m_SizeDelta.y
@@ -1254,11 +1274,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5863420622790131763, guid: 72245cc30d839734d98d515225c31589, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.054399967
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5863420622790131763, guid: 72245cc30d839734d98d515225c31589, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.9647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5863420622790131763, guid: 72245cc30d839734d98d515225c31589, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

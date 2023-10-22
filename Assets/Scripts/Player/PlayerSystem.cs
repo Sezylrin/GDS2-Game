@@ -34,23 +34,23 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     {
         block = new MaterialPropertyBlock();
         SetHitPoints();
-        consumeBar = 0;
-        canConsume = false;
+        //consumeBar = 0;
+        //canConsume = false;
         timer = GameManager.Instance.TimerManager.GenerateTimers(typeof(SystemCD), gameObject);
         //timer.times[(int)SystemCD.counterAttackQTE].OnTimeIsZero += RemoveCounterQTE;
-        InitCastPoints();
+        //InitCastPoints();
         CounterUsed();
     }
 
     #region Update
     private void Update()
     {
-        RegeneratePoints();
+        //RegeneratePoints();
     }
     #endregion
 
     #region Ability
-    [Header("Ability Stats")]
+    /*[Header("Ability Stats")]
     [SerializeField]
     private int MaxCastPoints;
     [SerializeField]
@@ -75,7 +75,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
             if (CurrentCastPoints != value)
             {
                 currentCastPoints = value;
-                PCM.UI.UpdateSKillPointUI(value);
+                //PCM.UI.UpdateSKillPointUI(value);
             }
         }
     }
@@ -168,7 +168,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     public void SpeedUpRegenDelay(float amount)
     {
         timer.ReduceCoolDown((int)SystemCD.pointRegenDelay, amount);
-    }
+    }*/
     #endregion
 
     #region Health
@@ -435,7 +435,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     #endregion
 
     #region Consume
-    [Header("Consume")]
+    /*[Header("Consume")]
     [SerializeField] private int consumeBar = 0;
     [SerializeField] private int consumeBarMax = 100;
     [SerializeField] private bool canConsume = false;
@@ -461,7 +461,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     public bool CanConsume()
     {
         return canConsume;
-    }
+    }*/
 
     #endregion
 

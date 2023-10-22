@@ -397,6 +397,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     {
         if (debugDisableAI)
             return;
+        if (currentState == EnemyState.attacking || currentState == EnemyState.chasing || force.magnitude < 0.2f)
+            return;
         rb.velocity = Vector2.zero;
         rb.velocity += force;
         path.enabled = false;

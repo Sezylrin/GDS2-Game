@@ -182,7 +182,6 @@ public class Cheetah : Enemy
                 Debug.Log("perfectDodge");
                 isSwiping = false;
                 InterruptAttack();
-                foundTarget.InstantRegenPoint();
                 foundTarget.Counter();
             }
             else

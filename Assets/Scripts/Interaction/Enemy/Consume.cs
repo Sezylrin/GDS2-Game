@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Consume : MonoBehaviour
 {
-    [field: SerializeField] private Enemy enemy;
+    /*[field: SerializeField] private Enemy enemy;
     [field: SerializeField] private GameObject UI;
     private int healthReceivedPercent;
     private bool beingConsumed = false;
@@ -54,5 +54,5 @@ public class Consume : MonoBehaviour
     public bool BeingConsumed()
     {
         return beingConsumed;
-    }
+    }*/
 }

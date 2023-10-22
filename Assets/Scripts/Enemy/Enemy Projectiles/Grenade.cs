@@ -49,7 +49,6 @@ public class Grenade : ArchProjectile
         {
             if (foundTarget.GetState() == playerState.perfectDodge)
             {
-                foundTarget.InstantRegenPoint();
                 foundTarget.Counter();
             }
             else

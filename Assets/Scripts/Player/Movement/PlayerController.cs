@@ -342,7 +342,7 @@ public class PlayerController : MonoBehaviour
     }
     private void UpdateAimLine()
     {
-        if (isAim && CheckStates(castState) && PCM.abilities.CanCast(slot))
+        if (isAim && CheckStates(castState))
             lineRend.enabled = true;
         else
             lineRend.enabled = false;
@@ -606,7 +606,6 @@ public class PlayerController : MonoBehaviour
             }
             yield return null;
         }
-        Debug.Log("maybe?");
         StopDash();
     }
 

@@ -22,7 +22,6 @@ public class TutorialEvents : MonoBehaviour
         {
             system.Hitpoints -= 30;
             system.UpdateHealthUI();
-            GameManager.Instance.PCM.system.AddToConsumeBar(100);
             Destroy(gameObject);
         }
     }

@@ -207,7 +207,6 @@ public class Rhino : Enemy
             if (foundTarget.GetState() == playerState.perfectDodge)
             {
                 InterruptAttack();
-                foundTarget.InstantRegenPoint();
                 foundTarget.Counter();
             }
             else
