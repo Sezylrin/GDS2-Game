@@ -58,6 +58,8 @@ public class EnemyManager : MonoBehaviour
     private Pool<Enemy> cheetahPool;
     private Pool<Enemy> lizardPool;
 
+    [field: SerializeField] private GameObject healthBarSegmentPrefab;
+
     [SerializeField]
     private List<Enemy> enemyList = new List<Enemy>();
     [field: SerializeField] bool debugKillEnemies { get; set; }
@@ -301,7 +303,7 @@ public class EnemyManager : MonoBehaviour
 
         int chanceMultiplier = 1;
         bool x = false;
-        // x = Level.Instance.isHard;
+        x = Level.Instance.isHard;
         if (SimulateHardLevel) x = true;
         if (x) chanceMultiplier = 4;
 
@@ -312,7 +314,8 @@ public class EnemyManager : MonoBehaviour
 
         int totalChance = windChance;
         int correctChance = 25 * chanceMultiplier;
-        if (totalChance != correctChance) Debug.Log("Total Element Chance Does Not Equal " + correctChance + "%, totalChance = " + totalChance);
+        if (AttacksList.Count < 25) Debug.Log("Player has not attacked 25 times yet. AttacksList.Count = " + AttacksList.Count);
+        else if (totalChance != correctChance) Debug.Log("Total Element Chance Does Not Equal " + correctChance + "%, totalChance = " + totalChance);
 
         if (randomValue <= fireChance) return ElementType.fire; // Attempt to select an element
         else if (fireChance < randomValue && randomValue <= waterChance) return ElementType.water;      
