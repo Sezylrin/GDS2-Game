@@ -344,7 +344,7 @@ public class EnemyManager : MonoBehaviour
                 UpdateTierChances(30, 55, 15);
                 break;
             case 5:
-                UpdateTierChances(10, 60, 30);
+                UpdateTierChances(0, 70, 30);
                 break;
             case 6:
                 UpdateTierChances(0, 50, 50);
