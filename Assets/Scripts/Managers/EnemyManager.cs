@@ -329,27 +329,27 @@ public class EnemyManager : MonoBehaviour
         int x = LevelGenerator.Instance.floorsCleared;
         if (SimulateFloorsCleared) x = FloorsCleared;
 
-        switch (x)
+        switch (x + 1)
         {
-            case 0:
+            case 1:
                 UpdateTierChances(100, 0, 0);
                 break;
-            case 1:
-                UpdateTierChances(85, 15, 0);
-                break;
             case 2:
-                UpdateTierChances(65, 30, 5);
+                UpdateTierChances(80, 20, 0);
                 break;
             case 3:
-                UpdateTierChances(35, 50, 15);
+                UpdateTierChances(55, 40, 5);
                 break;
             case 4:
-                UpdateTierChances(10, 65, 25);
+                UpdateTierChances(30, 55, 15);
                 break;
             case 5:
-                UpdateTierChances(0, 50, 50);
+                UpdateTierChances(10, 60, 30);
                 break;
             case 6:
+                UpdateTierChances(0, 50, 50);
+                break;
+            case 7:
                 UpdateTierChances(0, 25, 75);
                 break;
         }
