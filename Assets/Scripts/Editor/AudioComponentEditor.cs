@@ -50,10 +50,47 @@ public class AudioComponentEditor : Editor
                 streamWriter.WriteLine("}");
                 manager.LoadSounds(clips);
             }
-            AssetDatabase.Refresh();            
+
+            LoadSoundIntoSO();
+
+            AssetDatabase.Refresh();
+            AssetDatabase.SaveAssets();
+            EditorApplication.ExecuteMenuItem("File/Save Project");
         }
     }
-
+    private void LoadSoundIntoSO()
+    {
+        string[] guids = AssetDatabase.FindAssets("t:ElementalSO", new[] { "Assets/Scriptable Objects/abilities" });
+        int count = guids.Length;
+        ElementalSO[] SOs = new ElementalSO[count];
+        for (int n = 0; n < count; n++)
+        {
+            var path = AssetDatabase.GUIDToAssetPath(guids[n]);
+            SOs[n] = AssetDatabase.LoadAssetAtPath<ElementalSO>(path);
+        }
+        foreach (ElementalSO SO in SOs)
+        {
+            switch ((int)SO.elementType)
+            {
+                case (int)ElementType.wind:
+                    SO.audioCast = AudioRef.WindCast;
+                    SO.audioHit = AudioRef.WaterHit;
+                    break;
+                case (int)ElementType.water:
+                    SO.audioCast = AudioRef.WaterCast;
+                    SO.audioHit = AudioRef.WaterHit;
+                    break;
+                case (int)ElementType.fire:
+                    SO.audioCast = AudioRef.FireCast;
+                    SO.audioHit = AudioRef.FireHit;
+                    break;
+                case (int)ElementType.electric:
+                    SO.audioCast = AudioRef.ElectricCast;
+                    SO.audioHit = AudioRef.ElectricHit;
+                    break;
+            }
+        }
+    }
     private void OverrideAudioRefWithDefault()
     {
         string enumName = "AudioRef";

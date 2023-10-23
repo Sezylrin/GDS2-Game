@@ -97,6 +97,7 @@ public class GameManager : MonoBehaviour
     public void ActivateBookMenu()
     {
         BookMenuObj.SetActive(true);
+        BookMenu.IsSeparateMenu = false;
     }
 
     public void DeactivateBookMenu()
@@ -208,7 +209,6 @@ public class GameManager : MonoBehaviour
         if (consume)
         {
             StartConsumeDelay();
-            consume.StartConsuming();
             consuming = true;
         }
     }
@@ -220,7 +220,6 @@ public class GameManager : MonoBehaviour
 
     private void EndConsumeDelay(object sender, EventArgs e)
     {
-        consume.TriggerConsume();
         if (consume) RemoveConsume(consume);
     }
 

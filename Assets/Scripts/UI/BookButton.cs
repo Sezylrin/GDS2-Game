@@ -2,7 +2,6 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 using UnityEngine.EventSystems;
 using DG.Tweening.Core.Easing;
 using UnityEngine.UI;
@@ -11,6 +10,9 @@ public class BookButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 {
     private Tween hoverTween;
     private Button button;
+
+    public delegate void ButtonHoveredHandler(BookButton hoveredButton);
+    public static event ButtonHoveredHandler OnButtonHovered;
 
     private void Awake()
     {
@@ -57,6 +59,8 @@ public class BookButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public void OnPointerEnter(PointerEventData eventData)
     {
         ActivateHover();
+
+        //OnButtonHovered?.Invoke(this);
     }
 
     public void OnPointerExit(PointerEventData eventData)

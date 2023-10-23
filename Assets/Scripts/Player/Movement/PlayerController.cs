@@ -49,6 +49,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private CapsuleCollider2D col2D;
     [SerializeField]
+    private CircleCollider2D circCol2D;
+    [SerializeField]
     private PlayerComponentManager PCM;
     
     [Header("Speed Stats")]
@@ -159,12 +161,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField, ReadOnly]
     private bool isPerfectDodge;
 
+    private LayerMask initialLayer;
     #region Unity Function
     void Awake()
     {
         lastDirection = Vector2.up;
         QualitySettings.vSyncCount = 0;  // VSync must be disabled
         Application.targetFrameRate = 120;
+        
     }
     public void Start()
     {
@@ -177,6 +181,7 @@ public class PlayerController : MonoBehaviour
         currentMaxSpeed = maxSpeed;
         currentDashCharges = dashCharges;
         drag = rb.drag;
+        initialLayer = circCol2D.excludeLayers;
         //GameManager.Instance.OnControlSchemeSwitch += SchemeChange;
     }
     #region Updates
@@ -337,7 +342,7 @@ public class PlayerController : MonoBehaviour
     }
     private void UpdateAimLine()
     {
-        if (isAim && CheckStates(castState) && PCM.abilities.CanCast(slot))
+        if (isAim && CheckStates(castState))
             lineRend.enabled = true;
         else
             lineRend.enabled = false;
@@ -557,7 +562,8 @@ public class PlayerController : MonoBehaviour
         isDashing = true;
         currentDashCharges--;
         timers.SetTime((int)coolDownTimers.dashCastCD, dashCDTimer + dashDuration);
-        
+
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.Dash, false, 0.65f);
         BeginDash(dashDistance, dashDuration, direction);
     }
 
@@ -570,6 +576,7 @@ public class PlayerController : MonoBehaviour
     private void BeginDash(float distance, float dur, Vector2 dir)
     {
         col2D.excludeLayers += enemyLayer;
+        circCol2D.excludeLayers += enemyLayer;
         dashCoroutine = StartCoroutine(StartDashing(distance, dur, dir));
         PCM.Trail.DashAfterImage(dur, 5, Color.white, 0);
     }
@@ -614,9 +621,10 @@ public class PlayerController : MonoBehaviour
         if (dashCoroutine != null)
         {
             dashCoroutine = null;
-            col2D.excludeLayers = 0;
-            isDashing = false;
         }
+        col2D.excludeLayers = 0;
+        circCol2D.excludeLayers = initialLayer;
+        isDashing = false;
     }
 
     private void StopDash(Coroutine coroutine)
@@ -644,12 +652,6 @@ public class PlayerController : MonoBehaviour
     private void StopPerfectDodge(object sender, EventArgs e)
     {
         isPerfectDodge = false;
-    }
-
-    public void CounteredAttack(float counterQTE)
-    {
-        PCM.Trail.Countered(counterQTE, true);
-        timers.SetTime((int)coolDownTimers.perfectDodge, counterQTE);
     }
     #endregion
 

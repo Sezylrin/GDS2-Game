@@ -93,7 +93,7 @@ public class Rhino : Enemy
         while (Charging)
         {
             yield return null;
-            RaycastHit2D hit = Physics2D.CircleCast(transform.position, 1, dir, (dir * Time.deltaTime * ChargeSpeed).magnitude,TerrainLayers);
+            RaycastHit2D hit = Physics2D.CircleCast(transform.position + (Vector3)col2D.offset, ((CircleCollider2D)col2D).radius, dir, (dir * Time.deltaTime * ChargeSpeed).magnitude,TerrainLayers);
             if (hit.collider)
             {
                 Debug.Log("hit terrain");
@@ -198,23 +198,20 @@ public class Rhino : Enemy
     {        
         if ((!ChargeHitbox.activeSelf && !ShockwaveHitbox.activeSelf) || hitTarget)
             return;
-        IDamageable foundTarget;
+        if (!collision.isTrigger)
+            return;
+        PlayerSystem foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
         {
-            if (foundTarget is PlayerSystem)
+            if (Charging) Charging = false;
+            if (foundTarget.GetState() == playerState.perfectDodge)
             {
-                PlayerSystem temp = foundTarget as PlayerSystem;
-                if (Charging) Charging = false;
-                if (temp.GetState() == playerState.perfectDodge)
-                {
-                    InterruptAttack();
-                    temp.InstantRegenPoint();
-                    temp.Counter();
-                }
-                else
-                {
-                    DoDamage(foundTarget);
-                }
+                InterruptAttack();
+                foundTarget.Counter();
+            }
+            else
+            {
+                DoDamage(foundTarget);
             }
         }
     }

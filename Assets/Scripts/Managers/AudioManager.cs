@@ -4,10 +4,10 @@ using UnityEngine;
 using KevinCastejon.MoreAttributes;
 using AYellowpaper.SerializedCollections;
 using System;
+using UnityEngine.Audio;
 #if UNITY_EDITOR
 using UnityEditor;
 using System.IO;
-using UnityEngine.Audio;
 #endif
 public class AudioManager : MonoBehaviour
 {
@@ -44,6 +44,7 @@ public class AudioManager : MonoBehaviour
             loadedSO.loadedSound.Add(clip.ReferenceName, clip);
         }
         UpdateDict(loadedSO);
+        EditorUtility.SetDirty(loadedSO);
     }
 #endif
     private void UpdateDict(LoadedSoundDict loadedSO)
