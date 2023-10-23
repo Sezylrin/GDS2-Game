@@ -206,7 +206,6 @@ public class EnemyManager : MonoBehaviour
             SpawnEnemy();
             temp--;
         }
-        if (enemyList.Count() != NumberOfEnemiesToSpawn) Debug.Log("Did Not Spawn the Correct Amount of Enemies. enemyList.Count() = " + enemyList.Count() + ", NumberOfEnemiesToSpawn = " + NumberOfEnemiesToSpawn); 
     }
 
     private void SetSpawnLocations(List<Transform> spawnLocations)
