@@ -38,16 +38,16 @@ public class ElementCombo : MonoBehaviour
     private SerializedDictionary<Combos, ComboSO> setCombos;
 
     private Pool<ComboBase> tornadoPool;
-    private Pool<ComboBase> bramblePool;
+    private Pool<ComboBase> blizzardPool;
     [SerializeField]
     private GameObject fireTornado;
     [SerializeField]
-    private GameObject bramble;
+    private GameObject blizzard;
 
     void Start()
     {
         GameManager.Instance.PoolingManager.FindPool(fireTornado, out tornadoPool);
-        GameManager.Instance.PoolingManager.FindPool(bramble, out bramblePool);
+        GameManager.Instance.PoolingManager.FindPool(blizzard, out blizzardPool);
     }
 
     // Update is called once per frame
@@ -78,7 +78,10 @@ public class ElementCombo : MonoBehaviour
                 StartCoroutine(enemy.StunTarget(shock.duration));
                 break;
             case (int)Combos.fireTornado:
-                SpawnFireTornado(combo, mask, pos);
+                SpawnAreaCombo(tornadoPool,combo, mask, pos);
+                break;
+            case (int)Combos.blizzard:
+                SpawnAreaCombo(blizzardPool, combo, mask, pos);
                 break;
             /*case (int)Combos.aquaVolt:
                 comboInterface.ApplyAquaVolt(combo.BaseDamage[comboTier], combo.StaggerDamage[comboTier], combo.Duration[comboTier]);
@@ -112,24 +115,15 @@ public class ElementCombo : MonoBehaviour
         AttemptCombo(ElementOne, ElementTwo, new Rhino(), defaultMask, 0, transform.position);
     }
 
-    private void SpawnFireTornado(ComboSO combo, LayerMask target, Vector3 pos)
+    private void SpawnAreaCombo(Pool<ComboBase> pool ,ComboSO combo, LayerMask target, Vector3 pos)
     {
         bool newSpawn;
-        ComboBase temp = tornadoPool.GetPooledObj(out newSpawn);
+        ComboBase temp = pool.GetPooledObj(out newSpawn);
         if (newSpawn)
         {
             temp.InitSpawn();
         }
         temp.Init(combo as AreaComboSO, pos, target);
     }
-    private void SpawnBramble(ComboSO combo, LayerMask target, Vector3 pos)
-    {
-        bool newSpawn;
-        ComboBase temp = bramblePool.GetPooledObj(out newSpawn);
-        if (newSpawn)
-        {
-            temp.InitSpawn();
-        }
-        temp.Init(combo as AreaComboSO, pos, target);
-    }
+
 }

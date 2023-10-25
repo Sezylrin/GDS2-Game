@@ -42,12 +42,13 @@ public class Grenade : ArchProjectile
     {
         if (collision.transform == shooter)
             return;
-        PlayerSystem foundTarget;
+        if (!collision.isTrigger)
+            return;
+            PlayerSystem foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
         {
             if (foundTarget.GetState() == playerState.perfectDodge)
             {
-                foundTarget.InstantRegenPoint();
                 foundTarget.Counter();
             }
             else

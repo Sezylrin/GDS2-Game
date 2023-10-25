@@ -134,6 +134,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     private SpriteRenderer rend;
     [SerializeField]
     private MaterialPropertyBlock block;
+    [SerializeField]
+    private float[] hues = new float[3];
     #endregion
 
     #region Damage Modifier Variables
@@ -201,6 +203,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         SetStatsFromScriptableObject();
         SetHitPoints();
         SetElementOutline();
+        SetHue();
 
         WindingUp = false;
         Staggered = false;
@@ -330,7 +333,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         float modifier = CalculateModifer();
         float modifiedDamage = damage * modifier;
         Hitpoints -= (int)Mathf.Ceil(modifiedDamage);
-        
+
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.Hit);
         if (Hitpoints <= 0) //Handles death
         {
             Hitpoints = 0;
@@ -394,6 +398,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     {
         if (debugDisableAI)
             return;
+        if (currentState == EnemyState.attacking || currentState == EnemyState.chasing || force.magnitude < 0.2f)
+            return;
         rb.velocity = Vector2.zero;
         rb.velocity += force;
         path.enabled = false;
@@ -432,7 +438,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     private Coroutine flash;
     private void PlayFlash()
     {
-        /*block.SetColor("_FlashColour", Color.white);
+        block.SetColor("_FlashColour", Color.white);
         if (flash != null)
         {
             StopCoroutine(flash);
@@ -440,13 +446,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
             rend.SetPropertyBlock(block);
             flash = StartCoroutine(DamageFlash());
         }
-        flash = StartCoroutine(DamageFlash());*/
+        flash = StartCoroutine(DamageFlash());
     }
     protected void SetOutline(Color colour, float thickness = 1)
     {
-        /*block.SetColor("_OutlineColour", colour);
+        block.SetColor("_OutlineColour", colour);
         block.SetFloat("_Thickness", thickness);
-        rend.SetPropertyBlock(block);*/
+        rend.SetPropertyBlock(block);
     }
     private IEnumerator DamageFlash()
     {
@@ -472,8 +478,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
 
     protected void CancelFlash()
     {
-        /*block.SetFloat("_FlashAmount", 0);
-        rend.SetPropertyBlock(block);*/
+        block.SetFloat("_FlashAmount", 0);
+        rend.SetPropertyBlock(block);
     }
 
     private IEnumerator WindUpFlash()
@@ -490,6 +496,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
             yield return new WaitForSeconds(0.1f);
         }
         block.SetFloat("_FlashAmount", 0);
+        rend.SetPropertyBlock(block);
+    }
+
+    private void SetHue()
+    {
+        block.SetFloat("_HueShift", hues[Tier - 1]);
         rend.SetPropertyBlock(block);
     }
     #endregion
@@ -834,7 +846,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     protected virtual void StateMachine()
     {
         if (debugDisableAI) return;
-        if (IsStunned || Staggered) return;
+        if (IsStunned || Staggered)
+        {
+            StopPathing();
+            Debug.Log(currentState);
+            return;
+        }
         if (!hasDestination && currentState.Equals(EnemyState.stationary) && EnemyTimers.IsTimeZero((int)EnemyTimer.aiActionTimer))
         {
             if (AbleToAttack && Manager.CanAttack())
@@ -1013,14 +1030,16 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
 
     #region collisionPrevention
     private float collisionTime = 0;
+    private bool collisionOff = false;
     private LayerMask defaultLayer;
     
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (!collision.collider.CompareTag(Tags.T_Player))
+        if (!(collision.collider.CompareTag(Tags.T_Player)|| collision.collider.CompareTag(Tags.T_Terrain)))
         {
-            if (collisionTime > 1f)
+            if (collisionTime > 1f && !collisionOff)
             {
+                collisionOff = true;
                 col2D.excludeLayers += EnemyLayer;
                 Invoke("ResumeCollision", collisionDisabledDur);
             }
@@ -1032,6 +1051,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     {
         col2D.excludeLayers = defaultLayer;
         collisionTime = 0;
+        collisionOff = false;
     }
     #endregion
 

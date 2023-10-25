@@ -58,6 +58,8 @@ public class EnemyManager : MonoBehaviour
     private Pool<Enemy> cheetahPool;
     private Pool<Enemy> lizardPool;
 
+    [field: SerializeField] private GameObject healthBarSegmentPrefab;
+
     [SerializeField]
     private List<Enemy> enemyList = new List<Enemy>();
     [field: SerializeField] bool debugKillEnemies { get; set; }
@@ -301,7 +303,7 @@ public class EnemyManager : MonoBehaviour
 
         int chanceMultiplier = 1;
         bool x = false;
-        // x = Level.Instance.isHard;
+        x = Level.Instance.isHard;
         if (SimulateHardLevel) x = true;
         if (x) chanceMultiplier = 4;
 
@@ -312,7 +314,8 @@ public class EnemyManager : MonoBehaviour
 
         int totalChance = windChance;
         int correctChance = 25 * chanceMultiplier;
-        if (totalChance != correctChance) Debug.Log("Total Element Chance Does Not Equal " + correctChance + "%, totalChance = " + totalChance);
+        if (AttacksList.Count < 25) Debug.Log("Player has not attacked 25 times yet. AttacksList.Count = " + AttacksList.Count);
+        else if (totalChance != correctChance) Debug.Log("Total Element Chance Does Not Equal " + correctChance + "%, totalChance = " + totalChance);
 
         if (randomValue <= fireChance) return ElementType.fire; // Attempt to select an element
         else if (fireChance < randomValue && randomValue <= waterChance) return ElementType.water;      
@@ -326,27 +329,27 @@ public class EnemyManager : MonoBehaviour
         int x = LevelGenerator.Instance.floorsCleared;
         if (SimulateFloorsCleared) x = FloorsCleared;
 
-        switch (x)
+        switch (x + 1)
         {
-            case 0:
+            case 1:
                 UpdateTierChances(100, 0, 0);
                 break;
-            case 1:
-                UpdateTierChances(85, 15, 0);
-                break;
             case 2:
-                UpdateTierChances(65, 30, 5);
+                UpdateTierChances(80, 20, 0);
                 break;
             case 3:
-                UpdateTierChances(35, 50, 15);
+                UpdateTierChances(55, 40, 5);
                 break;
             case 4:
-                UpdateTierChances(10, 65, 25);
+                UpdateTierChances(30, 55, 15);
                 break;
             case 5:
-                UpdateTierChances(0, 50, 50);
+                UpdateTierChances(0, 70, 30);
                 break;
             case 6:
+                UpdateTierChances(0, 50, 50);
+                break;
+            case 7:
                 UpdateTierChances(0, 25, 75);
                 break;
         }

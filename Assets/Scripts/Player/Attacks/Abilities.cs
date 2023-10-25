@@ -35,7 +35,7 @@ public class Abilities : MonoBehaviour
         }
         //remember to uncheck them when done with debugging
         //SetAbilities();
-        PCM.UI.UpdateAbilityText(GetName(0), GetName(1), GetName(2));
+        PCM.UI.UpdateAbilityText(GetName(0), GetName(1), GetName(2), GetName(3));
     }
     public void ToggleActiveAbilitySet(InputAction.CallbackContext context)
     {
@@ -49,11 +49,11 @@ public class Abilities : MonoBehaviour
     {
         if (AbilitySetOne)
         {
-            PCM.UI.UpdateAbilityText(GetName(3), GetName(4), GetName(5));
+            PCM.UI.UpdateAbilityText(GetName(4), GetName(5), GetName(6), GetName(7));
         }
         else
         {
-            PCM.UI.UpdateAbilityText(GetName(0), GetName(1), GetName(2));
+            PCM.UI.UpdateAbilityText(GetName(0), GetName(1), GetName(2),GetName(3));
         }
     }
 
@@ -65,7 +65,7 @@ public class Abilities : MonoBehaviour
         }
         else
         {
-            return abilities[index].name + " " + abilities[index].castCost;
+            return abilities[index].name + " ";
         }
     }
     public void CastSlotOne()
@@ -92,12 +92,7 @@ public class Abilities : MonoBehaviour
             return false;
         return (abilities[slot].type == AbilityType.Projectile);
     }
-    public bool CanCast(int slot)
-    {
-        if(AbilitySetOne)
-            slot += 3;
-        return (PCM.system.CanCast(abilities[slot].castCost));
-    }
+
     public void SetSlot(ElementalSO abilityToUse, int slot)
     {
         if (slot < 0 || slot > 6)
@@ -123,6 +118,7 @@ public class Abilities : MonoBehaviour
     {
         lastUsed = abilityToCast;
         castDur = abilityToCast.castDuration;
+        GameManager.Instance.AudioManager.PlaySound(abilityToCast.audioCast);
         //play animation
         Pool<AbilityBase> temp;
         if (pools.TryGetValue(abilityToCast.type, out temp))

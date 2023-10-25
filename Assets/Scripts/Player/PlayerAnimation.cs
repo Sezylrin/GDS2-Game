@@ -33,6 +33,10 @@ public class PlayerAnimation : MonoBehaviour
             Moving();
             PlayFootStep();
         }
+        else
+        {
+            IdleMovement();
+        }
     }
     private void PlayFootStep()
     {
@@ -88,7 +92,7 @@ public class PlayerAnimation : MonoBehaviour
     }
     private void IdleMovement()
     {
-        lastDirection = CustomMath.GetDirection(Vector2.right, PCM.control.lastDirection);
+        lastDirection = CustomMath.GetDirection(Vector2.right, PCM.control.lastDirection, false);
 
         switch (lastDirection)
         {
@@ -96,16 +100,27 @@ public class PlayerAnimation : MonoBehaviour
                 anim.Play("IdleEast");
                 break;
             case 1:
-                anim.Play("IdleNorth");
+                anim.Play("PlayerIdleNorthEast");
                 break;
             case 2:
-                anim.Play("IdleWest");
+                anim.Play("IdleNorth");
                 break;
             case 3:
+                anim.Play("PlayerIdleNorthWest");
+                break;
+            case 4:
+                anim.Play("IdleWest");
+                break;
+            case 5:
+                anim.Play("PlayerIdleSouthWest");
+                break;
+            case 6:
                 anim.Play("IdleSouth");
                 break;
+            case 7:
+                anim.Play("PlayerIdleSouthEast");
+                break;
         }
-        lastDirection *= 2;
     }
     int lastDirection;
     private void HitStunned()
@@ -140,7 +155,6 @@ public class PlayerAnimation : MonoBehaviour
                 anim.Play("HitGoingS");
                 break;
             case 7:
-                Debug.Log("the one failing");
                 anim.Play("HitGoingSE");
                 break;
         }

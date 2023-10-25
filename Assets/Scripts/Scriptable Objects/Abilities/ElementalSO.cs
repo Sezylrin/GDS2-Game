@@ -38,7 +38,8 @@ public class ElementalSO : ScriptableObject
 
     public Sprite icon;
 
-
+    public AudioRef audioCast;
+    public AudioRef audioHit;
 }
 
 

@@ -12,27 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff4e45ad80ddcbb499ea1a635e9cbb92, type: 3}
   m_Name: SnakeSO
   m_EditorClassIdentifier: 
-  maxHealth: d0070000b80b0000a00f0000
+  maxHealth: e8030000dc050000c4090000
   speed:
   - 4
   - 5
   - 6
-  minSouls: 0a000000140000002d000000
-  maxSouls: 140000001e00000046000000
+  minSouls: 190000003c0000005f000000
+  maxSouls: 280000004600000069000000
   effectDuration: 5
   attackCooldown:
   - 4
   - 3
   - 2
-  attack1Damage: 140000001e00000028000000
+  attack1Damage: 0a0000000f00000014000000
   attack1Duration: 1
   windup1Duration: 1
   attackKnockback1: 6
-  attack2Damage: 0f0000001400000019000000
+  attack2Damage: 0a0000000f00000014000000
   attack2Duration: 1
   windup2Duration: 1
   attackKnockback2: 6
-  attack3Damage: 0a000000140000001e000000
+  attack3Damage: 050000000a0000000f000000
   attack3Duration: 8
   windup3Duration: 1
   attackKnockback3: 0

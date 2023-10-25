@@ -27,6 +27,8 @@ public class Cheetah : Enemy
     private Collider2D swipeHitbox;
     [SerializeField]
     private float multiSwipeDelay;
+    [SerializeField]
+    private Collider2D hitbox;
 
 
     protected override void Start()
@@ -92,14 +94,14 @@ public class Cheetah : Enemy
         Vector2 endPos = (Vector2)transform.position + (dir * swipeDistance);
         Vector2 startPos = transform.position;
         Vector2 dashDirection = endPos - startPos;
-        Vector2 size = ((CapsuleCollider2D)col2D).size;
+        Vector2 size = ((CapsuleCollider2D)hitbox).size;
         for (float timer = 0; timer < swipeDuration; timer += Time.deltaTime)
         {
 
             float ratio = (Time.time - startTime) / swipeDuration;
             //float cubic = Mathf.Sin((ratio * Mathf.PI) * 0.5f);
             Vector2 nextPosition = Vector2.Lerp(startPos, endPos, ratio);
-            if (Physics2D.CapsuleCast(transform.position, size, CapsuleDirection2D.Vertical, 0, dashDirection, Vector2.Distance(transform.position, nextPosition), TerrainLayers))
+            if (Physics2D.CircleCast(transform.position + (Vector3)col2D.offset, ((CircleCollider2D)col2D).radius, dashDirection, Vector2.Distance(transform.position, nextPosition), TerrainLayers))
             {
                 break;
             }
@@ -170,16 +172,16 @@ public class Cheetah : Enemy
     #region trigger
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!collision.isTrigger || !swipeHitbox.enabled)
+            return;
         PlayerSystem foundTarget;
         if (UtilityFunction.FindComponent(collision.transform, out foundTarget))
         {
-            Debug.Log("foundPlayer");
             if (foundTarget.GetState() == playerState.perfectDodge)
             {
                 Debug.Log("perfectDodge");
                 isSwiping = false;
                 InterruptAttack();
-                foundTarget.InstantRegenPoint();
                 foundTarget.Counter();
             }
             else

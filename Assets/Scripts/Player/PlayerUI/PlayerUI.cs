@@ -12,21 +12,17 @@ public class PlayerUI : MonoBehaviour
     [Header("Health UI")]
     [SerializeField]
     private Image greenHealth;
-    [Header("SkillPoints")]
-    [SerializeField]
-    private Transform skillPointHoriLayout;
-    [SerializeField]
-    private GameObject skillPointPrefab;
-    private List<SkillPointUI> skillPoints = new List<SkillPointUI>();
     [Header("Active SKills")]
     [SerializeField]
     private GameObject abilities;
     [SerializeField]
-    private TMP_Text QAbilityText;
+    private TMP_Text abilityText1;
     [SerializeField]
-    private TMP_Text EAbilityText;
+    private TMP_Text abilityText2;
     [SerializeField]
-    private TMP_Text shiftAbilityText;
+    private TMP_Text abilityText3;
+    [SerializeField]
+    private TMP_Text abilityText4;
     [Header("Souls UI")]
     [SerializeField]
     private TMP_Text soulsTxt;
@@ -50,51 +46,18 @@ public class PlayerUI : MonoBehaviour
         greenHealth.fillAmount = percentage;
     }
 
-    public void AddMoreSkillPoint()
+    
+    public void UpdateAbilityText(string AbilityOne, string AbilityTwo, string AbilityThree, string AbilityFour)
     {
-        skillPoints.Add(Instantiate(skillPointPrefab, skillPointHoriLayout).GetComponent<SkillPointUI>());
-    }
-
-    public void UpdateSKillPointUI(int availableSkillPoint)
-    {
-        for (int i = 0; i < skillPoints.Count; i++)
-        {
-            if (i < availableSkillPoint)
-            {
-                skillPoints[i].EnableSkillPoint();
-            }
-            else
-            {
-                skillPoints[i].DisableSkillPoint();
-            }
-        }
-    }
-
-    public void UpdateAbilityText(string AbilityOne, string AbilityTwo, string AbilityThree)
-    {
-        QAbilityText.text = AbilityOne;
-        EAbilityText.text = AbilityTwo;
-        shiftAbilityText.text = AbilityThree;
+        abilityText1.text = AbilityOne;
+        abilityText2.text = AbilityTwo;
+        abilityText3.text = AbilityThree;
+        abilityText4.text = AbilityFour;
     }
 
     public void UpdateSoulsText()
     {
         soulsTxt.text = GameManager.Instance.Souls.ToString();
-    }
-
-    public void UpdateConsumeBar(float fillAmount)
-    {
-        //consumeBarImage.fillAmount = fillAmount;
-        if (PCM.system.CanConsume())
-        {
-            //consumeBarImage.color = Color.red;
-        }
-    }
-
-    public void EmptyConsumeBar()
-    {
-        consumeBarImage.fillAmount = 0;
-        consumeBarImage.color = Color.yellow;
     }
 
     public void EnableAbilityUI()
