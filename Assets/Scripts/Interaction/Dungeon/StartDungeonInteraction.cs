@@ -8,5 +8,6 @@ public class StartDungeonInteraction : InteractionBase
     public override void Interact()
     {
         GameManager.Instance.LevelGenerator.EnterDoorCentre();
+        Destroy(this);
     }
 }
