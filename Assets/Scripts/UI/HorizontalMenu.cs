@@ -65,12 +65,12 @@ public class HorizontalMenu : Menu
 
     private void OnEnable()
     {
-        BookButton.OnButtonHovered += UpdateSelectedIndex;
+        //BookButton.OnButtonHovered += UpdateSelectedIndex;
     }
 
     private void OnDisable()
     {
-        BookButton.OnButtonHovered -= UpdateSelectedIndex;
+        //BookButton.OnButtonHovered -= UpdateSelectedIndex;
     }
 
     private void UpdateSelectedIndex(BookButton hoveredButton)

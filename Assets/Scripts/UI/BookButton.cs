@@ -12,7 +12,7 @@ public class BookButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private Button button;
 
     public delegate void ButtonHoveredHandler(BookButton hoveredButton);
-    public static event ButtonHoveredHandler OnButtonHovered;
+    //public static event ButtonHoveredHandler OnButtonHovered;
 
     private void Awake()
     {

@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class StartMenu : HorizontalMenu
 {
-    [SerializeField] private GameObject MenuContainer;
-
     public void Init()
     {
         OpenMenu();
@@ -14,23 +12,23 @@ public class StartMenu : HorizontalMenu
     public void StartGame()
     {
         GameManager.Instance.sceneLoader.Load(Scene.Hub);
-        GameManager.Instance.ActivateBookMenu();
+        GameManager.Instance.UIManager.EnableBookMenu();
         StartCoroutine(DeactivateMenuContainerAfterDelay());
     }
 
     private IEnumerator DeactivateMenuContainerAfterDelay()
     {
         yield return new WaitForSecondsRealtime(2.0f);
-        MenuContainer.SetActive(false);
+        GameManager.Instance.UIManager.CloseAll();
     }
 
     public void QuitGame()
     {
-        Application.Quit();
+        Application.Quit(); 
     }
 
     public void OpenSettings()
     {
-
+        gameObject.SetActive(false);
     }
 }
