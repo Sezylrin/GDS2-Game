@@ -6,9 +6,12 @@ public class Startup : MonoBehaviour
 {
     public Transform player;
     public PlayerComponentManager PCM;
+    private void Awake()
+    {
+        GameManager.Instance.SetPlayerTransform(player, PCM);
+    }
     void Start()
     {
         GameManager.Instance.UIManager.OpenStartMenu();
-        GameManager.Instance.SetPlayerTransform(player,PCM);
     }
 }
