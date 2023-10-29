@@ -22,8 +22,9 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public LevelGenerator LevelGenerator { get; private set; }
     [field: SerializeField] public AudioManager AudioManager { get; private set; }
     [field: SerializeField] public SkillTreeManager SkillTreeManager { get; private set; }
+    [field: SerializeField] public UIManager UIManager { get; private set; }
+   
     [field: SerializeField, HideOnPlay(true)] public Transform PlayerTransform { get; private set; }
-    [field: SerializeField] public BookMenu BookMenu{ get; private set; }
     [field: SerializeField] public StatsManager StatsManager { get; private set; }
     [field: SerializeField] private GameObject BookMenuObj;
     [field: SerializeField] public TileSwapper TileSwapper { get; private set; }
@@ -82,29 +83,6 @@ public class GameManager : MonoBehaviour
         PlayerTransform = player;
         this.PCM = PCM;
     }
-
-    #region Sounds
-    public void PlayOpenMenuSound()
-    {
-        AudioManager.PlaySound(AudioRef.OpenMenu);
-    }
-
-    public void PlayCloseMenuSound()
-    {
-        AudioManager.PlaySound(AudioRef.CloseMenu);
-    }
-
-    public void ActivateBookMenu()
-    {
-        BookMenuObj.SetActive(true);
-        BookMenu.IsSeparateMenu = false;
-    }
-
-    public void DeactivateBookMenu()
-    {
-        BookMenuObj.SetActive(false);
-    }
-    #endregion
 
     #region Souls
     public int Souls { get; private set; }
