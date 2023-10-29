@@ -30,9 +30,12 @@ public class BookButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         StopHoverAnimation();
     }
 
-    public void HandleClick()
+    public void HandleClick(bool PlaySound = true)
     {
-        GameManager.Instance.AudioManager.PlaySound(AudioRef.buttonPress);
+        if (PlaySound)
+        {
+            GameManager.Instance.AudioManager.PlaySound(AudioRef.buttonPress);
+        }
         StopHoverAnimation();
         button.onClick.Invoke();
     }

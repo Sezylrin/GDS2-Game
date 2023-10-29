@@ -45,30 +45,40 @@ public class UIManager : MonoBehaviour
     #region Interactions
     public void Return(InputAction.CallbackContext context)
     {
+        if (!activeMenu) return;
+
         Menu menu = activeMenu.GetComponent<Menu>();
         menu.Return();
     }
 
     public void Interact(InputAction.CallbackContext context)
     {
+        if (!activeMenu) return;
+
         Menu menu = activeMenu.GetComponent<Menu>();
         menu.Interact();
     }
 
     public void Navigate(InputAction.CallbackContext context)
     {
+        if (!activeMenu) return;
+
         Menu menu = activeMenu.GetComponent<Menu>();
         menu.Navigate(context);
     }
 
     public void ToggleSkills(InputAction.CallbackContext context)
     {
+        if (!activeMenu) return;
+
         Menu menu = activeMenu.GetComponent<Menu>();
         menu.ToggleSkills();
     }
 
     public void ToggleOpenMenu(InputAction.CallbackContext context)
     {
+        if (!GetBookMenu().IsInGame) return;
+
         Menu menu = activeMenu.GetComponent<Menu>();
         menu.ToggleOpenMenu();
     }
