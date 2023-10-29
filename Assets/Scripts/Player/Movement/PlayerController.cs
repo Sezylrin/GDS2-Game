@@ -182,6 +182,7 @@ public class PlayerController : MonoBehaviour
         currentDashCharges = dashCharges;
         drag = rb.drag;
         initialLayer = circCol2D.excludeLayers;
+        GameManager.Instance.SetCameraTrack(CameraFollowPoint);
         //GameManager.Instance.OnControlSchemeSwitch += SchemeChange;
     }
     #region Updates

@@ -129,6 +129,7 @@ public class Abilities : MonoBehaviour
         {
             
             AbilityBase ability = temp.GetPooledObj(out bool initial);
+            GameManager.Instance.EnemyManager.UpdateAttacksList(abilityToCast.elementType);
             if (initial)
             {
                 ability.init();

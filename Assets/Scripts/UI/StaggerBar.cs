@@ -113,7 +113,8 @@ public class StaggerBar : MonoBehaviour
     {
         if (!Staggered && StaggerTimers.IsTimeZero((int)StaggerTimer.delayBetweenStagger))
         {
-            Bar = Mathf.Clamp(Bar + staggerPoints, 0, PointsToStagger);          UpdateFillPercent(Bar / PointsToStagger);
+            Bar = Mathf.Clamp(Bar + staggerPoints, 0, PointsToStagger);
+            UpdateFillPercent(Bar / PointsToStagger);
 
             StartDelayedStaggerDecay();
 
