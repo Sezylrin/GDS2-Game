@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 653781078}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.43, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -321,7 +321,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5393515603043086089}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.048, y: 0.22553396, z: 0.019240111}
+  m_LocalPosition: {x: -0.57, y: 0.18, z: 0.019240111}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -972,16 +972,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 89582216222627071, guid: 72245cc30d839734d98d515225c31589, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 2.4258
+      value: 2.4255
       objectReference: {fileID: 0}
     - target: {fileID: 89582216222627071, guid: 72245cc30d839734d98d515225c31589, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.002
+      value: -0.0041
       objectReference: {fileID: 0}
-    - target: {fileID: 1493530621412628023, guid: 72245cc30d839734d98d515225c31589, type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 2100000, guid: 641d32eafc8b55047b45ccb519433489, type: 2}
     - target: {fileID: 5863420622790131762, guid: 72245cc30d839734d98d515225c31589, type: 3}
       propertyPath: m_Name
       value: Stagger Bar
@@ -1075,7 +1071,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -4165347194730273926}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5653138598990206209, guid: 72245cc30d839734d98d515225c31589, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72245cc30d839734d98d515225c31589, type: 3}

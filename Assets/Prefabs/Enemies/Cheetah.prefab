@@ -1194,16 +1194,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 89582216222627071, guid: 72245cc30d839734d98d515225c31589, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 2.2426
+      value: 2.25
       objectReference: {fileID: 0}
     - target: {fileID: 89582216222627071, guid: 72245cc30d839734d98d515225c31589, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0018
+      value: -0.0037
       objectReference: {fileID: 0}
-    - target: {fileID: 1493530621412628023, guid: 72245cc30d839734d98d515225c31589, type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 2100000, guid: 641d32eafc8b55047b45ccb519433489, type: 2}
     - target: {fileID: 5863420622790131762, guid: 72245cc30d839734d98d515225c31589, type: 3}
       propertyPath: m_Name
       value: Stagger Bar
@@ -1297,7 +1293,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3200451849759215230}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5653138598990206209, guid: 72245cc30d839734d98d515225c31589, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72245cc30d839734d98d515225c31589, type: 3}
