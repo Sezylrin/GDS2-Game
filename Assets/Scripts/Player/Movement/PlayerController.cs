@@ -126,13 +126,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private LineRenderer lineRend;
 
-    [Header("Debug Values")]
+    [field: Header("Debug Values")]
 
-    [SerializeField, ReadOnly]
-    private Vector2 direction;
+    [field: SerializeField, ReadOnly]
+    public Vector2 direction { get; private set; }
     [field: SerializeField, ReadOnly]
     public Vector2 lastDirection { get; private set; }
-    [field: SerializeField] [field: ReadOnly]
+    [field: SerializeField, ReadOnly]
     public playerState CurrentState { get; private set; }
     [SerializeField] [ReadOnly]
     private actionState bufferedState;
