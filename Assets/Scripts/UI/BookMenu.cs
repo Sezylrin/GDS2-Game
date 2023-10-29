@@ -53,6 +53,15 @@ public class BookMenu : Menu
         }
     }
 
+    public void CloseMenu()
+    {
+        IsOpen = false;
+        DisableAll();
+        activeMenu = null;
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.CloseMenu);
+        Time.timeScale = 1.0f;
+    }
+
     public void OpenSettingsMenu()
     {
         if (activeMenu) activeMenu.SetActive(false);
