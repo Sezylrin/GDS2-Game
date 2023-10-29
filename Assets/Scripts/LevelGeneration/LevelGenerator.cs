@@ -140,16 +140,16 @@ public class LevelGenerator : MonoBehaviour
 
     IEnumerator LoadLevel(string scenePath)
     {
-        GameManager.Instance.sceneLoader.CrossFadeAnimator.SetTrigger("Start");
-
-        yield return new WaitForSeconds(GameManager.Instance.sceneLoader.CrossFadeTime);
+        GameManager.Instance.sceneLoader.CrossFadeAnimator.Play("Start");
+        while (!GameManager.Instance.sceneLoader.isFade)
+            yield return null;
 
         SceneManager.LoadScene(scenePath);
     }
 
     public void TriggerCrossFadeEnd()
     {
-        GameManager.Instance.sceneLoader.CrossFadeAnimator.SetTrigger("End");
+        GameManager.Instance.sceneLoader.CrossFadeAnimator.Play("End");
     }
 
     private void DebugLoadLevelX(int x)

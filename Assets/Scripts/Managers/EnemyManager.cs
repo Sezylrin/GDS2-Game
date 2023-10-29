@@ -463,6 +463,11 @@ public class EnemyManager : MonoBehaviour
         {
             enemy.OnDeath(true);
         }
+        if (Level.Instance)
+        {
+            Level.Instance.ClearLevel();
+        }
+        CurrentAttackers = 0;
         enemyList.Clear();
         ActiveEnemiesCount = 0;
     }

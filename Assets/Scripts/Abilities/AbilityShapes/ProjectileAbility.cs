@@ -11,7 +11,7 @@ public class ProjectileAbility : AbilityBase
     private ProjectileVariantSO selected;
 
     [SerializeField]
-    private SpriteRenderer rend;
+    private Transform sprite;
 
     [SerializeField]
     private Rigidbody2D rb;
@@ -30,13 +30,14 @@ public class ProjectileAbility : AbilityBase
     {
         selected = selectedAbility as ProjectileVariantSO;
         LaunchTowardsTarget();
-        rend.color = selected.color.color;
+        base.CastAbility();
     }
 
     private void LaunchTowardsTarget()
     {
         transform.position = initialPos;
         rb.velocity = direction.normalized * selected.speed;
+        sprite.rotation = CustomMath.LookAt2D(direction);
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)
