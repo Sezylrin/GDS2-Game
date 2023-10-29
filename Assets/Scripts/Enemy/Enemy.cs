@@ -8,6 +8,7 @@ using Pathfinding;
 using System.Threading;
 using TMPro;
 using Random = UnityEngine.Random;
+using DG.Tweening;
 
 #region EnemyType Enum
 public enum EnemyType
@@ -112,6 +113,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     protected bool hitTarget = false;
     [SerializeField]
     protected float collisionDisabledDur;
+    [Header("EffectImage")]
+    [SerializeField]
+    protected Image effectImage;
+    [SerializeField]
+    protected Sprite[] elementSprites = new Sprite[4];
+    
     #endregion
 
     #region Combo Interface Variables
@@ -218,6 +225,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         EnemyTimers.ResetToZero();
 
         StaggerBar.ResetStagger();
+        effectImage.enabled = false;
+        comboText.text = "";
     }
 
     public virtual void SetStatsFromScriptableObject()
@@ -592,7 +601,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         hitTarget = false;
     }
 
-    protected virtual void InterruptAttack()
+    public virtual void InterruptAttack()
     {
         EnemyTimers.ResetSpecificToZero((int)EnemyTimer.windupDurationTimer);
         EnemyTimers.ResetSpecificToZero((int)EnemyTimer.attackDurationTimer);
@@ -639,17 +648,34 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         hitTarget = true;
     }
     #endregion
-
+    
     #region Element Functions
     protected virtual void ApplyElementEffect(ElementType type)
     {
         EnemyTimers.SetTime((int)EnemyTimer.effectedTimer, EffectDuration);
         ActiveElementEffect = type;
+        effectImage.enabled = true;
+        switch ((int)type)
+        {
+            case (int)ElementType.fire:
+                effectImage.sprite = elementSprites[0];
+                break;
+            case (int)ElementType.water:
+                effectImage.sprite = elementSprites[1];
+                break;
+            case (int)ElementType.electric:
+                effectImage.sprite = elementSprites[2];
+                break;
+            case (int)ElementType.wind:
+                effectImage.sprite = elementSprites[3];
+                break;
+        }
     }
 
     protected virtual void RemoveElementEffect(object sender, EventArgs e)
     {
         ActiveElementEffect = ElementType.noElement;
+        effectImage.enabled = false;
     }
 
     protected virtual void SetElementOutline()

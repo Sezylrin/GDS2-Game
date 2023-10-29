@@ -35,7 +35,7 @@ public class AreaAbility : AbilityBase
         transform.position = initialPos;
         SpawnAoeEffect();
         //polish
-        rend.color = selected.color.color;
+        base.CastAbility();
     }
 
     private void SpawnAoeEffect()
@@ -47,7 +47,6 @@ public class AreaAbility : AbilityBase
         else
         {
             col2D.radius = selected.radius;
-            AOETr.localScale = new Vector3(selected.radius, selected.radius, selected.radius) * 2;
         }
     }
 
@@ -62,7 +61,6 @@ public class AreaAbility : AbilityBase
             if (timer + Time.deltaTime >= selected.growthSpeed)
                 col2D.radius = endRadius;
             float radius = col2D.radius;
-            AOETr.localScale = new Vector3(radius, radius, radius) * 2;
             yield return null;
         }
         StopExpand();
