@@ -855,11 +855,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     }
 
     [Header("AI")]
-    [SerializeField, Range(1,10)] protected int IdleRadius;
-    [SerializeField, Range(1,10)] protected float RepositionPointMin;
-    [SerializeField, Range(1,10)] protected float RepositionPointMax;
-    [SerializeField] protected float IdleMoveRateMin;
-    [SerializeField] protected float IdleMoveRateMax;
+    [SerializeField, Range(1,10), Tooltip("How much randomness is applied to final calculated position")] protected int deviateRange;
+    [SerializeField, Range(1,10), Tooltip("How close the enemy can get to the player when repositioning")] protected float RepositionPointMin;
+    [SerializeField, Range(1,10), Tooltip("How far the enemy can get to the player when repositioning")] protected float RepositionPointMax;
+    [SerializeField, Range(1,10), Tooltip("Minimum Time before enemy can do something after a repositon")] protected float InactionTimerMin = 0;
+    [SerializeField, Range(1,10), Tooltip("Maximum Time before enemy can do something after a repositon")] protected float InactionTimerMax = 1;
+    
     [SerializeField][ReadOnly]
     protected EnemyState currentState;
     [SerializeField][ReadOnly]
@@ -888,8 +889,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
             }
             else
             {
-                float x = Random.Range(-IdleRadius, IdleRadius);
-                float y = Random.Range(-IdleRadius, IdleRadius);
+                float x = Random.Range(-deviateRange, deviateRange);
+                float y = Random.Range(-deviateRange, deviateRange);
                 randDeviate = new Vector2(x, y);
                 currentState = EnemyState.repositioning;
                 repositionRange = Random.Range(RepositionPointMin, RepositionPointMax);
@@ -908,48 +909,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
                 break;
         }
     }
-    protected virtual void EnemyAi()
-    {
-        if (debugDisableAI) return;
-        if (IsStunned || Staggered) return;
-        if (currentState == EnemyState.chasing)
-        {
-            DetermineAttackPathing();
-            return;
-        }
-        if (!(EnemyTimers.IsTimeZero((int)EnemyTimer.aiActionTimer) && !hasDestination))
-            return;
-        if (targetTr == null)
-            return;
-        if (currentState == EnemyState.stationary)
-        {
-            if (AbleToAttack && Manager.CanAttack())
-            {
-                isAttacking = true;
-                CurrentAttack = ChooseAttack();
-                currentState = EnemyState.chasing;
-            }
-            else
-            {
-                currentState = EnemyState.repositioning;
-            }
-        }
-
-        switch ((int)currentState)
-        {
-            case (int)EnemyState.idle:
-                IdlePathPicker();
-                break;
-            case (int)EnemyState.repositioning:
-                RepositionPicker();
-                break;
-        }
-
-        if(currentState == EnemyState.attacking)
-        {
-            currentState = EnemyState.stationary;
-        }
-    }
+    
     //call in child class to determine pathing choice
     protected virtual void DetermineAttackPathing()
     {
@@ -964,8 +924,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
 
     protected virtual void IdlePathPicker()
     {
-        float x = Random.Range(-IdleRadius, IdleRadius);
-        float y = Random.Range(-IdleRadius, IdleRadius);
+        float x = Random.Range(-deviateRange, deviateRange);
+        float y = Random.Range(-deviateRange, deviateRange);
         SetDestination(new Vector3(x,y,0) + transform.position);
     }
 
@@ -1002,10 +962,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         StopPathing();
         float timeToAdd = 0;
         switch ((int)currentState)
-        {
-            case (int)EnemyState.idle:
-                timeToAdd = Random.Range(IdleMoveRateMin, IdleMoveRateMax);
-                break;
+        {            
             case (int)EnemyState.chasing:
                 Attack();
                 currentState = EnemyState.attacking;
@@ -1023,7 +980,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
                 }
                 break;
             case (int)EnemyState.repositioning:
-                timeToAdd = Random.Range(1, 2f);
+                timeToAdd = Random.Range(InactionTimerMin, InactionTimerMax);
                 currentState = EnemyState.stationary;
                 break;
         }
