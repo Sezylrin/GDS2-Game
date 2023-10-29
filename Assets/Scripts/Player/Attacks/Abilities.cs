@@ -113,7 +113,11 @@ public class Abilities : MonoBehaviour
         abilityToCast = selected;
         PCM.control.RemoveBufferInput();
         PCM.control.StartAbility(selected.castStartSpeed);
+        castDir = abilitySpawnPoint.position - transform.position;
+        castType = selected.type;
     }
+    public Vector2 castDir { get; private set; }
+    public AbilityType castType { get; private set; }
     public void CastAbility(out float castDur)
     {
         lastUsed = abilityToCast;
@@ -135,14 +139,9 @@ public class Abilities : MonoBehaviour
             }            
             else
             {
-                Vector3 dir;
-                if (abilityToCast.type.Equals(AbilityType.dash))
-                    dir = PCM.control.lastDirection;
-                else
-                    dir = abilitySpawnPoint.position - transform.position;
                 if (abilityToCast.type.Equals(AbilityType.blast))
-                    PCM.system.AddForce(dir.normalized * 13);
-                ability.SetSelectedAbility(abilityToCast, abilitySpawnPoint.position, dir, transform);
+                    PCM.system.AddForce(castDir.normalized * 13);
+                ability.SetSelectedAbility(abilityToCast, abilitySpawnPoint.position, castDir, transform);
             }
         }
     }

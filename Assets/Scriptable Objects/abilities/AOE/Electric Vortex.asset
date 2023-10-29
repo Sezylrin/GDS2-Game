@@ -17,14 +17,16 @@ MonoBehaviour:
   type: 1
   castCost: 2
   castStartSpeed: 0.2
-  castDuration: 0.3
+  castDuration: 0.5
   pierceAmount: 99
   damage: 48
   knockback: 3
   Stagger: 25
   consumePoints: 5
-  lifeTime: 0.4
+  lifeTime: 0.5
   description: Electric based AOE attack
   icon: {fileID: 21300000, guid: 05b99824441986b489fa74f58bd0be96, type: 3}
-  radius: 2.5
-  growthSpeed: 0.1
+  audioCast: 5
+  audioHit: 6
+  radius: 3
+  growthSpeed: 0.02
