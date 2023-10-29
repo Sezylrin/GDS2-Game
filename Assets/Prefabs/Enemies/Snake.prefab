@@ -240,7 +240,7 @@ Transform:
   - {fileID: 1731773416687217357}
   - {fileID: 1752878505782548790}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &1752878506409264273
 CircleCollider2D:
@@ -416,7 +416,7 @@ MonoBehaviour:
   - 0
   - 78
   - 144
-  staggerBonusDamage: 3
+  staggerBonusDamage: 2
   elementResistAmount: 0.8
   baseArmour: 1
   IdleRadius: 1

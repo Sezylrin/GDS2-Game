@@ -3,23 +3,24 @@ using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.InputSystem;
 
-public class BookMenu : MonoBehaviour
+public class BookMenu : Menu
 {
     [SerializeField] private GameObject MainMenu;
     [SerializeField] private GameObject Settings;
     [SerializeField] public GameObject SkillSwitch;
     [SerializeField] private GameObject SkillTree;
 
-    [SerializeField] public StartMenu StartMenu;
-
     private GameObject activeMenu;
     public bool IsOpen = false;
-    public bool IsSeparateMenu = false;
+    public bool IsInGame = false;
 
     #region Interactions
-    public void ToggleOpenMenu(InputAction.CallbackContext context)
+    public override void ToggleOpenMenu()
     {
-        ToggleMenu();
+        if (IsInGame)
+        {
+            ToggleMenu();
+        }
     }
 
     public void DisableAll()
@@ -28,12 +29,6 @@ public class BookMenu : MonoBehaviour
         Settings.SetActive(false);
         SkillSwitch.SetActive(false);
         SkillTree.SetActive(false);
-    }
-
-    public void StartMenuInit()
-    {
-        StartMenu.Init();
-        IsSeparateMenu = true;
     }
 
     public void ToggleMenu()
@@ -48,6 +43,7 @@ public class BookMenu : MonoBehaviour
         }
         else
         {
+            GameManager.Instance.UIManager.OpenBookMenu();
             IsOpen = true;
             MainMenu.SetActive(true);
             activeMenu = MainMenu;
@@ -55,6 +51,14 @@ public class BookMenu : MonoBehaviour
             GameManager.Instance.AudioManager.PlaySound(AudioRef.OpenMenu);
             Time.timeScale = 0;
         }
+    }
+
+    public void OpenSettingsMenu()
+    {
+        if (activeMenu) activeMenu.SetActive(false);
+        Settings.SetActive(true);
+        activeMenu = Settings;
+        activeMenu.GetComponent<Menu>().OpenMenu();
     }
 
     public void OpenSkillSwitch()
@@ -73,43 +77,31 @@ public class BookMenu : MonoBehaviour
         activeMenu = MainMenu;
     }
 
-    public void Return(InputAction.CallbackContext context)
+    public override void Return()
     {
-        if (IsSeparateMenu)
-        {
-            StartMenu.Return();
-        }
         if (!IsOpen) return;
 
         Menu menu = activeMenu.GetComponent<Menu>();
         menu.Return();
     }
 
-    public void Interact(InputAction.CallbackContext context)
+    public override void Interact()
     {
-        if (IsSeparateMenu)
-        {
-            StartMenu.Interact();
-        }
         if (!IsOpen) return;
 
         Menu menu = activeMenu.GetComponent<Menu>();
         menu.Interact();
     }
 
-    public void Navigate(InputAction.CallbackContext context)
+    public override void Navigate(InputAction.CallbackContext context)
     {
-        if (IsSeparateMenu)
-        {
-            StartMenu.Navigate(context);
-        }
         if (!IsOpen) return;
         
         Menu menu = activeMenu.GetComponent<Menu>();
         menu.Navigate(context);
     }
 
-    public void ToggleSkills(InputAction.CallbackContext context)
+    public override void ToggleSkills()
     {
         if (!IsOpen) return;
 
