@@ -68,6 +68,16 @@ public class GameManager : MonoBehaviour
     {
         ConsumeTimers = TimerManager.GenerateTimers(typeof(ConsumeTimer), gameObject);
         ConsumeTimers.times[(int)ConsumeTimer.consumeDelay].OnTimeIsZero += EndConsumeDelay;
+        if (!PlayerTransform)
+        {
+            GameObject temp = GameObject.FindWithTag(Tags.T_Player);
+            if (temp)
+            {
+                PCM = temp.GetComponent<PlayerComponentManager>();
+                PlayerTransform = temp.transform;
+            }
+
+        }
     }
 
     //Temporary for now, remove when we have a proper way to open skillSwitchManager
