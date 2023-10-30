@@ -129,6 +129,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     public bool IsStunned { get; set; }
     [SerializeField]
     protected TMP_Text comboText;
+
+    protected EnemyAnimation enemyAnimation;
     #endregion
 
     #region Shader
@@ -183,8 +185,19 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     }
     protected virtual void Start()
     {
+        if (!initiallySpawned)
+        {
+            InitialSpawn();
+            Init();
+        }
+    }
+    private bool initiallySpawned = false;
+    public void InitialSpawn()
+    {
+        initiallySpawned = true;
         ComboManager = GameManager.Instance.ComboManager;
         Manager = GameManager.Instance.EnemyManager;
+        enemyAnimation = GetComponentInChildren<EnemyAnimation>();
 
         if (debugEnemySpawn) Manager.DebugAddEnemy(this);
 
@@ -194,8 +207,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         Speed = path.maxSpeed;
 
         ActiveElementEffect = ElementType.noElement;
-
-        Init();
 
         defaultLayer = col2D.excludeLayers;
     }
@@ -218,7 +229,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         Consumable = false;
         ElementTier = 1;
         currentState = EnemyState.stationary;
-
+        EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, 1f);
         targetTr = GameManager.Instance.PlayerTransform;
         TargetLayer = PlayerLayer;
 
@@ -714,20 +725,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
 
     #region Combo Functions
 
-    public void ComboAttack(ComboSO combo, ElementType typeOne, ElementType typeTwo, Color textColour)
+    public void ComboAttack(ComboSO comboSO, ElementType typeOne, ElementType typeTwo, Combos combo)
     {
-        TakeDamage(combo.BaseDamage, combo.StaggerDamage, typeOne, typeTwo);
-        comboText.text = combo.name;
-        comboText.color = textColour;
-        if (gameObject.activeInHierarchy)
-            StartCoroutine(RemoveText(combo.name));
-    }
-
-    private IEnumerator RemoveText(string textToRemove)
-    {
-        yield return new WaitForSeconds(2.5f);
-        if (comboText.text.Equals(textToRemove))
-            comboText.text = "";
+        TakeDamage(comboSO.BaseDamage, comboSO.StaggerDamage, typeOne, typeTwo);
+        enemyAnimation.PlayComboAnimation(combo);
     }
 
     public IEnumerator StunTarget(float dur)
@@ -736,7 +737,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         StopPathing();
         InterruptAttack();
         yield return new WaitForSeconds(dur);
-
+        enemyAnimation.StopShockAnim();
         IsStunned = false;
     }
 

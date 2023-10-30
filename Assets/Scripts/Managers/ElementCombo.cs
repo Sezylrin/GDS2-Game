@@ -15,18 +15,18 @@ public enum ElementType
     //poison = 1<<4,
     //nature = 1<<5
 }
-
+public enum Combos
+{
+    fireSurge = ElementType.fire | ElementType.electric,
+    steamExplosion = ElementType.fire | ElementType.water,
+    fireTornado = ElementType.fire | ElementType.wind,
+    shock = ElementType.electric | ElementType.water,
+    zap = ElementType.electric | ElementType.wind,
+    blizzard = ElementType.water | ElementType.wind
+}
 public class ElementCombo : MonoBehaviour
 {    
-    private enum Combos
-    {
-        fireSurge = ElementType.fire | ElementType.electric,
-        steamExplosion = ElementType.fire | ElementType.water,
-        fireTornado = ElementType.fire | ElementType.wind,
-        shock = ElementType.electric | ElementType.water,
-        zap = ElementType.electric | ElementType.wind,
-        blizzard = ElementType.water | ElementType.wind
-    }
+    
     [SerializeField, ReadOnly]
     private Combos attemptedCombo;
     public ElementType ElementOne;
@@ -64,16 +64,16 @@ public class ElementCombo : MonoBehaviour
         switch ((int)attemptedCombo)
         {
             case (int)Combos.fireSurge:
-                enemy.ComboAttack(combo, elementOne, elementTwo, Color.red);
+                enemy.ComboAttack(combo, elementOne, elementTwo, Combos.fireSurge);
                 break;
             case (int)Combos.steamExplosion:
-                enemy.ComboAttack(combo, elementOne, elementTwo, Color.white);
+                enemy.ComboAttack(combo, elementOne, elementTwo, Combos.steamExplosion);
                 break;
             case (int)Combos.zap:
-                enemy.ComboAttack(combo, elementOne, elementTwo, Color.magenta);
+                enemy.ComboAttack(combo, elementOne, elementTwo, Combos.zap);
                 break;
             case (int)Combos.shock:
-                enemy.ComboAttack(combo, elementOne, elementTwo, Color.yellow);
+                enemy.ComboAttack(combo, elementOne, elementTwo, Combos.shock);
                 ShockSO shock = combo as ShockSO;
                 StartCoroutine(enemy.StunTarget(shock.duration));
                 break;

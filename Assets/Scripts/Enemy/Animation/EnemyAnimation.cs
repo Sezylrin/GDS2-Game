@@ -21,6 +21,10 @@ public class EnemyAnimation : MonoBehaviour
     [SerializeField]
     protected SpriteRenderer rend;
     [SerializeField]
+    protected SpriteRenderer comboRend;
+    [SerializeField]
+    protected Animator comboAnim;
+    [SerializeField]
     protected Enemy enemy;
     [SerializeField, SerializedDictionary("Animation,String")]
     protected SerializedDictionary<AnimationMovements, string> clips;
@@ -39,9 +43,16 @@ public class EnemyAnimation : MonoBehaviour
         if (GameManager.Instance.PlayerTransform)
         {
             if (GameManager.Instance.PlayerTransform.position.y > transform.position.y)
+            {
                 rend.sortingOrder = 30;
+                comboRend.sortingOrder = 31;
+            }
             else
+            {
                 rend.sortingOrder = 10;
+                comboRend.sortingOrder = 11;
+            }
+                
         }
     }
 
@@ -103,5 +114,15 @@ public class EnemyAnimation : MonoBehaviour
                 anim.Play(clips[AnimationMovements.idleD]);
                 break;
         }
+    }
+
+    public void PlayComboAnimation(Combos comboToPlay)
+    {
+        comboAnim.Play(comboToPlay.ToString());
+    }
+
+    public void StopShockAnim()
+    {
+        comboAnim.Play("Nothing");
     }
 }
