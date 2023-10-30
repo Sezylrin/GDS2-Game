@@ -417,34 +417,33 @@ public class EnemyManager : MonoBehaviour
         switch (type)
         {
             case EnemyType.Rhino:
-                temp = rhinoPool.GetPooledObj();
-                temp.Init(spawnLocation, enemyElement, tier);
-                enemyList.Add(temp);
+                SpawnEnemy(rhinoPool, out temp, spawnLocation, enemyElement, tier);
                 break;
             case EnemyType.Snake:
-                temp = snakePool.GetPooledObj();
-                temp.Init(spawnLocation, enemyElement, tier);
-                enemyList.Add(temp);
+                SpawnEnemy(snakePool, out temp, spawnLocation, enemyElement, tier);
                 break;
             case EnemyType.Cheetah:
-                temp = cheetahPool.GetPooledObj();
-                temp.Init(spawnLocation, enemyElement, tier);
-                enemyList.Add(temp);
+                SpawnEnemy(cheetahPool, out temp, spawnLocation, enemyElement, tier);
                 break;
             case EnemyType.Lizard:
-                temp = lizardPool.GetPooledObj();
-                temp.Init(spawnLocation, enemyElement, tier);
-                enemyList.Add(temp);
+                SpawnEnemy(lizardPool, out temp, spawnLocation, enemyElement, tier);
                 break;
             default:
-                temp = rhinoPool.GetPooledObj();
-                temp.Init(spawnLocation, enemyElement, tier);
-                enemyList.Add(temp);
+                SpawnEnemy(rhinoPool, out temp, spawnLocation, enemyElement, tier);
                 break;
         }
         temp.ChangeState();
         ActiveEnemiesCount++;
         RecalculateMaxAttackers();
+    }
+
+    private void SpawnEnemy(Pool<Enemy> enemyPool, out Enemy enemy, Vector2 spawnLocation, ElementType element, int tier)
+    {
+        enemy = enemyPool.GetPooledObj(out bool initial);
+        if (initial)
+            enemy.InitialSpawn();
+        enemy.Init(spawnLocation, element, tier);
+        enemyList.Add(enemy);
     }
     #endregion
 
