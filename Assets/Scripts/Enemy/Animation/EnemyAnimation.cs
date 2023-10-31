@@ -5,17 +5,6 @@ using AYellowpaper.SerializedCollections;
 
 public class EnemyAnimation : MonoBehaviour
 {
-    public enum AnimationMovements
-    {
-        idleR,
-        idleL,
-        idleU,
-        idleD,
-        walkR,
-        walkL,
-        walkU,
-        walkD
-    }
     [SerializeField]
     protected Animator anim;
     [SerializeField]
@@ -27,7 +16,6 @@ public class EnemyAnimation : MonoBehaviour
     [SerializeField]
     protected Enemy enemy;
     [SerializeField, SerializedDictionary("Animation,String")]
-    protected SerializedDictionary<AnimationMovements, string> clips;
     public int lastDir { get; private set; } = 0;
     // Start is called before the first frame update
     // Update is called once per frame
@@ -79,41 +67,15 @@ public class EnemyAnimation : MonoBehaviour
     }
     private void WalkAnimation(int direction)
     {
-        switch (direction)
-        {
-            case 0:
-                anim.Play(clips[AnimationMovements.walkR]);
-                break;
-            case 1:
-                anim.Play(clips[AnimationMovements.walkU]);
-                break;
-            case 2:
-                anim.Play(clips[AnimationMovements.walkL]);
-                break;
-            case 3:
-                anim.Play(clips[AnimationMovements.walkD]);
-                break;
-        }
+        anim.SetFloat("Walk", (float)direction / 4f);
+        anim.Play("Walk");
         lastDir = direction;
     }
 
     private void IdleAnimation(int direction)
     {
-        switch (direction)
-        {
-            case 0:
-                anim.Play(clips[AnimationMovements.idleR]);
-                break;
-            case 1:
-                anim.Play(clips[AnimationMovements.idleU]);
-                break;
-            case 2:
-                anim.Play(clips[AnimationMovements.idleL]);
-                break;
-            case 3:
-                anim.Play(clips[AnimationMovements.idleD]);
-                break;
-        }
+        anim.SetFloat("Idle", (float)direction / 4f);
+        anim.Play("Idle");
     }
 
     public void PlayComboAnimation(Combos comboToPlay)
