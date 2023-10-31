@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ec8192177f5813f42942ed829eb66d9b
+guid: bd7e70f56e0947f47910fd650f8cddb7
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -107,13 +107,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PunchEastSheet_0
+      name: PunchEashSheet_0
       rect:
         serializedVersion: 2
-        x: 23
-        y: 23
-        width: 18
-        height: 33
+        x: 0
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -121,20 +121,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4c789728153ef3c4b9df03515d6dbfb3
-      internalID: 302286055
+      spriteID: 4268d428b7ba2f54ea550de8aaca8546
+      internalID: -110919357
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PunchEastSheet_1
+      name: PunchEashSheet_1
       rect:
         serializedVersion: 2
-        x: 103
-        y: 23
-        width: 37
-        height: 32
+        x: 65
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -142,20 +142,41 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c0c1932b6a1d477419d3d70011f61767
-      internalID: -1233139306
+      spriteID: 9b3a38d9ada362a4e8885b268be6c046
+      internalID: -377715679
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PunchEastSheet_2
+      name: PunchEashSheet_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba88141408fc07c4f99807ff6c88fab8
+      internalID: 1067293194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PunchEashSheet_3
       rect:
         serializedVersion: 2
         x: 192
-        y: 23
-        width: 28
-        height: 32
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -163,29 +184,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: af63bcb867bd74945a52e66bb770b0aa
-      internalID: 469128934
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: PunchEastSheet_3
-      rect:
-        serializedVersion: 2
-        x: 272
-        y: 23
-        width: 28
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ae33489a2d3ae414db8faaf3522f9b6d
-      internalID: 158923724
+      spriteID: a8a2a4c87b7b7dc45a55127076254342
+      internalID: -554580125
       vertices: []
       indices: 
       edges: []
@@ -201,10 +201,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      PunchEastSheet_0: 302286055
-      PunchEastSheet_1: -1233139306
-      PunchEastSheet_2: 469128934
-      PunchEastSheet_3: 158923724
+      PunchEashSheet_0: -110919357
+      PunchEashSheet_1: -377715679
+      PunchEashSheet_2: 1067293194
+      PunchEashSheet_3: -554580125
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
