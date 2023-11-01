@@ -36,11 +36,7 @@ public class BookMenu : Menu
     {
         if (IsOpen)
         {
-            IsOpen = false;
-            DisableAll();
-            activeMenu = null;
-            GameManager.Instance.AudioManager.PlaySound(AudioRef.CloseMenu);
-            Time.timeScale = 1.0f;
+            CloseMenu();
         }
         else
         {
@@ -59,12 +55,6 @@ public class BookMenu : Menu
         GameManager.Instance.sceneLoader.Load(Scene.MainMenu, false);
         IsInGame = false;
         GameManager.Instance.UIManager.CloseAll();
-    }
-
-    private IEnumerator CloseMenuAfterDelay()
-    {
-        yield return new WaitForSecondsRealtime(2.0f);
-       
     }
 
     public void CloseMenu()
