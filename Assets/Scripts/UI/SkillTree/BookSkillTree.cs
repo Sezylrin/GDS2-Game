@@ -15,6 +15,7 @@ public class BookSkillTree : Menu
     [Header("Menus")]
     [SerializeField] private List<ButtonRow> abilityButtonRows;
     [SerializeField] private List<ButtonRow> upgradeButtonRows;
+    [SerializeField] private BookButton returnButton;
 
     [Header("Dimensions")]
     [SerializeField] private int abilityRows = 2;
@@ -57,6 +58,18 @@ public class BookSkillTree : Menu
                 button.Init();
             }
         }
+
+        abilityButtonRows[0].row[0].UpdatePopup();
+    }
+
+    public override void Return()
+    {
+        ReturnToMainMenu();
+    }
+
+    public void ReturnToMainMenu()
+    {
+        GameManager.Instance.UIManager.GetBookMenu().ReturnToMainMenu();
     }
 
     public void UpdatePopup(string name, string description, bool canAfford, bool showPurchased)
@@ -86,9 +99,29 @@ public class BookSkillTree : Menu
 
     public void SetActiveButton(int row, int column)
     {
+        if (isOnAbilityMenu && row == abilityRows)
+        {
+            // If a valid button was previously selected, disable its hover state
+            if (currentSelectedIndex.x != -1 && currentSelectedIndex.y != -1)
+            {
+                abilityButtonRows[currentSelectedIndex.x].row[currentSelectedIndex.y].DisableHover();
+            }
+            returnButton.ActivateHover();
+            currentSelectedIndex = new Vector2Int(-1, -1); // Use -1,-1 to indicate the return button is selected
+            return;
+        }
+
+        // If the return button is currently selected and we move up, go to the last ability row
+        if (isOnAbilityMenu && currentSelectedIndex == new Vector2Int(-1, -1) && row < abilityRows)
+        {
+            returnButton.DisableHover();
+            row = abilityRows - 1;
+            column = 0; // Set to the first column of the last ability row
+        }
+
         List<ButtonRow> departingList = isOnAbilityMenu ? abilityButtonRows : upgradeButtonRows;
 
-        // Check boundary conditions and switch menu if needed
+        // Handle column boundaries and switch menu if needed
         if (column < 0)
         {
             if (isOnAbilityMenu)
@@ -114,6 +147,7 @@ public class BookSkillTree : Menu
             }
         }
 
+        // Handle row boundaries
         if (row < 0)
             row = isOnAbilityMenu ? abilityRows - 1 : upgradeRows - 1;
         else if (isOnAbilityMenu && row >= abilityRows)
@@ -121,8 +155,11 @@ public class BookSkillTree : Menu
         else if (!isOnAbilityMenu && row >= upgradeRows)
             row = 0;
 
-        // Disable hover for departing menu button
-        departingList[currentSelectedIndex.x].row[currentSelectedIndex.y].DisableHover();
+        // Disable hover for the departing menu button
+        if (currentSelectedIndex.x != -1 && currentSelectedIndex.y != -1) // Make sure we are not departing from the return button
+        {
+            departingList[currentSelectedIndex.x].row[currentSelectedIndex.y].DisableHover();
+        }
 
         currentSelectedIndex = new Vector2Int(row, column);
 
@@ -134,6 +171,12 @@ public class BookSkillTree : Menu
 
     public void ClickActiveButton()
     {
+        if (currentSelectedIndex == new Vector2Int(-1, -1))
+        {
+            returnButton.HandleClick();
+            return;
+        }
+
         List<ButtonRow> currentList = isOnAbilityMenu ? abilityButtonRows : upgradeButtonRows;
         currentList[currentSelectedIndex.x].row[currentSelectedIndex.y].HandlePurchase();
     }

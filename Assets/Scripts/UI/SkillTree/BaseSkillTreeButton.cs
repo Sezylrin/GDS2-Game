@@ -21,6 +21,11 @@ public class BaseSkillTreeButton : MonoBehaviour, IPointerEnterHandler, IPointer
 
     }
 
+    public virtual void UpdatePopup()
+    {
+
+    }
+
     public virtual void ActivateHover()
     {
         PlayHoverAnimation();

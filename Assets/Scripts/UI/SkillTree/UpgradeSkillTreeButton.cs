@@ -13,16 +13,25 @@ public class UpgradeSkillTreeButton : BaseSkillTreeButton
 {
     [SerializeField] private int SoulCostToSet;
     [SerializeField] private Sprite IconToSet;
-    [SerializeField] private string Name;
+    [SerializeField] private string OriginalName;
     [SerializeField] private string Description;
     [SerializeField] bool CanPurchaseOnce;
     [SerializeField] UpgradeType UpgradeType;
 
     int TimesPurchased = 1;
+    private string UpdatedName;
 
     public override void Init()
     {
         SoulCost = SoulCostToSet;
+        if (!CanPurchaseOnce)
+        {
+            UpdatedName = OriginalName + " " + TimesPurchased;
+        }
+        else
+        {
+            UpdatedName = OriginalName;
+        }
         if (CanPurchase())
         {
             BackgroundColor.color = new Color(BackgroundColor.color.r, BackgroundColor.color.g, BackgroundColor.color.b, 0f);
@@ -33,10 +42,16 @@ public class UpgradeSkillTreeButton : BaseSkillTreeButton
         }
         Icon.sprite = IconToSet;
     }
+
+    public override void UpdatePopup()
+    {
+        GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdatePopup(UpdatedName, Description, CanPurchase(), purchased);
+    }
+
     public override void ActivateHover()
     {
         base.ActivateHover();
-        GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdatePopup(Name, Description, CanPurchase(), purchased);
+        GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdatePopup(UpdatedName, Description, CanPurchase(), purchased);
     }
 
     public override void HandlePurchase()
@@ -56,11 +71,11 @@ public class UpgradeSkillTreeButton : BaseSkillTreeButton
             else
             {
                 TimesPurchased++;
-                Name += " " + TimesPurchased;
+                UpdatedName = OriginalName + " " + TimesPurchased;
             }
             GameManager.Instance.RemoveSouls(SoulCost);
             GameManager.Instance.AudioManager.PlaySound(AudioRef.buttonPress);
-            GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdatePopup(Name, Description, CanPurchase(), purchased);
+            GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdatePopup(UpdatedName, Description, CanPurchase(), purchased);
             GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdateSoulsText(GameManager.Instance.Souls);
 
             switch (UpgradeType)

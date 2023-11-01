@@ -10,6 +10,7 @@ public class AbilitySkillTreeButton : BaseSkillTreeButton
 
     public override void Init()
     {
+        SoulCost = SoulCostToSet;
         if (CanPurchase())
         {
             BackgroundColor.color = GetBackgroundColor();
@@ -18,7 +19,6 @@ public class AbilitySkillTreeButton : BaseSkillTreeButton
         {
             BackgroundColor.color = CantAffordColor;
         }
-        SoulCost = SoulCostToSet;
         Icon.sprite = abilityData.icon;
     }
 
@@ -28,9 +28,14 @@ public class AbilitySkillTreeButton : BaseSkillTreeButton
         GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdatePopup(abilityData.name, abilityData.description, CanPurchase(), purchased);
     }
 
+    public override void UpdatePopup()
+    {
+        GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdatePopup(abilityData.name, abilityData.description, CanPurchase(), purchased);
+    }
+
     public override void HandlePurchase()
     {
-        if (!CanPurchase())
+        if (!CanPurchase() || purchased)
         {
             GameManager.Instance.AudioManager.PlaySound(AudioRef.ButtonPressFail);
             return;
