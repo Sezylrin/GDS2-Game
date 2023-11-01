@@ -12,9 +12,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject StartMenuContainer;
     [SerializeField] private GameObject BookMenuContainer;
 
-    [Header("Container")]
-    [SerializeField] private GameObject MenuContainer;
-
     public void OpenStartMenu()
     {
         StartMenuContainer.SetActive(true);
@@ -87,6 +84,12 @@ public class UIManager : MonoBehaviour
     {
         return BookMenuContainer.GetComponent<BookMenu>();
     }
+
+    public StartMenu GetStartMenu() 
+    {
+        return StartMenuContainer.GetComponent<StartMenu>();
+    }
+
     #endregion
 
     #region Sounds

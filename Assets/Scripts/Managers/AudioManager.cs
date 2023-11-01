@@ -11,8 +11,9 @@ using System.IO;
 #endif
 public class AudioManager : MonoBehaviour
 {
-    public int sfxVolume = 100;
-    public int bgmVolume = 100;
+    public float masterVolume = 100;
+    public float sfxVolume = 100;
+    public float bgmVolume = 100;
 
     [SerializeField, Tooltip("Loaded Sounds, press Load sounds to load in sounds, do not edit the dictionary")]
     [SerializedDictionary("Reference", "AudioClipSO")]
@@ -85,7 +86,16 @@ public class AudioManager : MonoBehaviour
 
     public void ModifyBGMVolume(float volume)
     {
-        
+        bgmVolume = volume;
     }
 
+    public void ModifyMasterVolume(float volume)
+    {
+        masterVolume = volume;
+    }
+
+    public void ModifySFXVolume(float volume)
+    {
+        sfxVolume = volume;
+    }
 }
