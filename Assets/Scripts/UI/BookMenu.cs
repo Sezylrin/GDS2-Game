@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.InputSystem;
 using System.Collections;
+using DG.Tweening.Core.Easing;
 
 public class BookMenu : Menu
 {
@@ -40,6 +41,7 @@ public class BookMenu : Menu
         }
         else
         {
+            GameManager.Instance.PlayerTransform.gameObject.SetActive(false);
             GameManager.Instance.UIManager.OpenBookMenu();
             IsOpen = true;
             MainMenu.SetActive(true);
@@ -52,9 +54,10 @@ public class BookMenu : Menu
 
     public void ExitGame()
     {
-        GameManager.Instance.sceneLoader.Load(Scene.MainMenu, false);
         IsInGame = false;
         GameManager.Instance.UIManager.CloseAll();
+        Time.timeScale = 1.0f;
+        GameManager.Instance.sceneLoader.Load(Scene.MainMenu, false);
     }
 
     public void CloseMenu()
@@ -64,6 +67,7 @@ public class BookMenu : Menu
         activeMenu = null;
         GameManager.Instance.AudioManager.PlaySound(AudioRef.CloseMenu);
         Time.timeScale = 1.0f;
+        GameManager.Instance.PlayerTransform.gameObject.SetActive(true);
     }
 
     public void OpenSettingsMenu()
