@@ -52,9 +52,10 @@ public class BookMenu : Menu
 
     public void ExitGame()
     {
-        GameManager.Instance.sceneLoader.Load(Scene.MainMenu, false);
         IsInGame = false;
         GameManager.Instance.UIManager.CloseAll();
+        Time.timeScale = 1.0f;
+        GameManager.Instance.sceneLoader.Load(Scene.MainMenu, false);
     }
 
     public void CloseMenu()
