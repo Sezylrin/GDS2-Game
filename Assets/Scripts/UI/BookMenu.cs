@@ -36,11 +36,7 @@ public class BookMenu : Menu
     {
         if (IsOpen)
         {
-            IsOpen = false;
-            DisableAll();
-            activeMenu = null;
-            GameManager.Instance.AudioManager.PlaySound(AudioRef.CloseMenu);
-            Time.timeScale = 1.0f;
+            CloseMenu();
         }
         else
         {
