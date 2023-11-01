@@ -24,8 +24,17 @@ public class PlayerAnimation : MonoBehaviour
         {
             HitStunned();
         }
+        else if (PCM.system.GetState() == playerState.abilityStart)
+        {
+            WindUp();
+        }
+        else if (PCM.system.GetState() == playerState.abilityCast)
+        {
+            Attack();
+        }
         else if (PCM.system.GetState() == playerState.dashing)
         {
+            lastDirection = CustomMath.GetDirection(Vector2.right, PCM.control.direction, false);
             Dash(lastDirection);
         }
         else if (PCM.system.GetState() == playerState.idle)
@@ -75,7 +84,7 @@ public class PlayerAnimation : MonoBehaviour
         anim.Play("Idle");
         anim.SetFloat("Idle", (float)lastDirection / 8f);
     }
-    int lastDirection;
+    float lastDirection;
     private void HitStunned()
     {
         Vector2 knockback = PCM.system.hitDir;
@@ -91,40 +100,27 @@ public class PlayerAnimation : MonoBehaviour
     private void WindUp()
     {
         lastDirection = CustomMath.GetDirection(Vector2.right, PCM.abilities.castDir, false);
-        switch (lastDirection)
-        {
-            case 0:
-                anim.Play("HitGoingE");
-                break;
-            case 1:
-                anim.Play("HitGoingNE");
-                break;
-            case 2:
-                anim.Play("HitGoingN");
-                break;
-            case 3:
-                anim.Play("HitGoingNW");
-                break;
-            case 4:
-                anim.Play("HitGoingW");
-                break;
-            case 5:
-                anim.Play("HitGoingSW");
-                break;
-            case 6:
-                anim.Play("HitGoingS");
-                break;
-            case 7:
-                anim.Play("HitGoingSE");
-                break;
-        }
+        anim.SetFloat("Charge", lastDirection / 8f);
+        anim.Play("Casting");
     }
 
     private void Attack()
     {
         lastDirection = CustomMath.GetDirection(Vector2.right, PCM.abilities.castDir, false);
-        if (PCM.abilities.castType == AbilityType.dash)
-            Dash(lastDirection);
+        switch (PCM.abilities.castType)
+        {
+            case AbilityType.dash:
+                Dash(lastDirection);
+                break;
+            case AbilityType.AOE:
+                anim.SetFloat("Punching", lastDirection / 8f);
+                anim.Play("PunchingDown");
+                break;
+            default:
+                anim.SetFloat("Punching", lastDirection / 8f);
+                anim.Play("Punching");
+                break;
+        }
     }
 
     private void AOEAttack()
@@ -136,35 +132,10 @@ public class PlayerAnimation : MonoBehaviour
     {
 
     }
-    private void Dash(int dashDir)
+    private void Dash(float dashDir)
     {
-        switch (dashDir)
-        {
-            case 0:
-                anim.Play("PlayerRunningE");
-                break;
-            case 1:
-                anim.Play("PlayerRunningNE");
-                break;
-            case 2:
-                anim.Play("PlayerRunningN");
-                break;
-            case 3:
-                anim.Play("PlayerRunningNW");
-                break;
-            case 4:
-                anim.Play("PlayerRunningW");
-                break;
-            case 5:
-                anim.Play("PlayerRunningSW");
-                break;
-            case 6:
-                anim.Play("PlayerRunningS");
-                break;
-            case 7:
-                anim.Play("PlayerRunningSE");
-                break;
-        }
+        anim.Play("Run");
+        anim.SetFloat("Run", dashDir / 8f);
     }
 
 }

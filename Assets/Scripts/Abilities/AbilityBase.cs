@@ -128,7 +128,8 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
     public virtual void PoolSelf()
     {
         ResetAbility();
-        anim.Play("Idle");
+        if (gameObject.activeInHierarchy)
+            anim.Play("Idle");
         Pool.PoolObj(this);
     }
 }

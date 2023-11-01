@@ -114,6 +114,7 @@ public class Abilities : MonoBehaviour
         PCM.control.RemoveBufferInput();
         PCM.control.StartAbility(selected.castStartSpeed);
         castDir = abilitySpawnPoint.position - transform.position;
+        PCM.control.SetLastDir(castDir);
         castType = selected.type;
     }
     public Vector2 castDir { get; private set; }

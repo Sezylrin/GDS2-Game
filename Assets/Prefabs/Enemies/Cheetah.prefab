@@ -266,7 +266,7 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 19.39}
   - {x: 0, y: 0, z: 0}
-  anim: {fileID: 542129273}
+  anim: {fileID: 0}
 --- !u!70 &1726914328958765574
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -679,7 +679,7 @@ Transform:
   m_Children:
   - {fileID: 5272944645671773323}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &3200451849759215171
 Rigidbody2D:
@@ -839,7 +839,7 @@ MonoBehaviour:
   daggerSpeed: 24
   swipeAmount: 3
   swipeHitbox: {fileID: 8172455979165912751}
-  multiSwipeDelay: 0.5
+  multiSwipeDelay: 0.3
   hitbox: {fileID: 1726914328958765574}
 --- !u!114 &3200451849759215169
 MonoBehaviour:
@@ -988,7 +988,7 @@ GameObject:
   - component: {fileID: 3200451850185311737}
   - component: {fileID: 3200451850185311738}
   - component: {fileID: 542129274}
-  - component: {fileID: 542129273}
+  - component: {fileID: 6560601908160925237}
   m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
@@ -1084,7 +1084,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
---- !u!114 &542129273
+--- !u!114 &6560601908160925237
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1093,7 +1093,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3200451850185311736}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e28defc31dcfa84e9c85f027f6dd5a2, type: 3}
+  m_Script: {fileID: 11500000, guid: 9c8cd4f512c566543bf16cb8157f17ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 542129274}
@@ -1101,24 +1101,7 @@ MonoBehaviour:
   comboRend: {fileID: 984288727753627678}
   comboAnim: {fileID: 7507552216960432800}
   enemy: {fileID: 3200451849759215230}
-  clips:
-    _serializedList:
-    - Key: 0
-      Value: IdleR
-    - Key: 1
-      Value: IdleL
-    - Key: 2
-      Value: IdleU
-    - Key: 3
-      Value: IdleD
-    - Key: 4
-      Value: WalkR
-    - Key: 5
-      Value: WalkL
-    - Key: 7
-      Value: WalkD
-    - Key: 6
-      Value: WalkU
+  overrideAnim: 0
 --- !u!1 &5181158540969726442
 GameObject:
   m_ObjectHideFlags: 0

@@ -495,24 +495,6 @@ MonoBehaviour:
   comboRend: {fileID: 3321605924855528948}
   comboAnim: {fileID: 157518752641961541}
   enemy: {fileID: -4165347194730273926}
-  clips:
-    _serializedList:
-    - Key: 0
-      Value: IdleR
-    - Key: 1
-      Value: IdleL
-    - Key: 2
-      Value: IdleU
-    - Key: 3
-      Value: IdleD
-    - Key: 4
-      Value: WalkR
-    - Key: 5
-      Value: WalkL
-    - Key: 7
-      Value: WalkD
-    - Key: 6
-      Value: WalkU
 --- !u!1 &5393515603401796057
 GameObject:
   m_ObjectHideFlags: 0
@@ -742,6 +724,7 @@ MonoBehaviour:
   projectileSpawnPoint: {fileID: 1947467301}
   spearSpeed: 18
   grenadeSpeed: 0.5
+  boomerangSpeed: 12
 --- !u!114 &5393515603401796050
 MonoBehaviour:
   m_ObjectHideFlags: 0

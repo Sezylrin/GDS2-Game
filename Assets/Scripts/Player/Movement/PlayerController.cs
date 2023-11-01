@@ -190,6 +190,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         StateDecider();
+        UpdateLastDirection();
         ExecuteInput();
         UpdateMousePos();
         AimAbility();
@@ -210,10 +211,11 @@ public class PlayerController : MonoBehaviour
     public void SetDirection(InputAction.CallbackContext context)
     {
         direction = context.ReadValue<Vector2>().normalized;
-        if (!direction.Equals(Vector2.zero))
-        {
-            lastDirection = direction;
-        }
+    }  
+
+    public void SetLastDir(Vector2 newlastDir)
+    {
+        lastDirection = newlastDir;
     }
 
     public void Interact(InputAction.CallbackContext context)
@@ -363,9 +365,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    
-    
-    
 
     public void Consume(InputAction.CallbackContext context)
     {
@@ -475,8 +474,6 @@ public class PlayerController : MonoBehaviour
     private playerState[] castState = { playerState.idle, playerState.moving };
     private void ExecuteInput()
     {
-        if (bufferedState != actionState.nothing)
-            Debug.Log(bufferedState);
         switch ((int)bufferedState)
         {
             case (int)actionState.dashing:
@@ -522,6 +519,17 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Movement
+    private playerState[] allowedLastDir = { playerState.moving, playerState.idle, playerState.abilityLag };
+    private void UpdateLastDirection()
+    {
+        if (!CheckStates(allowedLastDir))
+            return;
+
+        if (!direction.Equals(Vector2.zero) && !lastDirection.Equals(direction))
+        {
+            lastDirection = direction;
+        }
+    }
     private void Move()
     {
         isMoving = false;
