@@ -78,7 +78,7 @@ public class Snake : Enemy
             {
                 temp.NewInstance();
             }
-            temp.Init(dir, GlobSpawnPoint.position, TargetLayer, Attack2Damage, Attack2Duration * 4, RapidFireSpeed, AttackKnockback2, transform);
+            temp.Init(dir, GlobSpawnPoint.position, TargetLayer, Attack2Damage, Attack2Duration * 10, RapidFireSpeed, AttackKnockback2, transform);
             yield return new WaitForSeconds(dur);
         }
     }

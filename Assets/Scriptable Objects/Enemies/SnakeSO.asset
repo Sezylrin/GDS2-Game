@@ -25,7 +25,7 @@ MonoBehaviour:
   - 3
   - 2
   attack1Damage: 0a0000000f00000014000000
-  attack1Duration: 1
+  attack1Duration: 0.25
   windup1Duration: 1
   attackKnockback1: 6
   attack2Damage: 0a0000000f00000014000000
@@ -33,7 +33,7 @@ MonoBehaviour:
   windup2Duration: 1
   attackKnockback2: 6
   attack3Damage: 050000000a0000000f000000
-  attack3Duration: 8
+  attack3Duration: 0.5
   windup3Duration: 1
   attackKnockback3: 0
   basePointsToStagger: 300

@@ -29,13 +29,14 @@ public class Cheetah : Enemy
     private float multiSwipeDelay;
     [SerializeField]
     private Collider2D hitbox;
+    private LayerMask initial;
 
 
     protected override void Start()
     {
         base.Start();
         GameManager.Instance.PoolingManager.FindPool(daggerPF,out daggerPool);
-
+        initial = col2D.excludeLayers;
     }
     protected override void SetInheritanceSO()
     {
@@ -71,22 +72,16 @@ public class Cheetah : Enemy
                 break;
         }
     }
-    private void StopSwipe()
-    {
-        
-    }
     #region Attack1
     protected override void Attack1()
     {
         dir = (targetTr.position - transform.position).normalized;
         StartCoroutine(Swipe());
     }
-
     private IEnumerator Swipe()
     {
         isSwiping = true;
         PivotPoint.eulerAngles = CustomMath.GetEularAngleToDir(Vector2.right, dir);
-        LayerMask initial = col2D.excludeLayers;
         col2D.excludeLayers = TargetLayer;
         swipeHitbox.includeLayers = TargetLayer;
         swipeHitbox.enabled = true;
@@ -145,9 +140,10 @@ public class Cheetah : Enemy
     #endregion
 
     #region Attack3
+    private Coroutine multiSwipe;
     protected override void Attack3()
     {
-        StartCoroutine(MultiSwipes());
+        multiSwipe = StartCoroutine(MultiSwipes());
     }
     private int swipesDone = 0;
     private Coroutine Swiping;
@@ -157,15 +153,32 @@ public class Cheetah : Enemy
         {
             if (Swiping == null)
             {
+                enemyAnimation.overrideAnim = true;
+                float time = 0;
                 if (swipesDone != 0)
-                    yield return new WaitForSeconds(multiSwipeDelay);
+                {
+                    while (time < multiSwipeDelay)
+                    {
+                        dir = (targetTr.position - transform.position).normalized;
+                        (enemyAnimation as CheetahAnimation).ChargingThree(dir);
+                        yield return null;
+                        time += Time.deltaTime;
+                    }
+                }
                 dir = (targetTr.position - transform.position).normalized;
+                (enemyAnimation as CheetahAnimation).AttackingThree(dir);
                 Swiping = StartCoroutine(Swipe());
+                while (Swiping != null)
+                {
+                    yield return null;
+                }
                 swipesDone++;
             }
             yield return null;
         }
         swipesDone = 0;
+        enemyAnimation.overrideAnim = false;
+        multiSwipe = null;
     }
     #endregion
 
@@ -181,7 +194,7 @@ public class Cheetah : Enemy
             {
                 Debug.Log("perfectDodge");
                 isSwiping = false;
-                InterruptAttack();
+                InterruptAttack();                
                 foundTarget.Counter();
             }
             else
@@ -191,4 +204,25 @@ public class Cheetah : Enemy
         }
     }
     #endregion
+    public override void InterruptAttack()
+    {
+        if(Swiping != null)
+        {
+            StopCoroutine(Swiping);
+            isSwiping = false;
+            Swiping = null;
+            col2D.excludeLayers = initial;
+            swipeHitbox.enabled = false;
+            swipeHitbox.includeLayers = 0;
+        }
+        if (multiSwipe != null)
+        {
+            StopCoroutine(multiSwipe);
+            swipesDone = 0;
+            enemyAnimation.overrideAnim = false;
+            multiSwipe = null;
+        }
+        enemyAnimation.overrideAnim = false;
+        base.InterruptAttack();
+    }
 }

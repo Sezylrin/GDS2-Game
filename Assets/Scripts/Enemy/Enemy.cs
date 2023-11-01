@@ -47,7 +47,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     [field: SerializeField, ReadOnly] public int Hitpoints { get; set; }
     [field: SerializeField, ReadOnly] protected ElementType ActiveElementEffect { get; set; } = ElementType.noElement;
     [field: SerializeField, ReadOnly] protected int ElementTier { get; set; }
-    [field: SerializeField, ReadOnly] protected int CurrentAttack { get; set; }
+    [field: SerializeField, ReadOnly] public int CurrentAttack { get; private set; }
     [field: SerializeField, ReadOnly] public bool WindingUp { get; private set; }
     [field: SerializeField, ReadOnly] public bool InAttack { get; private set; }
     [field: SerializeField, ReadOnly] protected bool Staggered { get; set; }
@@ -506,6 +506,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     {
         while (WindingUp)
         {
+            block.SetTexture("MainTex", rend.sprite.texture);
             block.SetColor("_FlashColour", Color.red);
             block.SetFloat("_FlashAmount", 0.65f);
             rend.SetPropertyBlock(block);
@@ -529,7 +530,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     #region Attacking Functions
 
     protected virtual int ChooseAttack()
-    {        
+    {
         return Random.Range(1, Tier+1);
     }
 
@@ -610,10 +611,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         Manager.DoneAttack();
         isAttacking = false;
         hitTarget = false;
+        enemyAnimation.ReturnToIdle();
     }
 
     public virtual void InterruptAttack()
     {
+        InAttack = false;
+        AbleToAttack = true;
         EnemyTimers.ResetSpecificToZero((int)EnemyTimer.windupDurationTimer);
         EnemyTimers.ResetSpecificToZero((int)EnemyTimer.attackDurationTimer);
         WindingUp = false;
@@ -624,6 +628,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
             Manager.DoneAttack();
         isAttacking = false;
         hitTarget = false;
+        enemyAnimation.ReturnToIdle();
     }
 
     protected virtual void Attack1()
@@ -736,9 +741,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         IsStunned = true;
         StopPathing();
         InterruptAttack();
+        AbleToAttack = false;
         yield return new WaitForSeconds(dur);
         enemyAnimation.StopShockAnim();
         IsStunned = false;
+        AbleToAttack = true;
     }
 
     public void InBlizzard(float bonusDamage)
