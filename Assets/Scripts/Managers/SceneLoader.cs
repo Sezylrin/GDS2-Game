@@ -26,7 +26,20 @@ public class SceneLoader : MonoBehaviour
         if (EnableDefaultTransition)
             TriggerFade(scene);
         else
-            SceneManager.LoadSceneAsync(scene.ToString());
+        {
+            if (sceneTransition == null)
+                sceneTransition = StartCoroutine(NoTransitionLoad(scene));
+        }
+    }
+
+    public IEnumerator NoTransitionLoad(Scene scene)
+    {
+        var temp = SceneManager.LoadSceneAsync(scene.ToString());
+        while (!temp.isDone)
+        {
+            yield return null;
+        }
+        sceneTransition = null;
     }
 
     public void LoadHub()
@@ -38,8 +51,10 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadedIntoHub()
     {
+        Debug.Log("Unhide");
         GameManager.Instance.PCM.system.FullHeal();
-        GameManager.Instance.PCM.gameObject.SetActive(true);
+        GameManager.Instance.PlayerTransform.gameObject.SetActive(true);
+        GameManager.Instance.PCM.control.RemoveBufferInput();        
     }
     [field: Header("Default Transition")]
     [field: SerializeField]
@@ -57,6 +72,7 @@ public class SceneLoader : MonoBehaviour
     }
     public IEnumerator TriggerCrossFadeStart(Scene scene)
     {
+        Debug.Log("called");
         CrossFadeAnimator.Play("Start");
         while (!isFade)
         {

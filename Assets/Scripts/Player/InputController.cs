@@ -52,7 +52,6 @@ public class InputController : MonoBehaviour
     {
         if (PlayerComponentManager.Instance != gameObject)
             return;
-        Debug.Log("called disable");
         //GameManager.Instance.SetPlayerTransform(null, null);
         PCM.control.SetControllerCursor(null);
         player.Move.performed -= PCM.control.SetDirection;
