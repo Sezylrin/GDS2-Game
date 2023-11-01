@@ -76,6 +76,7 @@ public class BookMenu : Menu
         Settings.SetActive(true);
         activeMenu = Settings;
         activeMenu.GetComponent<Menu>().OpenMenu();
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.OpenMenu);
     }
 
     public void OpenSkillSwitch()
@@ -84,6 +85,7 @@ public class BookMenu : Menu
         SkillSwitch.SetActive(true);
         activeMenu = SkillSwitch;
         activeMenu.GetComponent<Menu>().OpenMenu();
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.OpenMenu);
     }
 
     public void OpenSkillTree()
@@ -92,6 +94,7 @@ public class BookMenu : Menu
         SkillTree.SetActive(true);
         activeMenu = SkillTree;
         activeMenu.GetComponent<Menu>().OpenMenu();
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.OpenMenu);
     }
 
     public void ReturnToMainMenu()
@@ -100,6 +103,7 @@ public class BookMenu : Menu
         MainMenu.SetActive(true);
         MainMenu.GetComponent<Menu>().OpenMenu();
         activeMenu = MainMenu;
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.OpenMenu);
     }
 
     public override void Return()
