@@ -633,6 +633,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Lizard
       objectReference: {fileID: 0}
+    - target: {fileID: 5393515603401796057, guid: d51d7b73a4c492843b5bbe22b38ecfa3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5393515603401796060, guid: d51d7b73a4c492843b5bbe22b38ecfa3, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -46979,6 +46983,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cheetah
       objectReference: {fileID: 0}
+    - target: {fileID: 3200451849759215175, guid: 06faa7f54c6f8744881c8d7f0eb816db, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3200451849759215229, guid: 06faa7f54c6f8744881c8d7f0eb816db, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -47416,6 +47424,10 @@ PrefabInstance:
     - target: {fileID: 1752878506409264276, guid: 74e514a8f3fbc2e49872e5a3aee84b27, type: 3}
       propertyPath: m_Name
       value: Snake
+      objectReference: {fileID: 0}
+    - target: {fileID: 1752878506409264276, guid: 74e514a8f3fbc2e49872e5a3aee84b27, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1752878506409264286, guid: 74e514a8f3fbc2e49872e5a3aee84b27, type: 3}
       propertyPath: m_RootOrder
