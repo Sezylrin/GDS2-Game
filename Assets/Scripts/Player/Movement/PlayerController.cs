@@ -475,6 +475,8 @@ public class PlayerController : MonoBehaviour
     private playerState[] castState = { playerState.idle, playerState.moving };
     private void ExecuteInput()
     {
+        if (bufferedState != actionState.nothing)
+            Debug.Log(bufferedState);
         switch ((int)bufferedState)
         {
             case (int)actionState.dashing:

@@ -8,7 +8,11 @@ public class Startup : MonoBehaviour
     public PlayerComponentManager PCM;
     private void Awake()
     {
-        GameManager.Instance.SetPlayerTransform(player, PCM);
+        if (GameManager.Instance.PlayerTransform == null)
+        {
+            Debug.Log("ran");
+            GameManager.Instance.SetPlayerTransform(player, PCM);
+        }
     }
     void Start()
     {
