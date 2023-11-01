@@ -61,12 +61,6 @@ public class BookMenu : Menu
         GameManager.Instance.UIManager.CloseAll();
     }
 
-    private IEnumerator CloseMenuAfterDelay()
-    {
-        yield return new WaitForSecondsRealtime(2.0f);
-       
-    }
-
     public void CloseMenu()
     {
         IsOpen = false;
