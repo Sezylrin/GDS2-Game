@@ -10,7 +10,7 @@ public class BookMenu : Menu
     [SerializeField] private GameObject MainMenu;
     [SerializeField] private GameObject Settings;
     [SerializeField] public GameObject SkillSwitch;
-    [SerializeField] private GameObject SkillTree;
+    [SerializeField] public GameObject SkillTree;
 
     private GameObject activeMenu;
     public bool IsOpen = false;
@@ -83,6 +83,14 @@ public class BookMenu : Menu
         if (activeMenu) activeMenu.SetActive(false);
         SkillSwitch.SetActive(true);
         activeMenu = SkillSwitch;
+        activeMenu.GetComponent<Menu>().OpenMenu();
+    }
+
+    public void OpenSkillTree()
+    {
+        if (activeMenu) activeMenu.SetActive(false);
+        SkillTree.SetActive(true);
+        activeMenu = SkillTree;
         activeMenu.GetComponent<Menu>().OpenMenu();
     }
 

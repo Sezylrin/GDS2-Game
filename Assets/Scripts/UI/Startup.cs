@@ -10,7 +10,6 @@ public class Startup : MonoBehaviour
     {
         if (GameManager.Instance.PlayerTransform == null)
         {
-            Debug.Log("ran");
             GameManager.Instance.SetPlayerTransform(player, PCM);
         }
     }
