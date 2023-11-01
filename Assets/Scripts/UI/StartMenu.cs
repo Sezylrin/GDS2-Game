@@ -93,7 +93,6 @@ public class StartMenu : Menu
 
     public void StartGame()
     {
-        Debug.Log("Start");
         GameManager.Instance.sceneLoader.Load(Scene.Hub);
         GameManager.Instance.UIManager.EnableBookMenu();
         StartCoroutine(DeactivateMenuContainerAfterDelay());

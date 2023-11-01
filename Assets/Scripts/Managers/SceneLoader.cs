@@ -51,7 +51,6 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadedIntoHub()
     {
-        Debug.Log("Unhide");
         GameManager.Instance.PCM.system.FullHeal();
         GameManager.Instance.PlayerTransform.gameObject.SetActive(true);
         GameManager.Instance.PCM.control.RemoveBufferInput();        
@@ -72,7 +71,6 @@ public class SceneLoader : MonoBehaviour
     }
     public IEnumerator TriggerCrossFadeStart(Scene scene)
     {
-        Debug.Log("called");
         CrossFadeAnimator.Play("Start");
         while (!isFade)
         {
