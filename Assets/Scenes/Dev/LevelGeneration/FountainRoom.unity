@@ -292,6 +292,7 @@ GameObject:
   - component: {fileID: 70889518}
   - component: {fileID: 70889520}
   - component: {fileID: 70889519}
+  - component: {fileID: 70889521}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -31633,6 +31634,18 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &70889521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70889517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b678e70a6eef1646967cdb252c47396, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &139672733
 GameObject:
   m_ObjectHideFlags: 0
@@ -31886,6 +31899,7 @@ GameObject:
   - component: {fileID: 308990297}
   - component: {fileID: 308990296}
   - component: {fileID: 308990295}
+  - component: {fileID: 308990298}
   m_Layer: 0
   m_Name: props
   m_TagString: Untagged
@@ -34271,6 +34285,18 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &308990298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308990293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b678e70a6eef1646967cdb252c47396, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &677294429
 GameObject:
   m_ObjectHideFlags: 0
@@ -34971,6 +34997,7 @@ GameObject:
   - component: {fileID: 926362882}
   - component: {fileID: 926362884}
   - component: {fileID: 926362883}
+  - component: {fileID: 926362885}
   m_Layer: 0
   m_Name: walls
   m_TagString: Untagged
@@ -36172,6 +36199,18 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &926362885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926362881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b678e70a6eef1646967cdb252c47396, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &977141939
 GameObject:
   m_ObjectHideFlags: 0
@@ -36300,6 +36339,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4426702566635269196, guid: a63f3801e65df0549acc41be934a7ee8, type: 3}
+      propertyPath: preClearedRoom
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4426702566635269197, guid: a63f3801e65df0549acc41be934a7ee8, type: 3}
       propertyPath: m_Name
       value: LevelDoorCentre
@@ -36319,7 +36362,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1099847294}
   - component: {fileID: 1099847293}
-  - component: {fileID: 1099847295}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -36358,18 +36400,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1099847295
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1099847292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b678e70a6eef1646967cdb252c47396, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1144872357
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36649,6 +36679,7 @@ GameObject:
   - component: {fileID: 1279614862}
   - component: {fileID: 1279614861}
   - component: {fileID: 1279614863}
+  - component: {fileID: 1279614864}
   m_Layer: 0
   m_Name: UpperLayer
   m_TagString: Untagged
@@ -37230,6 +37261,18 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
+--- !u!114 &1279614864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1279614859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b678e70a6eef1646967cdb252c47396, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1434327206
 GameObject:
   m_ObjectHideFlags: 0

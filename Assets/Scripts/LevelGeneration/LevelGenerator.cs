@@ -46,8 +46,8 @@ public class LevelGenerator : MonoBehaviour
     public int activeLevelListIndex { get; private set; }
     // Calculates floorsCleared, replaced with floorsClearedOverride if debugMode is enabled
     public int floorsCleared => !debugMode ? Mathf.FloorToInt((float)(activeLevelListIndex + 1) / (fountainFrequency + 1)) : floorsClearedOverride;
-    [ReadOnly]
-    public int lastFloorOnExit;
+    [field: SerializeField, ReadOnly] public int lastFloorOnExit { get; private set;}
+    [field: SerializeField, ReadOnly] public int highestFloor { get; private set;}
 
     [Header("Debug")]
     public bool debugMode;
@@ -76,11 +76,22 @@ public class LevelGenerator : MonoBehaviour
 
     public void New()
     {
-        lastFloorOnExit = floorsCleared;
+        ValidateLastFloorOnExit();
+        ValidateHighestFloor();
         // difficulty = startDifficulty;
         levelList = new List<SceneReference>();
         AddNewFloor();
         activeLevelListIndex = -1;
+    }
+
+    private void ValidateLastFloorOnExit()
+    {
+        lastFloorOnExit = floorsCleared;
+    }
+
+    private void ValidateHighestFloor()
+    {
+        if (highestFloor < lastFloorOnExit) highestFloor = lastFloorOnExit;
     }
 
     private void Update()
@@ -172,6 +183,18 @@ public class LevelGenerator : MonoBehaviour
 
     public void EnterDoorCentre()
     {
+        LoadNextLevel();
+    }
+
+    public void StartDungeonOnFloor(int floor)
+    {
+        int startingLevelIndex = 0;
+        for (int i = 1; i < floor; i++)
+        {
+            startingLevelIndex = startingLevelIndex + fountainFrequency + 1;
+        }
+        startingLevelIndex--;
+        activeLevelListIndex = startingLevelIndex;
         LoadNextLevel();
     }
 
