@@ -95,7 +95,7 @@ public class Abilities : MonoBehaviour
 
     public void SetSlot(ElementalSO abilityToUse, int slot)
     {
-        if (slot < 0 || slot > 6)
+        if (slot < 0 || slot > 7)
         {
             Debug.Break();
             Debug.Log("Invalid Slot number");
