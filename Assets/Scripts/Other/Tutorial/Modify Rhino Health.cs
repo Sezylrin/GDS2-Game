@@ -18,6 +18,6 @@ public class ModifyRhinoHealth : MonoBehaviour
     {
         rhino.SetOverRideHealth(Amount);
         rhino.TakeDamage(Damage, 0, ElementType.noElement);
-        Destroy(gameObject);
+        Destroy(this);
     }
 }
