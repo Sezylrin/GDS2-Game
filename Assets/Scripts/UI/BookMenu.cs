@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class BookMenu : Menu
 {
@@ -51,6 +52,19 @@ public class BookMenu : Menu
             GameManager.Instance.AudioManager.PlaySound(AudioRef.OpenMenu);
             Time.timeScale = 0;
         }
+    }
+
+    public void ExitGame()
+    {
+        GameManager.Instance.sceneLoader.Load(Scene.MainMenu, false);
+        IsInGame = false;
+        GameManager.Instance.UIManager.CloseAll();
+    }
+
+    private IEnumerator CloseMenuAfterDelay()
+    {
+        yield return new WaitForSecondsRealtime(2.0f);
+       
     }
 
     public void CloseMenu()
