@@ -62,23 +62,4 @@ public class HorizontalMenu : Menu
         yield return new WaitForSecondsRealtime(navigationCooldownDuration);
         isOnCooldown = false;
     }
-
-    private void OnEnable()
-    {
-        BookButton.OnButtonHovered += UpdateSelectedIndex;
-    }
-
-    private void OnDisable()
-    {
-        BookButton.OnButtonHovered -= UpdateSelectedIndex;
-    }
-
-    private void UpdateSelectedIndex(BookButton hoveredButton)
-    {
-        int index = System.Array.IndexOf(buttons, hoveredButton);
-        if (index != -1)
-        {
-            currentSelectedIndex = index;
-        }
-    }
 }

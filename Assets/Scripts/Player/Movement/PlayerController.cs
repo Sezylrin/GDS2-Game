@@ -126,13 +126,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private LineRenderer lineRend;
 
-    [Header("Debug Values")]
+    [field: Header("Debug Values")]
 
-    [SerializeField, ReadOnly]
-    private Vector2 direction;
+    [field: SerializeField, ReadOnly]
+    public Vector2 direction { get; private set; }
     [field: SerializeField, ReadOnly]
     public Vector2 lastDirection { get; private set; }
-    [field: SerializeField] [field: ReadOnly]
+    [field: SerializeField, ReadOnly]
     public playerState CurrentState { get; private set; }
     [SerializeField] [ReadOnly]
     private actionState bufferedState;
@@ -182,6 +182,7 @@ public class PlayerController : MonoBehaviour
         currentDashCharges = dashCharges;
         drag = rb.drag;
         initialLayer = circCol2D.excludeLayers;
+        GameManager.Instance.SetCameraTrack(CameraFollowPoint);
         //GameManager.Instance.OnControlSchemeSwitch += SchemeChange;
     }
     #region Updates
@@ -474,6 +475,8 @@ public class PlayerController : MonoBehaviour
     private playerState[] castState = { playerState.idle, playerState.moving };
     private void ExecuteInput()
     {
+        if (bufferedState != actionState.nothing)
+            Debug.Log(bufferedState);
         switch ((int)bufferedState)
         {
             case (int)actionState.dashing:

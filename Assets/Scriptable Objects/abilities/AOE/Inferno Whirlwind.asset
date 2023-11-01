@@ -16,15 +16,17 @@ MonoBehaviour:
   elementType: 1
   type: 1
   castCost: 3
-  castStartSpeed: 0.3
-  castDuration: 0.4
+  castStartSpeed: 0.25
+  castDuration: 0.5
   pierceAmount: 99
   damage: 40
   knockback: 15
   Stagger: 18
   consumePoints: 7
-  lifeTime: 0.4
+  lifeTime: 0.5
   description: Fire based AOE attack
   icon: {fileID: 21300000, guid: 05b99824441986b489fa74f58bd0be96, type: 3}
+  audioCast: 7
+  audioHit: 8
   radius: 3
-  growthSpeed: 0.1
+  growthSpeed: 0.16

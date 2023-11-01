@@ -23,13 +23,6 @@ public class SkillTreeManager : MonoBehaviour
     [SerializeField] 
     private TMP_Text soulsTxt;
 
-    private AudioComponent audioComponent;
-
-    private void Start()
-    {
-        audioComponent = GetComponent<AudioComponent>();
-    }
-
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -47,7 +40,7 @@ public class SkillTreeManager : MonoBehaviour
 
     public void HideSkillTree()
     {
-        GameManager.Instance.PlayCloseMenuSound();
+        GameManager.Instance.UIManager.PlayCloseMenuSound();
         gameObject.SetActive(false);
     }
 

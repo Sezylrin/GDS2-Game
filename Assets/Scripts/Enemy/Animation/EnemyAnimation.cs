@@ -5,25 +5,17 @@ using AYellowpaper.SerializedCollections;
 
 public class EnemyAnimation : MonoBehaviour
 {
-    public enum AnimationMovements
-    {
-        idleR,
-        idleL,
-        idleU,
-        idleD,
-        walkR,
-        walkL,
-        walkU,
-        walkD
-    }
     [SerializeField]
     protected Animator anim;
     [SerializeField]
     protected SpriteRenderer rend;
     [SerializeField]
+    protected SpriteRenderer comboRend;
+    [SerializeField]
+    protected Animator comboAnim;
+    [SerializeField]
     protected Enemy enemy;
     [SerializeField, SerializedDictionary("Animation,String")]
-    protected SerializedDictionary<AnimationMovements, string> clips;
     public int lastDir { get; private set; } = 0;
     // Start is called before the first frame update
     // Update is called once per frame
@@ -39,9 +31,16 @@ public class EnemyAnimation : MonoBehaviour
         if (GameManager.Instance.PlayerTransform)
         {
             if (GameManager.Instance.PlayerTransform.position.y > transform.position.y)
+            {
                 rend.sortingOrder = 30;
+                comboRend.sortingOrder = 31;
+            }
             else
+            {
                 rend.sortingOrder = 10;
+                comboRend.sortingOrder = 11;
+            }
+                
         }
     }
 
@@ -68,40 +67,24 @@ public class EnemyAnimation : MonoBehaviour
     }
     private void WalkAnimation(int direction)
     {
-        switch (direction)
-        {
-            case 0:
-                anim.Play(clips[AnimationMovements.walkR]);
-                break;
-            case 1:
-                anim.Play(clips[AnimationMovements.walkU]);
-                break;
-            case 2:
-                anim.Play(clips[AnimationMovements.walkL]);
-                break;
-            case 3:
-                anim.Play(clips[AnimationMovements.walkD]);
-                break;
-        }
+        anim.SetFloat("Walk", (float)direction / 4f);
+        anim.Play("Walk");
         lastDir = direction;
     }
 
     private void IdleAnimation(int direction)
     {
-        switch (direction)
-        {
-            case 0:
-                anim.Play(clips[AnimationMovements.idleR]);
-                break;
-            case 1:
-                anim.Play(clips[AnimationMovements.idleU]);
-                break;
-            case 2:
-                anim.Play(clips[AnimationMovements.idleL]);
-                break;
-            case 3:
-                anim.Play(clips[AnimationMovements.idleD]);
-                break;
-        }
+        anim.SetFloat("Idle", (float)direction / 4f);
+        anim.Play("Idle");
+    }
+
+    public void PlayComboAnimation(Combos comboToPlay)
+    {
+        comboAnim.Play(comboToPlay.ToString());
+    }
+
+    public void StopShockAnim()
+    {
+        comboAnim.Play("Nothing");
     }
 }

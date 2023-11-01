@@ -1,0 +1,160 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7a51f6d6076a1f44b0a580c2bda5e78, type: 3}
+  m_Name: ControllerPrompts
+  m_EditorClassIdentifier: 
+  Prompts:
+    _serializedList:
+    - Key: 0
+      Value:
+        _serializedList:
+        - Key: 0
+          Value: {fileID: -450928052, guid: 0c87f2b3998e8b1488d2c87f04b16a07, type: 3}
+        - Key: 1
+          Value: {fileID: 407988771, guid: 5b061989571bb854298e1450222bd53f, type: 3}
+        - Key: 2
+          Value: {fileID: -1898650236, guid: f5935ec498bf3364994ee0670b9626dc, type: 3}
+    - Key: 1
+      Value:
+        _serializedList:
+        - Key: 0
+          Value: {fileID: -1735427128, guid: 0c87f2b3998e8b1488d2c87f04b16a07, type: 3}
+        - Key: 1
+          Value: {fileID: 2144842142, guid: 5b061989571bb854298e1450222bd53f, type: 3}
+        - Key: 2
+          Value: {fileID: -2719396, guid: f5935ec498bf3364994ee0670b9626dc, type: 3}
+    - Key: 2
+      Value:
+        _serializedList:
+        - Key: 0
+          Value: {fileID: 1706449278, guid: 0c87f2b3998e8b1488d2c87f04b16a07, type: 3}
+        - Key: 1
+          Value: {fileID: -1732815600, guid: 5b061989571bb854298e1450222bd53f, type: 3}
+        - Key: 2
+          Value: {fileID: 1510754786, guid: f5935ec498bf3364994ee0670b9626dc, type: 3}
+    - Key: 3
+      Value:
+        _serializedList:
+        - Key: 0
+          Value: {fileID: -1715217371, guid: 0c87f2b3998e8b1488d2c87f04b16a07, type: 3}
+        - Key: 1
+          Value: {fileID: -1115273287, guid: 5b061989571bb854298e1450222bd53f, type: 3}
+        - Key: 2
+          Value: {fileID: 1461128104, guid: f5935ec498bf3364994ee0670b9626dc, type: 3}
+    - Key: 4
+      Value:
+        _serializedList:
+        - Key: 0
+          Value: {fileID: 2054254363, guid: 0c87f2b3998e8b1488d2c87f04b16a07, type: 3}
+        - Key: 1
+          Value: {fileID: -1387710617, guid: 5b061989571bb854298e1450222bd53f, type: 3}
+        - Key: 2
+          Value: {fileID: 1935371999, guid: f5935ec498bf3364994ee0670b9626dc, type: 3}
+    - Key: 5
+      Value:
+        _serializedList:
+        - Key: 0
+          Value: {fileID: -1252834035, guid: 0c87f2b3998e8b1488d2c87f04b16a07, type: 3}
+        - Key: 1
+          Value: {fileID: -1315466378, guid: 5b061989571bb854298e1450222bd53f, type: 3}
+        - Key: 2
+          Value: {fileID: 340914818, guid: f5935ec498bf3364994ee0670b9626dc, type: 3}
+    - Key: 6
+      Value:
+        _serializedList:
+        - Key: 0
+          Value: {fileID: -1601183972, guid: 0c87f2b3998e8b1488d2c87f04b16a07, type: 3}
+        - Key: 1
+          Value: {fileID: -527005713, guid: 5b061989571bb854298e1450222bd53f, type: 3}
+        - Key: 2
+          Value: {fileID: -379341746, guid: f5935ec498bf3364994ee0670b9626dc, type: 3}
+    - Key: 7
+      Value:
+        _serializedList:
+        - Key: 0
+          Value: {fileID: 803778081, guid: 0c87f2b3998e8b1488d2c87f04b16a07, type: 3}
+        - Key: 1
+          Value: {fileID: 552780075, guid: 5b061989571bb854298e1450222bd53f, type: 3}
+        - Key: 2
+          Value: {fileID: 87228886, guid: f5935ec498bf3364994ee0670b9626dc, type: 3}
+    - Key: 8
+      Value:
+        _serializedList:
+        - Key: 0
+          Value: {fileID: -1275077488, guid: 0c87f2b3998e8b1488d2c87f04b16a07, type: 3}
+        - Key: 1
+          Value: {fileID: 1318072371, guid: 5b061989571bb854298e1450222bd53f, type: 3}
+        - Key: 2
+          Value: {fileID: 1023793404, guid: f5935ec498bf3364994ee0670b9626dc, type: 3}
+    - Key: 9
+      Value:
+        _serializedList:
+        - Key: 0
+          Value: {fileID: -1299783719, guid: 0c87f2b3998e8b1488d2c87f04b16a07, type: 3}
+        - Key: 1
+          Value: {fileID: -1720148055, guid: 5b061989571bb854298e1450222bd53f, type: 3}
+        - Key: 2
+          Value: {fileID: 1673446175, guid: f5935ec498bf3364994ee0670b9626dc, type: 3}
+    - Key: 10
+      Value:
+        _serializedList:
+        - Key: 0
+          Value: {fileID: -106381772, guid: 0c87f2b3998e8b1488d2c87f04b16a07, type: 3}
+        - Key: 1
+          Value: {fileID: -469846907, guid: 5b061989571bb854298e1450222bd53f, type: 3}
+        - Key: 2
+          Value: {fileID: 202449303, guid: f5935ec498bf3364994ee0670b9626dc, type: 3}
+    - Key: 11
+      Value:
+        _serializedList:
+        - Key: 0
+          Value: {fileID: -1877419470, guid: 0c87f2b3998e8b1488d2c87f04b16a07, type: 3}
+        - Key: 1
+          Value: {fileID: -669872637, guid: 5b061989571bb854298e1450222bd53f, type: 3}
+        - Key: 2
+          Value: {fileID: 68839590, guid: f5935ec498bf3364994ee0670b9626dc, type: 3}
+    - Key: 12
+      Value:
+        _serializedList:
+        - Key: 0
+          Value: {fileID: -1217753689, guid: 0c87f2b3998e8b1488d2c87f04b16a07, type: 3}
+        - Key: 1
+          Value: {fileID: -435121385, guid: 5b061989571bb854298e1450222bd53f, type: 3}
+        - Key: 2
+          Value: {fileID: -1656435031, guid: f5935ec498bf3364994ee0670b9626dc, type: 3}
+    - Key: 13
+      Value:
+        _serializedList:
+        - Key: 0
+          Value: {fileID: -939327978, guid: 0c87f2b3998e8b1488d2c87f04b16a07, type: 3}
+        - Key: 1
+          Value: {fileID: -703616279, guid: 5b061989571bb854298e1450222bd53f, type: 3}
+        - Key: 2
+          Value: {fileID: 1817522735, guid: f5935ec498bf3364994ee0670b9626dc, type: 3}
+    - Key: 14
+      Value:
+        _serializedList:
+        - Key: 0
+          Value: {fileID: 1927182287, guid: 0c87f2b3998e8b1488d2c87f04b16a07, type: 3}
+        - Key: 1
+          Value: {fileID: -875960197, guid: 5b061989571bb854298e1450222bd53f, type: 3}
+        - Key: 2
+          Value: {fileID: 196552701, guid: f5935ec498bf3364994ee0670b9626dc, type: 3}
+    - Key: 15
+      Value:
+        _serializedList:
+        - Key: 0
+          Value: {fileID: 948767869, guid: 0c87f2b3998e8b1488d2c87f04b16a07, type: 3}
+        - Key: 1
+          Value: {fileID: -1498910638, guid: 5b061989571bb854298e1450222bd53f, type: 3}
+        - Key: 2
+          Value: {fileID: -565189765, guid: f5935ec498bf3364994ee0670b9626dc, type: 3}

@@ -4,11 +4,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.DualShock;
+using UnityEngine.InputSystem.Switch;
+using UnityEngine.InputSystem.XInput;
 using KevinCastejon.MoreAttributes;
 public enum ControlScheme
 {
     keyboardAndMouse,
     controller
+}
+public enum ControllerScheme
+{
+    Playstation,
+    Xbox,
+    Switch
 }
 public class GameManager : MonoBehaviour
 {
@@ -22,8 +31,9 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public LevelGenerator LevelGenerator { get; private set; }
     [field: SerializeField] public AudioManager AudioManager { get; private set; }
     [field: SerializeField] public SkillTreeManager SkillTreeManager { get; private set; }
+    [field: SerializeField] public UIManager UIManager { get; private set; }
+   
     [field: SerializeField, HideOnPlay(true)] public Transform PlayerTransform { get; private set; }
-    [field: SerializeField] public BookMenu BookMenu{ get; private set; }
     [field: SerializeField] public StatsManager StatsManager { get; private set; }
     [field: SerializeField] private GameObject BookMenuObj;
     [field: SerializeField] public TileSwapper TileSwapper { get; private set; }
@@ -67,6 +77,16 @@ public class GameManager : MonoBehaviour
     {
         ConsumeTimers = TimerManager.GenerateTimers(typeof(ConsumeTimer), gameObject);
         ConsumeTimers.times[(int)ConsumeTimer.consumeDelay].OnTimeIsZero += EndConsumeDelay;
+        if (!PlayerTransform)
+        {
+            GameObject temp = GameObject.FindWithTag(Tags.T_Player);
+            if (temp)
+            {
+                PCM = temp.GetComponent<PlayerComponentManager>();
+                PlayerTransform = temp.transform;
+            }
+
+        }
     }
 
     //Temporary for now, remove when we have a proper way to open skillSwitchManager
@@ -82,29 +102,6 @@ public class GameManager : MonoBehaviour
         PlayerTransform = player;
         this.PCM = PCM;
     }
-
-    #region Sounds
-    public void PlayOpenMenuSound()
-    {
-        AudioManager.PlaySound(AudioRef.OpenMenu);
-    }
-
-    public void PlayCloseMenuSound()
-    {
-        AudioManager.PlaySound(AudioRef.CloseMenu);
-    }
-
-    public void ActivateBookMenu()
-    {
-        BookMenuObj.SetActive(true);
-        BookMenu.IsSeparateMenu = false;
-    }
-
-    public void DeactivateBookMenu()
-    {
-        BookMenuObj.SetActive(false);
-    }
-    #endregion
 
     #region Souls
     public int Souls { get; private set; }
@@ -234,6 +231,7 @@ public class GameManager : MonoBehaviour
     public PlayerInput input { get; private set; }
 
     public EventHandler OnControlSchemeSwitch;
+    public ControllerScheme controllerType;
     public void SetScheme(PlayerInput input)
 
     {
@@ -245,7 +243,6 @@ public class GameManager : MonoBehaviour
         string temp = input.currentControlScheme;
 
         ControlScheme scheme;
-
         switch (temp)
 
         {
@@ -261,6 +258,13 @@ public class GameManager : MonoBehaviour
             case "Controller":
 
                 scheme = ControlScheme.controller;
+                var Pad = Gamepad.current;
+                if (Pad is XInputController)
+                    controllerType = ControllerScheme.Xbox;
+                else if (Pad is DualShockGamepad)
+                    controllerType = ControllerScheme.Playstation;
+                else if (Pad is SwitchProControllerHID)
+                    controllerType = ControllerScheme.Switch;
 
                 SwitchToControllerCursor();
 

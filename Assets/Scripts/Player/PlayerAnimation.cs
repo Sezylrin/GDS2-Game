@@ -24,6 +24,10 @@ public class PlayerAnimation : MonoBehaviour
         {
             HitStunned();
         }
+        else if (PCM.system.GetState() == playerState.dashing)
+        {
+            Dash(lastDirection);
+        }
         else if (PCM.system.GetState() == playerState.idle)
         {
             IdleMovement();
@@ -62,76 +66,32 @@ public class PlayerAnimation : MonoBehaviour
     private void Moving()
     {
         lastDirection = CustomMath.GetDirection(Vector2.right, PCM.control.lastDirection, false);
-        switch (lastDirection)
-        {
-            case 0:
-                anim.Play("PlayerRunningE");
-                break;
-            case 1:
-                anim.Play("PlayerRunningNE");
-                break;
-            case 2:
-                anim.Play("PlayerRunningN");
-                break;
-            case 3:
-                anim.Play("PlayerRunningNW");
-                break;
-            case 4:
-                anim.Play("PlayerRunningW");
-                break;
-            case 5:
-                anim.Play("PlayerRunningSW");
-                break;
-            case 6:
-                anim.Play("PlayerRunningS");
-                break;
-            case 7:
-                anim.Play("PlayerRunningSE");
-                break;
-        }
+        anim.Play("Run");
+        anim.SetFloat("Run", (float)lastDirection / 8f);
     }
     private void IdleMovement()
     {
         lastDirection = CustomMath.GetDirection(Vector2.right, PCM.control.lastDirection, false);
-
-        switch (lastDirection)
-        {
-            case 0:
-                anim.Play("IdleEast");
-                break;
-            case 1:
-                anim.Play("PlayerIdleNorthEast");
-                break;
-            case 2:
-                anim.Play("IdleNorth");
-                break;
-            case 3:
-                anim.Play("PlayerIdleNorthWest");
-                break;
-            case 4:
-                anim.Play("IdleWest");
-                break;
-            case 5:
-                anim.Play("PlayerIdleSouthWest");
-                break;
-            case 6:
-                anim.Play("IdleSouth");
-                break;
-            case 7:
-                anim.Play("PlayerIdleSouthEast");
-                break;
-        }
+        anim.Play("Idle");
+        anim.SetFloat("Idle", (float)lastDirection / 8f);
     }
     int lastDirection;
     private void HitStunned()
     {
         Vector2 knockback = PCM.system.hitDir;
-        int dir;
+        float dir;
         if (knockback.magnitude > 0.1f)
             dir = CustomMath.GetDirection(Vector2.right, knockback, false);
         else
             dir = ((lastDirection + 4) % 8);
-        switch (dir)
+        anim.SetFloat("Hit", dir / 8f);
+        anim.Play("Hit");
+    }
+
+    private void WindUp()
+    {
+        lastDirection = CustomMath.GetDirection(Vector2.right, PCM.abilities.castDir, false);
+        switch (lastDirection)
         {
             case 0:
                 anim.Play("HitGoingE");
@@ -156,6 +116,53 @@ public class PlayerAnimation : MonoBehaviour
                 break;
             case 7:
                 anim.Play("HitGoingSE");
+                break;
+        }
+    }
+
+    private void Attack()
+    {
+        lastDirection = CustomMath.GetDirection(Vector2.right, PCM.abilities.castDir, false);
+        if (PCM.abilities.castType == AbilityType.dash)
+            Dash(lastDirection);
+    }
+
+    private void AOEAttack()
+    {
+        
+    }
+
+    private void BlastAndProjAttack()
+    {
+
+    }
+    private void Dash(int dashDir)
+    {
+        switch (dashDir)
+        {
+            case 0:
+                anim.Play("PlayerRunningE");
+                break;
+            case 1:
+                anim.Play("PlayerRunningNE");
+                break;
+            case 2:
+                anim.Play("PlayerRunningN");
+                break;
+            case 3:
+                anim.Play("PlayerRunningNW");
+                break;
+            case 4:
+                anim.Play("PlayerRunningW");
+                break;
+            case 5:
+                anim.Play("PlayerRunningSW");
+                break;
+            case 6:
+                anim.Play("PlayerRunningS");
+                break;
+            case 7:
+                anim.Play("PlayerRunningSE");
                 break;
         }
     }

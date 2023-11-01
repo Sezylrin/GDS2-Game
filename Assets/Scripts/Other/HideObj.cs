@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class HideObj : MonoBehaviour
 {
-    public GameObject objToHide;
     // Start is called before the first frame update
     void Start()
     {
-        objToHide.SetActive(false);
+        GameManager.Instance.PlayerTransform.gameObject.SetActive(false);
     }
 
     // Update is called once per frame

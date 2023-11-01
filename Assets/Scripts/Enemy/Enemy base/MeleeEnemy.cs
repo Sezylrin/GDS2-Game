@@ -54,7 +54,7 @@ public abstract class MeleeEnemy : Enemy
         hitTarget = false;
     }
 
-    protected override void InterruptAttack()
+    public override void InterruptAttack()
     {
         base.InterruptAttack();
         WarningBox.SetActive(false);

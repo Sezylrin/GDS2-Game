@@ -29,4 +29,9 @@ public class Menu : MonoBehaviour
     {
 
     }
+
+    public virtual void ToggleOpenMenu()
+    {
+
+    }
 }

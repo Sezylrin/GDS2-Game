@@ -32,8 +32,6 @@ public class ComboBase : MonoBehaviour, IPoolable<ComboBase>
         col2D.radius = SO.radius;
         col2D.includeLayers = target;
         col2D.excludeLayers = ~target;
-        spriteTR.localScale = (new Vector3(SO.radius, SO.radius, SO.radius)) * 2;
-        
         timer.SetTime((int)ComboTimers.lifetime, areaComboSO.duration);
         timer.SetTime((int)ComboTimers.damageTick, 0.1f);
     }
