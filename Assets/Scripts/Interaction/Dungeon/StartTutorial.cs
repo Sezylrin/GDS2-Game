@@ -14,5 +14,6 @@ public class StartTutorial : InteractionBase
     public override void Interact()
     {
         GameManager.Instance.sceneLoader.Load(Scene.Tutorial);
+        Destroy(this);
     }
 }
