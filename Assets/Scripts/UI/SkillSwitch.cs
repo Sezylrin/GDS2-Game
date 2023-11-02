@@ -155,13 +155,12 @@ public class SkillSwitch : Menu
 
             for (int i = 0; i < activeAbilitiesContainer.transform.childCount; i++)
             {
-                int dictionaryKey = i + offset;
                 Transform childTransform = activeAbilitiesContainer.transform.GetChild(i).transform.GetChild(0);
                 ActiveAbility activeAbility = childTransform.GetComponent<ActiveAbility>();
 
-                if (savedAbilityPositions.ContainsKey(dictionaryKey))
+                if (savedAbilityPositions.ContainsKey(activeAbility.abilityIndex + offset))
                 {
-                    activeAbility.UpdateAbility(savedAbilityPositions[dictionaryKey]);
+                    activeAbility.UpdateAbility(savedAbilityPositions[activeAbility.abilityIndex + offset]);
                 }
                 else
                 {
