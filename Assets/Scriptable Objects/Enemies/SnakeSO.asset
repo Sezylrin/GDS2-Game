@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: e8030000dc050000c4090000
   speed:
-  - 4
-  - 5
   - 6
+  - 7
+  - 8
   minSouls: 190000003c0000005f000000
   maxSouls: 280000004600000069000000
   effectDuration: 5
@@ -26,11 +26,11 @@ MonoBehaviour:
   - 2
   attack1Damage: 0a0000000f00000014000000
   attack1Duration: 0.25
-  windup1Duration: 1
+  windup1Duration: 1.1
   attackKnockback1: 6
   attack2Damage: 0a0000000f00000014000000
-  attack2Duration: 1
-  windup2Duration: 1
+  attack2Duration: 2
+  windup2Duration: 1.25
   attackKnockback2: 6
   attack3Damage: 050000000a0000000f000000
   attack3Duration: 0.5
@@ -45,6 +45,6 @@ MonoBehaviour:
   damageToReachMaxDuration: 400
   SingleShotSpeed: 18
   RapidFireAmount: 5
-  RapidFireSpeed: 13
+  RapidFireSpeed: 10
   AcidBlobSpeed: 1
-  AcidPoolDuration: 0.25
+  AcidPoolDuration: 8
