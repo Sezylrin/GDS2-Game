@@ -35,6 +35,7 @@ public class BookSkillTree : Menu
     [SerializeField] private TMP_Text DamageText;
 
     private Vector2Int currentSelectedIndex = new Vector2Int(0, 0);
+    private BaseSkillTreeButton lastHoveredButton = null;
     private bool isOnAbilityMenu = true;
 
     private float navigationCooldownDuration = 0.15f;
@@ -42,6 +43,12 @@ public class BookSkillTree : Menu
 
     public override void OpenMenu()
     {
+        if (lastHoveredButton != null)
+        {
+            lastHoveredButton.DisableHover();
+            lastHoveredButton = null;
+        }
+
         isOnAbilityMenu = true;
         SetActiveButton(0, 0);
         SoulsText.text = GameManager.Instance.Souls.ToString();
@@ -183,6 +190,7 @@ public class BookSkillTree : Menu
 
         // Enable hover for arriving menu button
         arrivingList[currentSelectedIndex.x].row[currentSelectedIndex.y].ActivateHover();
+        lastHoveredButton = arrivingList[currentSelectedIndex.x].row[currentSelectedIndex.y];
     }
 
     public void ClickActiveButton()

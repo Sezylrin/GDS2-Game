@@ -18,12 +18,17 @@ public class UpgradeSkillTreeButton : BaseSkillTreeButton
     [SerializeField] bool CanPurchaseOnce;
     [SerializeField] UpgradeType UpgradeType;
 
+    private bool HasInitialisedSoulCost = false;
     int TimesPurchased = 1;
     private string UpdatedName;
 
     public override void Init()
     {
-        SoulCost = SoulCostToSet;
+        if (!HasInitialisedSoulCost)
+        {
+            HasInitialisedSoulCost = true;
+            SoulCost = SoulCostToSet;
+        }
         if (!CanPurchaseOnce)
         {
             UpdatedName = OriginalName + " " + TimesPurchased;
