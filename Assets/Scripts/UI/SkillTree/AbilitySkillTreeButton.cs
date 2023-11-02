@@ -64,7 +64,7 @@ public class AbilitySkillTreeButton : BaseSkillTreeButton
                 Color windColor = new Color(0.53f, 0.81f, 0.98f, 1f);
                 return windColor;
             case ElementType.electric:
-                Color electricColor = new Color(1f, 1f, 0.5f, 1f);
+                Color electricColor = new Color(0.7f, 0.3f, 1f, 1f);
                 return electricColor;
             default:
                 return Color.white;
