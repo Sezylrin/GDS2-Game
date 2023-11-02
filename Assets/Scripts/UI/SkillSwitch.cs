@@ -48,12 +48,14 @@ public class SkillSwitch : Menu
         {
             Transform childTransform = allAbilitiesContainer.transform.GetChild(i);
             UnusedAbility unusedAbility = childTransform.gameObject.GetComponent<UnusedAbility>();
+            bool canUse = false;
             if (unusedAbility != null)
             {
                 if (abilityIndex < unlockedAbilities.Count)
                 {
                     unusedAbility.abilityData = unlockedAbilities[abilityIndex];
                     unusedAbility.UpdateBorder();
+                    canUse = true;
                 }
                 else if (abilityIndex - unlockedAbilities.Count < lockedAbilities.Count)
                 {
@@ -61,7 +63,7 @@ public class SkillSwitch : Menu
                 }
                 abilityIndex++;
             }
-            childTransform.GetChild(0).GetComponent<Image>().sprite = unusedAbility.abilityData.icon;
+            unusedAbility.InitIconAndBackground(canUse);
             allAbilities.Add(childTransform.gameObject);
         }
 
@@ -84,11 +86,11 @@ public class SkillSwitch : Menu
             if (activeAbility != null && savedAbilityPositions.ContainsKey(activeAbility.abilityIndex))
             {
                 activeAbility.UpdateAbility(savedAbilityPositions[activeAbility.abilityIndex]);
-                childTransform.GetChild(0).GetComponent<Image>().sprite = activeAbility.abilityData.icon;
+                activeAbility.InitIconAndBackground(true);
             }
             else
             {
-                childTransform.GetChild(0).GetComponent<Image>().enabled = false;
+                activeAbility.HideOrShowIcon(false);
             }
         }
     }
@@ -164,8 +166,8 @@ public class SkillSwitch : Menu
                 else
                 {
                     activeAbility.abilityData = null;
-                    childTransform.GetChild(0).GetComponent<Image>().enabled = false;
-                    activeAbility.GreyBorder(currentlyHoveredIndex == i);
+                    activeAbility.HideOrShowIcon(false);
+                    activeAbility.GreyBorder();
                 }
 
                 if (currentlyHoveredIndex == i)

@@ -7,16 +7,6 @@ public class UnusedAbility : UIAbility
 {
     public override void ActivateHover(bool playSound = true)
     {
-        Image bgImage = gameObject.GetComponent<Image>();
-
-        if (GameManager.Instance.StatsManager.GetUnlockedAbilities().Contains(abilityData))
-        {
-            bgImage.sprite = hoverBg;
-        }
-        else
-        {
-            bgImage.sprite = hoveredDisabledBg;
-        }
         GameManager.Instance.UIManager.GetBookMenu().SkillSwitch.GetComponent<SkillSwitch>().UpdatePopup(abilityData);
         if (playSound)
         {
@@ -31,11 +21,11 @@ public class UnusedAbility : UIAbility
 
         if (GameManager.Instance.StatsManager.GetUnlockedAbilities().Contains(abilityData))
         {
-            bgImage.sprite = bg;
+            borderImage.sprite = bg;
         }
         else
         {
-            bgImage.sprite = disabledBg;
+            borderImage.sprite = disabledBg;
         }
 
         base.StopHoverAnimation();
@@ -43,7 +33,6 @@ public class UnusedAbility : UIAbility
 
     public void UpdateBorder()
     {
-        Image bgImage = gameObject.GetComponent<Image>();
-        bgImage.sprite = bg;
+        borderImage.sprite = bg;
     }
 }

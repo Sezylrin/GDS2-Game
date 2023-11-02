@@ -10,21 +10,15 @@ public class ActiveAbility : UIAbility
     public void UpdateAbility(ElementalSO newAbilityData)
     {
         abilityData = newAbilityData;
-        Image image = gameObject.transform.GetChild(0).GetComponent<Image>();
-        image.sprite = newAbilityData.icon;
-        image.enabled = true;
-        gameObject.GetComponent<Image>().sprite = bg;
+        abilityIcon.sprite = newAbilityData.icon;
+        backgroundColor.color = GetBackgroundColor();
+        backgroundColor.enabled = true;
+        abilityIcon.enabled = true;
+        borderImage.sprite = bg;
     }
 
-    public void GreyBorder(bool hovered = false)
+    public void GreyBorder()
     {
-        if (hovered)
-        {
-            gameObject.GetComponent<Image>().sprite = hoveredDisabledBg;
-        }
-        else
-        {
-            gameObject.GetComponent<Image>().sprite = disabledBg;
-        }
+        borderImage.sprite = disabledBg;
     }
 }
