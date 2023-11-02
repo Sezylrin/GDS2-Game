@@ -84,18 +84,29 @@ public class AudioManager : MonoBehaviour
         availableSources.Push(obj);
     }
 
+    private float LinearToDecibel(float linear)
+    {
+        if (linear != 0)
+            return 20.0f * Mathf.Log10(linear);
+        else
+            return -80.0f;
+    }
+
     public void ModifyBGMVolume(float volume)
     {
         bgmVolume = volume;
+        BGMMixerGroup.audioMixer.SetFloat("BGM_Volume", LinearToDecibel(bgmVolume / 100f));
     }
 
     public void ModifyMasterVolume(float volume)
     {
         masterVolume = volume;
+        MasterMixerGroup.audioMixer.SetFloat("Master_Volume", LinearToDecibel(masterVolume / 100f));
     }
 
     public void ModifySFXVolume(float volume)
     {
         sfxVolume = volume;
+        SFXMixerGroup.audioMixer.SetFloat("SFX_Volume", LinearToDecibel(sfxVolume / 100f));
     }
 }
