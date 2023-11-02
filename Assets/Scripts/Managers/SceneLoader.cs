@@ -17,7 +17,7 @@ public class SceneLoader : MonoBehaviour
         if (scene == Scene.Tutorial)
         {
             GameManager.Instance.SetIsTutorial(true);
-            GameManager.Instance.PCM.UI.DisableAbilityUI();
+            // GameManager.Instance.PCM.UI.DisableAbilityUI();
         }
         else
         {
