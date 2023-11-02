@@ -109,7 +109,7 @@ public class BookSkillTree : Menu
     public void UpdateDamageText()
     {
         float DamageModifier = GameManager.Instance.StatsManager.damageModifier;
-        string DamagePercentage = DamageModifier * 100 + "%";
+        string DamagePercentage = (DamageModifier * 100).ToString("F0") + "%";
         DamageText.text = DamagePercentage;
     }
 
