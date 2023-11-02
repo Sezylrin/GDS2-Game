@@ -14,6 +14,8 @@ public class SkillSwitch : Menu
     private GameObject activeAbilitiesContainer;
     [SerializeField]
     private GameObject popupContainer;
+    [SerializeField]
+    private GameObject tabPromptContainer;
 
     [Header("Popup")]
     [SerializeField]
@@ -102,6 +104,7 @@ public class SkillSwitch : Menu
         currentlyHoveredIndex = 0;
         currentSkillMenu = CurrentSkillMenu.UnusedAbilities;
         firstSkillsetSelected = true;
+        tabPromptContainer.SetActive(false);
         InitialiseSkillSwitchManager();
     }
 
@@ -122,6 +125,10 @@ public class SkillSwitch : Menu
             currentlyHoveredAbility = newSelectedAbility;
             currentlyHoveredIndex = 0;
             newSelectedAbility.ActivateHover();
+            if (GameManager.Instance.StatsManager.secondSkillsetUnlocked)
+            {
+                tabPromptContainer.SetActive(true);
+            }
         }
         else
         {
@@ -139,6 +146,7 @@ public class SkillSwitch : Menu
             GameManager.Instance.AudioManager.PlaySound(AudioRef.buttonPress);
             newSelectedAbility.ActivateHover(false);
             selectedAbility = null;
+            tabPromptContainer.SetActive(false);
         }
     }
 
