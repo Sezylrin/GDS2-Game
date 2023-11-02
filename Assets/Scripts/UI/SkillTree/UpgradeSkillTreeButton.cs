@@ -81,7 +81,7 @@ public class UpgradeSkillTreeButton : BaseSkillTreeButton
                 SoulCost += 50;
             }
             GameManager.Instance.RemoveSouls(SoulCost);
-            GameManager.Instance.AudioManager.PlaySound(AudioRef.buttonPress);
+            GameManager.Instance.AudioManager.PlaySound(AudioRef.UnlockSkill);
             UpdatePopup();
             GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdateSoulsText(GameManager.Instance.Souls);
 
