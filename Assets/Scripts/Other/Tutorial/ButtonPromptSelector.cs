@@ -10,8 +10,8 @@ public class ButtonPromptSelector : MonoBehaviour
     [Header("Dont Touch")]
     [SerializeField] private bool isCanvas;
     [SerializeField] private ButtonPrompts promptsSO;
-    private Image canvasImage;
-    private SpriteRenderer spriteImage;
+    [SerializeField] private Image canvasImage;
+    [SerializeField] private SpriteRenderer spriteImage;
     [Space(20), Header("Prompt SetUp")]
     [SerializeField, Tooltip("Equivelant Keyboard Image")] private Sprite KeyboardSprite;
     [SerializeField, Tooltip("Equivelant Controller Image")] private ControllerButtons controllerButton;
@@ -20,18 +20,19 @@ public class ButtonPromptSelector : MonoBehaviour
     [SerializeField] private ControllerScheme previewController;
     void Start()
     {
-        if (isCanvas)
-        {
-            canvasImage = GetComponent<Image>();
-        }
-        else
-        {
-            spriteImage = GetComponent<SpriteRenderer>();
-        }
-        GameManager.Instance.OnControlSchemeSwitch += SwitchPrompt;
-        SetPrompt(GameManager.Instance.currentScheme, GameManager.Instance.controllerType);
     }
-
+    private void OnDisable()
+    {
+        GameManager.Instance.OnControlSchemeSwitch -= SwitchPrompt;
+    }
+    private void OnEnable()
+    {
+        if(GameManager.Instance)            
+        {
+            SetPrompt(GameManager.Instance.currentScheme, GameManager.Instance.controllerType);
+            GameManager.Instance.OnControlSchemeSwitch += SwitchPrompt;
+        }
+    }
     // Update is called once per frame
     void Update()
     {
@@ -45,6 +46,8 @@ public class ButtonPromptSelector : MonoBehaviour
 
     private void SetPrompt(ControlScheme newScheme, ControllerScheme whichController)
     {
+        Debug.Log("NotError");
+        Debug.Log(gameObject.name);
         if (newScheme == ControlScheme.keyboardAndMouse)
         {
             if (isCanvas)
@@ -60,6 +63,7 @@ public class ButtonPromptSelector : MonoBehaviour
             else
                 spriteImage.sprite = sprite;
         }
+        Debug.Log("error");
     }
 
     public void Preview()
