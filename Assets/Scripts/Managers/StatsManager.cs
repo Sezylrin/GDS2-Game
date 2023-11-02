@@ -16,8 +16,7 @@ public class StatsManager : MonoBehaviour
     public SerializedDictionary<int, ElementalSO> savedAbilityPositions;
 
     [Header("Stats")]
-    public int abilityModifier = 0;
-    public int attackDamageModifier = 0;
+    public float damageModifier = 1f;
     public int bonusHealth = 0;
     public bool secondSkillsetUnlocked = false;
 

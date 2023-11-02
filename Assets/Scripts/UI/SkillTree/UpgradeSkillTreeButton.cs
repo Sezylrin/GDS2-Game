@@ -45,13 +45,14 @@ public class UpgradeSkillTreeButton : BaseSkillTreeButton
 
     public override void UpdatePopup()
     {
-        GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdatePopup(UpdatedName, Description, CanPurchase(), purchased);
+        string UpdatedDescription = Description + ". Costs " + SoulCost + " souls to purchase.";
+        GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdatePopup(UpdatedName, UpdatedDescription, CanPurchase(), purchased);
     }
 
     public override void ActivateHover()
     {
         base.ActivateHover();
-        GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdatePopup(UpdatedName, Description, CanPurchase(), purchased);
+        UpdatePopup();
     }
 
     public override void HandlePurchase()
@@ -72,10 +73,11 @@ public class UpgradeSkillTreeButton : BaseSkillTreeButton
             {
                 TimesPurchased++;
                 UpdatedName = OriginalName + " " + TimesPurchased;
+                SoulCost += 50;
             }
             GameManager.Instance.RemoveSouls(SoulCost);
             GameManager.Instance.AudioManager.PlaySound(AudioRef.buttonPress);
-            GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdatePopup(UpdatedName, Description, CanPurchase(), purchased);
+            UpdatePopup();
             GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdateSoulsText(GameManager.Instance.Souls);
 
             switch (UpgradeType)
@@ -106,11 +108,12 @@ public class UpgradeSkillTreeButton : BaseSkillTreeButton
     {
         GameManager.Instance.StatsManager.bonusHealth += 10;
         GameManager.Instance.PCM.system.UpgradeHealth();
+        GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdateHealthText();
     }
 
     public void UpgradeDamage()
     {
-        GameManager.Instance.StatsManager.abilityModifier += 10;
-        GameManager.Instance.StatsManager.attackDamageModifier += 10;
+        GameManager.Instance.StatsManager.damageModifier += 0.1f;
+        GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdateDamageText();
     }
 }

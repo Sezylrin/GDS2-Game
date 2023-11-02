@@ -350,9 +350,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         if(currentState == EnemyState.idle) Manager.EnableAggro(); //Makes all enemies on screen aggro'd
         PlayFlash();
         CalculateResist(type, typeTwo);
+        float playerUpgradeDamageModifier = GameManager.Instance.StatsManager.damageModifier;
         float modifier = CalculateModifer();
-        float modifiedDamage = damage * modifier;
-        Hitpoints -= (int)Mathf.Ceil(modifiedDamage);
+        float totalModifier = playerUpgradeDamageModifier * modifier;
+        float modifiedDamage = damage * totalModifier;
+        Hitpoints -= Mathf.CeilToInt(modifiedDamage);
 
         GameManager.Instance.AudioManager.PlaySound(AudioRef.Hit);
         if (Hitpoints <= 0) //Handles death

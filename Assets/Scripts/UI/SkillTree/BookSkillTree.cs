@@ -29,8 +29,10 @@ public class BookSkillTree : Menu
     [SerializeField] private GameObject cantAfford;
     [SerializeField] private GameObject purchased;
 
-    [Header("Souls")]
+    [Header("Info")]
     [SerializeField] private TMP_Text SoulsText;
+    [SerializeField] private TMP_Text HealthText;
+    [SerializeField] private TMP_Text DamageText;
 
     private Vector2Int currentSelectedIndex = new Vector2Int(0, 0);
     private bool isOnAbilityMenu = true;
@@ -95,6 +97,20 @@ public class BookSkillTree : Menu
     public void UpdateSoulsText(int souls)
     {
         SoulsText.text = souls.ToString();
+    }
+
+    public void UpdateHealthText()
+    {
+        int StartingHealth = 100;
+        int BonusHealth = GameManager.Instance.StatsManager.bonusHealth;
+        HealthText.text = (StartingHealth + BonusHealth).ToString();
+    }
+
+    public void UpdateDamageText()
+    {
+        float DamageModifier = GameManager.Instance.StatsManager.damageModifier;
+        string DamagePercentage = DamageModifier * 100 + "%";
+        DamageText.text = DamagePercentage;
     }
 
     public void SetActiveButton(int row, int column)

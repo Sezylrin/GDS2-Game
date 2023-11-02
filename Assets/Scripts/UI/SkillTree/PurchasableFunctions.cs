@@ -16,12 +16,12 @@ public class PurchasableFunctions : MonoBehaviour
 
     public void IncreaseElementalDamage(int AmountToIncrease)
     {
-        GameManager.Instance.StatsManager.abilityModifier += AmountToIncrease;
+        //GameManager.Instance.StatsManager.abilityModifier += AmountToIncrease;
     }
 
     public void IncreaseDamage(int AmountToIncrease)
     {
-        GameManager.Instance.StatsManager.attackDamageModifier += AmountToIncrease;
+        //GameManager.Instance.StatsManager.attackDamageModifier += AmountToIncrease;
     }
 
     public void UnlockSecondSkillSet()

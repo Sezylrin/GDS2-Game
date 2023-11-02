@@ -25,12 +25,13 @@ public class AbilitySkillTreeButton : BaseSkillTreeButton
     public override void ActivateHover()
     {
         base.ActivateHover();
-        GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdatePopup(abilityData.name, abilityData.description, CanPurchase(), purchased);
+        UpdatePopup();
     }
 
     public override void UpdatePopup()
     {
-        GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdatePopup(abilityData.name, abilityData.description, CanPurchase(), purchased);
+        string Description = abilityData.description + ". Costs " + SoulCost + " souls to purchase.";
+        GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdatePopup(abilityData.name, Description, CanPurchase(), purchased);
     }
 
     public override void HandlePurchase()
@@ -45,7 +46,7 @@ public class AbilitySkillTreeButton : BaseSkillTreeButton
         GameManager.Instance.StatsManager.UnlockAbility(abilityData);
         GameManager.Instance.RemoveSouls(SoulCost);
         GameManager.Instance.AudioManager.PlaySound(AudioRef.buttonPress);
-        GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdatePopup(abilityData.name, abilityData.description, CanPurchase(), purchased);
+        UpdatePopup();
         GameManager.Instance.UIManager.GetBookMenu().SkillTree.GetComponent<BookSkillTree>().UpdateSoulsText(GameManager.Instance.Souls);
     }
 
