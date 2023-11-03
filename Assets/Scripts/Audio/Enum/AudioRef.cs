@@ -1,5 +1,10 @@
 public enum AudioRef
 {
+	Combat,
+	Grasslands,
+	Hub,
+	PauseMenu,
+	StartMenu,
 	ButtonHover,
 	buttonPress,
 	ButtonPressFail,
@@ -17,7 +22,23 @@ public enum AudioRef
 	FootStepGrassR,
 	Healing,
 	Hit,
+	Blizzard,
+	Boomerang,
+	Swipe,
+	Defeat,
+	FireTornado,
+	GrenadeDrop,
+	GrenadeExplosion,
+	KnifeThrow,
+	RhinoCharge,
+	RhinoStomp,
+	Spear,
+	TeleIn,
+	VenonPool,
+	Victory,
+	PoisonSpit,
 	OpenMenu,
 	Parry,
-	Stagger
+	Stagger,
+	UnlockSkill
 }

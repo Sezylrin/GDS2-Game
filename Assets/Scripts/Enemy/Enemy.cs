@@ -8,6 +8,7 @@ using Pathfinding;
 using System.Threading;
 using TMPro;
 using Random = UnityEngine.Random;
+using DG.Tweening;
 
 #region EnemyType Enum
 public enum EnemyType
@@ -46,7 +47,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     [field: SerializeField, ReadOnly] public int Hitpoints { get; set; }
     [field: SerializeField, ReadOnly] protected ElementType ActiveElementEffect { get; set; } = ElementType.noElement;
     [field: SerializeField, ReadOnly] protected int ElementTier { get; set; }
-    [field: SerializeField, ReadOnly] protected int CurrentAttack { get; set; }
+    [field: SerializeField, ReadOnly] public int CurrentAttack { get; private set; }
     [field: SerializeField, ReadOnly] public bool WindingUp { get; private set; }
     [field: SerializeField, ReadOnly] public bool InAttack { get; private set; }
     [field: SerializeField, ReadOnly] protected bool Staggered { get; set; }
@@ -112,6 +113,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     protected bool hitTarget = false;
     [SerializeField]
     protected float collisionDisabledDur;
+    [Header("EffectImage")]
+    [SerializeField]
+    protected Image effectImage;
+    [SerializeField]
+    protected Sprite[] elementSprites = new Sprite[4];
+    
     #endregion
 
     #region Combo Interface Variables
@@ -122,6 +129,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     public bool IsStunned { get; set; }
     [SerializeField]
     protected TMP_Text comboText;
+
+    protected EnemyAnimation enemyAnimation;
     #endregion
 
     #region Shader
@@ -176,8 +185,19 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     }
     protected virtual void Start()
     {
+        if (!initiallySpawned)
+        {
+            InitialSpawn();
+            Init();
+        }
+    }
+    private bool initiallySpawned = false;
+    public void InitialSpawn()
+    {
+        initiallySpawned = true;
         ComboManager = GameManager.Instance.ComboManager;
         Manager = GameManager.Instance.EnemyManager;
+        enemyAnimation = GetComponentInChildren<EnemyAnimation>();
 
         if (debugEnemySpawn) Manager.DebugAddEnemy(this);
 
@@ -187,8 +207,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         Speed = path.maxSpeed;
 
         ActiveElementEffect = ElementType.noElement;
-
-        Init();
 
         defaultLayer = col2D.excludeLayers;
     }
@@ -211,13 +229,15 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         Consumable = false;
         ElementTier = 1;
         currentState = EnemyState.stationary;
-
+        EnemyTimers.SetTime((int)EnemyTimer.aiActionTimer, 1f);
         targetTr = GameManager.Instance.PlayerTransform;
         TargetLayer = PlayerLayer;
 
         EnemyTimers.ResetToZero();
 
         StaggerBar.ResetStagger();
+        effectImage.enabled = false;
+        comboText.text = "";
     }
 
     public virtual void SetStatsFromScriptableObject()
@@ -330,11 +350,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         if(currentState == EnemyState.idle) Manager.EnableAggro(); //Makes all enemies on screen aggro'd
         PlayFlash();
         CalculateResist(type, typeTwo);
+        float playerUpgradeDamageModifier = GameManager.Instance.StatsManager.damageModifier;
         float modifier = CalculateModifer();
-        float modifiedDamage = damage * modifier;
-        Hitpoints -= (int)Mathf.Ceil(modifiedDamage);
+        float totalModifier = playerUpgradeDamageModifier * modifier;
+        float modifiedDamage = damage * totalModifier;
+        Hitpoints -= Mathf.CeilToInt(modifiedDamage);
 
-        GameManager.Instance.AudioManager.PlaySound(AudioRef.Hit);
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.Hit, false, 0.9f);
         if (Hitpoints <= 0) //Handles death
         {
             Hitpoints = 0;
@@ -486,6 +508,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     {
         while (WindingUp)
         {
+            block.SetTexture("MainTex", rend.sprite.texture);
             block.SetColor("_FlashColour", Color.red);
             block.SetFloat("_FlashAmount", 0.65f);
             rend.SetPropertyBlock(block);
@@ -509,7 +532,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     #region Attacking Functions
 
     protected virtual int ChooseAttack()
-    {        
+    {
         return Random.Range(1, Tier+1);
     }
 
@@ -590,10 +613,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         Manager.DoneAttack();
         isAttacking = false;
         hitTarget = false;
+        enemyAnimation.ReturnToIdle();
     }
 
-    protected virtual void InterruptAttack()
+    public virtual void InterruptAttack()
     {
+        InAttack = false;
+        AbleToAttack = true;
         EnemyTimers.ResetSpecificToZero((int)EnemyTimer.windupDurationTimer);
         EnemyTimers.ResetSpecificToZero((int)EnemyTimer.attackDurationTimer);
         WindingUp = false;
@@ -604,6 +630,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
             Manager.DoneAttack();
         isAttacking = false;
         hitTarget = false;
+        enemyAnimation.ReturnToIdle();
     }
 
     protected virtual void Attack1()
@@ -639,17 +666,34 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         hitTarget = true;
     }
     #endregion
-
+    
     #region Element Functions
     protected virtual void ApplyElementEffect(ElementType type)
     {
         EnemyTimers.SetTime((int)EnemyTimer.effectedTimer, EffectDuration);
         ActiveElementEffect = type;
+        effectImage.enabled = true;
+        switch ((int)type)
+        {
+            case (int)ElementType.fire:
+                effectImage.sprite = elementSprites[0];
+                break;
+            case (int)ElementType.water:
+                effectImage.sprite = elementSprites[1];
+                break;
+            case (int)ElementType.electric:
+                effectImage.sprite = elementSprites[2];
+                break;
+            case (int)ElementType.wind:
+                effectImage.sprite = elementSprites[3];
+                break;
+        }
     }
 
     protected virtual void RemoveElementEffect(object sender, EventArgs e)
     {
         ActiveElementEffect = ElementType.noElement;
+        effectImage.enabled = false;
     }
 
     protected virtual void SetElementOutline()
@@ -688,20 +732,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
 
     #region Combo Functions
 
-    public void ComboAttack(ComboSO combo, ElementType typeOne, ElementType typeTwo, Color textColour)
+    public void ComboAttack(ComboSO comboSO, ElementType typeOne, ElementType typeTwo, Combos combo)
     {
-        TakeDamage(combo.BaseDamage, combo.StaggerDamage, typeOne, typeTwo);
-        comboText.text = combo.name;
-        comboText.color = textColour;
-        if (gameObject.activeInHierarchy)
-            StartCoroutine(RemoveText(combo.name));
-    }
-
-    private IEnumerator RemoveText(string textToRemove)
-    {
-        yield return new WaitForSeconds(2.5f);
-        if (comboText.text.Equals(textToRemove))
-            comboText.text = "";
+        TakeDamage(comboSO.BaseDamage, comboSO.StaggerDamage, typeOne, typeTwo);
+        enemyAnimation.PlayComboAnimation(combo);
     }
 
     public IEnumerator StunTarget(float dur)
@@ -709,9 +743,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         IsStunned = true;
         StopPathing();
         InterruptAttack();
+        AbleToAttack = false;
         yield return new WaitForSeconds(dur);
-
+        enemyAnimation.StopShockAnim();
         IsStunned = false;
+        AbleToAttack = true;
     }
 
     public void InBlizzard(float bonusDamage)
@@ -829,11 +865,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
     }
 
     [Header("AI")]
-    [SerializeField, Range(1,10)] protected int IdleRadius;
-    [SerializeField, Range(1,10)] protected float RepositionPointMin;
-    [SerializeField, Range(1,10)] protected float RepositionPointMax;
-    [SerializeField] protected float IdleMoveRateMin;
-    [SerializeField] protected float IdleMoveRateMax;
+    [SerializeField, Range(1,10), Tooltip("How much randomness is applied to final calculated position")] protected int deviateRange;
+    [SerializeField, Range(1,10), Tooltip("How close the enemy can get to the player when repositioning")] protected float RepositionPointMin;
+    [SerializeField, Range(1,10), Tooltip("How far the enemy can get to the player when repositioning")] protected float RepositionPointMax;
+    [SerializeField, Range(1,10), Tooltip("Minimum Time before enemy can do something after a repositon")] protected float InactionTimerMin = 0;
+    [SerializeField, Range(1,10), Tooltip("Maximum Time before enemy can do something after a repositon")] protected float InactionTimerMax = 1;
+    
     [SerializeField][ReadOnly]
     protected EnemyState currentState;
     [SerializeField][ReadOnly]
@@ -862,8 +899,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
             }
             else
             {
-                float x = Random.Range(-IdleRadius, IdleRadius);
-                float y = Random.Range(-IdleRadius, IdleRadius);
+                float x = Random.Range(-deviateRange, deviateRange);
+                float y = Random.Range(-deviateRange, deviateRange);
                 randDeviate = new Vector2(x, y);
                 currentState = EnemyState.repositioning;
                 repositionRange = Random.Range(RepositionPointMin, RepositionPointMax);
@@ -882,48 +919,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
                 break;
         }
     }
-    protected virtual void EnemyAi()
-    {
-        if (debugDisableAI) return;
-        if (IsStunned || Staggered) return;
-        if (currentState == EnemyState.chasing)
-        {
-            DetermineAttackPathing();
-            return;
-        }
-        if (!(EnemyTimers.IsTimeZero((int)EnemyTimer.aiActionTimer) && !hasDestination))
-            return;
-        if (targetTr == null)
-            return;
-        if (currentState == EnemyState.stationary)
-        {
-            if (AbleToAttack && Manager.CanAttack())
-            {
-                isAttacking = true;
-                CurrentAttack = ChooseAttack();
-                currentState = EnemyState.chasing;
-            }
-            else
-            {
-                currentState = EnemyState.repositioning;
-            }
-        }
-
-        switch ((int)currentState)
-        {
-            case (int)EnemyState.idle:
-                IdlePathPicker();
-                break;
-            case (int)EnemyState.repositioning:
-                RepositionPicker();
-                break;
-        }
-
-        if(currentState == EnemyState.attacking)
-        {
-            currentState = EnemyState.stationary;
-        }
-    }
+    
     //call in child class to determine pathing choice
     protected virtual void DetermineAttackPathing()
     {
@@ -938,8 +934,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
 
     protected virtual void IdlePathPicker()
     {
-        float x = Random.Range(-IdleRadius, IdleRadius);
-        float y = Random.Range(-IdleRadius, IdleRadius);
+        float x = Random.Range(-deviateRange, deviateRange);
+        float y = Random.Range(-deviateRange, deviateRange);
         SetDestination(new Vector3(x,y,0) + transform.position);
     }
 
@@ -976,10 +972,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         StopPathing();
         float timeToAdd = 0;
         switch ((int)currentState)
-        {
-            case (int)EnemyState.idle:
-                timeToAdd = Random.Range(IdleMoveRateMin, IdleMoveRateMax);
-                break;
+        {            
             case (int)EnemyState.chasing:
                 Attack();
                 currentState = EnemyState.attacking;
@@ -997,7 +990,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
                 }
                 break;
             case (int)EnemyState.repositioning:
-                timeToAdd = Random.Range(1, 2f);
+                timeToAdd = Random.Range(InactionTimerMin, InactionTimerMax);
                 currentState = EnemyState.stationary;
                 break;
         }
@@ -1074,6 +1067,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
 
     public virtual void PoolSelf()
     {
+        EnemyTimers.ResetToZero();
+        ActiveElementEffect = ElementType.noElement;
         if (Pool != null)
             Pool.PoolObj(this);
         else

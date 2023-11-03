@@ -16,15 +16,17 @@ MonoBehaviour:
   elementType: 8
   type: 1
   castCost: 1
-  castStartSpeed: 0.3
-  castDuration: 0.4
+  castStartSpeed: 0.2
+  castDuration: 0.5
   pierceAmount: 99
-  damage: 27
+  damage: 35
   knockback: 45
   Stagger: 10
   consumePoints: 3
-  lifeTime: 0.6
+  lifeTime: 1
   description: Wind based AOE attack
   icon: {fileID: 21300000, guid: 05b99824441986b489fa74f58bd0be96, type: 3}
-  radius: 2.5
-  growthSpeed: 0.4
+  audioCast: 11
+  audioHit: 10
+  radius: 3
+  growthSpeed: 0.02

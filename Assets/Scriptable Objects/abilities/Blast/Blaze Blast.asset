@@ -17,23 +17,25 @@ MonoBehaviour:
   type: 0
   castCost: 1
   castStartSpeed: 0.15
-  castDuration: 0.38
+  castDuration: 0.5
   pierceAmount: 2
-  damage: 46
+  damage: 55
   knockback: 15
   Stagger: 25
   consumePoints: 10
-  lifeTime: 0.45
+  lifeTime: 0.5
   description: Close range Fire based attack
   icon: {fileID: 21300000, guid: 0371f50b092f5814bb6e164c12311d42, type: 3}
+  audioCast: 7
+  audioHit: 8
   initialShape:
-  - {x: 0.18772608, y: 0.44878396}
-  - {x: -0.32305247, y: 0.40426585}
-  - {x: -0.30065656, y: -0.3312522}
-  - {x: 0.17737156, y: -0.35661632}
+  - {x: 0.5, y: 0.5}
+  - {x: -0.5, y: 0.5}
+  - {x: -0.5, y: -0.5}
+  - {x: 0.5, y: -0.5}
   finalShape:
-  - {x: 1.04526, y: 1.193244}
-  - {x: -0.36391193, y: 0.70390177}
-  - {x: -0.38237536, y: -0.5491693}
-  - {x: 1.0762793, y: -1.0103674}
+  - {x: 1.55, y: 0.5}
+  - {x: -0.5, y: 0.5}
+  - {x: -0.5, y: -0.5}
+  - {x: 1.55, y: -0.5}
   speed: 0.15

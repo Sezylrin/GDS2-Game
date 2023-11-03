@@ -45,6 +45,7 @@ public class Snake : Enemy
     #region Attack1
     protected override void Attack1()
     {
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.PoisonSpit);
         dir = (targetTr.position - transform.position);
         PivotPoint.eulerAngles = CustomMath.GetEularAngleToDir(Vector2.right, dir);
         bool initial;
@@ -70,6 +71,7 @@ public class Snake : Enemy
         float dur = Attack2Duration / RapidFireAmount;
         for (int i = 0; i < RapidFireAmount; i++)
         {
+            GameManager.Instance.AudioManager.PlaySound(AudioRef.PoisonSpit);
             dir = (targetTr.position - transform.position);
             PivotPoint.eulerAngles = CustomMath.GetEularAngleToDir(Vector2.right, dir);
             bool initial;
@@ -78,7 +80,7 @@ public class Snake : Enemy
             {
                 temp.NewInstance();
             }
-            temp.Init(dir, GlobSpawnPoint.position, TargetLayer, Attack2Damage, Attack2Duration * 4, RapidFireSpeed, AttackKnockback2, transform);
+            temp.Init(dir, GlobSpawnPoint.position, TargetLayer, Attack2Damage, Attack2Duration * 10, RapidFireSpeed, AttackKnockback2, transform);
             yield return new WaitForSeconds(dur);
         }
     }
@@ -88,6 +90,7 @@ public class Snake : Enemy
     [ContextMenu("attack3")]
     protected override void Attack3()
     {
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.PoisonSpit);
         dir = (targetTr.position - transform.position).normalized;
         PivotPoint.eulerAngles = CustomMath.GetEularAngleToDir(Vector2.right, dir);
         float randomDeviation = Random.Range(0f, 120f);

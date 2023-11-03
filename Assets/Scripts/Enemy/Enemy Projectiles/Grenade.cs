@@ -8,6 +8,8 @@ public class Grenade : ArchProjectile
     private float explosionDelay;
     [SerializeField]
     private float explosionDuration;
+    [SerializeField]
+    private GameObject Explosion;
 
     public override void InitArch(Vector2 archDir, Vector2 targetPoint, bool fixedArrival)
     {
@@ -20,6 +22,7 @@ public class Grenade : ArchProjectile
 
     public void SpawnGrenade()
     {
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.GrenadeDrop);
         Speed = 0;
         initialV = 0;
         decay = 0;
@@ -28,13 +31,17 @@ public class Grenade : ArchProjectile
 
     public void ExplodeGrenade()
     {
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.GrenadeExplosion);
+
         col2d.enabled = true;
         col2d.offset = col2d.offset + Vector2.right * 0.05f;
+        Explosion.SetActive(true);
     }
 
     public override void PoolSelf()
     {
         col2d.enabled = false;
+        Explosion.SetActive(false);
         base.PoolSelf();
     }
 

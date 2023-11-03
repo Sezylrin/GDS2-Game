@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82fbe25d3000e9a4bb778cbb1df9a38f, type: 3}
+  m_Name: Claw
+  m_EditorClassIdentifier: 
+  ReferenceName: Swipe
+  clips:
+  - {fileID: 8300000, guid: 63e85e46433be3a4a9c2bcd2c6f5111f, type: 3}
+  - {fileID: 8300000, guid: 3dc2a70b33e5b1f43ad2e887e1697c72, type: 3}
+  - {fileID: 8300000, guid: aaa85c690e7d57849ac932a87544fc5f, type: 3}
+  mixGroup: {fileID: -3833594322038420439, guid: 8ef6d8b737ad1934aa2b7fdd12d63b52, type: 2}

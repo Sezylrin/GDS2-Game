@@ -126,13 +126,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private LineRenderer lineRend;
 
-    [Header("Debug Values")]
+    [field: Header("Debug Values")]
 
-    [SerializeField, ReadOnly]
-    private Vector2 direction;
+    [field: SerializeField, ReadOnly]
+    public Vector2 direction { get; private set; }
     [field: SerializeField, ReadOnly]
     public Vector2 lastDirection { get; private set; }
-    [field: SerializeField] [field: ReadOnly]
+    [field: SerializeField, ReadOnly]
     public playerState CurrentState { get; private set; }
     [SerializeField] [ReadOnly]
     private actionState bufferedState;
@@ -182,6 +182,7 @@ public class PlayerController : MonoBehaviour
         currentDashCharges = dashCharges;
         drag = rb.drag;
         initialLayer = circCol2D.excludeLayers;
+        GameManager.Instance.SetCameraTrack(CameraFollowPoint);
         //GameManager.Instance.OnControlSchemeSwitch += SchemeChange;
     }
     #region Updates
@@ -189,6 +190,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         StateDecider();
+        UpdateLastDirection();
         ExecuteInput();
         UpdateMousePos();
         AimAbility();
@@ -209,10 +211,11 @@ public class PlayerController : MonoBehaviour
     public void SetDirection(InputAction.CallbackContext context)
     {
         direction = context.ReadValue<Vector2>().normalized;
-        if (!direction.Equals(Vector2.zero))
-        {
-            lastDirection = direction;
-        }
+    }  
+
+    public void SetLastDir(Vector2 newlastDir)
+    {
+        lastDirection = newlastDir;
     }
 
     public void Interact(InputAction.CallbackContext context)
@@ -362,9 +365,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    
-    
-    
 
     public void Consume(InputAction.CallbackContext context)
     {
@@ -519,6 +519,17 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Movement
+    private playerState[] allowedLastDir = { playerState.moving, playerState.idle, playerState.abilityLag };
+    private void UpdateLastDirection()
+    {
+        if (!CheckStates(allowedLastDir))
+            return;
+
+        if (!direction.Equals(Vector2.zero) && !lastDirection.Equals(direction))
+        {
+            lastDirection = direction;
+        }
+    }
     private void Move()
     {
         isMoving = false;
@@ -569,6 +580,8 @@ public class PlayerController : MonoBehaviour
 
     public void Dash(float distance, float dur, Vector2 dir, Color color, float blend)
     {
+        col2D.excludeLayers += enemyLayer;
+        circCol2D.excludeLayers += enemyLayer;
         dashCoroutine = StartCoroutine(StartDashing(distance, dur, dir));
         PCM.Trail.DashAfterImage(dur, 5, color, blend);
     }
@@ -593,7 +606,7 @@ public class PlayerController : MonoBehaviour
             float ratio = (Time.time - startTime) / dur;
             //float cubic = Mathf.Sin((ratio * Mathf.PI) * 0.5f);
             Vector2 nextPosition = Vector2.Lerp(startPos, endPos, ratio);
-            if (Physics2D.CapsuleCast(transform.position, col2D.size, CapsuleDirection2D.Vertical, 0, dashDirection,Vector2.Distance(transform.position,nextPosition),terrainLayer))
+            if (Physics2D.CircleCast(circCol2D.offset + (Vector2)transform.position, circCol2D.radius, dashDirection,Vector2.Distance(transform.position,nextPosition),terrainLayer))
             {
                 break;
             }

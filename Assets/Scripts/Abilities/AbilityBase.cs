@@ -18,7 +18,7 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
     protected int CurrentPierce;
 
     [SerializeField] [ReadOnly]
-    private List<Enemy> hitEnemy = new List<Enemy>();
+    protected List<Enemy> hitEnemy = new List<Enemy>();
 
     public Pool<AbilityBase> Pool { get; set; }
     public bool IsPooled { get; set; }
@@ -30,6 +30,9 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
     protected int finalStagger;
 
     protected Transform followTR;
+
+    [SerializeField]
+    protected Animator anim;
     private void ResetAbility()
     {
         initialPos = Vector3.zero;
@@ -86,7 +89,7 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
 
     protected virtual void CastAbility()
     {
-
+        anim.Play(selectedAbility.elementType.ToString());
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
@@ -102,7 +105,7 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
                 return;
             }
             hitEnemy.Add(foundEnemy);
-            GameManager.Instance.AudioManager.PlaySound(selectedAbility.audioHit);
+            GameManager.Instance.AudioManager.PlaySound(selectedAbility.audioHit, false, 0.9f);
             foundEnemy.TakeDamage(finalDamage, finalStagger, selectedAbility.elementType, selectedAbility.castCost);
             //GameManager.Instance.PCM.system.AddToConsumeBar(selectedAbility.consumePoints);
             Vector3 dir;
@@ -125,6 +128,8 @@ public class AbilityBase : MonoBehaviour, IPoolable<AbilityBase>
     public virtual void PoolSelf()
     {
         ResetAbility();
+        if (gameObject.activeInHierarchy)
+            anim.Play("Idle");
         Pool.PoolObj(this);
     }
 }

@@ -46,8 +46,9 @@ public class LevelGenerator : MonoBehaviour
     public int activeLevelListIndex { get; private set; }
     // Calculates floorsCleared, replaced with floorsClearedOverride if debugMode is enabled
     public int floorsCleared => !debugMode ? Mathf.FloorToInt((float)(activeLevelListIndex + 1) / (fountainFrequency + 1)) : floorsClearedOverride;
-    [ReadOnly]
-    public int lastFloorOnExit;
+    [field: SerializeField, ReadOnly] public int lastFloorOnExit { get; private set;}
+    [field: SerializeField, ReadOnly] public int highestFloor { get; private set;}
+    public bool isInCombatLevel => (activeLevelListIndex+1) % (fountainFrequency+1) != 0;
 
     [Header("Debug")]
     public bool debugMode;
@@ -76,11 +77,22 @@ public class LevelGenerator : MonoBehaviour
 
     public void New()
     {
-        lastFloorOnExit = floorsCleared;
+        ValidateLastFloorOnExit();
+        ValidateHighestFloor();
         // difficulty = startDifficulty;
         levelList = new List<SceneReference>();
         AddNewFloor();
         activeLevelListIndex = -1;
+    }
+
+    private void ValidateLastFloorOnExit()
+    {
+        lastFloorOnExit = floorsCleared;
+    }
+
+    private void ValidateHighestFloor()
+    {
+        if (highestFloor < lastFloorOnExit) highestFloor = lastFloorOnExit;
     }
 
     private void Update()
@@ -121,9 +133,11 @@ public class LevelGenerator : MonoBehaviour
     //TODO: Change to AsyncLoading
     private void LoadNextLevel()
     {
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.TeleIn);
         if (DungeonCleared())
         {
-            //TODO: Win
+            GameManager.Instance.sceneLoader.Load(Scene.Victory);
+            GameManager.Instance.MusicManager.StopAllMusic();
             return;
         }
         // If the next level is not in list
@@ -140,16 +154,17 @@ public class LevelGenerator : MonoBehaviour
 
     IEnumerator LoadLevel(string scenePath)
     {
-        GameManager.Instance.sceneLoader.CrossFadeAnimator.SetTrigger("Start");
+        GameManager.Instance.sceneLoader.CrossFadeAnimator.Play("Start");
+        while (!GameManager.Instance.sceneLoader.isFade)
+            yield return null;
 
-        yield return new WaitForSeconds(GameManager.Instance.sceneLoader.CrossFadeTime);
-
+        GameManager.Instance.MusicManager.ResumeMultiple(new AudioRef[] { AudioRef.Combat, AudioRef.Grasslands }, true);
         SceneManager.LoadScene(scenePath);
     }
 
     public void TriggerCrossFadeEnd()
     {
-        GameManager.Instance.sceneLoader.CrossFadeAnimator.SetTrigger("End");
+        GameManager.Instance.sceneLoader.CrossFadeAnimator.Play("End");
     }
 
     private void DebugLoadLevelX(int x)
@@ -172,6 +187,18 @@ public class LevelGenerator : MonoBehaviour
 
     public void EnterDoorCentre()
     {
+        LoadNextLevel();
+    }
+
+    public void StartDungeonOnFloor(int floor)
+    {
+        int startingLevelIndex = 0;
+        for (int i = 1; i < floor; i++)
+        {
+            startingLevelIndex = startingLevelIndex + fountainFrequency + 1;
+        }
+        startingLevelIndex--;
+        activeLevelListIndex = startingLevelIndex;
         LoadNextLevel();
     }
 

@@ -34,4 +34,10 @@ public static class CustomMath
     {
         return Quaternion.Euler(0, 0, degrees) * Initial;
     }
+
+    public static Quaternion LookAt2D(Vector2 direction)
+    {
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        return Quaternion.AngleAxis(angle, Vector3.forward);
+    }
 }

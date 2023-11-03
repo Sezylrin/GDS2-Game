@@ -21,6 +21,8 @@ public class Lizard : Enemy
     private float spearSpeed;
     [SerializeField]
     private float grenadeSpeed;
+    [SerializeField]
+    private float boomerangSpeed;
     protected override void Start()
     {
         base.Start();
@@ -47,6 +49,7 @@ public class Lizard : Enemy
     #region Attack1
     protected override void Attack1()
     {
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.Spear);
         dir = (targetTr.position - transform.position);
         PivotPoint.eulerAngles = CustomMath.GetEularAngleToDir(Vector2.right, dir);
         bool initial;
@@ -79,6 +82,7 @@ public class Lizard : Enemy
     #region Attack3
     protected override void Attack3()
     {
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.Boomerang);
         dir = (targetTr.position - transform.position);
         PivotPoint.eulerAngles = CustomMath.GetEularAngleToDir(Vector2.right, dir);
         bool initial;
@@ -89,7 +93,7 @@ public class Lizard : Enemy
         }
         temp.Init(dir, projectileSpawnPoint.position, TargetLayer, Attack3Damage, Attack3Duration, spearSpeed, AttackKnockback3, transform);
         Vector2 perpendicular = CustomMath.RotateByEularAngles(dir,90).normalized * (Random.Range(0,2) == 0? 1 : -1);
-        (temp as ArchProjectile).InitArch(perpendicular * dir.magnitude * 0.5f, targetTr.position, false);
+        (temp as ArchProjectile).InitArch(perpendicular * dir.magnitude * 0.25f, targetTr.position, false);
     }
     #endregion
 

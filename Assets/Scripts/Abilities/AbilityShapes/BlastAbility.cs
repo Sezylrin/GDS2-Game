@@ -32,13 +32,14 @@ public class BlastAbility : AbilityBase
     protected override void CastAbility()
     {
         selected = selectedAbility as BlastVariantSO;
-        blastMesh.SetMaterial(selected.color);
+        //blastMesh.SetMaterial(selected.color);
         transform.position = initialPos;
         offset = transform.position - followTR.position;
         RotateSelf();
         col2D.SetPath(0, selected.initialShape);
         Array.Copy(selected.initialShape, corners,4);
         blastCoroutine = StartCoroutine(StartBlastExpand());
+        base.CastAbility();
     }
 
     private void RotateSelf()
@@ -64,13 +65,13 @@ public class BlastAbility : AbilityBase
                     corners[i] = selected.finalShape[i];
                 }
             }
-            blastMesh.SetVertex(corners);
+            //blastMesh.SetVertex(corners);
             col2D.SetPath(0, corners);
             yield return null;
         }
         if(selected.speed == 0)
         {
-            blastMesh.SetVertex(corners);
+            //blastMesh.SetVertex(corners);
             col2D.SetPath(0, selected.finalShape);
         }
         StopExpand();
@@ -86,7 +87,36 @@ public class BlastAbility : AbilityBase
 
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
-        base.OnTriggerEnter2D(collision);
+        if (CurrentPierce <= 0)
+            return;
+        Enemy foundEnemy;
+        if (UtilityFunction.FindComponent(collision.transform, out foundEnemy))
+        {
+
+            if (hitEnemy.Contains(foundEnemy))
+            {
+                return;
+            }
+            hitEnemy.Add(foundEnemy);
+            GameManager.Instance.AudioManager.PlaySound(selectedAbility.audioHit, false, 0.9f);
+            foundEnemy.TakeDamage(finalDamage, finalStagger, selectedAbility.elementType, selectedAbility.castCost);
+            foundEnemy.InterruptAttack();
+            //GameManager.Instance.PCM.system.AddToConsumeBar(selectedAbility.consumePoints);
+            Vector3 dir;
+            if (direction.Equals(Vector3.zero))
+            {
+                dir = collision.transform.position - initialPos;
+            }
+            else
+            {
+                dir = direction;
+            }
+            foundEnemy.AddForce(dir.normalized * selectedAbility.knockback);
+            if (CurrentPierce > 0)
+            {
+                CurrentPierce--;
+            }
+        }
     }
 
     public override void PoolSelf()

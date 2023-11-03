@@ -2,24 +2,27 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.InputSystem;
+using System.Collections;
+using DG.Tweening.Core.Easing;
 
-public class BookMenu : MonoBehaviour
+public class BookMenu : Menu
 {
     [SerializeField] private GameObject MainMenu;
     [SerializeField] private GameObject Settings;
     [SerializeField] public GameObject SkillSwitch;
-    [SerializeField] private GameObject SkillTree;
-
-    [SerializeField] public StartMenu StartMenu;
+    [SerializeField] public GameObject SkillTree;
 
     private GameObject activeMenu;
     public bool IsOpen = false;
-    public bool IsSeparateMenu = false;
+    public bool IsInGame = false;
 
     #region Interactions
-    public void ToggleOpenMenu(InputAction.CallbackContext context)
+    public override void ToggleOpenMenu()
     {
-        ToggleMenu();
+        if (IsInGame)
+        {
+            ToggleMenu();
+        }
     }
 
     public void DisableAll()
@@ -30,31 +33,60 @@ public class BookMenu : MonoBehaviour
         SkillTree.SetActive(false);
     }
 
-    public void StartMenuInit()
-    {
-        StartMenu.Init();
-        IsSeparateMenu = true;
-    }
-
     public void ToggleMenu()
     {
         if (IsOpen)
         {
-            IsOpen = false;
-            DisableAll();
-            activeMenu = null;
-            GameManager.Instance.AudioManager.PlaySound(AudioRef.CloseMenu);
-            Time.timeScale = 1.0f;
+            CloseMenu();
         }
         else
         {
+            GameManager.Instance.PlayerTransform.gameObject.SetActive(false);
+            GameManager.Instance.UIManager.OpenBookMenu();
             IsOpen = true;
             MainMenu.SetActive(true);
             activeMenu = MainMenu;
             MainMenu.GetComponent<Menu>().OpenMenu();
             GameManager.Instance.AudioManager.PlaySound(AudioRef.OpenMenu);
+            GameManager.Instance.MusicManager.ResumeMusic(AudioRef.PauseMenu, true);
             Time.timeScale = 0;
         }
+    }
+
+    public void ExitGame()
+    {
+        IsInGame = false;
+        GameManager.Instance.UIManager.CloseAll();
+        GameManager.Instance.MusicManager.StopAllMusic();
+        Time.timeScale = 1.0f;
+        GameManager.Instance.sceneLoader.Load(Scene.MainMenu, false);
+    }
+
+    public void CloseMenu()
+    {
+        IsOpen = false;
+        DisableAll();
+        activeMenu = null;
+        if (GameManager.Instance.IsTutorial || GameManager.Instance.LevelGenerator.isInCombatLevel)
+        {
+            GameManager.Instance.MusicManager.ResumeMultiple(new AudioRef[] { AudioRef.Combat, AudioRef.Grasslands }, true);
+        }
+        else
+        {
+            GameManager.Instance.MusicManager.ResumeMultiple(new AudioRef[] { AudioRef.Hub, AudioRef.Grasslands }, true);
+        }
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.CloseMenu);
+        Time.timeScale = 1.0f;
+        GameManager.Instance.PlayerTransform.gameObject.SetActive(true);
+    }
+
+    public void OpenSettingsMenu()
+    {
+        if (activeMenu) activeMenu.SetActive(false);
+        Settings.SetActive(true);
+        activeMenu = Settings;
+        activeMenu.GetComponent<Menu>().OpenMenu();
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.OpenMenu);
     }
 
     public void OpenSkillSwitch()
@@ -63,6 +95,16 @@ public class BookMenu : MonoBehaviour
         SkillSwitch.SetActive(true);
         activeMenu = SkillSwitch;
         activeMenu.GetComponent<Menu>().OpenMenu();
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.OpenMenu);
+    }
+
+    public void OpenSkillTree()
+    {
+        if (activeMenu) activeMenu.SetActive(false);
+        SkillTree.SetActive(true);
+        activeMenu = SkillTree;
+        activeMenu.GetComponent<Menu>().OpenMenu();
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.OpenMenu);
     }
 
     public void ReturnToMainMenu()
@@ -71,45 +113,34 @@ public class BookMenu : MonoBehaviour
         MainMenu.SetActive(true);
         MainMenu.GetComponent<Menu>().OpenMenu();
         activeMenu = MainMenu;
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.OpenMenu);
     }
 
-    public void Return(InputAction.CallbackContext context)
+    public override void Return()
     {
-        if (IsSeparateMenu)
-        {
-            StartMenu.Return();
-        }
         if (!IsOpen) return;
 
         Menu menu = activeMenu.GetComponent<Menu>();
         menu.Return();
     }
 
-    public void Interact(InputAction.CallbackContext context)
+    public override void Interact()
     {
-        if (IsSeparateMenu)
-        {
-            StartMenu.Interact();
-        }
         if (!IsOpen) return;
 
         Menu menu = activeMenu.GetComponent<Menu>();
         menu.Interact();
     }
 
-    public void Navigate(InputAction.CallbackContext context)
+    public override void Navigate(InputAction.CallbackContext context)
     {
-        if (IsSeparateMenu)
-        {
-            StartMenu.Navigate(context);
-        }
         if (!IsOpen) return;
         
         Menu menu = activeMenu.GetComponent<Menu>();
         menu.Navigate(context);
     }
 
-    public void ToggleSkills(InputAction.CallbackContext context)
+    public override void ToggleSkills()
     {
         if (!IsOpen) return;
 

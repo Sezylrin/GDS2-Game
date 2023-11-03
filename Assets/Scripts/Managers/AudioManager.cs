@@ -11,8 +11,9 @@ using System.IO;
 #endif
 public class AudioManager : MonoBehaviour
 {
-    public int sfxVolume = 100;
-    public int bgmVolume = 100;
+    public float masterVolume = 100;
+    public float sfxVolume = 100;
+    public float bgmVolume = 100;
 
     [SerializeField, Tooltip("Loaded Sounds, press Load sounds to load in sounds, do not edit the dictionary")]
     [SerializedDictionary("Reference", "AudioClipSO")]
@@ -83,9 +84,29 @@ public class AudioManager : MonoBehaviour
         availableSources.Push(obj);
     }
 
-    public void ModifyBGMVolume(float volume)
+    private float LinearToDecibel(float linear)
     {
-        
+        if (linear != 0)
+            return 20.0f * Mathf.Log10(linear);
+        else
+            return -80.0f;
     }
 
+    public void ModifyBGMVolume(float volume)
+    {
+        bgmVolume = volume;
+        BGMMixerGroup.audioMixer.SetFloat("BGM_Volume", LinearToDecibel(bgmVolume / 100f));
+    }
+
+    public void ModifyMasterVolume(float volume)
+    {
+        masterVolume = volume;
+        MasterMixerGroup.audioMixer.SetFloat("Master_Volume", LinearToDecibel(masterVolume / 100f));
+    }
+
+    public void ModifySFXVolume(float volume)
+    {
+        sfxVolume = volume;
+        SFXMixerGroup.audioMixer.SetFloat("SFX_Volume", LinearToDecibel(sfxVolume / 100f));
+    }
 }

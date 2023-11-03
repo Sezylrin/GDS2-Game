@@ -19,12 +19,14 @@ MonoBehaviour:
   castStartSpeed: 0.35
   castDuration: 0.6
   pierceAmount: 99
-  damage: 18
+  damage: 35
   knockback: 12
   Stagger: 18
   consumePoints: 0
-  lifeTime: 0.4
+  lifeTime: 0.3
   description: Water based dash attack
   icon: {fileID: 21300000, guid: 448e6b87ad3fc7048b85bcd89cf71859, type: 3}
+  audioCast: 0
+  audioHit: 0
   distance: 7
   hitboxSize: {x: 1.25, y: 2.5}

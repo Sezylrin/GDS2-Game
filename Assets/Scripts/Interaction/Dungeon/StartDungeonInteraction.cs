@@ -4,9 +4,27 @@ using UnityEngine;
 
 public class StartDungeonInteraction : InteractionBase
 {
-    // Start is called before the first frame update
+    public int floorToSpawn = 1;
+    public GameObject openSprite;
+    private bool isOpen;
+
+    public void Start()
+    {
+        isOpen = GameManager.Instance.LevelGenerator.highestFloor >= floorToSpawn-1;
+        openSprite.SetActive(isOpen);
+    }
+
     public override void Interact()
     {
-        GameManager.Instance.LevelGenerator.EnterDoorCentre();
+        if (!isOpen) return;
+        GameManager.Instance.LevelGenerator.StartDungeonOnFloor(floorToSpawn);
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.TeleIn);
+        Destroy(this);
+    }
+
+    protected override void OnTriggerEnter2D(Collider2D collision)
+    {
+        base.OnTriggerEnter2D(collision);
+        UI.SetActive(isOpen);
     }
 }

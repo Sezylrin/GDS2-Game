@@ -14,6 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadedSound:
     _serializedList:
+    - Key: Combat
+      Value: {fileID: 11400000, guid: 6f601610a5d98ea4fbbae71f81a6821a, type: 2}
+    - Key: Grasslands
+      Value: {fileID: 11400000, guid: 9361629ce7630544387a170f17315fe8, type: 2}
+    - Key: Hub
+      Value: {fileID: 11400000, guid: 33daa2cbc24441942a5554943ac8cc3d, type: 2}
+    - Key: PauseMenu
+      Value: {fileID: 11400000, guid: 9d5a8bc2c0c130e4983c80b18b935762, type: 2}
+    - Key: StartMenu
+      Value: {fileID: 11400000, guid: 5fe0a2fd62ac5754a8743368be9074e4, type: 2}
     - Key: ButtonHover
       Value: {fileID: 11400000, guid: 8e7680edbcfb7a94087a2800843eaa2c, type: 2}
     - Key: buttonPress
@@ -48,9 +58,41 @@ MonoBehaviour:
       Value: {fileID: 11400000, guid: b020652104065664785606b2244d74c1, type: 2}
     - Key: Hit
       Value: {fileID: 11400000, guid: 57048a30cfc44e242b528be8fe21204d, type: 2}
+    - Key: Blizzard
+      Value: {fileID: 11400000, guid: e138ed0bf0f69804f8ae326700abbbe0, type: 2}
+    - Key: Boomerang
+      Value: {fileID: 11400000, guid: 6523ba77f074c1b4e8f4ca6e8a9aabb0, type: 2}
+    - Key: Swipe
+      Value: {fileID: 11400000, guid: 6ea3898d0ce1d1741b97adf6ef16449b, type: 2}
+    - Key: Defeat
+      Value: {fileID: 11400000, guid: 7098c1e3293199e47b2c22f545bac4fb, type: 2}
+    - Key: FireTornado
+      Value: {fileID: 11400000, guid: adc153a353335d944aafead9ef7e6412, type: 2}
+    - Key: GrenadeDrop
+      Value: {fileID: 11400000, guid: ee329a3a2e754c248b8afe134393337a, type: 2}
+    - Key: GrenadeExplosion
+      Value: {fileID: 11400000, guid: c4ffda91c9c9c7f4996ea6806a4a780e, type: 2}
+    - Key: KnifeThrow
+      Value: {fileID: 11400000, guid: 729598d5fb4ae08409ea9a1e67cf7c1d, type: 2}
+    - Key: RhinoCharge
+      Value: {fileID: 11400000, guid: 1c9142585602ebd42a302e8b55649f23, type: 2}
+    - Key: RhinoStomp
+      Value: {fileID: 11400000, guid: c1bde5395b805424e962e86a8ddd1434, type: 2}
+    - Key: Spear
+      Value: {fileID: 11400000, guid: ec0d9e94caa1060409c6aa0a380c93fb, type: 2}
+    - Key: TeleIn
+      Value: {fileID: 11400000, guid: 1103a77ebcc95c54bbd7927bb5b142ed, type: 2}
+    - Key: VenonPool
+      Value: {fileID: 11400000, guid: 67b503b73ba52a443844fb80cdfe4035, type: 2}
+    - Key: Victory
+      Value: {fileID: 11400000, guid: 3121bbda3ca156f4fbcc839e9060989d, type: 2}
+    - Key: PoisonSpit
+      Value: {fileID: 11400000, guid: cff9597004bfe0345a91d0bee9db29b5, type: 2}
     - Key: OpenMenu
       Value: {fileID: 11400000, guid: bf17193b3ec6b924bb54d06b313ec416, type: 2}
     - Key: Parry
       Value: {fileID: 11400000, guid: a2f357b5cde3515468cd08f6e69234de, type: 2}
     - Key: Stagger
       Value: {fileID: 11400000, guid: 43e0c13428d8c4e4a97c467a63c20bd0, type: 2}
+    - Key: UnlockSkill
+      Value: {fileID: 11400000, guid: f60154bb70476f4428a3cc23d2610c6a, type: 2}

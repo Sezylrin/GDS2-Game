@@ -6,6 +6,8 @@ using UnityEngine;
 public class LevelDoor : InteractionBase
 {
     private bool doorAlreadyUsed;
+    public GameObject openSprite;
+    public bool preClearedRoom;
 
     [Serializable]
     public enum DoorPosition
@@ -29,6 +31,7 @@ public class LevelDoor : InteractionBase
     private void Start()
     {
         RemoveUnneededDoors();
+        if (preClearedRoom) OpenDoor();
     }
 
     public override void Interact()
@@ -64,7 +67,7 @@ public class LevelDoor : InteractionBase
     }
     private void OpenDoor()
     {
-        //TODO: Animate
+        openSprite.SetActive(true);
     }
 
     private void ExitLevel()

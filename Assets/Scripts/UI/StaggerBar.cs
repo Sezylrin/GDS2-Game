@@ -15,8 +15,8 @@ public class StaggerBar : MonoBehaviour
 
     [field: SerializeField] protected Enemy Parent { get; set; }
     [field: SerializeField] private Image image;
-    [field: SerializeField] protected Sprite fillingSprite { get; private set; }
-    [field: SerializeField] protected Sprite fullSprite { get; private set; }
+    [field: SerializeField] protected Color StaggeredColour { get; private set; }
+    [field: SerializeField] protected Color NotStaggeredColour { get; private set; }
     [field: SerializeField, ReadOnly] protected float Bar { get; set; }
     [field: SerializeField, ReadOnly] protected int PointsToStagger { get; set; } = 100;
     [field: SerializeField, ReadOnly] protected float StaggerMinDuration { get; set; } = 3;
@@ -50,12 +50,12 @@ public class StaggerBar : MonoBehaviour
 
     public void SetToOrange()
     {
-        image.sprite = fillingSprite;
+        image.color = NotStaggeredColour;
     }
 
     public void SetToPink()
     {
-        image.sprite = fullSprite;
+        image.color = StaggeredColour;
     }
 
     public void UpdateFillPercent(float percent)
@@ -113,13 +113,13 @@ public class StaggerBar : MonoBehaviour
     {
         if (!Staggered && StaggerTimers.IsTimeZero((int)StaggerTimer.delayBetweenStagger))
         {
-            Bar = Mathf.Clamp(Bar + staggerPoints, 0, PointsToStagger);          UpdateFillPercent(Bar / PointsToStagger);
+            Bar = Mathf.Clamp(Bar + staggerPoints, 0, PointsToStagger);
+            UpdateFillPercent(Bar / PointsToStagger);
 
             StartDelayedStaggerDecay();
 
             if (Bar == PointsToStagger)
             {
-
                 GameManager.Instance.AudioManager.PlaySound(AudioRef.Stagger);
                 BeginStagger();
             }

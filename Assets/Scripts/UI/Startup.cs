@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class Startup : MonoBehaviour
 {
-    [SerializeField] private GameObject StartMenu;
-
+    public Transform player;
+    public PlayerComponentManager PCM;
+    private void Awake()
+    {
+        if (GameManager.Instance.PlayerTransform == null)
+        {
+            GameManager.Instance.SetPlayerTransform(player, PCM);
+        }
+    }
     void Start()
     {
-        StartMenu.SetActive(true);
-        BookMenu bookMenu = GameManager.Instance.BookMenu;
-        bookMenu.StartMenuInit();
+        GameManager.Instance.UIManager.OpenStartMenu();
+        GameManager.Instance.MusicManager.PlayMusic(AudioRef.StartMenu, true);
     }
 }

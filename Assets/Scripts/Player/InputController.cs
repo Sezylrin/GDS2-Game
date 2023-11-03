@@ -22,6 +22,9 @@ public class InputController : MonoBehaviour
 
     private void OnEnable()
     {
+        if (PlayerComponentManager.Instance != gameObject)
+            return;
+        //Debug.Log("called");
         player.Enable();
         player.Move.performed += PCM.control.SetDirection;
         player.Move.canceled += PCM.control.SetDirection;
@@ -40,15 +43,15 @@ public class InputController : MonoBehaviour
         player.Look.performed += PCM.control.MousePosition;
         player.Look.canceled += PCM.control.MousePosition;
         player.LookMouse.performed += PCM.control.MousePosition;
-        GameManager.Instance.SetPlayerTransform(transform, PCM);
         PCM.control.SetControllerCursor(GameManager.Instance.controllerCursosrTR);
-        GameManager.Instance.SetCameraTrack(PCM.control.CameraFollowPoint);
     }
 
     
 
     private void OnDisable()
     {
+        if (PlayerComponentManager.Instance != gameObject)
+            return;
         //GameManager.Instance.SetPlayerTransform(null, null);
         PCM.control.SetControllerCursor(null);
         player.Move.performed -= PCM.control.SetDirection;

@@ -24,6 +24,19 @@ public class PlayerAnimation : MonoBehaviour
         {
             HitStunned();
         }
+        else if (PCM.system.GetState() == playerState.abilityStart)
+        {
+            WindUp();
+        }
+        else if (PCM.system.GetState() == playerState.abilityCast)
+        {
+            Attack();
+        }
+        else if (PCM.system.GetState() == playerState.dashing)
+        {
+            lastDirection = CustomMath.GetDirection(Vector2.right, PCM.control.direction, false);
+            Dash(lastDirection);
+        }
         else if (PCM.system.GetState() == playerState.idle)
         {
             IdleMovement();
@@ -49,12 +62,12 @@ public class PlayerAnimation : MonoBehaviour
         if (left)
         {
             left = !left;
-            GameManager.Instance.AudioManager.PlaySound(AudioRef.FootStepGrassL);
+            GameManager.Instance.AudioManager.PlaySound(AudioRef.FootStepGrassL, false, 0.7f);
         }
         else
         {
             left = !left;
-            GameManager.Instance.AudioManager.PlaySound(AudioRef.FootStepGrassR);
+            GameManager.Instance.AudioManager.PlaySound(AudioRef.FootStepGrassR, false, 0.7f);
         }
         yield return new WaitForSeconds(time);
         PlayFootStepCoroutine = null;
@@ -62,102 +75,67 @@ public class PlayerAnimation : MonoBehaviour
     private void Moving()
     {
         lastDirection = CustomMath.GetDirection(Vector2.right, PCM.control.lastDirection, false);
-        switch (lastDirection)
-        {
-            case 0:
-                anim.Play("PlayerRunningE");
-                break;
-            case 1:
-                anim.Play("PlayerRunningNE");
-                break;
-            case 2:
-                anim.Play("PlayerRunningN");
-                break;
-            case 3:
-                anim.Play("PlayerRunningNW");
-                break;
-            case 4:
-                anim.Play("PlayerRunningW");
-                break;
-            case 5:
-                anim.Play("PlayerRunningSW");
-                break;
-            case 6:
-                anim.Play("PlayerRunningS");
-                break;
-            case 7:
-                anim.Play("PlayerRunningSE");
-                break;
-        }
+        anim.Play("Run");
+        anim.SetFloat("Run", (float)lastDirection / 8f);
     }
     private void IdleMovement()
     {
         lastDirection = CustomMath.GetDirection(Vector2.right, PCM.control.lastDirection, false);
-
-        switch (lastDirection)
-        {
-            case 0:
-                anim.Play("IdleEast");
-                break;
-            case 1:
-                anim.Play("PlayerIdleNorthEast");
-                break;
-            case 2:
-                anim.Play("IdleNorth");
-                break;
-            case 3:
-                anim.Play("PlayerIdleNorthWest");
-                break;
-            case 4:
-                anim.Play("IdleWest");
-                break;
-            case 5:
-                anim.Play("PlayerIdleSouthWest");
-                break;
-            case 6:
-                anim.Play("IdleSouth");
-                break;
-            case 7:
-                anim.Play("PlayerIdleSouthEast");
-                break;
-        }
+        anim.Play("Idle");
+        anim.SetFloat("Idle", (float)lastDirection / 8f);
     }
-    int lastDirection;
+    float lastDirection;
     private void HitStunned()
     {
         Vector2 knockback = PCM.system.hitDir;
-        int dir;
+        float dir;
         if (knockback.magnitude > 0.1f)
             dir = CustomMath.GetDirection(Vector2.right, knockback, false);
         else
             dir = ((lastDirection + 4) % 8);
-        switch (dir)
+        anim.SetFloat("Hit", dir / 8f);
+        anim.Play("Hit");
+    }
+
+    private void WindUp()
+    {
+        lastDirection = CustomMath.GetDirection(Vector2.right, PCM.abilities.castDir, false);
+        anim.SetFloat("Charge", lastDirection / 8f);
+        anim.Play("Casting");
+    }
+
+    private void Attack()
+    {
+        lastDirection = CustomMath.GetDirection(Vector2.right, PCM.abilities.castDir, false);
+        switch (PCM.abilities.castType)
         {
-            case 0:
-                anim.Play("HitGoingE");
+            case AbilityType.dash:
+                Dash(lastDirection);
                 break;
-            case 1:
-                anim.Play("HitGoingNE");
+            case AbilityType.AOE:
+                anim.SetFloat("Punching", lastDirection / 8f);
+                anim.Play("PunchingDown");
                 break;
-            case 2:
-                anim.Play("HitGoingN");
-                break;
-            case 3:
-                anim.Play("HitGoingNW");
-                break;
-            case 4:
-                anim.Play("HitGoingW");
-                break;
-            case 5:
-                anim.Play("HitGoingSW");
-                break;
-            case 6:
-                anim.Play("HitGoingS");
-                break;
-            case 7:
-                anim.Play("HitGoingSE");
+            default:
+                anim.SetFloat("Punching", lastDirection / 8f);
+                anim.Play("Punching");
                 break;
         }
+    }
+
+    private void AOEAttack()
+    {
+        
+    }
+
+    private void BlastAndProjAttack()
+    {
+
+    }
+    private void Dash(float dashDir)
+    {
+        anim.Play("Run");
+        anim.SetFloat("Run", dashDir / 8f);
     }
 
 }

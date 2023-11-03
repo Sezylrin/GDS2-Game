@@ -19,14 +19,13 @@ public class PlayerComponentManager : MonoBehaviour
 
     public static GameObject Instance { get; private set; }
 
-    private void Start()
+    private void Awake()
     {
         
-        enabled = false;
-        if (Instance != null)
+        //enabled = false;
+        if (Instance != null && Instance != this)
         {
             DestroyImmediate(gameObject);
-            Instance.gameObject.SetActive(true);
         }
         else
         {

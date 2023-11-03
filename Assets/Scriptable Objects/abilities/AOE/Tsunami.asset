@@ -19,12 +19,14 @@ MonoBehaviour:
   castStartSpeed: 0.25
   castDuration: 0.5
   pierceAmount: 99
-  damage: 36
+  damage: 35
   knockback: 30
   Stagger: 28
   consumePoints: 3
-  lifeTime: 0.6
+  lifeTime: 1
   description: Water based AOE attack
   icon: {fileID: 21300000, guid: 05b99824441986b489fa74f58bd0be96, type: 3}
-  radius: 4
-  growthSpeed: 0.5
+  audioCast: 9
+  audioHit: 10
+  radius: 3
+  growthSpeed: 0.33

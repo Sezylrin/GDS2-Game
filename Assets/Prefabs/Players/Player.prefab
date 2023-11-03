@@ -2403,7 +2403,7 @@ Transform:
   - {fileID: 490763409}
   - {fileID: 247273588}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &3543791458973239727
 Rigidbody2D:
@@ -2479,7 +2479,7 @@ MonoBehaviour:
     <times>k__BackingField: []
     owner: {fileID: 0}
   PCM: {fileID: 864687022}
-  iframes: 0.7
+  iframes: 1
   hitStunnedDuration: 0.4
   flashDuration: 0.1
   rend: {fileID: 3543791457672997724}
@@ -2533,10 +2533,10 @@ MonoBehaviour:
     m_Bits: 64
   terrainLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 384
   cursorPos: {fileID: 0}
   lineRend: {fileID: 1434561470}
-  direction: {x: 0, y: 0}
+  <direction>k__BackingField: {x: 0, y: 0}
   <lastDirection>k__BackingField: {x: 0, y: 0}
   <CurrentState>k__BackingField: 0
   bufferedState: 0
@@ -2578,7 +2578,7 @@ MonoBehaviour:
   abilities:
   - {fileID: 11400000, guid: bfa1d90d7346b0d478313eedc9d02ef0, type: 2}
   - {fileID: 11400000, guid: 418ea2c3934df71459d836d5d9631746, type: 2}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: b171dd3449f27d24b853ff66dc8d7750, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

@@ -1,25 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using KevinCastejon.MoreAttributes;
 using UnityEngine.UI;
 
 public class HealthBarSegmentController : MonoBehaviour
 {
     public GameObject segmentPrefab;
     private List<HealthBarSegment> segments = new List<HealthBarSegment>();
-    private int MaxHealth { get; set; }
-    [field: SerializeField] private int HealthOfSegment { get; set; } = 100;
-    private int LowHealthThresholdPercent { get; set; }
+    [field: SerializeField, ReadOnly] private int MaxHealth { get; set; }
+    [field: SerializeField, ReadOnly] private int HealthOfSegment { get; set; }
+    [field: SerializeField, ReadOnly] private int TotalSegments { get; set; }
 
     public void SetStats(int maxHealth, int lowHealthThresholdPercent)
     {
         MaxHealth = maxHealth;
         HealthOfSegment = GameManager.Instance.HealthPerSegment;
-        LowHealthThresholdPercent = lowHealthThresholdPercent;
+        TotalSegments = MaxHealth / HealthOfSegment;
 
         SetInitialSegments();
     }
 
+    public void SetInitialSegments()
+    {
+        foreach (HealthBarSegment segment in segments)
+        {
+            segment.RemoveSelf();
+        }
+        segments.Clear();
+ 
+        while (segments.Count < TotalSegments)
+        {
+            CreateNewSegment();
+        }
+    }
+
+    private void CreateNewSegment() // Instantiates a new segment and adds it to the list
+    {
+        GameObject tempObj = Instantiate(segmentPrefab, gameObject.transform);
+        HealthBarSegment tempSegment = tempObj.GetComponent<HealthBarSegment>();
+        segments.Add(tempSegment);
+    }
+
+    /*
     public void SetInitialSegments()
     {
         float numberOfActualSegments = (float)MaxHealth / (float)HealthOfSegment;
@@ -62,17 +85,16 @@ public class HealthBarSegmentController : MonoBehaviour
         }
     }
 
-    private void CreateNewSegment() // Instantiates a new segment and adds it to the list
-    {
-            GameObject tempObj = Instantiate(segmentPrefab, gameObject.transform);
-            HealthBarSegment tempSegment = tempObj.GetComponent<HealthBarSegment>();
-            segments.Add(tempSegment);
-    }
-
     private void RemoveSegment() // Removes the last segment in the list
     {
         segments.RemoveAt(segments.Count - 1);
     }
+
+    private bool CheckForEvenHealth()
+    {
+        return MaxHealth % HealthOfSegment == 0;
+    }
+    */
 
     public void UpdateSegments(int currentHealth)
     {
@@ -89,15 +111,5 @@ public class HealthBarSegmentController : MonoBehaviour
         {
             segments[(int)numberOfFullSegments].UpdateFillPercent(leftoverHealthPercent);
         }
-    }
-
-    private bool CheckForEvenHealth()
-    {
-        return MaxHealth % HealthOfSegment == 0;
-    }
-
-    public void SetLowHealthThreshold(int percent)
-    {
-        LowHealthThresholdPercent = percent;
     }
 }

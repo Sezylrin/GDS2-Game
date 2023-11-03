@@ -95,7 +95,7 @@ public class Abilities : MonoBehaviour
 
     public void SetSlot(ElementalSO abilityToUse, int slot)
     {
-        if (slot < 0 || slot > 6)
+        if (slot < 0 || slot > 7)
         {
             Debug.Break();
             Debug.Log("Invalid Slot number");
@@ -113,7 +113,12 @@ public class Abilities : MonoBehaviour
         abilityToCast = selected;
         PCM.control.RemoveBufferInput();
         PCM.control.StartAbility(selected.castStartSpeed);
+        castDir = abilitySpawnPoint.position - transform.position;
+        PCM.control.SetLastDir(castDir);
+        castType = selected.type;
     }
+    public Vector2 castDir { get; private set; }
+    public AbilityType castType { get; private set; }
     public void CastAbility(out float castDur)
     {
         lastUsed = abilityToCast;
@@ -125,6 +130,7 @@ public class Abilities : MonoBehaviour
         {
             
             AbilityBase ability = temp.GetPooledObj(out bool initial);
+            GameManager.Instance.EnemyManager.UpdateAttacksList(abilityToCast.elementType);
             if (initial)
             {
                 ability.init();
@@ -135,14 +141,9 @@ public class Abilities : MonoBehaviour
             }            
             else
             {
-                Vector3 dir;
-                if (abilityToCast.type.Equals(AbilityType.dash))
-                    dir = PCM.control.lastDirection;
-                else
-                    dir = abilitySpawnPoint.position - transform.position;
                 if (abilityToCast.type.Equals(AbilityType.blast))
-                    PCM.system.AddForce(dir.normalized * 13);
-                ability.SetSelectedAbility(abilityToCast, abilitySpawnPoint.position, dir, transform);
+                    PCM.system.AddForce(castDir.normalized * 13);
+                ability.SetSelectedAbility(abilityToCast, abilitySpawnPoint.position, castDir, transform);
             }
         }
     }
