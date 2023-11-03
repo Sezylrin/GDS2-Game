@@ -62,12 +62,12 @@ public class PlayerAnimation : MonoBehaviour
         if (left)
         {
             left = !left;
-            GameManager.Instance.AudioManager.PlaySound(AudioRef.FootStepGrassL);
+            GameManager.Instance.AudioManager.PlaySound(AudioRef.FootStepGrassL, false, 0.7f);
         }
         else
         {
             left = !left;
-            GameManager.Instance.AudioManager.PlaySound(AudioRef.FootStepGrassR);
+            GameManager.Instance.AudioManager.PlaySound(AudioRef.FootStepGrassR, false, 0.7f);
         }
         yield return new WaitForSeconds(time);
         PlayFootStepCoroutine = null;

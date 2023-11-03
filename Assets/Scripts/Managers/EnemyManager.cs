@@ -452,6 +452,7 @@ public class EnemyManager : MonoBehaviour
         ActiveEnemiesCount--;
         if (ActiveEnemiesCount <= 0 && Level.Instance)
         {
+            GameManager.Instance.AudioManager.PlaySound(AudioRef.Victory);
             Level.Instance.ClearLevel();
         }
     }

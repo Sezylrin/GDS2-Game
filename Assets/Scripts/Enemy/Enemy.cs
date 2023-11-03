@@ -356,7 +356,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
         float modifiedDamage = damage * totalModifier;
         Hitpoints -= Mathf.CeilToInt(modifiedDamage);
 
-        GameManager.Instance.AudioManager.PlaySound(AudioRef.Hit);
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.Hit, false, 0.9f);
         if (Hitpoints <= 0) //Handles death
         {
             Hitpoints = 0;
@@ -1067,6 +1067,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPoolable<Enemy>
 
     public virtual void PoolSelf()
     {
+        EnemyTimers.ResetToZero();
+        ActiveElementEffect = ElementType.noElement;
         if (Pool != null)
             Pool.PoolObj(this);
         else

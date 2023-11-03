@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 21723369}
   - component: {fileID: 2510922662037965670}
   - component: {fileID: 7207627168122677665}
+  - component: {fileID: 7544405489550932457}
   m_Layer: 6
   m_Name: ShockwaveHitbox
   m_TagString: Untagged
@@ -27,8 +28,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 21723366}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 25, y: 25, z: 25}
+  m_LocalPosition: {x: -0.20000017, y: 0.38000005, z: 0}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4878145313093605394}
@@ -66,9 +67,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.06, y: -0.09}
   serializedVersion: 2
-  m_Radius: 0.13
+  m_Radius: 1
 --- !u!114 &2510922662037965670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,8 +121,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1141889249
-  m_SortingLayer: 6
+  m_SortingLayerID: 1725982173
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 65f0e363b74cf5845ab8c3fbc14f39ac, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.48235294}
@@ -134,6 +135,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &7544405489550932457
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 21723366}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bf70de7574fb3234da6e572c5f8a1138, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &266498435
 GameObject:
   m_ObjectHideFlags: 0
@@ -974,7 +995,7 @@ Transform:
   m_Children:
   - {fileID: 4878145313093605394}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &9185797213798890991
 CircleCollider2D:
@@ -1174,6 +1195,7 @@ MonoBehaviour:
   <ShockwaveStartRadius>k__BackingField: 0
   <ShockwaveEndRadius>k__BackingField: 0
   <ShockwaveGrowthSpeed>k__BackingField: 0
+  shockwave: {fileID: 7544405489550932457}
   boundary: {fileID: 0}
 --- !u!114 &9185797213798890979
 MonoBehaviour:
@@ -1369,24 +1391,7 @@ MonoBehaviour:
   comboRend: {fileID: 1061731966063786954}
   comboAnim: {fileID: 5686250093221489951}
   enemy: {fileID: 9185797213798890990}
-  clips:
-    _serializedList:
-    - Key: 0
-      Value: IdleR
-    - Key: 1
-      Value: IdleL
-    - Key: 2
-      Value: IdleU
-    - Key: 3
-      Value: IdleD
-    - Key: 4
-      Value: WalkR
-    - Key: 5
-      Value: WalkL
-    - Key: 7
-      Value: WalkD
-    - Key: 6
-      Value: WalkU
+  overrideAnim: 0
 --- !u!1001 &567611885313092990
 PrefabInstance:
   m_ObjectHideFlags: 0
