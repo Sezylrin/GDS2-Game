@@ -1,5 +1,6 @@
 public enum AudioRef
 {
+	Combat,
 	Grasslands,
 	Hub,
 	PauseMenu,

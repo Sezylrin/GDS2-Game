@@ -48,6 +48,7 @@ public class LevelGenerator : MonoBehaviour
     public int floorsCleared => !debugMode ? Mathf.FloorToInt((float)(activeLevelListIndex + 1) / (fountainFrequency + 1)) : floorsClearedOverride;
     [field: SerializeField, ReadOnly] public int lastFloorOnExit { get; private set;}
     [field: SerializeField, ReadOnly] public int highestFloor { get; private set;}
+    public bool isInCombatLevel => (activeLevelListIndex+1) % (fountainFrequency+1) != 0;
 
     [Header("Debug")]
     public bool debugMode;
