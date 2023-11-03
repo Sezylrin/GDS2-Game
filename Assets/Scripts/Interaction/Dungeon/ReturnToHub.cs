@@ -8,7 +8,7 @@ public class ReturnToHub : InteractionBase
     public override void Interact()
     {
         GameManager.Instance.sceneLoader.LoadHub();
-        GameManager.Instance.RemoveLostSouls();
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.TeleIn);
     }
 
 }

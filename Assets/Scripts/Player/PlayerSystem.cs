@@ -182,6 +182,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
             return;
         StartCoroutine(DamageFlash());
         GameManager.Instance.AudioManager.PlaySound(AudioRef.Hit);
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.Hit);
         if (Hitpoints - damage <= 0)
         {
             Hitpoints = 0;

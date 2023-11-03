@@ -80,6 +80,7 @@ public class Cheetah : Enemy
     }
     private IEnumerator Swipe()
     {
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.Swipe);
         isSwiping = true;
         PivotPoint.eulerAngles = CustomMath.GetEularAngleToDir(Vector2.right, dir);
         col2D.excludeLayers = TargetLayer;
@@ -128,6 +129,7 @@ public class Cheetah : Enemy
         float startingAngle = degreeOffset * ((float)daggerAmount * 0.5f - 0.5f) * -1;
         for ( int i = 0; i < daggerAmount; i++)
         {
+            GameManager.Instance.AudioManager.PlaySound(AudioRef.KnifeThrow);
             Vector2 newDir = CustomMath.RotateByEularAngles(dir, startingAngle + (i * degreeOffset));
             EnemyProjectile temp = daggerPool.GetPooledObj(out bool initial);
             if (initial)

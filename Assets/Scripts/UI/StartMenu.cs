@@ -101,6 +101,7 @@ public class StartMenu : Menu
     private IEnumerator DeactivateMenuContainerAfterDelay()
     {
         yield return new WaitForSecondsRealtime(2.0f);
+        GameManager.Instance.MusicManager.PlayMultiple(new AudioRef[] { AudioRef.Hub, AudioRef.Grasslands }, true);
         GameManager.Instance.UIManager.CloseAll();
     }
 

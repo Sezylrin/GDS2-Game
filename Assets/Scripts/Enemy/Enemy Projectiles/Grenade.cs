@@ -20,6 +20,7 @@ public class Grenade : ArchProjectile
 
     public void SpawnGrenade()
     {
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.GrenadeDrop);
         Speed = 0;
         initialV = 0;
         decay = 0;
@@ -28,6 +29,8 @@ public class Grenade : ArchProjectile
 
     public void ExplodeGrenade()
     {
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.GrenadeExplosion);
+
         col2d.enabled = true;
         col2d.offset = col2d.offset + Vector2.right * 0.05f;
     }

@@ -18,6 +18,7 @@ public class StartDungeonInteraction : InteractionBase
     {
         if (!isOpen) return;
         GameManager.Instance.LevelGenerator.StartDungeonOnFloor(floorToSpawn);
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.TeleIn);
         Destroy(this);
     }
 

@@ -78,9 +78,11 @@ public class ElementCombo : MonoBehaviour
                 StartCoroutine(enemy.StunTarget(shock.duration));
                 break;
             case (int)Combos.fireTornado:
+                GameManager.Instance.AudioManager.PlaySound(AudioRef.FireTornado);
                 SpawnAreaCombo(tornadoPool,combo, mask, pos);
                 break;
             case (int)Combos.blizzard:
+                GameManager.Instance.AudioManager.PlaySound(AudioRef.Blizzard);
                 SpawnAreaCombo(blizzardPool, combo, mask, pos);
                 break;
             /*case (int)Combos.aquaVolt:

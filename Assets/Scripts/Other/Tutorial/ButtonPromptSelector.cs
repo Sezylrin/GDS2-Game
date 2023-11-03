@@ -46,8 +46,14 @@ public class ButtonPromptSelector : MonoBehaviour
 
     private void SetPrompt(ControlScheme newScheme, ControllerScheme whichController)
     {
-        Debug.Log("NotError");
-        Debug.Log(gameObject.name);
+        if (!isCanvas && !spriteImage)
+        {
+            canvasImage = GetComponent<Image>();
+            spriteImage = GetComponent<SpriteRenderer>();
+            if (!isCanvas && !spriteImage)
+                Destroy(gameObject);
+                return;
+        }
         if (newScheme == ControlScheme.keyboardAndMouse)
         {
             if (isCanvas)
@@ -63,7 +69,6 @@ public class ButtonPromptSelector : MonoBehaviour
             else
                 spriteImage.sprite = sprite;
         }
-        Debug.Log("error");
     }
 
     public void Preview()
