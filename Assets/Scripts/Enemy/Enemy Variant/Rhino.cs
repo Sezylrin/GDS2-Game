@@ -22,6 +22,8 @@ public class Rhino : Enemy
     private RhinoScriptableObject RhinoSO;
     private Coroutine shockwaveCoroutine;
     private Pool<EnemyProjectile> pool;
+    [SerializeField]
+    private Animator shockwave;
 
     #region Tutorial
     public ModifyBoundary boundary;
@@ -90,19 +92,27 @@ public class Rhino : Enemy
         StartCoroutine(AutoEndCharge());
         
         Charging = true;
+        float time = 0;
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.RhinoCharge);
         while (Charging)
         {
-            yield return null;
+            if (time > 0.1f)
+            {
+                GameManager.Instance.AudioManager.PlaySound(AudioRef.RhinoCharge);
+                time = 0;
+            }
+            time += Time.deltaTime;
             RaycastHit2D hit = Physics2D.CircleCast(transform.position + (Vector3)col2D.offset, ((CircleCollider2D)col2D).radius, dir, (dir * Time.deltaTime * ChargeSpeed).magnitude,TerrainLayers);
             if (hit.collider)
             {
-                Debug.Log("hit terrain");
                 Charging = false;
                 EnemyTimers.SetTime((int)EnemyTimer.attackDurationTimer, 0);
                 break;
             }
             else
                 transform.Translate(dir * Time.deltaTime * ChargeSpeed);
+
+            yield return null;
         }
         EndCharge();
     }
@@ -123,6 +133,8 @@ public class Rhino : Enemy
     #region 2 - Shockwave
     protected override void Attack2()
     {
+        shockwave.Play("ExpandingCircle");
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.RhinoStomp);
         col2D.includeLayers = TargetLayer;
         ShockwaveHitbox.SetActive(true);
         //StartShockwave();
@@ -171,6 +183,7 @@ public class Rhino : Enemy
     #region 3 - Stomp
     protected override void Attack3()
     {
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.RhinoStomp);
         dir = (targetTr.position - transform.position);
         PivotPoint.eulerAngles = CustomMath.GetEularAngleToDir(Vector2.right, dir);
         col2D.includeLayers = TargetLayer;
@@ -221,6 +234,12 @@ public class Rhino : Enemy
         ChargeHitbox.SetActive(false);
         ShockwaveHitbox.SetActive(false);
         base.PoolSelf();
+    }
+
+    public override void InterruptAttack()
+    {
+        EnemyTimers.ResetSpecificToZero((int)EnemyTimer.attackDurationTimer);
+        base.InterruptAttack();
     }
     #region AI
     #endregion

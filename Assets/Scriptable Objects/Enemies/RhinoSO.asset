@@ -29,7 +29,7 @@ MonoBehaviour:
   windup1Duration: 1.25
   attackKnockback1: 0
   attack2Damage: 0a0000000f00000014000000
-  attack2Duration: 1
+  attack2Duration: 0.5
   windup2Duration: 1.25
   attackKnockback2: 0
   attack3Damage: 0a0000000f00000014000000
@@ -45,7 +45,7 @@ MonoBehaviour:
   damageToReachMaxDuration: 700
   ChargeSpeed: 15
   attack2Range: 3
-  shockwaveStartRadius: 0.13
+  shockwaveStartRadius: 1
   shockwaveEndRadius: 0
   shockwaveGrowthSpeed: 0
   stompMoveSpeed: 5

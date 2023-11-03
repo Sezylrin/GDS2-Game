@@ -255,6 +255,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
 
     public void OnDeath()
     {
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.Defeat);
         GameManager.Instance.EnemyManager.KillEnemies();
         GameManager.Instance.sceneLoader.Load(Scene.Hub);
 

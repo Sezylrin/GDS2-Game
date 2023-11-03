@@ -25,6 +25,7 @@ public class AcidPool : ArchProjectile
         SpriteObj.gameObject.SetActive(false);
         acidPool.SetActive(true);
         col2d.enabled = true;
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.VenonPool);
         //PoolSelf();
     }
 

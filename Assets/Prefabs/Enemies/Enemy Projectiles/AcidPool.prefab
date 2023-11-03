@@ -33,7 +33,7 @@ Transform:
   - {fileID: 7132035564043966518}
   - {fileID: 1198850280975067311}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7132035563446077347
 MonoBehaviour:
@@ -282,7 +282,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9218727960546599345}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.01, y: -0.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -325,17 +325,17 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: 1.85, y: 0}
-  - {x: 1.4966815, y: -0.5290067}
-  - {x: 0.5716814, y: -0.8559509}
-  - {x: -0.5716814, y: -0.8559509}
-  - {x: -1.4966816, y: -0.52900666}
-  - {x: -1.85, y: 0.0000000786805}
-  - {x: -1.4966816, y: 0.5290066}
-  - {x: -0.5716816, y: 0.85595083}
-  - {x: 0.5716817, y: 0.85595083}
-  - {x: 1.4966813, y: 0.5290068}
-  - {x: 1.85, y: -0.000000157361}
+  - {x: 1.84, y: -0.01}
+  - {x: 1.4866815, y: -0.5390067}
+  - {x: 0.5616814, y: -0.8659509}
+  - {x: -0.5816814, y: -0.8659509}
+  - {x: -1.5066816, y: -0.53900665}
+  - {x: -1.86, y: -0.009999922}
+  - {x: -1.5066816, y: 0.5190066}
+  - {x: -0.5816816, y: 0.8459508}
+  - {x: 0.5616817, y: 0.8459508}
+  - {x: 1.4866813, y: 0.5190068}
+  - {x: 1.84, y: -0.010000157}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
