@@ -216,6 +216,12 @@ public class Rhino : Enemy
         }
     }
 
+    public override void PoolSelf()
+    {
+        ChargeHitbox.SetActive(false);
+        ShockwaveHitbox.SetActive(false);
+        base.PoolSelf();
+    }
     #region AI
     #endregion
 }

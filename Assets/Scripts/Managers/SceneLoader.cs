@@ -51,6 +51,7 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadedIntoHub()
     {
+        GameManager.Instance.SetIsTutorial(false);
         GameManager.Instance.PCM.system.FullHeal();
         GameManager.Instance.PlayerTransform.gameObject.SetActive(true);
         GameManager.Instance.PCM.control.RemoveBufferInput();        

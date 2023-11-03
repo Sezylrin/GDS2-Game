@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7393159857015536217}
   - component: {fileID: 2564479434284491285}
   - component: {fileID: 8817709285150188160}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SnakeGlob
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,6 +58,7 @@ MonoBehaviour:
   <terrainMask>k__BackingField:
     serializedVersion: 2
     m_Bits: 128
+  <poolOnContact>k__BackingField: 1
   overrideProjectile: 0
 --- !u!58 &2564479434284491285
 CircleCollider2D:
@@ -131,7 +132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3631084391540936362}
   - component: {fileID: 2842824064956163721}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PoisonSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

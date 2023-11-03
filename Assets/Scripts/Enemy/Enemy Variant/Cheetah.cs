@@ -227,4 +227,10 @@ public class Cheetah : Enemy
         enemyAnimation.overrideAnim = false;
         base.InterruptAttack();
     }
+
+    public override void PoolSelf()
+    {
+        hitbox.enabled = false;
+        base.PoolSelf();
+    }
 }

@@ -29,11 +29,13 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     [SerializeField]
     private SpriteRenderer rend;
     private MaterialPropertyBlock block;
-
+    private void Awake()
+    {
+        SetHitPoints();
+    }
     private void Start()
     {
         block = new MaterialPropertyBlock();
-        SetHitPoints();
         //consumeBar = 0;
         //canConsume = false;
         timer = GameManager.Instance.TimerManager.GenerateTimers(typeof(SystemCD), gameObject);
@@ -227,6 +229,7 @@ public class PlayerSystem : MonoBehaviour, IDamageable
 
     private void SetHealthUI()
     {
+        Debug.Log("called");
         float heathPercent = (float)Hitpoints / (float)actualMaxHealth;
         PCM.UI.SetGreenHealthBar(heathPercent);
     }
@@ -253,10 +256,10 @@ public class PlayerSystem : MonoBehaviour, IDamageable
     public void OnDeath()
     {
         GameManager.Instance.EnemyManager.KillEnemies();
-        GameManager.Instance.sceneLoader.LoadHub();
+        GameManager.Instance.sceneLoader.Load(Scene.Hub);
 
-        GameManager.Instance.SetLostSouls();
-        GameManager.Instance.SetSoulsToZero();
+        /*GameManager.Instance.SetLostSouls();
+        GameManager.Instance.SetSoulsToZero();*/
     }
 
     public void SetHitPoints()
