@@ -67,7 +67,14 @@ public class BookMenu : Menu
         IsOpen = false;
         DisableAll();
         activeMenu = null;
-        GameManager.Instance.MusicManager.ResumeMultiple(new AudioRef[] { AudioRef.Hub, AudioRef.Grasslands }, true);
+        if (GameManager.Instance.IsTutorial || GameManager.Instance.LevelGenerator.isInCombatLevel)
+        {
+            GameManager.Instance.MusicManager.ResumeMultiple(new AudioRef[] { AudioRef.Combat, AudioRef.Grasslands }, true);
+        }
+        else
+        {
+            GameManager.Instance.MusicManager.ResumeMultiple(new AudioRef[] { AudioRef.Hub, AudioRef.Grasslands }, true);
+        }
         GameManager.Instance.AudioManager.PlaySound(AudioRef.CloseMenu);
         Time.timeScale = 1.0f;
         GameManager.Instance.PlayerTransform.gameObject.SetActive(true);

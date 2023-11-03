@@ -13,9 +13,15 @@ public class MusicManager : MonoBehaviour
         {
             StopAllMusic();
         }
-
-        AudioObj playingSound = GetAudioManager().PlaySound(audioRef, loop);
-        ActiveSounds.Add(audioRef, playingSound);
+        if (ActiveSounds.ContainsKey(audioRef))
+        {
+            ResumeMusic(audioRef);
+        }
+        else
+        {
+            AudioObj playingSound = GetAudioManager().PlaySound(audioRef, loop);
+            ActiveSounds.Add(audioRef, playingSound);
+        }
     }
 
     public void PlayMultiple(AudioRef[] sounds, bool overrideCurrentSounds = false, bool loop = true)
@@ -27,8 +33,15 @@ public class MusicManager : MonoBehaviour
 
         foreach (AudioRef sound in sounds)
         {
-            AudioObj playingSound = GetAudioManager().PlaySound(sound, loop);
-            ActiveSounds.Add(sound, playingSound);
+            if (ActiveSounds.ContainsKey(sound))
+            {
+                ResumeMusic(sound);
+            }
+            else
+            {
+                AudioObj playingSound = GetAudioManager().PlaySound(sound, loop);
+                ActiveSounds.Add(sound, playingSound);
+            }
         }
     }
 

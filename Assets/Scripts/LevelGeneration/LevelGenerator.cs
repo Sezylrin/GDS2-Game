@@ -156,6 +156,7 @@ public class LevelGenerator : MonoBehaviour
         while (!GameManager.Instance.sceneLoader.isFade)
             yield return null;
 
+        GameManager.Instance.MusicManager.ResumeMultiple(new AudioRef[] { AudioRef.Combat, AudioRef.Grasslands }, true);
         SceneManager.LoadScene(scenePath);
     }
 
