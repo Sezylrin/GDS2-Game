@@ -20,4 +20,10 @@ public class StartDungeonInteraction : InteractionBase
         GameManager.Instance.LevelGenerator.StartDungeonOnFloor(floorToSpawn);
         Destroy(this);
     }
+
+    protected override void OnTriggerEnter2D(Collider2D collision)
+    {
+        base.OnTriggerEnter2D(collision);
+        UI.SetActive(isOpen);
+    }
 }
