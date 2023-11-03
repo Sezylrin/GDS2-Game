@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,7 +8,8 @@ public enum Scene
 {
     MainMenu,
     Hub,
-    Tutorial
+    Tutorial,
+    Victory,
 }
 
 public class SceneLoader : MonoBehaviour
@@ -30,6 +32,11 @@ public class SceneLoader : MonoBehaviour
             if (sceneTransition == null)
                 sceneTransition = StartCoroutine(NoTransitionLoad(scene));
         }
+    }
+
+    public void SeparateLoad(Scene scene)
+    {
+        sceneTransition = StartCoroutine(NoTransitionLoad(scene));
     }
 
     public IEnumerator NoTransitionLoad(Scene scene)
@@ -92,7 +99,7 @@ public class SceneLoader : MonoBehaviour
         {
             GameManager.Instance.MusicManager.ResumeMultiple(new AudioRef[] { AudioRef.Hub, AudioRef.Grasslands }, true);
         }
-        else if (scene != Scene.MainMenu)
+        else if (scene != Scene.MainMenu && scene != Scene.Victory)
         {
             GameManager.Instance.MusicManager.ResumeMultiple(new AudioRef[] { AudioRef.Combat, AudioRef.Grasslands }, true);
         }

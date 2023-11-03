@@ -133,9 +133,11 @@ public class LevelGenerator : MonoBehaviour
     //TODO: Change to AsyncLoading
     private void LoadNextLevel()
     {
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.TeleIn);
         if (DungeonCleared())
         {
-            //TODO: Win
+            GameManager.Instance.sceneLoader.Load(Scene.Victory);
+            GameManager.Instance.MusicManager.StopAllMusic();
             return;
         }
         // If the next level is not in list

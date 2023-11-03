@@ -32,6 +32,12 @@ public class UIManager : MonoBehaviour
         activeMenu = BookMenuContainer;
     }
 
+    public void DisableBookMenu()
+    {
+        GetBookMenu().IsInGame = false;
+        activeMenu = null;
+    }
+
     public void CloseAll()
     {
         BookMenuContainer.GetComponent<BookMenu>().IsOpen = false;
