@@ -88,14 +88,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //Temporary for now, remove when we have a proper way to open skillSwitchManager
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            AddSouls(10000);
-        }
-    }
     public void SetPlayerTransform(Transform player, PlayerComponentManager PCM)
     {
         PlayerTransform = player;
