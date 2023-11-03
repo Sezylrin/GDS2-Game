@@ -123,6 +123,10 @@ public class EnemyManager : MonoBehaviour
             debugKillEnemies = false;
             KillEnemies();
         }
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            KillEnemies();
+        }
     }
 
     #region EnemyAttacking
