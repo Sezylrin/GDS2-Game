@@ -7,6 +7,7 @@ public class HealPlayer : InteractionBase
     // Start is called before the first frame update
     public override void Interact()
     {
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.Healing);
         GameManager.Instance.PCM.system.FullHeal();
     }
 }

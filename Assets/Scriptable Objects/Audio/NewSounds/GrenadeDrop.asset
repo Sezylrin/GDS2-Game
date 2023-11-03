@@ -10,11 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 82fbe25d3000e9a4bb778cbb1df9a38f, type: 3}
-  m_Name: Hit
+  m_Name: GrenadeDrop
   m_EditorClassIdentifier: 
-  ReferenceName: Hit
+  ReferenceName: GrenadeDrop
   clips:
-  - {fileID: 8300000, guid: 3b6a5bab7d48bf5428d7107a5a7fb558, type: 3}
-  - {fileID: 8300000, guid: 3a91b8d4d114920469397e46a35b46a8, type: 3}
-  - {fileID: 8300000, guid: 61ddafe19ed908643af657bd91a78533, type: 3}
+  - {fileID: 8300000, guid: 6200ce90dd3c07d429dc51b87f5b3b45, type: 3}
   mixGroup: {fileID: -3833594322038420439, guid: 8ef6d8b737ad1934aa2b7fdd12d63b52, type: 2}

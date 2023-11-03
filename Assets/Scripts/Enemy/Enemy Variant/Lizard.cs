@@ -49,6 +49,7 @@ public class Lizard : Enemy
     #region Attack1
     protected override void Attack1()
     {
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.Spear);
         dir = (targetTr.position - transform.position);
         PivotPoint.eulerAngles = CustomMath.GetEularAngleToDir(Vector2.right, dir);
         bool initial;
@@ -81,6 +82,7 @@ public class Lizard : Enemy
     #region Attack3
     protected override void Attack3()
     {
+        GameManager.Instance.AudioManager.PlaySound(AudioRef.Boomerang);
         dir = (targetTr.position - transform.position);
         PivotPoint.eulerAngles = CustomMath.GetEularAngleToDir(Vector2.right, dir);
         bool initial;
