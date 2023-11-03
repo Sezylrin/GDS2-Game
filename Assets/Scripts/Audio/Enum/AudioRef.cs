@@ -19,5 +19,6 @@ public enum AudioRef
 	Hit,
 	OpenMenu,
 	Parry,
-	Stagger
+	Stagger,
+	UnlockSkill
 }

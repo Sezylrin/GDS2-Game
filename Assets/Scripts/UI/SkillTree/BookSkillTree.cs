@@ -29,10 +29,13 @@ public class BookSkillTree : Menu
     [SerializeField] private GameObject cantAfford;
     [SerializeField] private GameObject purchased;
 
-    [Header("Souls")]
+    [Header("Info")]
     [SerializeField] private TMP_Text SoulsText;
+    [SerializeField] private TMP_Text HealthText;
+    [SerializeField] private TMP_Text DamageText;
 
     private Vector2Int currentSelectedIndex = new Vector2Int(0, 0);
+    private BaseSkillTreeButton lastHoveredButton = null;
     private bool isOnAbilityMenu = true;
 
     private float navigationCooldownDuration = 0.15f;
@@ -40,6 +43,12 @@ public class BookSkillTree : Menu
 
     public override void OpenMenu()
     {
+        if (lastHoveredButton != null)
+        {
+            lastHoveredButton.DisableHover();
+            lastHoveredButton = null;
+        }
+
         isOnAbilityMenu = true;
         SetActiveButton(0, 0);
         SoulsText.text = GameManager.Instance.Souls.ToString();
@@ -95,6 +104,20 @@ public class BookSkillTree : Menu
     public void UpdateSoulsText(int souls)
     {
         SoulsText.text = souls.ToString();
+    }
+
+    public void UpdateHealthText()
+    {
+        int StartingHealth = 100;
+        int BonusHealth = GameManager.Instance.StatsManager.bonusHealth;
+        HealthText.text = (StartingHealth + BonusHealth).ToString();
+    }
+
+    public void UpdateDamageText()
+    {
+        float DamageModifier = GameManager.Instance.StatsManager.damageModifier;
+        string DamagePercentage = (DamageModifier * 100).ToString("F0") + "%";
+        DamageText.text = DamagePercentage;
     }
 
     public void SetActiveButton(int row, int column)
@@ -167,6 +190,7 @@ public class BookSkillTree : Menu
 
         // Enable hover for arriving menu button
         arrivingList[currentSelectedIndex.x].row[currentSelectedIndex.y].ActivateHover();
+        lastHoveredButton = arrivingList[currentSelectedIndex.x].row[currentSelectedIndex.y];
     }
 
     public void ClickActiveButton()

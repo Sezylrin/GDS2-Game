@@ -2403,7 +2403,7 @@ Transform:
   - {fileID: 490763409}
   - {fileID: 247273588}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &3543791458973239727
 Rigidbody2D:
@@ -2479,7 +2479,7 @@ MonoBehaviour:
     <times>k__BackingField: []
     owner: {fileID: 0}
   PCM: {fileID: 864687022}
-  iframes: 0.7
+  iframes: 1
   hitStunnedDuration: 0.4
   flashDuration: 0.1
   rend: {fileID: 3543791457672997724}
@@ -2536,7 +2536,7 @@ MonoBehaviour:
     m_Bits: 128
   cursorPos: {fileID: 0}
   lineRend: {fileID: 1434561470}
-  direction: {x: 0, y: 0}
+  <direction>k__BackingField: {x: 0, y: 0}
   <lastDirection>k__BackingField: {x: 0, y: 0}
   <CurrentState>k__BackingField: 0
   bufferedState: 0

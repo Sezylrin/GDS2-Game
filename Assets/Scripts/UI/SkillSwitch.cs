@@ -14,6 +14,8 @@ public class SkillSwitch : Menu
     private GameObject activeAbilitiesContainer;
     [SerializeField]
     private GameObject popupContainer;
+    [SerializeField]
+    private GameObject tabPromptContainer;
 
     [Header("Popup")]
     [SerializeField]
@@ -48,12 +50,14 @@ public class SkillSwitch : Menu
         {
             Transform childTransform = allAbilitiesContainer.transform.GetChild(i);
             UnusedAbility unusedAbility = childTransform.gameObject.GetComponent<UnusedAbility>();
+            bool canUse = false;
             if (unusedAbility != null)
             {
                 if (abilityIndex < unlockedAbilities.Count)
                 {
                     unusedAbility.abilityData = unlockedAbilities[abilityIndex];
                     unusedAbility.UpdateBorder();
+                    canUse = true;
                 }
                 else if (abilityIndex - unlockedAbilities.Count < lockedAbilities.Count)
                 {
@@ -61,7 +65,7 @@ public class SkillSwitch : Menu
                 }
                 abilityIndex++;
             }
-            childTransform.GetChild(0).GetComponent<Image>().sprite = unusedAbility.abilityData.icon;
+            unusedAbility.InitIconAndBackground(canUse);
             allAbilities.Add(childTransform.gameObject);
         }
 
@@ -84,11 +88,11 @@ public class SkillSwitch : Menu
             if (activeAbility != null && savedAbilityPositions.ContainsKey(activeAbility.abilityIndex))
             {
                 activeAbility.UpdateAbility(savedAbilityPositions[activeAbility.abilityIndex]);
-                childTransform.GetChild(0).GetComponent<Image>().sprite = activeAbility.abilityData.icon;
+                activeAbility.InitIconAndBackground(true);
             }
             else
             {
-                childTransform.GetChild(0).GetComponent<Image>().enabled = false;
+                activeAbility.HideOrShowIcon(false);
             }
         }
     }
@@ -100,6 +104,7 @@ public class SkillSwitch : Menu
         currentlyHoveredIndex = 0;
         currentSkillMenu = CurrentSkillMenu.UnusedAbilities;
         firstSkillsetSelected = true;
+        tabPromptContainer.SetActive(false);
         InitialiseSkillSwitchManager();
     }
 
@@ -120,6 +125,10 @@ public class SkillSwitch : Menu
             currentlyHoveredAbility = newSelectedAbility;
             currentlyHoveredIndex = 0;
             newSelectedAbility.ActivateHover();
+            if (GameManager.Instance.StatsManager.secondSkillsetUnlocked)
+            {
+                tabPromptContainer.SetActive(true);
+            }
         }
         else
         {
@@ -137,6 +146,7 @@ public class SkillSwitch : Menu
             GameManager.Instance.AudioManager.PlaySound(AudioRef.buttonPress);
             newSelectedAbility.ActivateHover(false);
             selectedAbility = null;
+            tabPromptContainer.SetActive(false);
         }
     }
 
@@ -153,19 +163,18 @@ public class SkillSwitch : Menu
 
             for (int i = 0; i < activeAbilitiesContainer.transform.childCount; i++)
             {
-                int dictionaryKey = i + offset;
                 Transform childTransform = activeAbilitiesContainer.transform.GetChild(i).transform.GetChild(0);
                 ActiveAbility activeAbility = childTransform.GetComponent<ActiveAbility>();
 
-                if (savedAbilityPositions.ContainsKey(dictionaryKey))
+                if (savedAbilityPositions.ContainsKey(activeAbility.abilityIndex + offset))
                 {
-                    activeAbility.UpdateAbility(savedAbilityPositions[dictionaryKey]);
+                    activeAbility.UpdateAbility(savedAbilityPositions[activeAbility.abilityIndex + offset]);
                 }
                 else
                 {
                     activeAbility.abilityData = null;
-                    childTransform.GetChild(0).GetComponent<Image>().enabled = false;
-                    activeAbility.GreyBorder(currentlyHoveredIndex == i);
+                    activeAbility.HideOrShowIcon(false);
+                    activeAbility.GreyBorder();
                 }
 
                 if (currentlyHoveredIndex == i)
