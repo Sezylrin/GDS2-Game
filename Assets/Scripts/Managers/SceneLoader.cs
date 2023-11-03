@@ -87,6 +87,16 @@ public class SceneLoader : MonoBehaviour
         if (scene == Scene.Hub)
             LoadedIntoHub();
         CrossFadeAnimator.Play("End");
+
+        if (scene == Scene.Hub)
+        {
+            GameManager.Instance.MusicManager.ResumeMultiple(new AudioRef[] { AudioRef.Hub, AudioRef.Grasslands }, true);
+        }
+        else if (scene != Scene.MainMenu)
+        {
+            GameManager.Instance.MusicManager.ResumeMultiple(new AudioRef[] { AudioRef.Combat, AudioRef.Grasslands }, true);
+        }
+        
         sceneTransition = null;
     }
 
