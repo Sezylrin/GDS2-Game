@@ -41,6 +41,7 @@ public class BookMenu : Menu
         }
         else
         {
+            Debug.Log("Running");
             GameManager.Instance.PlayerTransform.gameObject.SetActive(false);
             GameManager.Instance.UIManager.OpenBookMenu();
             IsOpen = true;
@@ -48,6 +49,7 @@ public class BookMenu : Menu
             activeMenu = MainMenu;
             MainMenu.GetComponent<Menu>().OpenMenu();
             GameManager.Instance.AudioManager.PlaySound(AudioRef.OpenMenu);
+            GameManager.Instance.MusicManager.ResumeMusic(AudioRef.PauseMenu, true);
             Time.timeScale = 0;
         }
     }
@@ -56,6 +58,7 @@ public class BookMenu : Menu
     {
         IsInGame = false;
         GameManager.Instance.UIManager.CloseAll();
+        GameManager.Instance.MusicManager.StopAllMusic();
         Time.timeScale = 1.0f;
         GameManager.Instance.sceneLoader.Load(Scene.MainMenu, false);
     }
@@ -65,6 +68,7 @@ public class BookMenu : Menu
         IsOpen = false;
         DisableAll();
         activeMenu = null;
+        GameManager.Instance.MusicManager.ResumeMultiple(new AudioRef[] { AudioRef.Hub, AudioRef.Grasslands }, true);
         GameManager.Instance.AudioManager.PlaySound(AudioRef.CloseMenu);
         Time.timeScale = 1.0f;
         GameManager.Instance.PlayerTransform.gameObject.SetActive(true);
