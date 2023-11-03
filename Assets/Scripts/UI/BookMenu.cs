@@ -41,7 +41,6 @@ public class BookMenu : Menu
         }
         else
         {
-            Debug.Log("Running");
             GameManager.Instance.PlayerTransform.gameObject.SetActive(false);
             GameManager.Instance.UIManager.OpenBookMenu();
             IsOpen = true;
