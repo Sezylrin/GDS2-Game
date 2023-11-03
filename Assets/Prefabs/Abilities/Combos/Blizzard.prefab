@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1419865249768747742}
   - component: {fileID: 1419865249768747743}
   - component: {fileID: 4983529150264355188}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 1419865250949850068}
   - component: {fileID: 1419865250949850071}
   - component: {fileID: 840741398749092065}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Blizzard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,7 +138,7 @@ Transform:
   m_Children:
   - {fileID: 1419865249768747742}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &1419865250949850068
 CircleCollider2D:

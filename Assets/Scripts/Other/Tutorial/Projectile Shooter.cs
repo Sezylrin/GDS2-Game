@@ -12,6 +12,11 @@ public class ProjectileShooter : MonoBehaviour
 
     private Pool<EnemyProjectile> projPool;
     private Pool<EnemyProjectile> projPool2;
+
+    [SerializeField]
+    private Animator one;
+    [SerializeField]
+    private Animator two;
     private void Start()
     {
         GameManager.Instance.PoolingManager.FindPool(projectile, out projPool);
@@ -26,6 +31,8 @@ public class ProjectileShooter : MonoBehaviour
         {
             temp.NewInstance();
         }
+        one.Play("ChargingOne");
+        two.Play("ChargingOne");
         temp.Init(Vector2.down, spawnPointOne.position, TargetLayer, 0, 10, 5, 25, transform, transform);
         bool initial2;
         EnemyProjectile temp2 = projPool2.GetPooledObj(out initial2);
