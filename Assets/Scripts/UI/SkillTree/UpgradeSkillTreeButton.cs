@@ -69,17 +69,7 @@ public class UpgradeSkillTreeButton : BaseSkillTreeButton
                 GameManager.Instance.AudioManager.PlaySound(AudioRef.ButtonPressFail);
                 return;
             }
-            if (CanPurchaseOnce)
-            {
-                BackgroundColor.color = new Color(BackgroundColor.color.r, BackgroundColor.color.g, BackgroundColor.color.b, 0f);
-                purchased = true;
-            }
-            else
-            {
-                TimesPurchased++;
-                UpdatedName = OriginalName + " " + TimesPurchased;
-                SoulCost += 50;
-            }
+
             GameManager.Instance.RemoveSouls(SoulCost);
             GameManager.Instance.AudioManager.PlaySound(AudioRef.UnlockSkill);
             UpdatePopup();
@@ -96,6 +86,18 @@ public class UpgradeSkillTreeButton : BaseSkillTreeButton
                 case UpgradeType.UpgradeDamage:
                     UpgradeDamage();
                     break;
+            }
+
+            if (CanPurchaseOnce)
+            {
+                BackgroundColor.color = new Color(BackgroundColor.color.r, BackgroundColor.color.g, BackgroundColor.color.b, 0f);
+                purchased = true;
+            }
+            else
+            {
+                TimesPurchased++;
+                UpdatedName = OriginalName + " " + TimesPurchased;
+                SoulCost += 50;
             }
         }
         else
