@@ -53,8 +53,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isCanvas: 1
   promptsSO: {fileID: 11400000, guid: f89c629f3fcfe6d4ba5c6228bc23e3a0, type: 2}
+  canvasImage: {fileID: 3843951233257938193}
+  spriteImage: {fileID: 0}
   KeyboardSprite: {fileID: 0}
   controllerButton: 0
+  previewScheme: 0
+  previewController: 0
 --- !u!222 &1279902678186494123
 CanvasRenderer:
   m_ObjectHideFlags: 0
