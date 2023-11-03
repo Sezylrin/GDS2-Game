@@ -21,4 +21,10 @@ public class StartDungeonInteraction : InteractionBase
         GameManager.Instance.AudioManager.PlaySound(AudioRef.TeleIn);
         Destroy(this);
     }
+
+    protected override void OnTriggerEnter2D(Collider2D collision)
+    {
+        base.OnTriggerEnter2D(collision);
+        UI.SetActive(isOpen);
+    }
 }

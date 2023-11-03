@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public ElementCombo ComboManager { get; private set; }
     [field: SerializeField] public LevelGenerator LevelGenerator { get; private set; }
     [field: SerializeField] public AudioManager AudioManager { get; private set; }
+    [field: SerializeField] public MusicManager MusicManager { get; private set; }
     [field: SerializeField] public UIManager UIManager { get; private set; }
    
     [field: SerializeField, HideOnPlay(true)] public Transform PlayerTransform { get; private set; }
@@ -88,14 +89,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //Temporary for now, remove when we have a proper way to open skillSwitchManager
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            AddSouls(10000);
-        }
-    }
     public void SetPlayerTransform(Transform player, PlayerComponentManager PCM)
     {
         PlayerTransform = player;

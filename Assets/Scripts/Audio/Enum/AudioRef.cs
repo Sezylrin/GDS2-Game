@@ -1,5 +1,9 @@
 public enum AudioRef
 {
+	Grasslands,
+	Hub,
+	PauseMenu,
+	StartMenu,
 	ButtonHover,
 	buttonPress,
 	ButtonPressFail,

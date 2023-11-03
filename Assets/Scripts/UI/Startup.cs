@@ -16,5 +16,6 @@ public class Startup : MonoBehaviour
     void Start()
     {
         GameManager.Instance.UIManager.OpenStartMenu();
+        GameManager.Instance.MusicManager.PlayMusic(AudioRef.StartMenu, true);
     }
 }
