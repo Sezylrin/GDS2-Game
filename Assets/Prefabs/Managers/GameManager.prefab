@@ -26241,7 +26241,6 @@ GameObject:
   - component: {fileID: 3761662248408365452}
   - component: {fileID: 1972795618}
   - component: {fileID: 1309138667}
-  - component: {fileID: 1309138668}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -26275,7 +26274,7 @@ Transform:
   - {fileID: 1730852287}
   - {fileID: 4865530911036148025}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3761662248408365452
 MonoBehaviour:
@@ -26353,26 +26352,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3761662248408365442}
   m_Enabled: 1
---- !u!114 &1309138668
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3761662248408365442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a6e58df1cb19254fa063bd5efe715da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sounds:
-    _serializedList:
-    - Key: 1
-      Value:
-      - {fileID: 8300000, guid: d101b0877c675654da30ca64004c613d, type: 3}
-    - Key: 0
-      Value:
-      - {fileID: 8300000, guid: a3b84be9e12f5d543afed76f4fd532e8, type: 3}
 --- !u!1 &4865530910042071424
 GameObject:
   m_ObjectHideFlags: 0

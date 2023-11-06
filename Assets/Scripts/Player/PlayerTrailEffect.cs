@@ -22,10 +22,6 @@ public class PlayerTrailEffect : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            Countered(0.3f, true);
-        }
     }
     public void PerfectDodge(float duration, bool removeSelf = false)
     {
