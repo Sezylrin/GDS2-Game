@@ -48,16 +48,10 @@ public class SceneLoader : MonoBehaviour
         sceneTransition = null;
     }
 
-    public void LoadHub()
-    {
-        TriggerFade(Scene.Hub);
-        GameManager.Instance.LevelGenerator.New();
-        GameManager.Instance.SetIsTutorial(false);
-    }
-
     public void LoadedIntoHub()
     {
         GameManager.Instance.SetIsTutorial(false);
+        GameManager.Instance.LevelGenerator.New();
         GameManager.Instance.PCM.system.FullHeal();
         GameManager.Instance.PlayerTransform.gameObject.SetActive(true);
         GameManager.Instance.PCM.control.RemoveBufferInput();        
@@ -85,13 +79,13 @@ public class SceneLoader : MonoBehaviour
         }
         AsyncOperation temp = SceneManager.LoadSceneAsync((int)scene);
         float time = 0;
+        if (scene == Scene.Hub)
+            LoadedIntoHub();
         while (!temp.isDone || !isFade || time < CrossFadeTime)
         {
             time += Time.deltaTime;
             yield return null;
         }
-        if (scene == Scene.Hub)
-            LoadedIntoHub();
         CrossFadeAnimator.Play("End");
 
         if (scene == Scene.Hub)

@@ -8,6 +8,7 @@ using UnityEngine.InputSystem.DualShock;
 using UnityEngine.InputSystem.Switch;
 using UnityEngine.InputSystem.XInput;
 using KevinCastejon.MoreAttributes;
+using UnityEngine.InputSystem.Utilities;
 public enum ControlScheme
 {
     keyboardAndMouse,
@@ -68,6 +69,8 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
         playerInputs = new PlayerInputs();
+        konami = playerInputs.Konami;
+        cheat = playerInputs.Cheat;
         input.onControlsChanged += SetScheme;
         
         SwitchToMouseCursor();
@@ -318,6 +321,103 @@ public class GameManager : MonoBehaviour
     {
         IsTutorial = tutorial;
         StatsManager.ResetEquipForTutorial();
+    }
+    #endregion
+
+    #region Konami
+    public bool cheatMode { get; private set; } = false;
+    private PlayerInputs.KonamiActions konami;
+    private PlayerInputs.CheatActions cheat;
+    private int codePosition = 0;
+    private KoIn[] konamiCode = { KoIn.up, KoIn.up, KoIn.down, KoIn.down, KoIn.left, KoIn.right, KoIn.left, KoIn.right, KoIn.B, KoIn.A, KoIn.Return };
+    private enum KoIn
+    {
+        left,
+        right,
+        up,
+        down,
+        A,
+        B,
+        Return
+    }
+
+    private void OnEnable()
+    {
+        
+        konami.Enable();
+        konami.Left.performed += Left;
+        konami.Right.performed += Right;
+        konami.Up.performed += Up;
+        konami.Down.performed += Down;
+        konami.A.performed += A;
+        konami.B.performed += B;
+        konami.Return.performed += Return;
+    }
+    private void DisableKonami()
+    {
+        konami.Left.performed -= Left;
+        konami.Right.performed -= Right;
+        konami.Up.performed -= Up;
+        konami.Down.performed -= Down;
+        konami.A.performed -= A;
+        konami.B.performed -= B;
+        konami.Return.performed -= Return;
+        konami.Disable();
+    }
+    private void CheckCode(KoIn input)
+    {
+        if (konamiCode[codePosition] == input)
+        {
+            codePosition++;
+            if(input == KoIn.Return)
+            {
+                AudioManager.PlaySound(AudioRef.Victory);
+                cheatMode = true;
+                DisableKonami();
+                cheat.Enable();
+                cheat.Kill.performed += KillEnemy;
+                cheat.Souls.performed += GainSouls;
+            }
+        }
+        else
+        {
+            codePosition = 0;
+        }
+    }
+    private void KillEnemy(InputAction.CallbackContext context)
+    {
+        EnemyManager.KillEnemies();
+    }private void GainSouls(InputAction.CallbackContext context)
+    {
+        AddSouls(10000);
+    }
+    private void Left(InputAction.CallbackContext context)
+    {
+        CheckCode(KoIn.left);
+    }
+    private void Right(InputAction.CallbackContext context)
+    {
+        CheckCode(KoIn.right);
+    }
+    private void Up(InputAction.CallbackContext context)
+    {
+        CheckCode(KoIn.up);
+    }
+    private void Down(InputAction.CallbackContext context)
+    {
+        CheckCode(KoIn.down);
+    }
+    private void A(InputAction.CallbackContext context)
+    {
+        CheckCode(KoIn.A);
+    }
+    private void B(InputAction.CallbackContext context)
+    {
+        CheckCode(KoIn.B);
+    }
+    private void Return(InputAction.CallbackContext context)
+    {
+        CheckCode(KoIn.Return);
     }
     #endregion
 }

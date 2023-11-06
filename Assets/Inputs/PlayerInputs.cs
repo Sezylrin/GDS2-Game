@@ -1368,6 +1368,301 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Konami"",
+            ""id"": ""1567e7ec-6af6-4c02-ad8b-45cba01c21a5"",
+            ""actions"": [
+                {
+                    ""name"": ""Up"",
+                    ""type"": ""Button"",
+                    ""id"": ""0fd3af5c-4d92-40fa-912f-cf4b839644fc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Down"",
+                    ""type"": ""Button"",
+                    ""id"": ""05624e8c-b5e6-42ec-9b7c-cb6a241d7e6c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Left"",
+                    ""type"": ""Button"",
+                    ""id"": ""9dcf8909-2db4-4cde-8808-aac2eecef760"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Right"",
+                    ""type"": ""Button"",
+                    ""id"": ""374ec75b-ad95-4067-8ac0-c887b51543b1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""A"",
+                    ""type"": ""Button"",
+                    ""id"": ""e4f2b189-6299-4e25-83b4-c2906f44b674"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""B"",
+                    ""type"": ""Button"",
+                    ""id"": ""0d61a7d2-6789-424e-8be5-a5ace967bd4e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Return"",
+                    ""type"": ""Button"",
+                    ""id"": ""9525e002-83ab-48b6-ac57-c30f829e1840"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""026982bd-7fa0-44b2-97c5-7b9a821788bf"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""868d8a1e-01d5-46bd-9dc3-868eef3a2e28"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1fc166f4-8689-4048-8f27-66da54de4de6"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Down"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""51592189-dfed-4f23-aba5-bc6fd62cf896"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Down"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""83fca5a1-bc3d-474c-9d9f-5f38790ced12"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""006c21ac-56ab-442b-baa5-477cbbadd5bf"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5b194532-3280-4440-836b-a226051ddf65"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""461c4aba-1f4e-4dae-87ba-5a4a28fb8508"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2db85b33-74a6-4797-8462-d3baea633a33"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""A"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""95568e4e-f141-462a-b1b6-a64364a54d2d"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""A"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8c20c13c-0d83-4bab-a369-8c5c3521dab3"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""B"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a4394be9-29bc-4521-94e0-6224e8a7b0bd"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""B"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d32755e6-0eaf-4fe5-bb29-4afc21391cbb"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Return"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bdf5ef62-7413-4e2b-b8a1-ef944e7eb9dd"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Return"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Cheat"",
+            ""id"": ""5cc1cff1-3434-45f1-b427-cd12434ba2f7"",
+            ""actions"": [
+                {
+                    ""name"": ""Kill"",
+                    ""type"": ""Button"",
+                    ""id"": ""d826d3ff-5efa-45fc-8967-7032f8b991f3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Souls"",
+                    ""type"": ""Button"",
+                    ""id"": ""3390bf3e-8617-4316-84a1-904c2f20a47f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""4a2855ae-47c1-4b0f-90ac-cd75ead84317"",
+                    ""path"": ""<Keyboard>/j"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Kill"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1c486f87-39a8-43f3-9109-9190678b5af0"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Kill"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cad92715-8d9f-40e5-a05e-7ac3f6633c14"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Souls"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""65624185-dc86-41ca-b553-f9bac4ea1cb0"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Souls"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1438,6 +1733,19 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Menu_Navigate = m_Menu.FindAction("Navigate", throwIfNotFound: true);
         m_Menu_Interact = m_Menu.FindAction("Interact", throwIfNotFound: true);
         m_Menu_Return = m_Menu.FindAction("Return", throwIfNotFound: true);
+        // Konami
+        m_Konami = asset.FindActionMap("Konami", throwIfNotFound: true);
+        m_Konami_Up = m_Konami.FindAction("Up", throwIfNotFound: true);
+        m_Konami_Down = m_Konami.FindAction("Down", throwIfNotFound: true);
+        m_Konami_Left = m_Konami.FindAction("Left", throwIfNotFound: true);
+        m_Konami_Right = m_Konami.FindAction("Right", throwIfNotFound: true);
+        m_Konami_A = m_Konami.FindAction("A", throwIfNotFound: true);
+        m_Konami_B = m_Konami.FindAction("B", throwIfNotFound: true);
+        m_Konami_Return = m_Konami.FindAction("Return", throwIfNotFound: true);
+        // Cheat
+        m_Cheat = asset.FindActionMap("Cheat", throwIfNotFound: true);
+        m_Cheat_Kill = m_Cheat.FindAction("Kill", throwIfNotFound: true);
+        m_Cheat_Souls = m_Cheat.FindAction("Souls", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1865,6 +2173,154 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         }
     }
     public MenuActions @Menu => new MenuActions(this);
+
+    // Konami
+    private readonly InputActionMap m_Konami;
+    private List<IKonamiActions> m_KonamiActionsCallbackInterfaces = new List<IKonamiActions>();
+    private readonly InputAction m_Konami_Up;
+    private readonly InputAction m_Konami_Down;
+    private readonly InputAction m_Konami_Left;
+    private readonly InputAction m_Konami_Right;
+    private readonly InputAction m_Konami_A;
+    private readonly InputAction m_Konami_B;
+    private readonly InputAction m_Konami_Return;
+    public struct KonamiActions
+    {
+        private @PlayerInputs m_Wrapper;
+        public KonamiActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Up => m_Wrapper.m_Konami_Up;
+        public InputAction @Down => m_Wrapper.m_Konami_Down;
+        public InputAction @Left => m_Wrapper.m_Konami_Left;
+        public InputAction @Right => m_Wrapper.m_Konami_Right;
+        public InputAction @A => m_Wrapper.m_Konami_A;
+        public InputAction @B => m_Wrapper.m_Konami_B;
+        public InputAction @Return => m_Wrapper.m_Konami_Return;
+        public InputActionMap Get() { return m_Wrapper.m_Konami; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(KonamiActions set) { return set.Get(); }
+        public void AddCallbacks(IKonamiActions instance)
+        {
+            if (instance == null || m_Wrapper.m_KonamiActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_KonamiActionsCallbackInterfaces.Add(instance);
+            @Up.started += instance.OnUp;
+            @Up.performed += instance.OnUp;
+            @Up.canceled += instance.OnUp;
+            @Down.started += instance.OnDown;
+            @Down.performed += instance.OnDown;
+            @Down.canceled += instance.OnDown;
+            @Left.started += instance.OnLeft;
+            @Left.performed += instance.OnLeft;
+            @Left.canceled += instance.OnLeft;
+            @Right.started += instance.OnRight;
+            @Right.performed += instance.OnRight;
+            @Right.canceled += instance.OnRight;
+            @A.started += instance.OnA;
+            @A.performed += instance.OnA;
+            @A.canceled += instance.OnA;
+            @B.started += instance.OnB;
+            @B.performed += instance.OnB;
+            @B.canceled += instance.OnB;
+            @Return.started += instance.OnReturn;
+            @Return.performed += instance.OnReturn;
+            @Return.canceled += instance.OnReturn;
+        }
+
+        private void UnregisterCallbacks(IKonamiActions instance)
+        {
+            @Up.started -= instance.OnUp;
+            @Up.performed -= instance.OnUp;
+            @Up.canceled -= instance.OnUp;
+            @Down.started -= instance.OnDown;
+            @Down.performed -= instance.OnDown;
+            @Down.canceled -= instance.OnDown;
+            @Left.started -= instance.OnLeft;
+            @Left.performed -= instance.OnLeft;
+            @Left.canceled -= instance.OnLeft;
+            @Right.started -= instance.OnRight;
+            @Right.performed -= instance.OnRight;
+            @Right.canceled -= instance.OnRight;
+            @A.started -= instance.OnA;
+            @A.performed -= instance.OnA;
+            @A.canceled -= instance.OnA;
+            @B.started -= instance.OnB;
+            @B.performed -= instance.OnB;
+            @B.canceled -= instance.OnB;
+            @Return.started -= instance.OnReturn;
+            @Return.performed -= instance.OnReturn;
+            @Return.canceled -= instance.OnReturn;
+        }
+
+        public void RemoveCallbacks(IKonamiActions instance)
+        {
+            if (m_Wrapper.m_KonamiActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IKonamiActions instance)
+        {
+            foreach (var item in m_Wrapper.m_KonamiActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_KonamiActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public KonamiActions @Konami => new KonamiActions(this);
+
+    // Cheat
+    private readonly InputActionMap m_Cheat;
+    private List<ICheatActions> m_CheatActionsCallbackInterfaces = new List<ICheatActions>();
+    private readonly InputAction m_Cheat_Kill;
+    private readonly InputAction m_Cheat_Souls;
+    public struct CheatActions
+    {
+        private @PlayerInputs m_Wrapper;
+        public CheatActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Kill => m_Wrapper.m_Cheat_Kill;
+        public InputAction @Souls => m_Wrapper.m_Cheat_Souls;
+        public InputActionMap Get() { return m_Wrapper.m_Cheat; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CheatActions set) { return set.Get(); }
+        public void AddCallbacks(ICheatActions instance)
+        {
+            if (instance == null || m_Wrapper.m_CheatActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_CheatActionsCallbackInterfaces.Add(instance);
+            @Kill.started += instance.OnKill;
+            @Kill.performed += instance.OnKill;
+            @Kill.canceled += instance.OnKill;
+            @Souls.started += instance.OnSouls;
+            @Souls.performed += instance.OnSouls;
+            @Souls.canceled += instance.OnSouls;
+        }
+
+        private void UnregisterCallbacks(ICheatActions instance)
+        {
+            @Kill.started -= instance.OnKill;
+            @Kill.performed -= instance.OnKill;
+            @Kill.canceled -= instance.OnKill;
+            @Souls.started -= instance.OnSouls;
+            @Souls.performed -= instance.OnSouls;
+            @Souls.canceled -= instance.OnSouls;
+        }
+
+        public void RemoveCallbacks(ICheatActions instance)
+        {
+            if (m_Wrapper.m_CheatActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(ICheatActions instance)
+        {
+            foreach (var item in m_Wrapper.m_CheatActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_CheatActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public CheatActions @Cheat => new CheatActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -1923,5 +2379,20 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnNavigate(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnReturn(InputAction.CallbackContext context);
+    }
+    public interface IKonamiActions
+    {
+        void OnUp(InputAction.CallbackContext context);
+        void OnDown(InputAction.CallbackContext context);
+        void OnLeft(InputAction.CallbackContext context);
+        void OnRight(InputAction.CallbackContext context);
+        void OnA(InputAction.CallbackContext context);
+        void OnB(InputAction.CallbackContext context);
+        void OnReturn(InputAction.CallbackContext context);
+    }
+    public interface ICheatActions
+    {
+        void OnKill(InputAction.CallbackContext context);
+        void OnSouls(InputAction.CallbackContext context);
     }
 }

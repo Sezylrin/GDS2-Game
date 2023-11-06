@@ -229,7 +229,6 @@ public class PlayerSystem : MonoBehaviour, IDamageable
 
     private void SetHealthUI()
     {
-        Debug.Log("called");
         float heathPercent = (float)Hitpoints / (float)actualMaxHealth;
         PCM.UI.SetGreenHealthBar(heathPercent);
     }

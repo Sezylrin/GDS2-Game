@@ -56,6 +56,7 @@ public class BookMenu : Menu
     public void ExitGame()
     {
         IsInGame = false;
+        GameManager.Instance.EnemyManager.KillEnemies();
         GameManager.Instance.UIManager.CloseAll();
         GameManager.Instance.MusicManager.StopAllMusic();
         Time.timeScale = 1.0f;
